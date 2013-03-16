@@ -23,6 +23,7 @@ The start of a REST interface for a forum.
 * logout: shouldSeeErrorJsonIfNotLoggedIn
 * tech task: Logging intergration
 * tech task: Gradle build
+* tech task: Check for existing username in register
 
 ### Later features
 * Superuser
