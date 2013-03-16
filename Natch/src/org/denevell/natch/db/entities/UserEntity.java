@@ -1,0 +1,36 @@
+package org.denevell.natch.db.entities;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+
+@NamedQuery(name=UserEntity.NAMED_QUERY_FIND_WITH_USERNAME_AND_PASSWORD,query=
+	"select u from User u where " +
+			"u.username=':" + UserEntity.NAMED_QUERY_PARAM_USERNAME + "' and " +
+			"u.password=':" + UserEntity.NAMED_QUERY_PARAM_PASSWORD + "'")
+@Entity
+public class UserEntity {
+	
+	public static final String NAMED_QUERY_FIND_WITH_USERNAME_AND_PASSWORD = "findWithUsernamePassword";
+	public static final String NAMED_QUERY_PARAM_PASSWORD = "password";
+	public static final String NAMED_QUERY_PARAM_USERNAME = "username";
+	
+	@Id
+	private String username;
+	private String password;
+	
+	public String getUsername() {
+		return username;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+
+}
