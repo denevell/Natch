@@ -14,6 +14,9 @@ public class RegisterModel {
 	private EntityManagerFactory mFactory;
 	private EntityManager mEntityManager;
 	private UserEntityQueries mUserEntityQueries;
+	public enum RegisterResult {
+		REGISTERED, UNKNOWN_ERROR, DUPLICATE_USERNAME, USER_INPUT_ERROR
+	}
 
 	/**
 	 * For DI testing
@@ -28,10 +31,6 @@ public class RegisterModel {
 		mFactory = Persistence.createEntityManagerFactory("users");
 		mEntityManager = mFactory.createEntityManager();		
 		mUserEntityQueries = new UserEntityQueries();
-	}
-	
-	public enum RegisterResult {
-		REGISTERED, UNKNOWN_ERROR, DUPLICATE_USERNAME, USER_INPUT_ERROR
 	}
 	
 	private void closeEntityConnection() {
