@@ -3,7 +3,6 @@ package org.denevell.natch.models;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.LockModeType;
 import javax.persistence.Persistence;
 
 import org.denevell.natch.db.entities.UserEntity;
@@ -49,9 +48,9 @@ public class RegisterModel {
 		UserEntity u = new UserEntity();
 		u.setPassword(password);
 		u.setUsername(username);
+		u.setSalt("abc");
 		EntityTransaction trans = null;
 		try {
-			mEntityManager.lock(this, LockModeType.PESSIMISTIC_WRITE);
 			trans = mEntityManager.getTransaction();
 			if(!mUserEntityQueries.doesUsernameExist(username)) {
 				trans.begin();
@@ -64,7 +63,7 @@ public class RegisterModel {
 		} catch(Exception e) {
 			// TODO: Log
 			e.printStackTrace();
-			if(trans!=null) trans.rollback();
+			if(trans!=null && trans.isActive()) trans.rollback();
 			closeEntityConnection();		
 			return RegisterResult.UNKNOWN_ERROR;
 		} finally {

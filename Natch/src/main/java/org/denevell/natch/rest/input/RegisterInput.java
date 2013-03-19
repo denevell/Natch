@@ -1,5 +1,8 @@
 package org.denevell.natch.rest.input;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class RegisterInput {
 	
 	private String username; 

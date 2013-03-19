@@ -26,13 +26,17 @@ public class RegisterResource {
 	@Context ServletContext context;
 	private RegisterModel mUserModel;
 	
+	public RegisterResource() {
+		mUserModel = new RegisterModel();
+	}
+	
 	/**
 	 * For DI testing.
 	 */
 	public RegisterResource(RegisterModel userModel) {
 		mUserModel = userModel;
 	}
-
+	
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

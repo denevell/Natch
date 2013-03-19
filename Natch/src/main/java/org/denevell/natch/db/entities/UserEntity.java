@@ -7,12 +7,12 @@ import javax.persistence.NamedQuery;
 
 @NamedQueries({
 		@NamedQuery(name=UserEntity.NAMED_QUERY_FIND_WITH_USERNAME_AND_PASSWORD,query=
-			"select u from User u where " +
-			"u.username=':" + UserEntity.NAMED_QUERY_PARAM_USERNAME + "' and " +
-			"u.password=':" + UserEntity.NAMED_QUERY_PARAM_PASSWORD + "'"),
+			"select u from UserEntity u where " +
+			"u.username=:" + UserEntity.NAMED_QUERY_PARAM_USERNAME + " and " +
+			"u.password=:" + UserEntity.NAMED_QUERY_PARAM_PASSWORD + ""),
 		@NamedQuery(name=UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME,query=
-			"select u from User u where " +
-			"u.username=':" + UserEntity.NAMED_QUERY_PARAM_USERNAME + "'")
+			"select u from UserEntity u where " +
+			"u.username=:" + UserEntity.NAMED_QUERY_PARAM_USERNAME + "")
 		})
 @Entity
 public class UserEntity {
@@ -25,6 +25,7 @@ public class UserEntity {
 	@Id
 	private String username;
 	private String password;
+	private String salt;
 	
 	public String getUsername() {
 		return username;
@@ -37,6 +38,12 @@ public class UserEntity {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getSalt() {
+		return salt;
+	}
+	public void setSalt(String salt) {
+		this.salt = salt;
 	}
 	
 
