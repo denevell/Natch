@@ -9,19 +9,31 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
+import org.denevell.natch.db.entities.UserEntityQueries;
 import org.denevell.natch.models.UserModel;
+import org.junit.Before;
 import org.junit.Test;
 
 public class RegisterModelTests {
 	
+	private UserEntityQueries queries;
+	private EntityTransaction trans;
+	private EntityManager entityManager;
+	private EntityManagerFactory factory;
+
+	@Before
+	public void setup() {
+		factory = mock(EntityManagerFactory.class);
+		entityManager = mock(EntityManager.class);
+		trans = mock(EntityTransaction.class);
+		queries = mock(UserEntityQueries.class);
+	}
+	
 	@Test
 	public void shouldRegisterWithUsernameAndPassword() {
 		// Arrange
-		EntityManagerFactory factory = mock(EntityManagerFactory.class);
-		EntityManager entityManager = mock(EntityManager.class);
-		EntityTransaction trans = mock(EntityTransaction.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
-		UserModel um = new UserModel(entityManager, factory);
+		UserModel um = new UserModel(entityManager, factory, queries);
 		
 		// Act
 		boolean result = um.addUserToSystem("user", "pass");
@@ -33,11 +45,8 @@ public class RegisterModelTests {
 	@Test
 	public void shouldntRegisterWithBlankUsername() {
 		// Arrange
-		EntityManagerFactory factory = mock(EntityManagerFactory.class);
-		EntityManager entityManager = mock(EntityManager.class);
-		EntityTransaction trans = mock(EntityTransaction.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
-		UserModel um = new UserModel(entityManager, factory);
+		UserModel um = new UserModel(entityManager, factory, queries);
 		
 		// Act
 		boolean result = um.addUserToSystem("", "asd");
@@ -49,11 +58,8 @@ public class RegisterModelTests {
 	@Test
 	public void shouldntRegisterWithNullUsername() {
 		// Arrange
-		EntityManagerFactory factory = mock(EntityManagerFactory.class);
-		EntityManager entityManager = mock(EntityManager.class);
-		EntityTransaction trans = mock(EntityTransaction.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
-		UserModel um = new UserModel(entityManager, factory);
+		UserModel um = new UserModel(entityManager, factory, queries);
 		
 		// Act
 		boolean result = um.addUserToSystem(null, "asd");
@@ -65,11 +71,8 @@ public class RegisterModelTests {
 	@Test
 	public void shouldntRegisterWithBlankPassword() {
 		// Arrange
-		EntityManagerFactory factory = mock(EntityManagerFactory.class);
-		EntityManager entityManager = mock(EntityManager.class);
-		EntityTransaction trans = mock(EntityTransaction.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
-		UserModel um = new UserModel(entityManager, factory);
+		UserModel um = new UserModel(entityManager, factory, queries);
 		
 		// Act
 		boolean result = um.addUserToSystem("dsfd", "");
@@ -81,11 +84,8 @@ public class RegisterModelTests {
 	@Test
 	public void shouldntRegisterWithNullPassword() {
 		// Arrange
-		EntityManagerFactory factory = mock(EntityManagerFactory.class);
-		EntityManager entityManager = mock(EntityManager.class);
-		EntityTransaction trans = mock(EntityTransaction.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
-		UserModel um = new UserModel(entityManager, factory);
+		UserModel um = new UserModel(entityManager, factory, queries);
 		
 		// Act
 		boolean result = um.addUserToSystem("dsfd", null);
@@ -95,19 +95,29 @@ public class RegisterModelTests {
 	}
 	
 	@Test
-	public void shouldntRegisterWithEntityMangerException() { // If username exists for example
+	public void shouldntRegisterWithEntityMangerException() { 
 		// Arrange
-		EntityManagerFactory factory = mock(EntityManagerFactory.class);
-		EntityManager entityManager = mock(EntityManager.class);
-		EntityTransaction trans = mock(EntityTransaction.class);
 		when(entityManager.getTransaction()).thenThrow(new RuntimeException());
-		UserModel um = new UserModel(entityManager, factory);
+		UserModel um = new UserModel(entityManager, factory, queries);
 		
 		// Act
 		boolean result = um.addUserToSystem("dsfd", "dsfsdf");
 		
 		// Assert
 		assertFalse("Successfully register", result);
+	}
+	
+	@Test
+	public void shouldntRegisterWithDuplicateUsername() { 
+		// Arrange
+		when(queries.doesUsernameExist("username")).thenReturn(true);
+		UserModel um = new UserModel(entityManager, factory, queries);
+		
+		// Act
+		boolean result = um.addUserToSystem("dsfd", "dsfsdf");
+		
+		// Assert
+		assertFalse("Unsuccessfully register", result);
 	}	
 
 }

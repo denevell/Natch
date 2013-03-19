@@ -2,16 +2,23 @@ package org.denevell.natch.db.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
-@NamedQuery(name=UserEntity.NAMED_QUERY_FIND_WITH_USERNAME_AND_PASSWORD,query=
-	"select u from User u where " +
+@NamedQueries({
+		@NamedQuery(name=UserEntity.NAMED_QUERY_FIND_WITH_USERNAME_AND_PASSWORD,query=
+			"select u from User u where " +
 			"u.username=':" + UserEntity.NAMED_QUERY_PARAM_USERNAME + "' and " +
-			"u.password=':" + UserEntity.NAMED_QUERY_PARAM_PASSWORD + "'")
+			"u.password=':" + UserEntity.NAMED_QUERY_PARAM_PASSWORD + "'"),
+		@NamedQuery(name=UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME,query=
+			"select u from User u where " +
+			"u.username=':" + UserEntity.NAMED_QUERY_PARAM_USERNAME + "'")
+		})
 @Entity
 public class UserEntity {
 	
 	public static final String NAMED_QUERY_FIND_WITH_USERNAME_AND_PASSWORD = "findWithUsernamePassword";
+	public static final String NAMED_QUERY_FIND_EXISTING_USERNAME= "findExistingUsername";
 	public static final String NAMED_QUERY_PARAM_PASSWORD = "password";
 	public static final String NAMED_QUERY_PARAM_USERNAME = "username";
 	
