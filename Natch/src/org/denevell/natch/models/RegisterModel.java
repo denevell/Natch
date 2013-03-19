@@ -9,7 +9,7 @@ import javax.persistence.Persistence;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.db.entities.UserEntityQueries;
 
-public class UserModel {
+public class RegisterModel {
 	
 	private EntityManagerFactory mFactory;
 	private EntityManager mEntityManager;
@@ -18,16 +18,20 @@ public class UserModel {
 	/**
 	 * For DI testing
 	 */
-	public UserModel(EntityManager entityManager, EntityManagerFactory factory, UserEntityQueries ueq ) {
+	public RegisterModel(EntityManager entityManager, EntityManagerFactory factory, UserEntityQueries ueq ) {
 		mFactory = factory;
 		mEntityManager =  entityManager;
 		mUserEntityQueries = ueq;
 	}
 	
-	public UserModel() {
+	public RegisterModel() {
 		mFactory = Persistence.createEntityManagerFactory("users");
 		mEntityManager = mFactory.createEntityManager();		
 		mUserEntityQueries = new UserEntityQueries();
+	}
+	
+	public enum RegisterResult {
+		REGISTERED, UNKNOWN_ERROR, DUPLICATE_USERNAME, USER_INPUT_ERROR
 	}
 	
 	private void closeEntityConnection() {
@@ -39,9 +43,9 @@ public class UserModel {
 		}
 	}	
 	
-	public boolean addUserToSystem(String password, String username) {
+	public RegisterResult addUserToSystem(String username, String password) {
 		if(password==null || password.trim().length()==0 || username==null || username.trim().length()==0) {
-			return false;
+			return RegisterResult.USER_INPUT_ERROR;
 		}
 		UserEntity u = new UserEntity();
 		u.setPassword(password);
@@ -54,16 +58,16 @@ public class UserModel {
 				trans.begin();
 				mEntityManager.persist(u);
 				trans.commit();
-				return true;		
+				return RegisterResult.REGISTERED;
 			} else {
-				return false;
+				return RegisterResult.DUPLICATE_USERNAME;
 			}
 		} catch(Exception e) {
 			// TODO: Log
 			e.printStackTrace();
 			if(trans!=null) trans.rollback();
 			closeEntityConnection();		
-			return false;
+			return RegisterResult.UNKNOWN_ERROR;
 		} finally {
 			closeEntityConnection();		
 		}

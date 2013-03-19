@@ -1,7 +1,6 @@
 package org.denevell.natch.tests;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -10,7 +9,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
 import org.denevell.natch.db.entities.UserEntityQueries;
-import org.denevell.natch.models.UserModel;
+import org.denevell.natch.models.RegisterModel;
+import org.denevell.natch.models.RegisterModel.RegisterResult;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,100 +24,96 @@ public class RegisterModelTests {
 	@Before
 	public void setup() {
 		factory = mock(EntityManagerFactory.class);
-		entityManager = mock(EntityManager.class);
 		trans = mock(EntityTransaction.class);
+		entityManager = mock(EntityManager.class);
+		when(entityManager.getTransaction()).thenReturn(trans);
 		queries = mock(UserEntityQueries.class);
 	}
 	
 	@Test
 	public void shouldRegisterWithUsernameAndPassword() {
 		// Arrange
-		when(entityManager.getTransaction()).thenReturn(trans);
-		UserModel um = new UserModel(entityManager, factory, queries);
+		RegisterModel um = new RegisterModel(entityManager, factory, queries);
 		
 		// Act
-		boolean result = um.addUserToSystem("user", "pass");
+		RegisterResult result = um.addUserToSystem("user", "pass");
 		
 		// Assert
-		assertTrue("Successfully register", result);
+		assertEquals("Successfully register", RegisterResult.REGISTERED, result);
 	}
 	
 	@Test
 	public void shouldntRegisterWithBlankUsername() {
 		// Arrange
-		when(entityManager.getTransaction()).thenReturn(trans);
-		UserModel um = new UserModel(entityManager, factory, queries);
+		RegisterModel um = new RegisterModel(entityManager, factory, queries);
 		
 		// Act
-		boolean result = um.addUserToSystem("", "asd");
+		RegisterResult result = um.addUserToSystem("", "asd");
 		
 		// Assert
-		assertFalse("Successfully register", result);
+		assertEquals(RegisterResult.USER_INPUT_ERROR, result);
 	}
 	
 	@Test
 	public void shouldntRegisterWithNullUsername() {
 		// Arrange
-		when(entityManager.getTransaction()).thenReturn(trans);
-		UserModel um = new UserModel(entityManager, factory, queries);
+		RegisterModel um = new RegisterModel(entityManager, factory, queries);
 		
 		// Act
-		boolean result = um.addUserToSystem(null, "asd");
+		RegisterResult result = um.addUserToSystem(null, "asd");
 		
 		// Assert
-		assertFalse("Successfully register", result);
+		assertEquals(RegisterResult.USER_INPUT_ERROR, result);
 	}
 	
 	@Test
 	public void shouldntRegisterWithBlankPassword() {
 		// Arrange
-		when(entityManager.getTransaction()).thenReturn(trans);
-		UserModel um = new UserModel(entityManager, factory, queries);
+		RegisterModel um = new RegisterModel(entityManager, factory, queries);
 		
 		// Act
-		boolean result = um.addUserToSystem("dsfd", "");
+		RegisterResult result = um.addUserToSystem("dsfd", "");
 		
 		// Assert
-		assertFalse("Successfully register", result);
+		assertEquals(RegisterResult.USER_INPUT_ERROR, result);
 	}
 	
 	@Test
 	public void shouldntRegisterWithNullPassword() {
 		// Arrange
-		when(entityManager.getTransaction()).thenReturn(trans);
-		UserModel um = new UserModel(entityManager, factory, queries);
+		RegisterModel um = new RegisterModel(entityManager, factory, queries);
 		
 		// Act
-		boolean result = um.addUserToSystem("dsfd", null);
+		RegisterResult result = um.addUserToSystem("dsfd", null);
 		
 		// Assert
-		assertFalse("Successfully register", result);
+		assertEquals(RegisterResult.USER_INPUT_ERROR, result);
 	}
 	
 	@Test
 	public void shouldntRegisterWithEntityMangerException() { 
 		// Arrange
 		when(entityManager.getTransaction()).thenThrow(new RuntimeException());
-		UserModel um = new UserModel(entityManager, factory, queries);
+		RegisterModel um = new RegisterModel(entityManager, factory, queries);
 		
 		// Act
-		boolean result = um.addUserToSystem("dsfd", "dsfsdf");
+		RegisterResult result = um.addUserToSystem("dsfd", "dsfsdf");
 		
 		// Assert
-		assertFalse("Successfully register", result);
+		assertEquals(RegisterResult.UNKNOWN_ERROR, result);
 	}
 	
 	@Test
 	public void shouldntRegisterWithDuplicateUsername() { 
 		// Arrange
 		when(queries.doesUsernameExist("username")).thenReturn(true);
-		UserModel um = new UserModel(entityManager, factory, queries);
+		RegisterModel um = new RegisterModel(entityManager, factory, queries);
 		
 		// Act
-		boolean result = um.addUserToSystem("dsfd", "dsfsdf");
+		RegisterResult result = um.addUserToSystem("username", "dsfsdf");
 		
 		// Assert
-		assertFalse("Unsuccessfully register", result);
+		assertEquals(RegisterResult.DUPLICATE_USERNAME, result);
 	}	
 
 }
