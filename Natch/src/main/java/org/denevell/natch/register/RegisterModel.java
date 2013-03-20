@@ -1,4 +1,4 @@
-package org.denevell.natch.models;
+package org.denevell.natch.register;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

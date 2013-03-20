@@ -1,17 +1,17 @@
-package org.denevell.natch.rest.input;
+package org.denevell.natch.register;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class RegisterInput {
+public class RegisterResourceInput {
 	
 	private String username; 
 	private String password;
 	
-	public RegisterInput() {
+	public RegisterResourceInput() {
 	}
 
-	public RegisterInput(String username, String password) {
+	public RegisterResourceInput(String username, String password) {
 		this.username = username;
 		this.password = password;
 	}

@@ -1,9 +1,9 @@
-package org.denevell.natch.rest.output;
+package org.denevell.natch.register;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class RegisterReturnData {
+public class RegisterResourceReturnData {
 
 	private boolean successful;
 

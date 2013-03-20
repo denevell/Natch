@@ -1,4 +1,4 @@
-package org.denevell.natch.rest;
+package org.denevell.natch.register;
 
 import java.net.HttpURLConnection;
 
@@ -13,10 +13,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.denevell.natch.models.RegisterModel;
-import org.denevell.natch.models.RegisterModel.RegisterResult;
-import org.denevell.natch.rest.input.RegisterInput;
-import org.denevell.natch.rest.output.RegisterReturnData;
+import org.denevell.natch.register.RegisterModel.RegisterResult;
+
 
 @Path("user")
 public class RegisterResource {
@@ -40,8 +38,8 @@ public class RegisterResource {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public RegisterReturnData register(RegisterInput registerInput) {
-		RegisterReturnData regReturnData = new RegisterReturnData();
+	public RegisterResourceReturnData register(RegisterResourceInput registerInput) {
+		RegisterResourceReturnData regReturnData = new RegisterResourceReturnData();
 		RegisterResult okay = RegisterResult.UNKNOWN_ERROR;
 		if(registerInput!=null) {
 			okay = mUserModel.addUserToSystem(registerInput.getUsername(), registerInput.getPassword());

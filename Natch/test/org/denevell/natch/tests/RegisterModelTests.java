@@ -9,8 +9,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
 import org.denevell.natch.db.entities.UserEntityQueries;
-import org.denevell.natch.models.RegisterModel;
-import org.denevell.natch.models.RegisterModel.RegisterResult;
+import org.denevell.natch.register.RegisterModel;
+import org.denevell.natch.register.RegisterModel.RegisterResult;
 import org.junit.Before;
 import org.junit.Test;
 
