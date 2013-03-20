@@ -25,7 +25,7 @@ The start of a REST interface for a forum.
 * tech task: Re-enable db locking 
 * ~~tech task: Gradle build~~
 * tech task: Gradle war install 
-* tech task: Gradle tests run 
+* ~~tech task: Gradle tests run~~ 
 * tech task: Integration tests setup 
 * ~~tech task: Check for existing username in register~~
 

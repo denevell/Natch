@@ -5,6 +5,10 @@ repositories {
 }
 
 dependencies {
+	testCompile 'junit:junit:4.11'
+	testCompile 'org.mockito:mockito-all:1.9.5'
+	testCompile 'com.sun.jersey:jersey-bundle:1.17.1'
+	testCompile 'org.codehaus.jackson:jackson-core-asl:1.9.12'
 	providedCompile	'org.apache.tomcat:tomcat-servlet-api:7.0.37'
 	providedCompile 'com.sun.jersey:jersey-bundle:1.17.1'
 	providedCompile 'org.eclipse.persistence:javax.persistence:2.0.0'

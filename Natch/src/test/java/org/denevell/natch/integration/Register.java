@@ -38,7 +38,7 @@ public class Register {
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
 		// Assert
-		assertTrue(result.isSuccessful());
+		assertTrue("Should return true as 'successful' field", result.isSuccessful());
 	}
 	
 	public void register_shouldSeeErrorJsonOnBlanksPassed() {

@@ -16,6 +16,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>java</name>
+			<type>2</type>
+			<location>/home/user/workspace/Natch/Natch/src/test/java</location>
+		</link>
+		<link>
 			<name>test</name>
 			<type>2</type>
 			<location>/home/user/workspace/Natch/Natch/test</location>
