@@ -1,5 +1,6 @@
 package org.denevell.natch.integration;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import javax.ws.rs.core.MediaType;
@@ -45,8 +46,20 @@ public class Register {
 		
 	}
 
+	@Test
 	public void register_shouldSeeErrorJsonOnExistingUsername() {
+		// Arrange 
+	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
+	    
+	    // Act
+		RegisterResourceReturnData result = service
+	    		.path("rest")
+	    		.path("user")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.put(RegisterResourceReturnData.class, registerInput);
 		
+		// Assert
+		assertFalse("Should return false as 'successful' field", result.isSuccessful());
 	}
 	
 	public void register_shouldSeeErrorJsonOnBadJsonPassed() {

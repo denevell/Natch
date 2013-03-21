@@ -1,5 +1,5 @@
 apply plugin: 'war'
- 
+
 repositories {
    mavenCentral()
 }
@@ -12,4 +12,18 @@ dependencies {
 	providedCompile	'org.apache.tomcat:tomcat-servlet-api:7.0.37'
 	providedCompile 'com.sun.jersey:jersey-bundle:1.17.1'
 	providedCompile 'org.eclipse.persistence:javax.persistence:2.0.0'
+
 }    
+
+task createIntegrationWar(type: War, dependsOn: classes) {
+    sourceSets.main.resources.srcDirs = ['src/test/resources']
+    classifier = 'Integration'
+}
+
+task undeploy(type:Exec) {
+	commandLine = ['rm', '/var/lib/tomcat7/webapps/Natch-Integration.war']
+}
+
+task deploy(type:Exec) {
+	commandLine = ['cp', 'build/libs/Natch-Integration.war', '/var/lib/tomcat7/webapps/']
+}
