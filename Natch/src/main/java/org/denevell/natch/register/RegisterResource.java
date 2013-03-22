@@ -50,7 +50,7 @@ public class RegisterResource {
 			}
 		} 
 		if(okay==RegisterResult.UNKNOWN_ERROR) {
-			throw new WebApplicationException(HttpURLConnection.HTTP_BAD_REQUEST);
+			throw new WebApplicationException(HttpURLConnection.HTTP_SEE_OTHER);
 		}
 		return regReturnData;
 	}

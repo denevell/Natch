@@ -15,15 +15,15 @@ dependencies {
 
 }    
 
-task createIntegrationWar(type: War, dependsOn: classes) {
+task createFunctionalWar(type: War, dependsOn: classes) {
     sourceSets.main.resources.srcDirs = ['src/test/resources']
-    classifier = 'Integration'
+    classifier = 'Functional'
 }
 
-task undeploy(type:Exec) {
-	commandLine = ['rm', '/var/lib/tomcat7/webapps/Natch-Integration.war']
+task deployFunctionalWar(type:Exec, dependsOn: createFunctionalWar) {
+       commandLine = ['cp', 'build/libs/Natch-Functional.war', '/var/lib/tomcat7/webapps/']
+       sleep 10000
 }
 
-task deploy(type:Exec) {
-	commandLine = ['cp', 'build/libs/Natch-Integration.war', '/var/lib/tomcat7/webapps/']
-}
+
+test.dependsOn deployFunctionalWar

@@ -9,7 +9,7 @@
 			<property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:sqlite:/var/lib/tomcat7/dbs/test.db" />
 			<property name="eclipselink.logging.level" value="ALL" />
-			<property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
+			<property name="eclipselink.ddl-generation" value="create-tables" />
 	     </properties>
      </persistence-unit>
 </persistence>

@@ -6,10 +6,11 @@ The start of a REST interface for a forum.
 
 ### 0.1
 
-* register: shouldRegisterWithUsernameAndPassword
+* ~~register: shouldRegisterWithUsernameAndPassword~~
 * register: shouldSeeErrorJsonOnBlanksPassed
 * register: shouldSeeErrorJsonOnExistingUsername
 * register: shouldSeeErrorJsonOnBadJsonPassed
+* register: shouldSeeErrorJsonOnUnknownError
 * register: shouldSaltPassword
 * login: shouldLoginWithGoodCredentials
 * login: shouldReturnAuthKey
@@ -24,10 +25,14 @@ The start of a REST interface for a forum.
 * tech task: Logging intergration
 * tech task: Re-enable db locking 
 * ~~tech task: Gradle build~~
-* tech task: Gradle war install 
+* ~~tech task: Gradle war install~~
 * ~~tech task: Gradle tests run~~ 
-* tech task: Integration tests setup 
+* ~~tech task: Integration tests setup~~
 * ~~tech task: Check for existing username in register~~
+
+### Misc tech tasks
+
+* Better war deploy method than cping the war to the directory.
 
 ### Later features
 * Superuser

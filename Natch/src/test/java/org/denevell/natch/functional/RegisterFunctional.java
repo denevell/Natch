@@ -1,5 +1,6 @@
 package org.denevell.natch.functional;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -31,9 +32,7 @@ public class RegisterFunctional {
 	    
 	    Process p = Runtime.getRuntime().exec("rm -f /var/lib/tomcat7/dbs/test.db");
 	    p.waitFor();
-	    BufferedReader result = new BufferedReader(new  InputStreamReader(p.getErrorStream()));
-	    System.out.println(result.readLine());
-	    
+	    assertEquals(0, p.exitValue());
 	}
 
 	@Test
