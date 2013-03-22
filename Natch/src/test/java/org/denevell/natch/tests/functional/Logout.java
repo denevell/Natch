@@ -1,4 +1,4 @@
-package org.denevell.natch.functional;
+package org.denevell.natch.tests.functional;
 
 public class Logout {
 

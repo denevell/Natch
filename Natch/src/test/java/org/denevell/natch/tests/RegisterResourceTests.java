@@ -35,6 +35,7 @@ public class RegisterResourceTests {
 		
 		// Assert
 		assertTrue(result.isSuccessful());
+		assertEquals("Error json", "", result.getError());
 	}
 	
 	@Test
