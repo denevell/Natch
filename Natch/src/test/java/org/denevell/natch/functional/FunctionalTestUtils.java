@@ -1,6 +1,6 @@
-package org.denevell.natch.integration;
+package org.denevell.natch.functional;
 
-public class IntegrationTestUtils {
+public class FunctionalTestUtils {
 
 	public static String getBaseURI() {
 		return "http://localhost:8080/Natch-Integration/";

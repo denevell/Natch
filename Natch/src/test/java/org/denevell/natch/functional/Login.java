@@ -1,4 +1,4 @@
-package org.denevell.natch.integration;
+package org.denevell.natch.functional;
 
 public class Login {
 

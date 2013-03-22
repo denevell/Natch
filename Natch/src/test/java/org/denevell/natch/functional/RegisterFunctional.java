@@ -1,4 +1,4 @@
-package org.denevell.natch.integration;
+package org.denevell.natch.functional;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -27,7 +27,7 @@ public class RegisterFunctional {
 	public void setup() throws IOException, InterruptedException {
 	    ClientConfig config = new DefaultClientConfig();
 	    Client client = Client.create(config);
-	    service = client.resource(IntegrationTestUtils.getBaseURI());
+	    service = client.resource(FunctionalTestUtils.getBaseURI());
 	    
 	    Process p = Runtime.getRuntime().exec("rm -f /var/lib/tomcat7/dbs/test.db");
 	    p.waitFor();
