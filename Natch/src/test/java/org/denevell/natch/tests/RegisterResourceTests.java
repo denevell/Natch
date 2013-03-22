@@ -53,4 +53,78 @@ public class RegisterResourceTests {
 		assertEquals("Error json", "Username already exists.", result.getError());
 	}
 	
+	@Test
+	public void shouldntRegisterWithBlanks() {
+		// Arrange
+		RegisterResource resource = new RegisterResource(userModel);
+		RegisterResourceInput registerInput = new RegisterResourceInput("", "");
+		when(userModel.addUserToSystem("", "")).thenReturn(RegisterResult.USER_INPUT_ERROR);
+		
+		// Act
+		RegisterResourceReturnData result = resource.register(registerInput);
+		
+		// Assert
+		assertFalse(result.isSuccessful());
+		assertEquals("Error json", "Username and password cannot be blank.", result.getError());
+	}
+	
+	@Test
+	public void shouldntRegisterWithBlankUsername() {
+		// Arrange
+		RegisterResource resource = new RegisterResource(userModel);
+		RegisterResourceInput registerInput = new RegisterResourceInput("", "pass");
+		when(userModel.addUserToSystem("", "pass")).thenReturn(RegisterResult.USER_INPUT_ERROR);
+		
+		// Act
+		RegisterResourceReturnData result = resource.register(registerInput);
+		
+		// Assert
+		assertFalse(result.isSuccessful());
+		assertEquals("Error json", "Username and password cannot be blank.", result.getError());
+	}
+	
+	@Test
+	public void shouldntRegisterWithBlankPassword() {
+		// Arrange
+		RegisterResource resource = new RegisterResource(userModel);
+		RegisterResourceInput registerInput = new RegisterResourceInput("user", "");
+		when(userModel.addUserToSystem("user", "")).thenReturn(RegisterResult.USER_INPUT_ERROR);
+		
+		// Act
+		RegisterResourceReturnData result = resource.register(registerInput);
+		
+		// Assert
+		assertFalse(result.isSuccessful());
+		assertEquals("Error json", "Username and password cannot be blank.", result.getError());
+	}
+	
+	@Test
+	public void shouldntRegisterWithNulls() {
+		// Arrange
+		RegisterResource resource = new RegisterResource(userModel);
+		RegisterResourceInput registerInput = new RegisterResourceInput(null, null);
+		when(userModel.addUserToSystem(null, null)).thenReturn(RegisterResult.USER_INPUT_ERROR);
+		
+		// Act
+		RegisterResourceReturnData result = resource.register(registerInput);
+		
+		// Assert
+		assertFalse(result.isSuccessful());
+		assertEquals("Error json", "Username and password cannot be blank.", result.getError());
+	}
+	
+	@Test
+	public void shouldntRegisterWithNullInputObject() {
+		// Arrange
+		RegisterResource resource = new RegisterResource(userModel);
+		when(userModel.addUserToSystem(null, null)).thenReturn(RegisterResult.USER_INPUT_ERROR);
+		
+		// Act
+		RegisterResourceReturnData result = resource.register(null);
+		
+		// Assert
+		assertFalse(result.isSuccessful());
+		assertEquals("Error json", "Username and password cannot be blank.", result.getError());
+	}
+	
 }

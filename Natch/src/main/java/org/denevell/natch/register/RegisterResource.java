@@ -1,14 +1,12 @@
 package org.denevell.natch.register;
 
-import java.net.HttpURLConnection;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
@@ -35,13 +33,22 @@ public class RegisterResource {
 		mUserModel = userModel;
 	}
 	
+	@DELETE
+	public void clearTestDb() {
+		mUserModel.clearTestDd();
+	}
+	
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public RegisterResourceReturnData register(RegisterResourceInput registerInput) {
 		RegisterResourceReturnData regReturnData = new RegisterResourceReturnData();
-		RegisterResult okay = RegisterResult.UNKNOWN_ERROR;
-		if(registerInput!=null) {
+		if(!isValidRegisterInput(registerInput)) {
+			regReturnData.setSuccessful(false);
+			regReturnData.setError("Username and password cannot be blank.");
+			return regReturnData;
+		} else {
+			RegisterResult okay = RegisterResult.UNKNOWN_ERROR;
 			okay = mUserModel.addUserToSystem(registerInput.getUsername(), registerInput.getPassword());
 			if(okay==RegisterResult.REGISTERED) {
 				regReturnData.setSuccessful(true);
@@ -49,10 +56,15 @@ public class RegisterResource {
 				regReturnData.setSuccessful(false);
 				regReturnData.setError("Username already exists.");
 			}
+			return regReturnData;
 		} 
-		if(okay==RegisterResult.UNKNOWN_ERROR) {
-			throw new WebApplicationException(HttpURLConnection.HTTP_SEE_OTHER);
-		}
-		return regReturnData;
+	}
+
+	private boolean isValidRegisterInput(RegisterResourceInput registerInput) {
+		return registerInput!=null 
+				&& registerInput.getPassword()!=null 
+				&& registerInput.getPassword().trim().length()!=0 
+				&& registerInput.getUsername()!=null
+				&& registerInput.getUsername().trim().length()!=0;
 	}
 }

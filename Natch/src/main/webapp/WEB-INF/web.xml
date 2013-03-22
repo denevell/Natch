@@ -22,9 +22,4 @@
 		<servlet-name>Jersey REST Service</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
-
-	<resource-ref> 
-	    <res-ref-name>jdbc/users</res-ref-name> 
-		<res-type>javax.sql.DataSource</res-type> 
-	</resource-ref> 
 </web-app>

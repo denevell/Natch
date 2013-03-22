@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.db.entities.UserEntityQueries;
@@ -40,6 +41,15 @@ public class RegisterModel {
 			// Log
 		}
 	}	
+	
+	public void clearTestDd() {
+		EntityTransaction trans = mEntityManager.getTransaction();
+		trans.begin();
+		Query q = mEntityManager.createQuery("delete from UserEntity");
+		q.executeUpdate();
+		trans.commit();
+		closeEntityConnection();
+	}
 	
 	public RegisterResult addUserToSystem(String username, String password) {
 		if(password==null || password.trim().length()==0 || username==null || username.trim().length()==0) {

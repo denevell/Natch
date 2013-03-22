@@ -7,7 +7,7 @@ The start of a REST interface for a forum.
 ### 0.1
 
 * ~~register: shouldRegisterWithUsernameAndPassword~~
-* register: shouldSeeErrorJsonOnBlanksPassed
+* ~~register: shouldSeeErrorJsonOnBlanksPassed~~
 * ~~register: shouldSeeErrorJsonOnExistingUsername~~
 * register: shouldSeeErrorJsonOnBadJsonPassed
 * register: shouldSeeErrorJsonOnUnknownError
@@ -34,6 +34,7 @@ The start of a REST interface for a forum.
 ### Misc tech tasks
 
 * Better war deploy method than cping the war to the directory.
+* Better way to clear database on functional tests - put tests in war and access the jpa that way?
 
 ### Later features
 * Superuser

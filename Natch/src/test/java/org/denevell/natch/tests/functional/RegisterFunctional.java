@@ -22,9 +22,10 @@ public class RegisterFunctional {
 	@Before
 	public void setup() throws IOException, InterruptedException {
 		service = TestUtils.getRESTClient();
-	    Process p = Runtime.getRuntime().exec("rm -f /var/lib/tomcat7/dbs/test.db");
-	    p.waitFor();
-	    assertEquals(0, p.exitValue());
+		service
+	    	.path("rest")
+	    	.path("user")
+	    	.delete();
 	}
 
 	@Test
@@ -44,10 +45,91 @@ public class RegisterFunctional {
 		assertTrue("Should return true as 'successful' field", result.isSuccessful());
 	}
 	
+	@Test
 	public void shouldSeeErrorJsonOnBlanksPassed() {
+		// Arrange 
+	    RegisterResourceInput registerInput = new RegisterResourceInput("", "");
+	    
+	    // Act
+		RegisterResourceReturnData result = service
+	    		.path("rest")
+	    		.path("user")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.put(RegisterResourceReturnData.class, registerInput);
 		
+		// Assert
+		assertEquals("Username and password cannot be blank.", result.getError());
+		assertFalse("Should return false 'successful' field", result.isSuccessful());		
 	}
-
+	
+	@Test
+	public void shouldSeeErrorJsonOnBlankUsername() {
+		// Arrange 
+	    RegisterResourceInput registerInput = new RegisterResourceInput("", "passy");
+	    
+	    // Act
+		RegisterResourceReturnData result = service
+	    		.path("rest")
+	    		.path("user")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.put(RegisterResourceReturnData.class, registerInput);
+		
+		// Assert
+		assertEquals("Username and password cannot be blank.", result.getError());
+		assertFalse("Should return false 'successful' field", result.isSuccessful());		
+	}
+	
+	@Test
+	public void shouldSeeErrorJsonOnBlankPassword() {
+		// Arrange 
+	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "");
+	    
+	    // Act
+		RegisterResourceReturnData result = service
+	    		.path("rest")
+	    		.path("user")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.put(RegisterResourceReturnData.class, registerInput);
+		
+		// Assert
+		assertEquals("Username and password cannot be blank.", result.getError());
+		assertFalse("Should return false 'successful' field", result.isSuccessful());		
+	}
+	
+	@Test
+	public void shouldSeeErrorJsonOnNullUsername() {
+		// Arrange 
+	    RegisterResourceInput registerInput = new RegisterResourceInput(null, "passy");
+	    
+	    // Act
+		RegisterResourceReturnData result = service
+	    		.path("rest")
+	    		.path("user")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.put(RegisterResourceReturnData.class, registerInput);
+		
+		// Assert
+		assertEquals("Username and password cannot be blank.", result.getError());
+		assertFalse("Should return false 'successful' field", result.isSuccessful());		
+	}
+	
+	@Test
+	public void shouldSeeErrorJsonOnNulls() {
+		// Arrange 
+	    RegisterResourceInput registerInput = new RegisterResourceInput(null, null);
+	    
+	    // Act
+		RegisterResourceReturnData result = service
+	    		.path("rest")
+	    		.path("user")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.put(RegisterResourceReturnData.class, registerInput);
+		
+		// Assert
+		assertEquals("Username and password cannot be blank.", result.getError());
+		assertFalse("Should return false 'successful' field", result.isSuccessful());		
+	}
+	
 	@Test
 	public void shouldSeeErrorJsonOnExistingUsername() {
 		// Arrange 
@@ -70,7 +152,27 @@ public class RegisterFunctional {
 		assertEquals("Should see blank error JSON", "", result.getError());
 		assertFalse("Should return false as 'successful' field", result2.isSuccessful());
 		assertEquals("Should see error JSON", "Username already exists.", result2.getError());
-	}
+	}	
+	
+	@Test
+	public void shouldSeeErrorJsonOnNullPassword() {
+		// Arrange 
+	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", null);
+	    
+	    // Act
+		RegisterResourceReturnData result = service
+	    		.path("rest")
+	    		.path("user")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.put(RegisterResourceReturnData.class, registerInput);
+		
+		// Assert
+		assertEquals("Username and password cannot be blank.", result.getError());
+		assertFalse("Should return false 'successful' field", result.isSuccessful());		
+	}	
+
+	
+
 	
 	public void shouldSeeErrorJsonOnBadJsonPassed() {
 		

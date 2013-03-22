@@ -15,14 +15,14 @@ dependencies {
 
 }    
 
-task createFunctionalWar(type: War, dependsOn: classes) {
+task createFunctionalWar(type: War) {
     sourceSets.main.resources.srcDirs = ['src/test/resources']
     classifier = 'Functional'
 }
 
 task deployFunctionalWar(type:Exec, dependsOn: createFunctionalWar) {
        commandLine = ['cp', 'build/libs/Natch-Functional.war', '/var/lib/tomcat7/webapps/']
-       sleep 10000
+       sleep(10000)
 }
 
 

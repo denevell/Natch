@@ -1,7 +1,0 @@
-<Context> 
-  <Resource name="jdbc/users" 
-            type="javax.sql.DataSource" 
-            driverClassName="org.sqlite.JDBC"
-            url="jdbc:sqlite:/var/lib/tomcat7/dbs/users.db"
-            /> 
-</Context>
