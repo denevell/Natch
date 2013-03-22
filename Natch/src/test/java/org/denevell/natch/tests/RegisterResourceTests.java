@@ -1,15 +1,16 @@
 package org.denevell.natch.tests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.denevell.natch.register.RegisterResourceInput;
 import org.denevell.natch.register.RegisterModel;
-import org.denevell.natch.register.RegisterResource;
-import org.denevell.natch.register.RegisterResourceReturnData;
 import org.denevell.natch.register.RegisterModel.RegisterResult;
+import org.denevell.natch.register.RegisterResource;
+import org.denevell.natch.register.RegisterResourceInput;
+import org.denevell.natch.register.RegisterResourceReturnData;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -48,6 +49,7 @@ public class RegisterResourceTests {
 		
 		// Assert
 		assertFalse(result.isSuccessful());
+		assertEquals("Error json", "Username already exists.", result.getError());
 	}
 	
 }

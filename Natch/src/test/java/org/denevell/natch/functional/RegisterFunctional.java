@@ -4,9 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import javax.ws.rs.core.MediaType;
 
@@ -48,6 +46,7 @@ public class RegisterFunctional {
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
 		// Assert
+		assertEquals("", result.getError());
 		assertTrue("Should return true as 'successful' field", result.isSuccessful());
 	}
 	
@@ -75,6 +74,7 @@ public class RegisterFunctional {
 		// Assert
 		assertTrue("Should return true as 'successful' field", result.isSuccessful());
 		assertFalse("Should return false as 'successful' field", result2.isSuccessful());
+		assertEquals("Should see error JSON", "Username already exists.", result2.getError());
 	}
 	
 	public void register_shouldSeeErrorJsonOnBadJsonPassed() {

@@ -8,7 +8,7 @@ The start of a REST interface for a forum.
 
 * ~~register: shouldRegisterWithUsernameAndPassword~~
 * register: shouldSeeErrorJsonOnBlanksPassed
-* register: shouldSeeErrorJsonOnExistingUsername
+* ~~register: shouldSeeErrorJsonOnExistingUsername~~
 * register: shouldSeeErrorJsonOnBadJsonPassed
 * register: shouldSeeErrorJsonOnUnknownError
 * register: shouldSaltPassword
@@ -24,6 +24,7 @@ The start of a REST interface for a forum.
 * logout: shouldSeeErrorJsonIfNotLoggedIn
 * tech task: Logging intergration
 * tech task: Re-enable db locking 
+* tech task: Strings file somewhere
 * ~~tech task: Gradle build~~
 * ~~tech task: Gradle war install~~
 * ~~tech task: Gradle tests run~~ 

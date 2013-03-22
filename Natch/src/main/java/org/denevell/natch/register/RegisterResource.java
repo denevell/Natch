@@ -47,6 +47,7 @@ public class RegisterResource {
 				regReturnData.setSuccessful(true);
 			} else {
 				regReturnData.setSuccessful(false);
+				regReturnData.setError("Username already exists.");
 			}
 		} 
 		if(okay==RegisterResult.UNKNOWN_ERROR) {
