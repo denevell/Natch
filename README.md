@@ -22,6 +22,9 @@ The start of a REST interface for a forum.
 * user details: shouldSeeJsonErrorIfNotLoggedIn
 * logout: shouldLogout
 * logout: shouldSeeErrorJsonIfNotLoggedIn
+
+### 0.1 Tech tasks
+
 * tech task: Logging intergration
 * tech task: Re-enable db locking 
 * tech task: Strings file somewhere
