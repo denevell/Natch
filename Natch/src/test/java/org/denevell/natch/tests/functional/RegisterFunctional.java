@@ -170,13 +170,6 @@ public class RegisterFunctional {
 		assertEquals("Username and password cannot be blank.", result.getError());
 		assertFalse("Should return false 'successful' field", result.isSuccessful());		
 	}	
-
-	
-
-	
-	public void shouldSeeErrorJsonOnBadJsonPassed() {
-		
-	}
 	
 	public void shouldSaltPassword() {
 		

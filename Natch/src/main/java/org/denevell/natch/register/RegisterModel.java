@@ -42,7 +42,7 @@ public class RegisterModel {
 		}
 	}	
 	
-	public void clearTestDd() {
+	public void clearTestDb() {
 		EntityTransaction trans = mEntityManager.getTransaction();
 		trans.begin();
 		Query q = mEntityManager.createQuery("delete from UserEntity");

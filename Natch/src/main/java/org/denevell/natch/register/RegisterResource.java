@@ -35,7 +35,7 @@ public class RegisterResource {
 	
 	@DELETE
 	public void clearTestDb() {
-		mUserModel.clearTestDd();
+		mUserModel.clearTestDb();
 	}
 	
 	@PUT
@@ -43,28 +43,22 @@ public class RegisterResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public RegisterResourceReturnData register(RegisterResourceInput registerInput) {
 		RegisterResourceReturnData regReturnData = new RegisterResourceReturnData();
-		if(!isValidRegisterInput(registerInput)) {
+		if(registerInput==null) {
 			regReturnData.setSuccessful(false);
 			regReturnData.setError("Username and password cannot be blank.");
 			return regReturnData;
-		} else {
-			RegisterResult okay = RegisterResult.UNKNOWN_ERROR;
-			okay = mUserModel.addUserToSystem(registerInput.getUsername(), registerInput.getPassword());
-			if(okay==RegisterResult.REGISTERED) {
-				regReturnData.setSuccessful(true);
-			} else {
-				regReturnData.setSuccessful(false);
-				regReturnData.setError("Username already exists.");
-			}
-			return regReturnData;
-		} 
+		}
+		RegisterResult okay = mUserModel.addUserToSystem(registerInput.getUsername(), registerInput.getPassword());
+		if(okay==RegisterResult.REGISTERED) {
+			regReturnData.setSuccessful(true);
+		} else if(okay==RegisterResult.USER_INPUT_ERROR) {
+			regReturnData.setSuccessful(false);
+			regReturnData.setError("Username and password cannot be blank.");
+		} else if(okay==RegisterResult.DUPLICATE_USERNAME){
+			regReturnData.setSuccessful(false);
+			regReturnData.setError("Username already exists.");
+		}
+		return regReturnData;
 	}
 
-	private boolean isValidRegisterInput(RegisterResourceInput registerInput) {
-		return registerInput!=null 
-				&& registerInput.getPassword()!=null 
-				&& registerInput.getPassword().trim().length()!=0 
-				&& registerInput.getUsername()!=null
-				&& registerInput.getUsername().trim().length()!=0;
-	}
 }

@@ -9,7 +9,7 @@ The start of a REST interface for a forum.
 * ~~register: shouldRegisterWithUsernameAndPassword~~
 * ~~register: shouldSeeErrorJsonOnBlanksPassed~~
 * ~~register: shouldSeeErrorJsonOnExistingUsername~~
-* register: shouldSeeErrorJsonOnBadJsonPassed
+* ~~register: shouldSeeErrorJsonOnBadJsonPassed -- deferring until later~~
 * register: shouldSeeErrorJsonOnUnknownError
 * register: shouldSaltPassword
 * login: shouldLoginWithGoodCredentials
@@ -51,3 +51,4 @@ The start of a REST interface for a forum.
 * Message a user
 * Thread posts
 * Base64 login / reg
+* Intercept json parsing errors and return 400s.
