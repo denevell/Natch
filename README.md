@@ -16,7 +16,7 @@ The start of a REST interface for a forum.
 * login: shouldReturnAuthKey
 * login: shouldSeeJsonErrorOnBadCredentials
 * login: shouldSeeJsonErrorOnBlanksPassed
-* login: shouldSeeJsonErrorOnBadJson
+~~* login: shouldSeeJsonErrorOnBadJson~~
 * login: shouldBeAbleToLoginTwice
 * user details: shouldSeeUserDetails
 * user details: shouldSeeJsonErrorIfNotLoggedIn
@@ -51,4 +51,4 @@ The start of a REST interface for a forum.
 * Message a user
 * Thread posts
 * Base64 login / reg
-* Intercept json parsing errors and return 400s.
+* Intercept json parsing errors and return 400s: register, login
