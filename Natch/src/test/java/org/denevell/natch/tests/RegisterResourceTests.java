@@ -127,4 +127,19 @@ public class RegisterResourceTests {
 		assertEquals("Error json", "Username and password cannot be blank.", result.getError());
 	}
 	
+	@Test
+	public void shouldntRegisterWithUnknownError() {
+		// Arrange
+		RegisterResource resource = new RegisterResource(userModel);
+		RegisterResourceInput registerInput = new RegisterResourceInput("user", "pass");
+		when(userModel.addUserToSystem("user", "pass")).thenReturn(RegisterResult.UNKNOWN_ERROR);
+		
+		// Act
+		RegisterResourceReturnData result = resource.register(registerInput);
+		
+		// Assert
+		assertFalse(result.isSuccessful());
+		assertEquals("Error json", "Unknown error.", result.getError());
+	}
+	
 }

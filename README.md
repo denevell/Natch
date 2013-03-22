@@ -10,7 +10,7 @@ The start of a REST interface for a forum.
 * ~~register: shouldSeeErrorJsonOnBlanksPassed~~
 * ~~register: shouldSeeErrorJsonOnExistingUsername~~
 * ~~register: shouldSeeErrorJsonOnBadJsonPassed -- deferring until later~~
-* register: shouldSeeErrorJsonOnUnknownError
+* ~~register: shouldSeeErrorJsonOnUnknownError~~
 * register: shouldSaltPassword
 * login: shouldLoginWithGoodCredentials
 * login: shouldReturnAuthKey

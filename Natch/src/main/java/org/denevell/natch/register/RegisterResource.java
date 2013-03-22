@@ -57,6 +57,9 @@ public class RegisterResource {
 		} else if(okay==RegisterResult.DUPLICATE_USERNAME){
 			regReturnData.setSuccessful(false);
 			regReturnData.setError("Username already exists.");
+		} else {
+			regReturnData.setSuccessful(false);
+			regReturnData.setError("Unknown error.");
 		}
 		return regReturnData;
 	}
