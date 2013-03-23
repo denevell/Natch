@@ -11,7 +11,7 @@ The start of a REST interface for a forum.
 * ~~register: shouldSeeErrorJsonOnExistingUsername~~
 * ~~register: shouldSeeErrorJsonOnBadJsonPassed -- deferring until later~~
 * ~~register: shouldSeeErrorJsonOnUnknownError~~
-* register: shouldSaltPassword
+* ~~register: shouldSaltPassword~~
 * login: shouldLoginWithGoodCredentials
 * login: shouldReturnAuthKey
 * login: shouldSeeJsonErrorOnBadCredentials

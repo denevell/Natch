@@ -1,4 +1,5 @@
 apply plugin: 'war'
+apply plugin: 'eclipse'
 
 repositories {
    mavenCentral()
@@ -12,7 +13,7 @@ dependencies {
 	providedCompile	'org.apache.tomcat:tomcat-servlet-api:7.0.37'
 	providedCompile 'com.sun.jersey:jersey-bundle:1.17.1'
 	providedCompile 'org.eclipse.persistence:javax.persistence:2.0.0'
-
+	compile 'org.mindrot:jbcrypt:0.3m'
 }    
 
 task createFunctionalWar(type: War) {
@@ -22,7 +23,6 @@ task createFunctionalWar(type: War) {
 
 task deployFunctionalWar(type:Exec, dependsOn: createFunctionalWar) {
        commandLine = ['cp', 'build/libs/Natch-Functional.war', '/var/lib/tomcat7/webapps/']
-       sleep(10000)
 }
 
 

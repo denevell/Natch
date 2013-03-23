@@ -46,6 +46,30 @@ public class RegisterFunctional {
 	}
 	
 	@Test
+	public void shouldSeeErrorJsonOnExistingUsername() {
+		// Arrange 
+	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
+	    
+	    // Act
+		RegisterResourceReturnData result = service
+	    		.path("rest")
+	    		.path("user")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.put(RegisterResourceReturnData.class, registerInput);
+		RegisterResourceReturnData result2 = service
+	    		.path("rest")
+	    		.path("user")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.put(RegisterResourceReturnData.class, registerInput);
+		
+		// Assert
+		assertTrue("Should return true as 'successful' field", result.isSuccessful());
+		assertEquals("Should see blank error JSON", "", result.getError());
+		assertFalse("Should return false as 'successful' field", result2.isSuccessful());
+		assertEquals("Should see error JSON", "Username already exists.", result2.getError());
+	}	
+	
+	@Test
 	public void shouldSeeErrorJsonOnBlanksPassed() {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput("", "");
@@ -97,23 +121,6 @@ public class RegisterFunctional {
 	}
 	
 	@Test
-	public void shouldSeeErrorJsonOnNullUsername() {
-		// Arrange 
-	    RegisterResourceInput registerInput = new RegisterResourceInput(null, "passy");
-	    
-	    // Act
-		RegisterResourceReturnData result = service
-	    		.path("rest")
-	    		.path("user")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.put(RegisterResourceReturnData.class, registerInput);
-		
-		// Assert
-		assertEquals("Username and password cannot be blank.", result.getError());
-		assertFalse("Should return false 'successful' field", result.isSuccessful());		
-	}
-	
-	@Test
 	public void shouldSeeErrorJsonOnNulls() {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput(null, null);
@@ -131,9 +138,9 @@ public class RegisterFunctional {
 	}
 	
 	@Test
-	public void shouldSeeErrorJsonOnExistingUsername() {
+	public void shouldSeeErrorJsonOnNullUsername() {
 		// Arrange 
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
+	    RegisterResourceInput registerInput = new RegisterResourceInput(null, "passy");
 	    
 	    // Act
 		RegisterResourceReturnData result = service
@@ -141,18 +148,11 @@ public class RegisterFunctional {
 	    		.path("user")
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.put(RegisterResourceReturnData.class, registerInput);
-		RegisterResourceReturnData result2 = service
-	    		.path("rest")
-	    		.path("user")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.put(RegisterResourceReturnData.class, registerInput);
 		
 		// Assert
-		assertTrue("Should return true as 'successful' field", result.isSuccessful());
-		assertEquals("Should see blank error JSON", "", result.getError());
-		assertFalse("Should return false as 'successful' field", result2.isSuccessful());
-		assertEquals("Should see error JSON", "Username already exists.", result2.getError());
-	}	
+		assertEquals("Username and password cannot be blank.", result.getError());
+		assertFalse("Should return false 'successful' field", result.isSuccessful());		
+	}
 	
 	@Test
 	public void shouldSeeErrorJsonOnNullPassword() {
@@ -171,8 +171,12 @@ public class RegisterFunctional {
 		assertFalse("Should return false 'successful' field", result.isSuccessful());		
 	}	
 	
+	public void shouldSeeJsonErrorOnGarbageInput() {
+		// Deferred functional requirement
+	}
+	
 	public void shouldSaltPassword() {
-		
+		// Completed non functional requirement
 	}
 	
 }

@@ -8,6 +8,7 @@ import javax.persistence.Query;
 
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.db.entities.UserEntityQueries;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class RegisterModel {
 	
@@ -56,9 +57,9 @@ public class RegisterModel {
 			return RegisterResult.USER_INPUT_ERROR;
 		}
 		UserEntity u = new UserEntity();
+		password = generatedSaltedPassword(password);
 		u.setPassword(password);
 		u.setUsername(username);
-		u.setSalt("abc");
 		EntityTransaction trans = null;
 		try {
 			trans = mEntityManager.getTransaction();
@@ -79,5 +80,10 @@ public class RegisterModel {
 		} finally {
 			closeEntityConnection();		
 		}
+	}
+
+	private String generatedSaltedPassword(String password) {
+		password = BCrypt.hashpw(password, BCrypt.gensalt(12));
+		return password;
 	}
 }
