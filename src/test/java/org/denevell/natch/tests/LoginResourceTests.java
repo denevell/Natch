@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.denevell.natch.login.LoginModel;
+import org.denevell.natch.login.LoginModel.LoginEnumResult;
 import org.denevell.natch.login.LoginModel.LoginResult;
 import org.denevell.natch.login.LoginResource;
 import org.denevell.natch.login.LoginResourceInput;
@@ -28,7 +29,7 @@ public class LoginResourceTests {
 		// Arrange
 		LoginResource resource = new LoginResource(userModel);
 		LoginResourceInput loginInput = new LoginResourceInput("username", "password");
-		when(userModel.login("username", "password")).thenReturn(LoginResult.LOGGED_IN);
+		when(userModel.login("username", "password")).thenReturn(new LoginResult(LoginEnumResult.LOGGED_IN));
 		
 		// Act
 		LoginResourceReturnData result = resource.login(loginInput);
@@ -43,7 +44,7 @@ public class LoginResourceTests {
 		// Arrange
 		LoginResource resource = new LoginResource(userModel);
 		LoginResourceInput loginInput = new LoginResourceInput("username", "password");
-		when(userModel.login("username", "password")).thenReturn(LoginResult.CREDENTIALS_INCORRECT);
+		when(userModel.login("username", "password")).thenReturn(new LoginResult(LoginEnumResult.CREDENTIALS_INCORRECT));
 		
 		// Act
 		LoginResourceReturnData result = resource.login(loginInput);
@@ -54,10 +55,12 @@ public class LoginResourceTests {
 	}
 	
 	@Test
-	public void shouldntLoginWithBlanks() {
+	public void shouldntLoginBadJsonInput() {
 		// Arrange
 		LoginResource resource = new LoginResource(userModel);
-		LoginResourceInput loginInput = new LoginResourceInput(" ", " ");
+		LoginResourceInput loginInput = new LoginResourceInput("username", "password");
+		when(userModel.login("username", "password")).thenReturn(new LoginResult(LoginEnumResult.USER_INPUT_ERROR));
+		
 		
 		// Act
 		LoginResourceReturnData result = resource.login(loginInput);
@@ -66,75 +69,6 @@ public class LoginResourceTests {
 		assertFalse("Fail to register", result.isSuccessful());
 		assertEquals("Json error message", "Incorrect username or password.", result.getError());
 	}
-	
-	@Test
-	public void shouldntLoginWithBlankUsername() {
-		// Arrange
-		LoginResource resource = new LoginResource(userModel);
-		LoginResourceInput loginInput = new LoginResourceInput(" ", "password");
-		
-		// Act
-		LoginResourceReturnData result = resource.login(loginInput);
-		
-		// Assert
-		assertFalse("Fail to register", result.isSuccessful());
-		assertEquals("Json error message", "Incorrect username or password.", result.getError());
-	}
-	
-	@Test
-	public void shouldntLoginWithBlankPassword() {
-		// Arrange
-		LoginResource resource = new LoginResource(userModel);
-		LoginResourceInput loginInput = new LoginResourceInput("username", " ");
-		
-		// Act
-		LoginResourceReturnData result = resource.login(loginInput);
-		
-		// Assert
-		assertFalse("Fail to register", result.isSuccessful());
-		assertEquals("Json error message", "Incorrect username or password.", result.getError());
-	}
-	
-	@Test
-	public void shouldntLoginWithNulls() {
-		// Arrange
-		LoginResource resource = new LoginResource(userModel);
-		LoginResourceInput loginInput = new LoginResourceInput(null, null);
-		
-		// Act
-		LoginResourceReturnData result = resource.login(loginInput);
-		
-		// Assert
-		assertFalse("Fail to register", result.isSuccessful());
-		assertEquals("Json error message", "Incorrect username or password.", result.getError());
-	}
-	
-	@Test
-	public void shouldntLoginWithNullUsername() {
-		// Arrange
-		LoginResource resource = new LoginResource(userModel);
-		LoginResourceInput loginInput = new LoginResourceInput(null, "password");
-		
-		// Act
-		LoginResourceReturnData result = resource.login(loginInput);
-		
-		// Assert
-		assertFalse("Fail to register", result.isSuccessful());
-		assertEquals("Json error message", "Incorrect username or password.", result.getError());
-	}
-	@Test
-	public void shouldntLoginWithNullPassword() {
-		// Arrange
-		LoginResource resource = new LoginResource(userModel);
-		LoginResourceInput loginInput = new LoginResourceInput("username", null);
-		
-		// Act
-		LoginResourceReturnData result = resource.login(loginInput);
-		
-		// Assert
-		assertFalse("Fail to register", result.isSuccessful());
-		assertEquals("Json error message", "Incorrect username or password.", result.getError());
-	}	
 	
 	@Test
 	public void shouldntLoginWithNullInputObject() {

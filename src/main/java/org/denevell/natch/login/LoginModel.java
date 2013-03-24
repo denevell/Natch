@@ -6,7 +6,31 @@ import org.denevell.natch.utils.PasswordSaltUtils;
 public class LoginModel {
 	
 	private UserEntityQueries mUserEntityQueries;
-	public enum LoginResult { LOGGED_IN, USER_INPUT_ERROR, UNKNOWN_ERROR, CREDENTIALS_INCORRECT };
+	public enum LoginEnumResult { LOGGED_IN, USER_INPUT_ERROR, UNKNOWN_ERROR, CREDENTIALS_INCORRECT };
+	public static class LoginResult {
+		private String authKey = "";
+		private LoginEnumResult result;
+		public LoginResult(LoginEnumResult result) {
+			this.result = result;
+		}
+		public LoginResult(LoginEnumResult result, String authKey) {
+			this.result = result;
+			this.authKey = authKey;
+		}
+		public String getAuthKey() {
+			return authKey;
+		}
+		public void setAuthKey(String authKey) {
+			this.authKey = authKey;
+		}
+		public LoginEnumResult getResult() {
+			return result;
+		}
+		public void setResult(LoginEnumResult result) {
+			this.result = result;
+		}
+	}
+	
 	/**
 	 * For DI testing
 	 */
@@ -20,19 +44,19 @@ public class LoginModel {
 
 	public LoginResult login(String username, String password) {
 		if(password==null || password.trim().length()==0 || username==null || username.trim().length()==0) {
-			return LoginResult.USER_INPUT_ERROR;
+			return new LoginResult(LoginEnumResult.USER_INPUT_ERROR);
 		}
 		try {
 			boolean res = mUserEntityQueries.areCredentialsCorrect(username, password);
 			if(res) {
-				return LoginResult.LOGGED_IN;
+				return new LoginResult(LoginEnumResult.LOGGED_IN, "123");
 			} else {
-				return LoginResult.CREDENTIALS_INCORRECT;
+				return new LoginResult(LoginEnumResult.CREDENTIALS_INCORRECT);
 			}
 		} catch(Exception e) {
 			// TODO: Log
 			e.printStackTrace();
-			return LoginResult.UNKNOWN_ERROR;
+			return new LoginResult(LoginEnumResult.UNKNOWN_ERROR);
 		} 
 	}	
 

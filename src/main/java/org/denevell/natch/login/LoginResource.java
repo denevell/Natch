@@ -10,6 +10,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
+import org.denevell.natch.login.LoginModel.LoginEnumResult;
 import org.denevell.natch.login.LoginModel.LoginResult;
 
 
@@ -45,7 +46,7 @@ public class LoginResource {
 		String username = loginInput.getUsername();
 		String password = loginInput.getPassword();
 		LoginResult loginResult = mLoginModel.login(username, password);
-		if(loginResult==LoginResult.LOGGED_IN) {
+		if(loginResult.getResult()==LoginEnumResult.LOGGED_IN) {
 			returnResult.setSuccessful(true);
 		} else {
 			returnResult.setSuccessful(false);

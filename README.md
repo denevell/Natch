@@ -16,8 +16,9 @@ The start of a REST interface for a forum.
 * ~~login: shouldSeeJsonErrorOnBadCredentials~~
 * ~~login: shouldSeeJsonErrorOnBadJson -- deferring until later~~
 * ~~login: shouldSeeJsonErrorOnBlanksPassed~~
-* login: shouldReturnAuthKey
+* ~~login: shouldReturnAuthKey~~
 * ~~login: shouldBeAbleToLoginTwice~~
+* login: shouldLoginWithAuthKey
 * user details: shouldSeeUserDetails
 * user details: shouldSeeJsonErrorIfNotLoggedIn
 * logout: shouldLogout
@@ -29,6 +30,7 @@ The start of a REST interface for a forum.
 * tech task: Re-enable db locking 
 * tech task: Strings file somewhere
 * tech task: Tests for entity queries or refactor somewhere else
+* tech task: Tests for JDNI injection of auth key bean
 * ~~tech task: Gradle build~~
 * ~~tech task: Gradle war install~~
 * ~~tech task: Gradle tests run~~ 
@@ -53,6 +55,7 @@ The start of a REST interface for a forum.
 * Delete post
 * Delete user
 * Change user details
+* Choose what details to display publicly
 * Message a user
 * Thread posts
 * Base64 login / reg
