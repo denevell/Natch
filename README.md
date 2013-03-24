@@ -60,3 +60,4 @@ The start of a REST interface for a forum.
 * Thread posts
 * Base64 login / reg
 * Intercept json parsing errors and return 400s: register, login
+* Login timeout?
