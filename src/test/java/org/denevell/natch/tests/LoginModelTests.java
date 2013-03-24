@@ -20,7 +20,7 @@ public class LoginModelTests {
 	}
 	
 	@Test
-	public void shouldRegisterWithUsernameAndPassword() {
+	public void shouldLoginWithUsernameAndPassword() {
 		// Arrange
 		LoginModel um = new LoginModel(queries);
 		when(queries.areCredentialsCorrect("username", "password")).thenReturn(true);
@@ -33,7 +33,7 @@ public class LoginModelTests {
 	}
 	
 	@Test
-	public void shouldntRegisterWithIncorrectUsernameAndPassword() {
+	public void shouldntLoginWithIncorrectUsernameAndPassword() {
 		// Arrange
 		LoginModel um = new LoginModel(queries);
 		when(queries.areCredentialsCorrect("username", "password")).thenReturn(false);
@@ -43,6 +43,77 @@ public class LoginModelTests {
 		
 		// Assert
 		assertEquals("Successfully register", LoginResult.CREDENTIALS_INCORRECT, result);
+	}
+	
+	@Test
+	public void shouldntLoginWithBlanks() {
+		// Arrange
+		LoginModel um = new LoginModel(queries);
+		
+		// Act
+		LoginResult result = um.login(" ", " ");
+		
+		// Assert
+		assertEquals("Fail to register", LoginResult.USER_INPUT_ERROR, result);
+	}
+	
+	@Test
+	public void shouldntLoginWithBlankUsername() {
+		// Arrange
+		LoginModel um = new LoginModel(queries);
+		
+		// Act
+		LoginResult result = um.login(" ", "password");
+		
+		// Assert
+		assertEquals("Fail to register", LoginResult.USER_INPUT_ERROR, result);
+	}
+	
+	@Test
+	public void shouldntLoginWithBlankPassword() {
+		// Arrange
+		LoginModel um = new LoginModel(queries);
+		
+		// Act
+		LoginResult result = um.login("username", " ");
+		
+		// Assert
+		assertEquals("Fail to register", LoginResult.USER_INPUT_ERROR, result);
+	}
+	
+	@Test
+	public void shouldntLoginWithNulls() {
+		// Arrange
+		LoginModel um = new LoginModel(queries);
+		
+		// Act
+		LoginResult result = um.login(null, null);
+		
+		// Assert
+		assertEquals("Fail to register", LoginResult.USER_INPUT_ERROR, result);
+	}
+	
+	@Test
+	public void shouldntLoginWithNullUsername() {
+		// Arrange
+		LoginModel um = new LoginModel(queries);
+		
+		// Act
+		LoginResult result = um.login(null, "password");
+		
+		// Assert
+		assertEquals("Fail to register", LoginResult.USER_INPUT_ERROR, result);
+	}
+	@Test
+	public void shouldntLoginWithNullPassword() {
+		// Arrange
+		LoginModel um = new LoginModel(queries);
+		
+		// Act
+		LoginResult result = um.login("username", null);
+		
+		// Assert
+		assertEquals("Fail to register", LoginResult.USER_INPUT_ERROR, result);
 	}
 	
 }

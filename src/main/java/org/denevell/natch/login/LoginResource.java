@@ -37,6 +37,11 @@ public class LoginResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public LoginResourceReturnData login(LoginResourceInput loginInput) {
 		LoginResourceReturnData returnResult = new LoginResourceReturnData();
+		if(loginInput==null) {
+			returnResult.setSuccessful(false);
+			returnResult.setError("Incorrect username or password.");
+			return returnResult;
+		}
 		String username = loginInput.getUsername();
 		String password = loginInput.getPassword();
 		LoginResult loginResult = mLoginModel.login(username, password);
