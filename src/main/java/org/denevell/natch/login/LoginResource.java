@@ -13,7 +13,7 @@ import javax.ws.rs.core.UriInfo;
 import org.denevell.natch.login.LoginModel.LoginResult;
 
 
-@Path("user")
+@Path("login")
 public class LoginResource {
 	
 	@Context UriInfo info;

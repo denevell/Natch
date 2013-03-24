@@ -12,11 +12,11 @@ The start of a REST interface for a forum.
 * ~~register: shouldSeeErrorJsonOnBadJsonPassed -- deferring until later~~
 * ~~register: shouldSeeErrorJsonOnUnknownError~~
 * ~~register: shouldSaltPassword~~
-* login: shouldLoginWithGoodCredentials
-* login: shouldReturnAuthKey
-* login: shouldSeeJsonErrorOnBadCredentials
+* ~~login: shouldLoginWithGoodCredentials~~
+* ~~login: shouldSeeJsonErrorOnBadCredentials~~
+* ~~login: shouldSeeJsonErrorOnBadJson -- deferring until later~~
 * login: shouldSeeJsonErrorOnBlanksPassed
-* ~~login: shouldSeeJsonErrorOnBadJson~~
+* login: shouldReturnAuthKey
 * login: shouldBeAbleToLoginTwice
 * user details: shouldSeeUserDetails
 * user details: shouldSeeJsonErrorIfNotLoggedIn
@@ -39,6 +39,7 @@ The start of a REST interface for a forum.
 
 * Better war deploy method than cping the war to the directory.
 * Better way to clear database on functional tests - put tests in war and access the jpa that way?
+* Speed improvements?
 
 ### Later features
 * Superuser

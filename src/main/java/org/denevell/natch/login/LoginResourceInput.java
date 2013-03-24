@@ -10,4 +10,7 @@ public class LoginResourceInput extends UsernameAndPassword {
 	public LoginResourceInput(String username, String password) {
 		super(username, password);
 	}
+	
+	public LoginResourceInput() {
+	}
 }
