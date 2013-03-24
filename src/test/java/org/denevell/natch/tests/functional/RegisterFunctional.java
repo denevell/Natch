@@ -17,15 +17,12 @@ import com.sun.jersey.api.client.WebResource;
 
 public class RegisterFunctional {
 	
-	private WebResource service;
+	private WebResource registerService;
 
 	@Before
 	public void setup() throws IOException, InterruptedException {
-		service = TestUtils.getRESTClient();
-		service
-	    	.path("rest")
-	    	.path("user")
-	    	.delete();
+		registerService = TestUtils.getRESTRegisterClient();
+		registerService.delete();
 	}
 
 	@Test
@@ -34,9 +31,7 @@ public class RegisterFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    
 	    // Act
-		RegisterResourceReturnData result = service
-	    		.path("rest")
-	    		.path("user")
+		RegisterResourceReturnData result = registerService
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
@@ -51,14 +46,10 @@ public class RegisterFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    
 	    // Act
-		RegisterResourceReturnData result = service
-	    		.path("rest")
-	    		.path("user")
+		RegisterResourceReturnData result = registerService
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.put(RegisterResourceReturnData.class, registerInput);
-		RegisterResourceReturnData result2 = service
-	    		.path("rest")
-	    		.path("user")
+		RegisterResourceReturnData result2 = registerService
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
@@ -75,9 +66,7 @@ public class RegisterFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("", "");
 	    
 	    // Act
-		RegisterResourceReturnData result = service
-	    		.path("rest")
-	    		.path("user")
+		RegisterResourceReturnData result = registerService
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
@@ -92,9 +81,7 @@ public class RegisterFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("", "passy");
 	    
 	    // Act
-		RegisterResourceReturnData result = service
-	    		.path("rest")
-	    		.path("user")
+		RegisterResourceReturnData result = registerService
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
@@ -109,9 +96,7 @@ public class RegisterFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "");
 	    
 	    // Act
-		RegisterResourceReturnData result = service
-	    		.path("rest")
-	    		.path("user")
+		RegisterResourceReturnData result = registerService
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
@@ -126,9 +111,7 @@ public class RegisterFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput(null, null);
 	    
 	    // Act
-		RegisterResourceReturnData result = service
-	    		.path("rest")
-	    		.path("user")
+		RegisterResourceReturnData result = registerService
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
@@ -143,9 +126,7 @@ public class RegisterFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput(null, "passy");
 	    
 	    // Act
-		RegisterResourceReturnData result = service
-	    		.path("rest")
-	    		.path("user")
+		RegisterResourceReturnData result = registerService
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
@@ -160,9 +141,7 @@ public class RegisterFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", null);
 	    
 	    // Act
-		RegisterResourceReturnData result = service
-	    		.path("rest")
-	    		.path("user")
+		RegisterResourceReturnData result = registerService
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		

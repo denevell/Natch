@@ -14,4 +14,11 @@ public class TestUtils {
 	    return client.resource(baseUrl);		
 	}
 
+	public static WebResource getRESTRegisterClient() {
+		String baseUrl = "http://localhost:8080/Natch-Functional/";
+	    ClientConfig config = new DefaultClientConfig();
+	    Client client = Client.create(config);
+	    return client.resource(baseUrl).path("rest").path("user");		
+	}
+
 }
