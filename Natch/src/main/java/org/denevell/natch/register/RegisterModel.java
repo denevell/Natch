@@ -8,13 +8,14 @@ import javax.persistence.Query;
 
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.db.entities.UserEntityQueries;
-import org.mindrot.jbcrypt.BCrypt;
+import org.denevell.natch.utils.PasswordSaltUtils;
 
 public class RegisterModel {
 	
 	private EntityManagerFactory mFactory;
 	private EntityManager mEntityManager;
 	private UserEntityQueries mUserEntityQueries;
+	private PasswordSaltUtils mPasswordSalter;
 	public enum RegisterResult {
 		REGISTERED, UNKNOWN_ERROR, DUPLICATE_USERNAME, USER_INPUT_ERROR
 	}
@@ -22,16 +23,18 @@ public class RegisterModel {
 	/**
 	 * For DI testing
 	 */
-	public RegisterModel(EntityManager entityManager, EntityManagerFactory factory, UserEntityQueries ueq ) {
+	public RegisterModel(EntityManager entityManager, EntityManagerFactory factory, UserEntityQueries ueq, PasswordSaltUtils saltUtils) {
 		mFactory = factory;
 		mEntityManager =  entityManager;
 		mUserEntityQueries = ueq;
+		mPasswordSalter = saltUtils;
 	}
 	
 	public RegisterModel() {
 		mFactory = Persistence.createEntityManagerFactory("users");
 		mEntityManager = mFactory.createEntityManager();		
 		mUserEntityQueries = new UserEntityQueries();
+		mPasswordSalter = new PasswordSaltUtils();
 	}
 	
 	private void closeEntityConnection() {
@@ -57,7 +60,7 @@ public class RegisterModel {
 			return RegisterResult.USER_INPUT_ERROR;
 		}
 		UserEntity u = new UserEntity();
-		password = generatedSaltedPassword(password);
+		password = mPasswordSalter.generatedSaltedPassword(password);
 		u.setPassword(password);
 		u.setUsername(username);
 		EntityTransaction trans = null;
@@ -82,8 +85,4 @@ public class RegisterModel {
 		}
 	}
 
-	private String generatedSaltedPassword(String password) {
-		password = BCrypt.hashpw(password, BCrypt.gensalt(12));
-		return password;
-	}
 }
