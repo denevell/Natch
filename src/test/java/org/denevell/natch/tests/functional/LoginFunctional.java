@@ -153,8 +153,30 @@ public class LoginFunctional {
 		// Deferred non functional requirement
 	}
 	
+	@Test
 	public void login_shouldBeAbleToLoginTwice() {
+		// Arrange 
+	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
+	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
+		service
+	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
+	    	.put(RegisterResourceReturnData.class, registerInput);
+	    
+	    // Act
+		LoginResourceReturnData loginResult = service
+	    		.path("rest").path("login")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.post(LoginResourceReturnData.class, loginInput);
+		LoginResourceReturnData loginResult2 = service
+	    		.path("rest").path("login")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.post(LoginResourceReturnData.class, loginInput);
 		
+		// Assert
+		assertEquals("", loginResult.getError());
+		assertTrue("Should return true as 'successful' field for first login", loginResult.isSuccessful());		
+		assertEquals("", loginResult2.getError());
+		assertTrue("Should return true as 'successful' field for second login", loginResult2.isSuccessful());		
 	}
 	
 }
