@@ -15,7 +15,7 @@ The start of a REST interface for a forum.
 * ~~login: shouldLoginWithGoodCredentials~~
 * ~~login: shouldSeeJsonErrorOnBadCredentials~~
 * ~~login: shouldSeeJsonErrorOnBadJson -- deferring until later~~
-* login: shouldSeeJsonErrorOnBlanksPassed
+* ~~login: shouldSeeJsonErrorOnBlanksPassed~~
 * login: shouldReturnAuthKey
 * login: shouldBeAbleToLoginTwice
 * user details: shouldSeeUserDetails

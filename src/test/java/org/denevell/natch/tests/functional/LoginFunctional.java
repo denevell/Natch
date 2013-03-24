@@ -67,15 +67,90 @@ public class LoginFunctional {
 		
 		// Assert
 		assertEquals("Incorrect username or password.", loginResult.getError());
-		assertFalse("Should return true as 'successful' field", loginResult.isSuccessful());
+		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
 	}
 	
+	@Test
 	public void login_shouldSeeJsonErrorOnBlanksPassed() {
+		// Arrange 
+	    LoginResourceInput loginInput = new LoginResourceInput(" ", " ");
+	    
+	    // Act
+		LoginResourceReturnData loginResult = service
+	    		.path("rest").path("login")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.post(LoginResourceReturnData.class, loginInput);
 		
+		// Assert
+		assertEquals("Incorrect username or password.", loginResult.getError());
+		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
+	}
+	
+	@Test
+	public void login_shouldSeeJsonErrorOnBlankUsername() {
+		// Arrange 
+	    LoginResourceInput loginInput = new LoginResourceInput(" ", "password");
+	    
+	    // Act
+		LoginResourceReturnData loginResult = service
+	    		.path("rest").path("login")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.post(LoginResourceReturnData.class, loginInput);
+		
+		// Assert
+		assertEquals("Incorrect username or password.", loginResult.getError());
+		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
+	}
+	
+	@Test
+	public void login_shouldSeeJsonErrorOnBlankPassword() {
+		// Arrange 
+	    LoginResourceInput loginInput = new LoginResourceInput("username", " ");
+	    
+	    // Act
+		LoginResourceReturnData loginResult = service
+	    		.path("rest").path("login")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.post(LoginResourceReturnData.class, loginInput);
+		
+		// Assert
+		assertEquals("Incorrect username or password.", loginResult.getError());
+		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
+	}
+	
+	@Test
+	public void login_shouldSeeJsonErrorOnNullUsername() {
+		// Arrange 
+	    LoginResourceInput loginInput = new LoginResourceInput(null, "password");
+	    
+	    // Act
+		LoginResourceReturnData loginResult = service
+	    		.path("rest").path("login")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.post(LoginResourceReturnData.class, loginInput);
+		
+		// Assert
+		assertEquals("Incorrect username or password.", loginResult.getError());
+		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
+	}
+	
+	@Test
+	public void login_shouldSeeJsonErrorOnNullPassword() {
+		// Arrange 
+	    LoginResourceInput loginInput = new LoginResourceInput("username", null);
+	    
+	    // Act
+		LoginResourceReturnData loginResult = service
+	    		.path("rest").path("login")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.post(LoginResourceReturnData.class, loginInput);
+		
+		// Assert
+		assertEquals("Incorrect username or password.", loginResult.getError());
 	}
 	
 	public void login_shouldSeeJsonErrorOnBadJson() {
-		
+		// Deferred non functional requirement
 	}
 	
 	public void login_shouldBeAbleToLoginTwice() {
