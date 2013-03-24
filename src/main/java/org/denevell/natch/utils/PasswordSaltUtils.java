@@ -9,4 +9,9 @@ public class PasswordSaltUtils {
 		return password;
 	}
 
+	public boolean checkSaltedPassword(String attempt, String saltedPassword) {
+		boolean res = BCrypt.checkpw(attempt, saltedPassword);
+		return res;
+	}
+
 }

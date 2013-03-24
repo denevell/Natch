@@ -33,7 +33,7 @@ public class RegisterModel {
 	public RegisterModel() {
 		mFactory = Persistence.createEntityManagerFactory("users");
 		mEntityManager = mFactory.createEntityManager();		
-		mUserEntityQueries = new UserEntityQueries();
+		mUserEntityQueries = new UserEntityQueries(new PasswordSaltUtils());
 		mPasswordSalter = new PasswordSaltUtils();
 	}
 	

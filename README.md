@@ -28,6 +28,7 @@ The start of a REST interface for a forum.
 * tech task: Logging intergration
 * tech task: Re-enable db locking 
 * tech task: Strings file somewhere
+* tech task: Tests for entity queries or refactor somewhere else
 * ~~tech task: Gradle build~~
 * ~~tech task: Gradle war install~~
 * ~~tech task: Gradle tests run~~ 
