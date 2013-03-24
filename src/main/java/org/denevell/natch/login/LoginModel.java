@@ -6,6 +6,7 @@ import org.denevell.natch.utils.PasswordSaltUtils;
 public class LoginModel {
 	
 	private UserEntityQueries mUserEntityQueries;
+	private LoginAuthDataSingleton mAuthDataGenerator;
 	public enum LoginEnumResult { LOGGED_IN, USER_INPUT_ERROR, UNKNOWN_ERROR, CREDENTIALS_INCORRECT };
 	public static class LoginResult {
 		private String authKey = "";
@@ -33,13 +34,16 @@ public class LoginModel {
 	
 	/**
 	 * For DI testing
+	 * @param authKeyGenerator 
 	 */
-	public LoginModel(UserEntityQueries ueq) {
+	public LoginModel(UserEntityQueries ueq, LoginAuthDataSingleton authKeyGenerator) {
 		mUserEntityQueries = ueq;
+		mAuthDataGenerator = authKeyGenerator;
 	}
 	
 	public LoginModel() {
 		mUserEntityQueries = new UserEntityQueries(new PasswordSaltUtils());
+		mAuthDataGenerator = LoginAuthDataSingleton.getInstance();
 	}
 
 	public LoginResult login(String username, String password) {
@@ -49,7 +53,8 @@ public class LoginModel {
 		try {
 			boolean res = mUserEntityQueries.areCredentialsCorrect(username, password);
 			if(res) {
-				return new LoginResult(LoginEnumResult.LOGGED_IN, "123");
+				String authKey = mAuthDataGenerator.generate(username);
+				return new LoginResult(LoginEnumResult.LOGGED_IN, authKey);
 			} else {
 				return new LoginResult(LoginEnumResult.CREDENTIALS_INCORRECT);
 			}
@@ -61,3 +66,4 @@ public class LoginModel {
 	}	
 
 }
+

@@ -48,6 +48,7 @@ public class LoginResource {
 		LoginResult loginResult = mLoginModel.login(username, password);
 		if(loginResult.getResult()==LoginEnumResult.LOGGED_IN) {
 			returnResult.setSuccessful(true);
+			returnResult.setAuthKey(loginResult.getAuthKey());
 		} else {
 			returnResult.setSuccessful(false);
 			returnResult.setError("Incorrect username or password.");

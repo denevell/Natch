@@ -1,13 +1,12 @@
 package org.denevell.natch.tests;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.denevell.natch.db.entities.UserEntityQueries;
+import org.denevell.natch.login.LoginAuthDataSingleton;
 import org.denevell.natch.login.LoginModel;
 import org.denevell.natch.login.LoginModel.LoginEnumResult;
 import org.denevell.natch.login.LoginModel.LoginResult;
@@ -17,16 +16,19 @@ import org.junit.Test;
 public class LoginModelTests {
 	
 	private UserEntityQueries queries;
+	private LoginModel um;
+	private LoginAuthDataSingleton authKeyGenerator;
 
 	@Before
 	public void setup() {
 		queries = mock(UserEntityQueries.class);
+		authKeyGenerator = mock(LoginAuthDataSingleton.class);
+		um = new LoginModel(queries, authKeyGenerator);
 	}
 	
 	@Test
 	public void shouldLoginWithUsernameAndPassword() {
 		// Arrange
-		LoginModel um = new LoginModel(queries);
 		when(queries.areCredentialsCorrect("username", "password")).thenReturn(true);
 		
 		// Act
@@ -39,7 +41,6 @@ public class LoginModelTests {
 	@Test
 	public void shouldntLoginWithIncorrectUsernameAndPassword() {
 		// Arrange
-		LoginModel um = new LoginModel(queries);
 		when(queries.areCredentialsCorrect("username", "password")).thenReturn(false);
 		
 		// Act
@@ -52,7 +53,6 @@ public class LoginModelTests {
 	@Test
 	public void shouldntLoginWithBlanks() {
 		// Arrange
-		LoginModel um = new LoginModel(queries);
 		
 		// Act
 		LoginResult result = um.login(" ", " ");
@@ -64,7 +64,6 @@ public class LoginModelTests {
 	@Test
 	public void shouldntLoginWithBlankUsername() {
 		// Arrange
-		LoginModel um = new LoginModel(queries);
 		
 		// Act
 		LoginResult result = um.login(" ", "password");
@@ -76,7 +75,6 @@ public class LoginModelTests {
 	@Test
 	public void shouldntLoginWithBlankPassword() {
 		// Arrange
-		LoginModel um = new LoginModel(queries);
 		
 		// Act
 		LoginResult result = um.login("username", " ");
@@ -88,7 +86,6 @@ public class LoginModelTests {
 	@Test
 	public void shouldntLoginWithNulls() {
 		// Arrange
-		LoginModel um = new LoginModel(queries);
 		
 		// Act
 		LoginResult result = um.login(null, null);
@@ -100,7 +97,6 @@ public class LoginModelTests {
 	@Test
 	public void shouldntLoginWithNullUsername() {
 		// Arrange
-		LoginModel um = new LoginModel(queries);
 		
 		// Act
 		LoginResult result = um.login(null, "password");
@@ -112,7 +108,6 @@ public class LoginModelTests {
 	@Test
 	public void shouldntLoginWithNullPassword() {
 		// Arrange
-		LoginModel um = new LoginModel(queries);
 		
 		// Act
 		LoginResult result = um.login("username", null);
@@ -124,20 +119,19 @@ public class LoginModelTests {
 	@Test
 	public void shouldReturnLoginAuthKey() {
 		// Arrange
-		LoginModel um = new LoginModel(queries);
 		when(queries.areCredentialsCorrect("username", "password")).thenReturn(true);
+		when(authKeyGenerator.generate("username")).thenReturn("authKey123");
 		
 		// Act
 		LoginResult result = um.login("username", "password");
 		
 		// Assert
-		assertNotNull(result.getAuthKey());
+		assertEquals("authKey123", result.getAuthKey());
 	}
 	
 	@Test
 	public void shouldntReturnLoginAuthKeyOnBadCredentials() {
 		// Arrange
-		LoginModel um = new LoginModel(queries);
 		when(queries.areCredentialsCorrect("username", "password")).thenReturn(false);
 		
 		// Act
@@ -145,20 +139,6 @@ public class LoginModelTests {
 		
 		// Assert
 		assertTrue("Blank auth key on incorrect credentials", result.getAuthKey().length()==0);
-	}
-	
-	@Test
-	public void shouldReturnDifferentLoginAuthKeySecondTime() {
-		// Arrange
-		LoginModel um = new LoginModel(queries);
-		when(queries.areCredentialsCorrect("username", "password")).thenReturn(true);
-		
-		// Act
-		LoginResult result = um.login("username", "password");
-		LoginResult result2 = um.login("username", "password");
-		
-		// Assert
-		assertFalse(result.getAuthKey().equals(result2.getAuthKey()));
 	}
 	
 	@Test

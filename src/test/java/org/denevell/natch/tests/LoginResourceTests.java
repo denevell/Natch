@@ -29,7 +29,7 @@ public class LoginResourceTests {
 		// Arrange
 		LoginResource resource = new LoginResource(userModel);
 		LoginResourceInput loginInput = new LoginResourceInput("username", "password");
-		when(userModel.login("username", "password")).thenReturn(new LoginResult(LoginEnumResult.LOGGED_IN));
+		when(userModel.login("username", "password")).thenReturn(new LoginResult(LoginEnumResult.LOGGED_IN, "authKey123"));
 		
 		// Act
 		LoginResourceReturnData result = resource.login(loginInput);
@@ -37,6 +37,7 @@ public class LoginResourceTests {
 		// Assert
 		assertTrue(result.isSuccessful());
 		assertEquals("Error json", "", result.getError());
+		assertEquals("Auth key", "authKey123", result.getAuthKey());
 	}
 	
 	@Test
@@ -52,6 +53,7 @@ public class LoginResourceTests {
 		// Assert
 		assertFalse(result.isSuccessful());
 		assertEquals("Error json", "Incorrect username or password.", result.getError());
+		assertEquals("Auth key", "", result.getAuthKey());
 	}
 	
 	@Test
