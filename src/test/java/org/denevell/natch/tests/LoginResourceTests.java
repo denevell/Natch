@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import org.denevell.natch.serv.login.LoginModel;
 import org.denevell.natch.serv.login.LoginResource;
 import org.denevell.natch.serv.login.LoginResourceInput;
+import org.denevell.natch.serv.login.LoginResourceLoggedInReturnData;
 import org.denevell.natch.serv.login.LoginResourceReturnData;
 import org.denevell.natch.serv.login.LoginModel.LoginEnumResult;
 import org.denevell.natch.serv.login.LoginModel.LoginResult;
@@ -105,6 +106,32 @@ public class LoginResourceTests {
 		
 		// Assert
 		assertEquals("Auth key", "", result.getAuthKey());
+	}
+	
+	@Test
+	public void shouldReturnTrueIfLoggedInWithAuthKey() {
+		// Arrange
+		when(userModel.loggedInAs("authKey123")).thenReturn("username");
+		
+		// Act
+		LoginResourceLoggedInReturnData result = resource.isLoggedIn("authKey123");
+		
+		// Assert
+		assertTrue(result.isSuccessful());
+		assertTrue(result.getError().length()==0);
+	}
+	
+	@Test
+	public void shouldReturnFalseIfNotLoggedInWithAuthKey() {
+		// Arrange
+		when(userModel.loggedInAs("authKey123")).thenReturn("username");
+		
+		// Act
+		LoginResourceLoggedInReturnData result = resource.isLoggedIn("badAuthKey123");
+		
+		// Assert
+		assertFalse(result.isSuccessful());
+		assertTrue(result.getError().length()==0);
 	}
 	
 }

@@ -57,4 +57,18 @@ public class LoginResource {
 		return returnResult;
 	}
 
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.TEXT_PLAIN)
+	public LoginResourceLoggedInReturnData isLoggedIn(String authKey) {
+		LoginResourceLoggedInReturnData ret = new LoginResourceLoggedInReturnData();
+		String username = mLoginModel.loggedInAs(authKey);
+		if(username==null) {
+			ret.setSuccessful(false);
+		} else {
+			ret.setSuccessful(true);
+		}
+		return ret;
+	}
+
 }
