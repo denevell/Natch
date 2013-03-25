@@ -64,6 +64,14 @@ public class LoginModel {
 			e.printStackTrace();
 			return new LoginResult(LoginEnumResult.UNKNOWN_ERROR);
 		} 
+	}
+
+	/**
+	 * @return Null when false
+	 */
+	public String loggedInAs(String authKey) {
+		String username = mAuthDataGenerator.retrieveUsername(authKey);
+		return username;
 	}	
 
 }

@@ -1,6 +1,7 @@
 package org.denevell.natch.tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -16,14 +17,14 @@ import org.junit.Test;
 public class LoginModelTests {
 	
 	private UserEntityQueries queries;
-	private LoginModel um;
+	private LoginModel loginModel;
 	private LoginAuthKeysSingleton authKeyGenerator;
 
 	@Before
 	public void setup() {
 		queries = mock(UserEntityQueries.class);
 		authKeyGenerator = mock(LoginAuthKeysSingleton.class);
-		um = new LoginModel(queries, authKeyGenerator);
+		loginModel = new LoginModel(queries, authKeyGenerator);
 	}
 	
 	@Test
@@ -32,7 +33,7 @@ public class LoginModelTests {
 		when(queries.areCredentialsCorrect("username", "password")).thenReturn(true);
 		
 		// Act
-		LoginResult result = um.login("username", "password");
+		LoginResult result = loginModel.login("username", "password");
 		
 		// Assert
 		assertEquals("Successfully register", LoginEnumResult.LOGGED_IN, result.getResult());
@@ -44,7 +45,7 @@ public class LoginModelTests {
 		when(queries.areCredentialsCorrect("username", "password")).thenReturn(false);
 		
 		// Act
-		LoginResult result = um.login("username", "password");
+		LoginResult result = loginModel.login("username", "password");
 		
 		// Assert
 		assertEquals("Successfully register", LoginEnumResult.CREDENTIALS_INCORRECT, result.getResult());
@@ -55,7 +56,7 @@ public class LoginModelTests {
 		// Arrange
 		
 		// Act
-		LoginResult result = um.login(" ", " ");
+		LoginResult result = loginModel.login(" ", " ");
 		
 		// Assert
 		assertEquals("Fail to register", LoginEnumResult.USER_INPUT_ERROR, result.getResult());
@@ -66,7 +67,7 @@ public class LoginModelTests {
 		// Arrange
 		
 		// Act
-		LoginResult result = um.login(" ", "password");
+		LoginResult result = loginModel.login(" ", "password");
 		
 		// Assert
 		assertEquals("Fail to register", LoginEnumResult.USER_INPUT_ERROR, result.getResult());
@@ -77,7 +78,7 @@ public class LoginModelTests {
 		// Arrange
 		
 		// Act
-		LoginResult result = um.login("username", " ");
+		LoginResult result = loginModel.login("username", " ");
 		
 		// Assert
 		assertEquals("Fail to register", LoginEnumResult.USER_INPUT_ERROR, result.getResult());
@@ -88,7 +89,7 @@ public class LoginModelTests {
 		// Arrange
 		
 		// Act
-		LoginResult result = um.login(null, null);
+		LoginResult result = loginModel.login(null, null);
 		
 		// Assert
 		assertEquals("Fail to register", LoginEnumResult.USER_INPUT_ERROR, result.getResult());
@@ -99,7 +100,7 @@ public class LoginModelTests {
 		// Arrange
 		
 		// Act
-		LoginResult result = um.login(null, "password");
+		LoginResult result = loginModel.login(null, "password");
 		
 		// Assert
 		assertEquals("Fail to register", LoginEnumResult.USER_INPUT_ERROR, result.getResult());
@@ -110,7 +111,7 @@ public class LoginModelTests {
 		// Arrange
 		
 		// Act
-		LoginResult result = um.login("username", null);
+		LoginResult result = loginModel.login("username", null);
 		
 		// Assert
 		assertEquals("Fail to register", LoginEnumResult.USER_INPUT_ERROR, result.getResult());
@@ -123,7 +124,7 @@ public class LoginModelTests {
 		when(authKeyGenerator.generate("username")).thenReturn("authKey123");
 		
 		// Act
-		LoginResult result = um.login("username", "password");
+		LoginResult result = loginModel.login("username", "password");
 		
 		// Assert
 		assertEquals("authKey123", result.getAuthKey());
@@ -135,7 +136,7 @@ public class LoginModelTests {
 		when(queries.areCredentialsCorrect("username", "password")).thenReturn(false);
 		
 		// Act
-		LoginResult result = um.login("username", "password");
+		LoginResult result = loginModel.login("username", "password");
 		
 		// Assert
 		assertTrue("Blank auth key on incorrect credentials", result.getAuthKey().length()==0);
@@ -143,9 +144,35 @@ public class LoginModelTests {
 	
 	@Test
 	public void shouldBeLoggedInWithCorrectAuthKey() {
+		// Arrange
+		String authKey = "auth123";
+		when(authKeyGenerator.retrieveUsername("auth123")).thenReturn("username");
+		
+		// Act
+		String username = loginModel.loggedInAs(authKey);
+		
+		// Assert
+		assertEquals("username", username);
 	}
 	
 	@Test
 	public void shouldntBeLoggedInWithIncorrectAuthKey() {
+		// Arrange
+		when(authKeyGenerator.retrieveUsername("auth123")).thenReturn("username");
+		
+		// Act
+		String username = loginModel.loggedInAs("badAuth123");
+		
+		// Assert
+		assertNull(username);
+	}	
+	
+	@Test
+	public void shouldntBeLoggedInWithNull() {
+		// Act
+		String username = loginModel.loggedInAs(null);
+		
+		// Assert
+		assertNull(username);
 	}	
 }
