@@ -2,6 +2,7 @@ package org.denevell.natch.tests.functional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -149,6 +150,7 @@ public class LoginFunctional {
 		assertEquals("Incorrect username or password.", loginResult.getError());
 	}
 	
+	@Test
 	public void login_shouldSeeJsonErrorOnBadJson() {
 		// Deferred non functional requirement
 	}
@@ -177,6 +179,48 @@ public class LoginFunctional {
 		assertTrue("Should return true as 'successful' field for first login", loginResult.isSuccessful());		
 		assertEquals("", loginResult2.getError());
 		assertTrue("Should return true as 'successful' field for second login", loginResult2.isSuccessful());		
+	}
+	
+	@Test
+	public void shouldReturnAuthKeyOnLogin() {
+		// Arrange 
+	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
+	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
+		service
+	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
+	    	.put(RegisterResourceReturnData.class, registerInput);
+	    
+	    // Act
+		LoginResourceReturnData loginResult = service
+	    		.path("rest").path("login")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.post(LoginResourceReturnData.class, loginInput);
+		
+		// Assert
+		assertTrue("Should return auth key", loginResult.getAuthKey().length()>5);
+	}
+	
+	@Test
+	public void shouldReturnDifferentAuthKeys() {
+		// Arrange 
+	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
+	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
+		service
+	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
+	    	.put(RegisterResourceReturnData.class, registerInput);
+	    
+	    // Act
+		LoginResourceReturnData loginResult = service
+	    		.path("rest").path("login")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.post(LoginResourceReturnData.class, loginInput);
+		LoginResourceReturnData loginResult1 = service
+	    		.path("rest").path("login")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.post(LoginResourceReturnData.class, loginInput);
+		
+		// Assert
+		assertFalse("Should return different auth key", loginResult.getAuthKey().equals(loginResult1.getAuthKey()));		
 	}
 	
 }

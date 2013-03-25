@@ -18,16 +18,17 @@ import org.junit.Test;
 public class LoginResourceTests {
 	
 	private LoginModel userModel;
+	private LoginResource resource;
 
 	@Before
 	public void setup() {
 		userModel = mock(LoginModel.class);
+		resource = new LoginResource(userModel);
 	}
 	
 	@Test
 	public void shouldLoginWithUsernameAndPassword() {
 		// Arrange
-		LoginResource resource = new LoginResource(userModel);
 		LoginResourceInput loginInput = new LoginResourceInput("username", "password");
 		when(userModel.login("username", "password")).thenReturn(new LoginResult(LoginEnumResult.LOGGED_IN, "authKey123"));
 		
@@ -37,13 +38,11 @@ public class LoginResourceTests {
 		// Assert
 		assertTrue(result.isSuccessful());
 		assertEquals("Error json", "", result.getError());
-		assertEquals("Auth key", "authKey123", result.getAuthKey());
 	}
 	
 	@Test
 	public void shouldntLoginWithIncorrectUsernameAndPassword() {
 		// Arrange
-		LoginResource resource = new LoginResource(userModel);
 		LoginResourceInput loginInput = new LoginResourceInput("username", "password");
 		when(userModel.login("username", "password")).thenReturn(new LoginResult(LoginEnumResult.CREDENTIALS_INCORRECT));
 		
@@ -53,13 +52,11 @@ public class LoginResourceTests {
 		// Assert
 		assertFalse(result.isSuccessful());
 		assertEquals("Error json", "Incorrect username or password.", result.getError());
-		assertEquals("Auth key", "", result.getAuthKey());
 	}
 	
 	@Test
 	public void shouldntLoginBadJsonInput() {
 		// Arrange
-		LoginResource resource = new LoginResource(userModel);
 		LoginResourceInput loginInput = new LoginResourceInput("username", "password");
 		when(userModel.login("username", "password")).thenReturn(new LoginResult(LoginEnumResult.USER_INPUT_ERROR));
 		
@@ -75,7 +72,6 @@ public class LoginResourceTests {
 	@Test
 	public void shouldntLoginWithNullInputObject() {
 		// Arrange
-		LoginResource resource = new LoginResource(userModel);
 		
 		// Act
 		LoginResourceReturnData result = resource.login(null);
@@ -84,5 +80,31 @@ public class LoginResourceTests {
 		assertFalse("Fail to register", result.isSuccessful());
 		assertEquals("Json error message", "Incorrect username or password.", result.getError());
 	}	
+	
+	@Test
+	public void shouldReturnLoginAuthKey() {
+		// Arrange
+		LoginResourceInput loginInput = new LoginResourceInput("username", "password");
+		when(userModel.login("username", "password")).thenReturn(new LoginResult(LoginEnumResult.LOGGED_IN, "authKey123"));
+		
+		// Act
+		LoginResourceReturnData result = resource.login(loginInput);
+		
+		// Assert
+		assertEquals("Auth key", "authKey123", result.getAuthKey());
+	}
+	
+	@Test
+	public void shouldntReturnLoginAuthKeyOnBadCredentials() {	
+		// Arrange
+		LoginResourceInput loginInput = new LoginResourceInput("username", "password");
+		when(userModel.login("username", "password")).thenReturn(new LoginResult(LoginEnumResult.CREDENTIALS_INCORRECT));
+		
+		// Act
+		LoginResourceReturnData result = resource.login(loginInput);
+		
+		// Assert
+		assertEquals("Auth key", "", result.getAuthKey());
+	}
 	
 }

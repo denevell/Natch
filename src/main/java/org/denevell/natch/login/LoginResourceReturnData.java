@@ -8,7 +8,7 @@ import org.denevell.natch.rest.baseentities.SuccessOrError;
 public class LoginResourceReturnData extends SuccessOrError {
 	private String authKey = "";
 
-	public Object getAuthKey() {
+	public String getAuthKey() {
 		return this.authKey;
 	}
 
