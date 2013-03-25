@@ -1,20 +1,20 @@
-package org.denevell.natch.login;
+package org.denevell.natch.auth;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class LoginAuthDataSingleton {
-	private static LoginAuthDataSingleton sInstance;
+public class LoginAuthKeysSingleton {
+	private static LoginAuthKeysSingleton sInstance;
 	Map<String, String> mLoginKeys = Collections.synchronizedMap(new HashMap<String, String>());
 	
-	private LoginAuthDataSingleton() {
+	private LoginAuthKeysSingleton() {
 	}
 	
-	public static LoginAuthDataSingleton getInstance() {
+	public static LoginAuthKeysSingleton getInstance() {
 		if(sInstance==null) {
-			sInstance = new LoginAuthDataSingleton();
+			sInstance = new LoginAuthKeysSingleton();
 		} 
 		return sInstance;
 	}
@@ -24,13 +24,13 @@ public class LoginAuthDataSingleton {
 			return null;
 		}
 		String key = UUID.randomUUID().toString();
-		mLoginKeys.put(username, key);
+		mLoginKeys.put(key, username);
 		return key;
 	}
 
-	public String retrieve(String username) {
-		String key = mLoginKeys.get(username);
-		return key;
+	public String retrieveUsername(String key) {
+		String username = mLoginKeys.get(key);
+		return username;
 	}
 
 	public void clearAllKeys() {

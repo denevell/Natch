@@ -6,12 +6,12 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.denevell.natch.login.LoginModel;
-import org.denevell.natch.login.LoginModel.LoginEnumResult;
-import org.denevell.natch.login.LoginModel.LoginResult;
-import org.denevell.natch.login.LoginResource;
-import org.denevell.natch.login.LoginResourceInput;
-import org.denevell.natch.login.LoginResourceReturnData;
+import org.denevell.natch.serv.login.LoginModel;
+import org.denevell.natch.serv.login.LoginResource;
+import org.denevell.natch.serv.login.LoginResourceInput;
+import org.denevell.natch.serv.login.LoginResourceReturnData;
+import org.denevell.natch.serv.login.LoginModel.LoginEnumResult;
+import org.denevell.natch.serv.login.LoginModel.LoginResult;
 import org.junit.Before;
 import org.junit.Test;
 

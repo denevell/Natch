@@ -1,4 +1,4 @@
-package org.denevell.natch.login;
+package org.denevell.natch.serv.login;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -10,8 +10,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.denevell.natch.login.LoginModel.LoginEnumResult;
-import org.denevell.natch.login.LoginModel.LoginResult;
+import org.denevell.natch.serv.login.LoginModel.LoginEnumResult;
+import org.denevell.natch.serv.login.LoginModel.LoginResult;
 
 
 @Path("login")

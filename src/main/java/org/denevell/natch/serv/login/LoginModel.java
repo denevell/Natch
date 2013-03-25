@@ -1,12 +1,13 @@
-package org.denevell.natch.login;
+package org.denevell.natch.serv.login;
 
+import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.db.entities.UserEntityQueries;
 import org.denevell.natch.utils.PasswordSaltUtils;
 
 public class LoginModel {
 	
 	private UserEntityQueries mUserEntityQueries;
-	private LoginAuthDataSingleton mAuthDataGenerator;
+	private LoginAuthKeysSingleton mAuthDataGenerator;
 	public enum LoginEnumResult { LOGGED_IN, USER_INPUT_ERROR, UNKNOWN_ERROR, CREDENTIALS_INCORRECT };
 	public static class LoginResult {
 		private String authKey = "";
@@ -36,14 +37,14 @@ public class LoginModel {
 	 * For DI testing
 	 * @param authKeyGenerator 
 	 */
-	public LoginModel(UserEntityQueries ueq, LoginAuthDataSingleton authKeyGenerator) {
+	public LoginModel(UserEntityQueries ueq, LoginAuthKeysSingleton authKeyGenerator) {
 		mUserEntityQueries = ueq;
 		mAuthDataGenerator = authKeyGenerator;
 	}
 	
 	public LoginModel() {
 		mUserEntityQueries = new UserEntityQueries(new PasswordSaltUtils());
-		mAuthDataGenerator = LoginAuthDataSingleton.getInstance();
+		mAuthDataGenerator = LoginAuthKeysSingleton.getInstance();
 	}
 
 	public LoginResult login(String username, String password) {

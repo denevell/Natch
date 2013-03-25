@@ -6,11 +6,11 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.denevell.natch.register.RegisterModel;
-import org.denevell.natch.register.RegisterModel.RegisterResult;
-import org.denevell.natch.register.RegisterResource;
-import org.denevell.natch.register.RegisterResourceInput;
-import org.denevell.natch.register.RegisterResourceReturnData;
+import org.denevell.natch.serv.register.RegisterModel;
+import org.denevell.natch.serv.register.RegisterResource;
+import org.denevell.natch.serv.register.RegisterResourceInput;
+import org.denevell.natch.serv.register.RegisterResourceReturnData;
+import org.denevell.natch.serv.register.RegisterModel.RegisterResult;
 import org.junit.Before;
 import org.junit.Test;
 

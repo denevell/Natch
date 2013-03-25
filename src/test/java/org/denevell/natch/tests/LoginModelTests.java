@@ -5,11 +5,11 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.db.entities.UserEntityQueries;
-import org.denevell.natch.login.LoginAuthDataSingleton;
-import org.denevell.natch.login.LoginModel;
-import org.denevell.natch.login.LoginModel.LoginEnumResult;
-import org.denevell.natch.login.LoginModel.LoginResult;
+import org.denevell.natch.serv.login.LoginModel;
+import org.denevell.natch.serv.login.LoginModel.LoginEnumResult;
+import org.denevell.natch.serv.login.LoginModel.LoginResult;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,12 +17,12 @@ public class LoginModelTests {
 	
 	private UserEntityQueries queries;
 	private LoginModel um;
-	private LoginAuthDataSingleton authKeyGenerator;
+	private LoginAuthKeysSingleton authKeyGenerator;
 
 	@Before
 	public void setup() {
 		queries = mock(UserEntityQueries.class);
-		authKeyGenerator = mock(LoginAuthDataSingleton.class);
+		authKeyGenerator = mock(LoginAuthKeysSingleton.class);
 		um = new LoginModel(queries, authKeyGenerator);
 	}
 	

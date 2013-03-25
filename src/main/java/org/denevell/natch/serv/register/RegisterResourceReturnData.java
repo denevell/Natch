@@ -1,4 +1,4 @@
-package org.denevell.natch.register;
+package org.denevell.natch.serv.register;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

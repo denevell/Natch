@@ -1,4 +1,4 @@
-package org.denevell.natch.register;
+package org.denevell.natch.serv.register;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +11,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.denevell.natch.register.RegisterModel.RegisterResult;
+import org.denevell.natch.serv.register.RegisterModel.RegisterResult;
 
 
 @Path("user")

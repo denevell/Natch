@@ -5,17 +5,17 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import org.denevell.natch.login.LoginAuthDataSingleton;
+import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.junit.Before;
 import org.junit.Test;
 
 public class LoginAuthDataSingletonTests {
 	
-	private LoginAuthDataSingleton authKeyGenerator;
+	private LoginAuthKeysSingleton authKeyGenerator;
 
 	@Before
 	public void setup() {
-		authKeyGenerator = LoginAuthDataSingleton.getInstance();
+		authKeyGenerator = LoginAuthKeysSingleton.getInstance();
 		authKeyGenerator.clearAllKeys();
 	}
 	
@@ -59,48 +59,45 @@ public class LoginAuthDataSingletonTests {
 		// Act
 		String authKey = authKeyGenerator.generate("username");
 		String authKey1 = authKeyGenerator.generate("username");
-		String retrievedAuthKey = authKeyGenerator.retrieve("username");
 		
 		// Assert
 		assertFalse(authKey.equals(authKey1));
-		assertFalse(authKey.equals(retrievedAuthKey));
-		assertTrue(authKey1.equals(retrievedAuthKey));
 	}	
 	
 	@Test
-	public void shouldRetrieveAuthKeyForUsername() {
+	public void shouldRetrieveUsernameForKey() {
 		// Arrange
 		
 		// Act
 		String authKey = authKeyGenerator.generate("username");
-		String retrievedAuthKey = authKeyGenerator.retrieve("username");
+		String retrievedUsername = authKeyGenerator.retrieveUsername(authKey);
 		
 		// Assert
-		assertTrue(authKey.equals(retrievedAuthKey));
+		assertTrue("username".equals(retrievedUsername));
 	}	
 	
 	@Test
-	public void shouldReturnNullForNullRetrieve() {
+	public void shouldReturnNullForNullKey() {
 		// Arrange
 		
 		// Act
-		String retrievedAuthKey = authKeyGenerator.retrieve(null);
+		String retrievedUsername = authKeyGenerator.retrieveUsername(null);
 		
 		// Assert
-		assertNull(retrievedAuthKey);
+		assertNull(retrievedUsername);
 	}	
 	
 	@Test
-	public void shouldRetrieveAuthKeyForUsernameInNewObject() {
+	public void shouldRetrieveUsernameForAuthKeyIfNewObject() {
 		// Arrange
 		
 		// Act
 		String authKey = authKeyGenerator.generate("username");
-		authKeyGenerator = LoginAuthDataSingleton.getInstance();
-		String retrievedAuthKey = authKeyGenerator.retrieve("username");
+		authKeyGenerator = LoginAuthKeysSingleton.getInstance();
+		String retrievedUsername = authKeyGenerator.retrieveUsername(authKey);
 		
 		// Assert
-		assertTrue(authKey.equals(retrievedAuthKey));
+		assertTrue("username".equals(retrievedUsername));
 	}	
 	
 	@Test
@@ -108,14 +105,14 @@ public class LoginAuthDataSingletonTests {
 		// Arrange
 		
 		// Act
-		authKeyGenerator.generate("username");
-		String retrievedAuthKey = authKeyGenerator.retrieve("username");
+		String key = authKeyGenerator.generate("username");
+		String retrievedUsername = authKeyGenerator.retrieveUsername(key);
 		authKeyGenerator.clearAllKeys();
-		String retrievedAuthKey1 = authKeyGenerator.retrieve("username");
+		String retrievedUsername1 = authKeyGenerator.retrieveUsername(key);
 		
 		// Assert
-		assertNotNull(retrievedAuthKey);
-		assertNull(retrievedAuthKey1);
+		assertNotNull(retrievedUsername);
+		assertNull(retrievedUsername1);
 	}	
 
 }

@@ -2,17 +2,16 @@ package org.denevell.natch.tests.functional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
 import javax.ws.rs.core.MediaType;
 
-import org.denevell.natch.login.LoginResourceInput;
-import org.denevell.natch.login.LoginResourceReturnData;
-import org.denevell.natch.register.RegisterResourceInput;
-import org.denevell.natch.register.RegisterResourceReturnData;
+import org.denevell.natch.serv.login.LoginResourceInput;
+import org.denevell.natch.serv.login.LoginResourceReturnData;
+import org.denevell.natch.serv.register.RegisterResourceInput;
+import org.denevell.natch.serv.register.RegisterResourceReturnData;
 import org.junit.Before;
 import org.junit.Test;
 
