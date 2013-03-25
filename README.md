@@ -30,7 +30,7 @@ The start of a REST interface for a forum.
 * tech task: Re-enable db locking 
 * tech task: Strings file somewhere
 * tech task: Tests for entity queries or refactor somewhere else
-* tech task: Tests for JDNI injection of auth key bean
+* tech task: JDNI instead of singleton?
 * ~~tech task: Gradle build~~
 * ~~tech task: Gradle war install~~
 * ~~tech task: Gradle tests run~~ 
