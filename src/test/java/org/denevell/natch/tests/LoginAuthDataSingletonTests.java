@@ -114,5 +114,20 @@ public class LoginAuthDataSingletonTests {
 		assertNotNull(retrievedUsername);
 		assertNull(retrievedUsername1);
 	}	
+	
+	@Test
+	public void shouldRemoveAuthKey() {
+		// Arrange
+		String authKey = authKeyGenerator.generate("username");
+		
+		// Act
+		String retrievedUsername = authKeyGenerator.retrieveUsername(authKey);
+		authKeyGenerator.remove(authKey);
+		String retrievedUsername2 = authKeyGenerator.retrieveUsername(authKey);
+		
+		// Assert
+		assertNotNull(retrievedUsername);
+		assertNull(retrievedUsername2);
+	}		
 
 }

@@ -32,6 +32,10 @@ public class LoginAuthKeysSingleton {
 		String username = mLoginKeys.get(key);
 		return username;
 	}
+	
+	public void remove(String authKey) {
+		mLoginKeys.remove(authKey);
+	}
 
 	public void clearAllKeys() {
 		mLoginKeys.clear();
