@@ -19,17 +19,15 @@ The start of a REST interface for a forum.
 * ~~login: shouldReturnAuthKey~~
 * ~~login: shouldBeAbleToLoginTwice~~
 * ~~login: shouldLoginWithAuthKey~~
-* user details: shouldSeeUserDetails
-* user details: shouldSeeJsonErrorIfNotLoggedIn
 * logout: shouldLogout
-* logout: shouldSeeErrorJsonIfNotLoggedIn
+* logout: shouldSeeErrorJsonIfNotLoggedInAsThatUser
 
 ### 0.1 Tech tasks
 
-* tech task: Logging intergration
-* tech task: Re-enable db locking 
-* tech task: Strings file somewhere
-* tech task: Tests for entity queries or refactor somewhere else
+* Logging intergration
+* Re-enable db locking 
+* Strings file somewhere
+* Tests for entity queries or refactor somewhere else
 * Login UUID collision prevention
 * ~~tech task: JDNI instead of singleton? -- seems not~~
 * ~~tech task: Gradle build~~
@@ -56,6 +54,8 @@ The start of a REST interface for a forum.
 * Delete post
 * Delete user
 * Change user details
+* View own user details
+* View user details publicly
 * Choose what details to display publicly
 * Message a user
 * Thread posts
