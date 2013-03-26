@@ -18,7 +18,7 @@ The start of a REST interface for a forum.
 * ~~login: shouldSeeJsonErrorOnBlanksPassed~~
 * ~~login: shouldReturnAuthKey~~
 * ~~login: shouldBeAbleToLoginTwice~~
-* login: shouldLoginWithAuthKey
+* ~~login: shouldLoginWithAuthKey~~
 * user details: shouldSeeUserDetails
 * user details: shouldSeeJsonErrorIfNotLoggedIn
 * logout: shouldLogout
@@ -30,7 +30,8 @@ The start of a REST interface for a forum.
 * tech task: Re-enable db locking 
 * tech task: Strings file somewhere
 * tech task: Tests for entity queries or refactor somewhere else
-* tech task: JDNI instead of singleton?
+* Login UUID collision prevention
+* ~~tech task: JDNI instead of singleton? -- seems not~~
 * ~~tech task: Gradle build~~
 * ~~tech task: Gradle war install~~
 * ~~tech task: Gradle tests run~~ 

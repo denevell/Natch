@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.serv.login.LoginResourceInput;
+import org.denevell.natch.serv.login.LoginResourceLoggedInReturnData;
 import org.denevell.natch.serv.login.LoginResourceReturnData;
 import org.denevell.natch.serv.register.RegisterResourceInput;
 import org.denevell.natch.serv.register.RegisterResourceReturnData;
@@ -220,6 +221,54 @@ public class LoginFunctional {
 		
 		// Assert
 		assertFalse("Should return different auth key", loginResult.getAuthKey().equals(loginResult1.getAuthKey()));		
+	}
+	
+	@Test
+	public void shouldLoginWithAuthKey() {
+		// Arrange 
+	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
+	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
+		service
+	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
+	    	.put(RegisterResourceReturnData.class, registerInput);
+		LoginResourceReturnData loginResult = service
+	    	.path("rest").path("login")
+	    	.type(MediaType.APPLICATION_JSON)
+	    	.post(LoginResourceReturnData.class, loginInput);
+		String authKey = loginResult.getAuthKey();
+	    
+	    // Act
+		LoginResourceLoggedInReturnData authResult = service
+	    		.path("rest").path("login").path("is").path(authKey)
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.get(LoginResourceLoggedInReturnData.class);
+		
+		// Assert
+		assertTrue("Should say true to is logged in", authResult.isSuccessful());		
+	}
+	
+	@Test
+	public void shouldntLoginWithBadAuthKey() {
+		// Arrange 
+	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
+	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
+		service
+	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
+	    	.put(RegisterResourceReturnData.class, registerInput);
+		LoginResourceReturnData loginResult = service
+	    	.path("rest").path("login")
+	    	.type(MediaType.APPLICATION_JSON)
+	    	.post(LoginResourceReturnData.class, loginInput);
+		String authKey = loginResult.getAuthKey();
+	    
+	    // Act
+		LoginResourceLoggedInReturnData authResult = service
+	    		.path("rest").path("login").path("is").path(authKey+"INCORRECT")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.get(LoginResourceLoggedInReturnData.class);
+		
+		// Assert
+		assertFalse("Should say true to is logged in", authResult.isSuccessful());		
 	}
 	
 }
