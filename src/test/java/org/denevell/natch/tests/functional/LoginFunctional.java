@@ -27,7 +27,7 @@ public class LoginFunctional {
 		service = TestUtils.getRESTClient();
 		service
 	    	.path("rest")
-	    	.path("user")
+	    	.path("register")
 	    	.delete();
 	}
 	
@@ -37,7 +37,7 @@ public class LoginFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
+	    	.path("rest").path("register").type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);
 	    
 	    // Act
@@ -57,7 +57,7 @@ public class LoginFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passyWRONG");
 		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
+	    	.path("rest").path("register").type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);
 	    
 	    // Act
@@ -161,7 +161,7 @@ public class LoginFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
+	    	.path("rest").path("register").type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);
 	    
 	    // Act
@@ -187,7 +187,7 @@ public class LoginFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
+	    	.path("rest").path("register").type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);
 	    
 	    // Act
@@ -206,7 +206,7 @@ public class LoginFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
+	    	.path("rest").path("register").type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);
 	    
 	    // Act
@@ -229,7 +229,7 @@ public class LoginFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
+	    	.path("rest").path("register").type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);
 		LoginResourceReturnData loginResult = service
 	    	.path("rest").path("login")
@@ -253,7 +253,7 @@ public class LoginFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
+	    	.path("rest").path("register").type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);
 		LoginResourceReturnData loginResult = service
 	    	.path("rest").path("login")

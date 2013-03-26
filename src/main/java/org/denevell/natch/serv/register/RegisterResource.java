@@ -14,7 +14,7 @@ import javax.ws.rs.core.UriInfo;
 import org.denevell.natch.serv.register.RegisterModel.RegisterResult;
 
 
-@Path("user")
+@Path("register")
 public class RegisterResource {
 	
 	@Context UriInfo info;
