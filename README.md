@@ -41,24 +41,29 @@ The start of a REST interface for a forum.
 * Better war deploy method than cping the war to the directory.
 * Better way to clear database on functional tests - put tests in war and access the jpa that way?
 * Speed improvements?
-
-### Later features
-* Superuser
-* Groups
-* Password reset
- * Email users
-* Make post
-* Edit post
-* List posts
-* Filter posts
-* Delete post
-* Delete user
-* Change user details
-* View own user details
-* View user details publicly
-* Choose what details to display publicly
-* Message a user
-* Thread posts
-* Base64 login / reg
 * Intercept json parsing errors and return 400s: register, login
 * Login timeout?
+
+### Later features
+* Site management
+ * Superuser
+ * Groups
+ * Permissions for actions
+* Make post
+ * List posts
+ * Edit post
+ * Filter posts
+ * Thread posts
+ * Delete post
+* View users publicly 
+ * Choose what details to display publicly
+* Site comms
+ * Message a user
+* User management 
+ * View user details
+ * Change user details
+ * Password reset
+  * Email users
+ * Delete user
+* Misc
+ * Base64 login / reg or maybe ssl?
