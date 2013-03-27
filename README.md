@@ -20,8 +20,8 @@ The start of a REST interface for a forum.
 * ~~login: shouldBeAbleToLoginTwice~~
 * ~~login: shouldLoginWithAuthKey~~
 * login: shouldntBeAbleToLoginTwiceAndLogoutBackInWithTheFirstKey
-* logout: shouldLogout
-* logout: shouldSeeErrorJsonIfNotLoggedInAsThatUser
+* ~~logout: shouldLogout~~
+* ~~logout: shouldSeeErrorJsonIfNotLoggedInAsThatUser -- shows 401 if bad auth data~~
 
 ### 0.1 Tech tasks
 
@@ -42,6 +42,7 @@ The start of a REST interface for a forum.
 
 * Better war deploy method than cping the war to the directory.
 * Better way to clear database on functional tests - put tests in war and access the jpa that way?
+* Stop the jpa unknown entity problem
 * Speed improvements?
 * Intercept json parsing errors and return 400s: register, login
 * Login timeout?
