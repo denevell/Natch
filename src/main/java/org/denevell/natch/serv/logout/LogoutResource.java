@@ -1,5 +1,7 @@
 package org.denevell.natch.serv.logout;
 
+import java.util.ResourceBundle;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -18,6 +20,7 @@ public class LogoutResource {
 	@Context UriInfo mInfo;
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext mContext;
+    ResourceBundle rb = ResourceBundle.getBundle("Strings");
 	private LogoutModel mLogoutModel;
 	
 	public LogoutResource() {
@@ -41,7 +44,7 @@ public class LogoutResource {
 			returnResult.setSuccessful(true);
 		} else {
 			returnResult.setSuccessful(false);
-			returnResult.setError("Unknown error.");
+			returnResult.setError(rb.getString("unknown_error"));
 		}
 		return returnResult;
 	}

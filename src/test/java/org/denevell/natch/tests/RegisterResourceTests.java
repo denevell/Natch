@@ -65,7 +65,7 @@ public class RegisterResourceTests {
 		
 		// Assert
 		assertFalse(result.isSuccessful());
-		assertEquals("Error json", "Username and password cannot be blank.", result.getError());
+		assertEquals("Error json", "Username or password cannot be blank.", result.getError());
 	}
 	
 	@Test
@@ -79,7 +79,7 @@ public class RegisterResourceTests {
 		
 		// Assert
 		assertFalse(result.isSuccessful());
-		assertEquals("Error json", "Username and password cannot be blank.", result.getError());
+		assertEquals("Error json", "Username or password cannot be blank.", result.getError());
 	}
 	
 	@Test

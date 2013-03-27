@@ -1,5 +1,7 @@
 package org.denevell.natch.serv.login;
 
+import java.util.ResourceBundle;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -23,6 +25,7 @@ public class LoginResource {
 	@Context HttpServletRequest request;
 	@Context ServletContext context;
 	private LoginModel mLoginModel;
+    ResourceBundle rb = ResourceBundle.getBundle("Strings");
 	
 	public LoginResource() {
 		mLoginModel = new LoginModel();
@@ -42,7 +45,7 @@ public class LoginResource {
 		LoginResourceReturnData returnResult = new LoginResourceReturnData();
 		if(loginInput==null) {
 			returnResult.setSuccessful(false);
-			returnResult.setError("Incorrect username or password.");
+			returnResult.setError(rb.getString("incorrect_username"));
 			return returnResult;
 		}
 		String username = loginInput.getUsername();
@@ -53,7 +56,7 @@ public class LoginResource {
 			returnResult.setAuthKey(loginResult.getAuthKey());
 		} else {
 			returnResult.setSuccessful(false);
-			returnResult.setError("Incorrect username or password.");
+			returnResult.setError(rb.getString("incorrect_username"));
 			
 		}
 		return returnResult;

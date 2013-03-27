@@ -1,5 +1,7 @@
 package org.denevell.natch.serv.register;
 
+import java.util.ResourceBundle;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -21,6 +23,7 @@ public class RegisterResource {
 	@Context HttpServletRequest request;
 	@Context ServletContext context;
 	private RegisterModel mUserModel;
+    ResourceBundle rb = ResourceBundle.getBundle("Strings");
 	
 	public RegisterResource() {
 		mUserModel = new RegisterModel();
@@ -45,7 +48,7 @@ public class RegisterResource {
 		RegisterResourceReturnData regReturnData = new RegisterResourceReturnData();
 		if(registerInput==null) {
 			regReturnData.setSuccessful(false);
-			regReturnData.setError("Username and password cannot be blank.");
+			regReturnData.setError(rb.getString("user_pass_cant_be_blank"));
 			return regReturnData;
 		}
 		RegisterResult okay = mUserModel.addUserToSystem(registerInput.getUsername(), registerInput.getPassword());
@@ -53,13 +56,13 @@ public class RegisterResource {
 			regReturnData.setSuccessful(true);
 		} else if(okay==RegisterResult.USER_INPUT_ERROR) {
 			regReturnData.setSuccessful(false);
-			regReturnData.setError("Username and password cannot be blank.");
+			regReturnData.setError(rb.getString("user_pass_cant_be_blank"));
 		} else if(okay==RegisterResult.DUPLICATE_USERNAME){
 			regReturnData.setSuccessful(false);
-			regReturnData.setError("Username already exists.");
+			regReturnData.setError(rb.getString("username_exists"));
 		} else {
 			regReturnData.setSuccessful(false);
-			regReturnData.setError("Unknown error.");
+			regReturnData.setError(rb.getString("unknown_error"));
 		}
 		return regReturnData;
 	}

@@ -27,10 +27,10 @@ The start of a REST interface for a forum.
 
 * Logging intergration
 * Re-enable db locking 
-* Strings file somewhere
 * Tests for entity queries or refactor somewhere else
 * Tests for login header filter
 * Login UUID collision prevention
+* ~~Strings file somewhere~~
 * ~~tech task: JDNI instead of singleton? -- seems not~~
 * ~~tech task: Gradle build~~
 * ~~tech task: Gradle war install~~
@@ -46,6 +46,9 @@ The start of a REST interface for a forum.
 * Speed improvements?
 * Intercept json parsing errors and return 400s: register, login
 * Login timeout?
+* Strings file in both test and main java resources?
+* Strings file access from unit tests and functional tests
+
 
 ### Later features
 * Site management

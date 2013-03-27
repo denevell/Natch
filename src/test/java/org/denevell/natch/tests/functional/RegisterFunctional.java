@@ -71,7 +71,7 @@ public class RegisterFunctional {
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
 		// Assert
-		assertEquals("Username and password cannot be blank.", result.getError());
+		assertEquals("Username or password cannot be blank.", result.getError());
 		assertFalse("Should return false 'successful' field", result.isSuccessful());		
 	}
 	
@@ -86,7 +86,7 @@ public class RegisterFunctional {
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
 		// Assert
-		assertEquals("Username and password cannot be blank.", result.getError());
+		assertEquals("Username or password cannot be blank.", result.getError());
 		assertFalse("Should return false 'successful' field", result.isSuccessful());		
 	}
 	
@@ -101,7 +101,7 @@ public class RegisterFunctional {
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
 		// Assert
-		assertEquals("Username and password cannot be blank.", result.getError());
+		assertEquals("Username or password cannot be blank.", result.getError());
 		assertFalse("Should return false 'successful' field", result.isSuccessful());		
 	}
 	
@@ -116,7 +116,7 @@ public class RegisterFunctional {
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
 		// Assert
-		assertEquals("Username and password cannot be blank.", result.getError());
+		assertEquals("Username or password cannot be blank.", result.getError());
 		assertFalse("Should return false 'successful' field", result.isSuccessful());		
 	}
 	
@@ -131,7 +131,7 @@ public class RegisterFunctional {
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
 		// Assert
-		assertEquals("Username and password cannot be blank.", result.getError());
+		assertEquals("Username or password cannot be blank.", result.getError());
 		assertFalse("Should return false 'successful' field", result.isSuccessful());		
 	}
 	
@@ -146,7 +146,7 @@ public class RegisterFunctional {
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
 		// Assert
-		assertEquals("Username and password cannot be blank.", result.getError());
+		assertEquals("Username or password cannot be blank.", result.getError());
 		assertFalse("Should return false 'successful' field", result.isSuccessful());		
 	}	
 	
