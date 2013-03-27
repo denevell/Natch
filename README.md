@@ -28,6 +28,7 @@ The start of a REST interface for a forum.
 * Re-enable db locking 
 * Strings file somewhere
 * Tests for entity queries or refactor somewhere else
+* Tests for login header filter
 * Login UUID collision prevention
 * ~~tech task: JDNI instead of singleton? -- seems not~~
 * ~~tech task: Gradle build~~
