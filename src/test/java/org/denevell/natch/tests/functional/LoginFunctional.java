@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import javax.ws.rs.core.MediaType;
 
@@ -21,6 +22,7 @@ import com.sun.jersey.api.client.WebResource;
 public class LoginFunctional {
 	
 	private WebResource service;
+    ResourceBundle rb = ResourceBundle.getBundle("Strings");
 
 	@Before
 	public void setup() throws IOException, InterruptedException {
@@ -67,7 +69,7 @@ public class LoginFunctional {
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
 		// Assert
-		assertEquals("Incorrect username or password.", loginResult.getError());
+		assertEquals(rb.getString("incorrect_username"), loginResult.getError());
 		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
 	}
 	
@@ -83,7 +85,7 @@ public class LoginFunctional {
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
 		// Assert
-		assertEquals("Incorrect username or password.", loginResult.getError());
+		assertEquals(rb.getString("incorrect_username"), loginResult.getError());
 		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
 	}
 	
@@ -99,7 +101,7 @@ public class LoginFunctional {
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
 		// Assert
-		assertEquals("Incorrect username or password.", loginResult.getError());
+		assertEquals(rb.getString("incorrect_username"), loginResult.getError());
 		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
 	}
 	
@@ -115,7 +117,7 @@ public class LoginFunctional {
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
 		// Assert
-		assertEquals("Incorrect username or password.", loginResult.getError());
+		assertEquals(rb.getString("incorrect_username"), loginResult.getError());
 		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
 	}
 	
@@ -131,7 +133,7 @@ public class LoginFunctional {
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
 		// Assert
-		assertEquals("Incorrect username or password.", loginResult.getError());
+		assertEquals(rb.getString("incorrect_username"), loginResult.getError());
 		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
 	}
 	
@@ -147,7 +149,7 @@ public class LoginFunctional {
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
 		// Assert
-		assertEquals("Incorrect username or password.", loginResult.getError());
+		assertEquals(rb.getString("incorrect_username"), loginResult.getError());
 	}
 	
 	@Test

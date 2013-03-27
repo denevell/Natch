@@ -6,6 +6,8 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.ResourceBundle;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
@@ -20,6 +22,7 @@ public class LogoutResourceTests {
 	private LogoutModel userModel;
 	private LogoutResource resource;
 	private HttpServletRequest requestContext;
+    ResourceBundle rb = ResourceBundle.getBundle("Strings");
 
 	@Before
 	public void setup() {
@@ -55,7 +58,7 @@ public class LogoutResourceTests {
 		
 		// Assert
 		assertFalse(result.isSuccessful());
-		assertEquals("Error json", "Unknown error.", result.getError());
+		assertEquals("Error json", rb.getString("unknown_error"), result.getError());
 	}
 	
 }

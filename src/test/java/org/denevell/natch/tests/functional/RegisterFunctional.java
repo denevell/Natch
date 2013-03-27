@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import javax.ws.rs.core.MediaType;
 
@@ -18,6 +19,7 @@ import com.sun.jersey.api.client.WebResource;
 public class RegisterFunctional {
 	
 	private WebResource registerService;
+    ResourceBundle rb = ResourceBundle.getBundle("Strings");
 
 	@Before
 	public void setup() throws IOException, InterruptedException {
@@ -57,7 +59,7 @@ public class RegisterFunctional {
 		assertTrue("Should return true as 'successful' field", result.isSuccessful());
 		assertEquals("Should see blank error JSON", "", result.getError());
 		assertFalse("Should return false as 'successful' field", result2.isSuccessful());
-		assertEquals("Should see error JSON", "Username already exists.", result2.getError());
+		assertEquals("Should see error JSON", rb.getString("username_exists"), result2.getError());
 	}	
 	
 	@Test
@@ -71,7 +73,7 @@ public class RegisterFunctional {
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
 		// Assert
-		assertEquals("Username or password cannot be blank.", result.getError());
+		assertEquals(rb.getString("user_pass_cant_be_blank"), result.getError());
 		assertFalse("Should return false 'successful' field", result.isSuccessful());		
 	}
 	
@@ -86,7 +88,7 @@ public class RegisterFunctional {
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
 		// Assert
-		assertEquals("Username or password cannot be blank.", result.getError());
+		assertEquals(rb.getString("user_pass_cant_be_blank"), result.getError());
 		assertFalse("Should return false 'successful' field", result.isSuccessful());		
 	}
 	
@@ -101,7 +103,7 @@ public class RegisterFunctional {
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
 		// Assert
-		assertEquals("Username or password cannot be blank.", result.getError());
+		assertEquals(rb.getString("user_pass_cant_be_blank"), result.getError());
 		assertFalse("Should return false 'successful' field", result.isSuccessful());		
 	}
 	
@@ -116,7 +118,7 @@ public class RegisterFunctional {
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
 		// Assert
-		assertEquals("Username or password cannot be blank.", result.getError());
+		assertEquals(rb.getString("user_pass_cant_be_blank"), result.getError());
 		assertFalse("Should return false 'successful' field", result.isSuccessful());		
 	}
 	
@@ -131,7 +133,7 @@ public class RegisterFunctional {
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
 		// Assert
-		assertEquals("Username or password cannot be blank.", result.getError());
+		assertEquals(rb.getString("user_pass_cant_be_blank"), result.getError());
 		assertFalse("Should return false 'successful' field", result.isSuccessful());		
 	}
 	
@@ -146,7 +148,7 @@ public class RegisterFunctional {
 	    		.put(RegisterResourceReturnData.class, registerInput);
 		
 		// Assert
-		assertEquals("Username or password cannot be blank.", result.getError());
+		assertEquals(rb.getString("user_pass_cant_be_blank"), result.getError());
 		assertFalse("Should return false 'successful' field", result.isSuccessful());		
 	}	
 	

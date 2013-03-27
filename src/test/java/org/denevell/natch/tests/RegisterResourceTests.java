@@ -6,17 +6,20 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.ResourceBundle;
+
 import org.denevell.natch.serv.register.RegisterModel;
+import org.denevell.natch.serv.register.RegisterModel.RegisterResult;
 import org.denevell.natch.serv.register.RegisterResource;
 import org.denevell.natch.serv.register.RegisterResourceInput;
 import org.denevell.natch.serv.register.RegisterResourceReturnData;
-import org.denevell.natch.serv.register.RegisterModel.RegisterResult;
 import org.junit.Before;
 import org.junit.Test;
 
 public class RegisterResourceTests {
 	
 	private RegisterModel userModel;
+    ResourceBundle rb = ResourceBundle.getBundle("Strings");
 
 	@Before
 	public void setup() {
@@ -50,7 +53,7 @@ public class RegisterResourceTests {
 		
 		// Assert
 		assertFalse(result.isSuccessful());
-		assertEquals("Error json", "Username already exists.", result.getError());
+		assertEquals("Error json", rb.getString("username_exists"), result.getError());
 	}
 	
 	@Test
@@ -65,7 +68,7 @@ public class RegisterResourceTests {
 		
 		// Assert
 		assertFalse(result.isSuccessful());
-		assertEquals("Error json", "Username or password cannot be blank.", result.getError());
+		assertEquals("Error json", rb.getString("user_pass_cant_be_blank"), result.getError());
 	}
 	
 	@Test
@@ -79,7 +82,7 @@ public class RegisterResourceTests {
 		
 		// Assert
 		assertFalse(result.isSuccessful());
-		assertEquals("Error json", "Username or password cannot be blank.", result.getError());
+		assertEquals("Error json", rb.getString("user_pass_cant_be_blank"), result.getError());
 	}
 	
 	@Test
@@ -94,7 +97,7 @@ public class RegisterResourceTests {
 		
 		// Assert
 		assertFalse(result.isSuccessful());
-		assertEquals("Error json", "Unknown error.", result.getError());
+		assertEquals("Error json", rb.getString("unknown_error"), result.getError());
 	}
 	
 }

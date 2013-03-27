@@ -45,9 +45,9 @@ The start of a REST interface for a forum.
 * Stop the jpa unknown entity problem
 * Speed improvements?
 * Intercept json parsing errors and return 400s: register, login
-* Login timeout?
+* ~~Login timeout? -- No, next login will kill old anyway~~
 * Strings file in both test and main java resources?
-* Strings file access from unit tests and functional tests
+* ~~Strings file access from unit tests and functional tests~~
 
 
 ### Later features

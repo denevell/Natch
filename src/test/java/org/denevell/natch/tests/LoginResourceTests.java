@@ -6,6 +6,8 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.ResourceBundle;
+
 import org.denevell.natch.serv.login.LoginModel;
 import org.denevell.natch.serv.login.LoginResource;
 import org.denevell.natch.serv.login.LoginResourceInput;
@@ -20,7 +22,8 @@ public class LoginResourceTests {
 	
 	private LoginModel userModel;
 	private LoginResource resource;
-
+    ResourceBundle rb = ResourceBundle.getBundle("Strings");
+	
 	@Before
 	public void setup() {
 		userModel = mock(LoginModel.class);
@@ -52,7 +55,7 @@ public class LoginResourceTests {
 		
 		// Assert
 		assertFalse(result.isSuccessful());
-		assertEquals("Error json", "Incorrect username or password.", result.getError());
+		assertEquals("Error json", rb.getString("incorrect_username"), result.getError());
 	}
 	
 	@Test
@@ -66,7 +69,7 @@ public class LoginResourceTests {
 		
 		// Assert
 		assertFalse("Fail to register", result.isSuccessful());
-		assertEquals("Json error message", "Incorrect username or password.", result.getError());
+		assertEquals("Json error message", rb.getString("incorrect_username"), result.getError());
 	}
 	
 	@Test
@@ -78,7 +81,7 @@ public class LoginResourceTests {
 		
 		// Assert
 		assertFalse("Fail to register", result.isSuccessful());
-		assertEquals("Json error message", "Incorrect username or password.", result.getError());
+		assertEquals("Json error message", rb.getString("incorrect_username"), result.getError());
 	}	
 	
 	@Test
