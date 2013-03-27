@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.serv.register.RegisterResourceInput;
 import org.denevell.natch.serv.register.RegisterResourceReturnData;
+import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,7 +20,7 @@ import com.sun.jersey.api.client.WebResource;
 public class RegisterFunctional {
 	
 	private WebResource registerService;
-    ResourceBundle rb = ResourceBundle.getBundle("Strings");
+    ResourceBundle rb = Strings.getMainResourceBundle();
 
 	@Before
 	public void setup() throws IOException, InterruptedException {

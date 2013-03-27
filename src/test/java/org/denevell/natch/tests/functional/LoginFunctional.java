@@ -14,6 +14,7 @@ import org.denevell.natch.serv.login.LoginResourceLoggedInReturnData;
 import org.denevell.natch.serv.login.LoginResourceReturnData;
 import org.denevell.natch.serv.register.RegisterResourceInput;
 import org.denevell.natch.serv.register.RegisterResourceReturnData;
+import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,7 +23,7 @@ import com.sun.jersey.api.client.WebResource;
 public class LoginFunctional {
 	
 	private WebResource service;
-    ResourceBundle rb = ResourceBundle.getBundle("Strings");
+    ResourceBundle rb = Strings.getMainResourceBundle();
 
 	@Before
 	public void setup() throws IOException, InterruptedException {

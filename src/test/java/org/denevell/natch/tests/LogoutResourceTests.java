@@ -14,6 +14,7 @@ import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.serv.logout.LogoutModel;
 import org.denevell.natch.serv.logout.LogoutResource;
 import org.denevell.natch.serv.logout.LogoutResourceReturnData;
+import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,7 +23,7 @@ public class LogoutResourceTests {
 	private LogoutModel userModel;
 	private LogoutResource resource;
 	private HttpServletRequest requestContext;
-    ResourceBundle rb = ResourceBundle.getBundle("Strings");
+    ResourceBundle rb = Strings.getMainResourceBundle();
 
 	@Before
 	public void setup() {

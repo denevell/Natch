@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
+import org.denevell.natch.utils.Strings;
 
 
 @Path("logout")
@@ -20,7 +21,7 @@ public class LogoutResource {
 	@Context UriInfo mInfo;
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext mContext;
-    ResourceBundle rb = ResourceBundle.getBundle("Strings");
+    ResourceBundle rb = Strings.getMainResourceBundle();
 	private LogoutModel mLogoutModel;
 	
 	public LogoutResource() {

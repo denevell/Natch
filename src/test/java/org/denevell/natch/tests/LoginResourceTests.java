@@ -15,6 +15,7 @@ import org.denevell.natch.serv.login.LoginResourceLoggedInReturnData;
 import org.denevell.natch.serv.login.LoginResourceReturnData;
 import org.denevell.natch.serv.login.LoginModel.LoginEnumResult;
 import org.denevell.natch.serv.login.LoginModel.LoginResult;
+import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,7 +23,7 @@ public class LoginResourceTests {
 	
 	private LoginModel userModel;
 	private LoginResource resource;
-    ResourceBundle rb = ResourceBundle.getBundle("Strings");
+    ResourceBundle rb = Strings.getMainResourceBundle();
 	
 	@Before
 	public void setup() {

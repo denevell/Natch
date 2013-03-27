@@ -16,6 +16,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.serv.login.LoginModel.LoginEnumResult;
 import org.denevell.natch.serv.login.LoginModel.LoginResult;
+import org.denevell.natch.utils.Strings;
 
 
 @Path("login")
@@ -25,7 +26,7 @@ public class LoginResource {
 	@Context HttpServletRequest request;
 	@Context ServletContext context;
 	private LoginModel mLoginModel;
-    ResourceBundle rb = ResourceBundle.getBundle("Strings");
+    ResourceBundle rb = Strings.getMainResourceBundle();
 	
 	public LoginResource() {
 		mLoginModel = new LoginModel();

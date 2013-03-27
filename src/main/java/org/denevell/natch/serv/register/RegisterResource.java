@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.serv.register.RegisterModel.RegisterResult;
+import org.denevell.natch.utils.Strings;
 
 
 @Path("register")
@@ -23,7 +24,7 @@ public class RegisterResource {
 	@Context HttpServletRequest request;
 	@Context ServletContext context;
 	private RegisterModel mUserModel;
-    ResourceBundle rb = ResourceBundle.getBundle("Strings");
+    ResourceBundle rb = Strings.getMainResourceBundle();
 	
 	public RegisterResource() {
 		mUserModel = new RegisterModel();

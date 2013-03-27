@@ -5,7 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.util.ResourceBundle;
 
 import javax.ws.rs.core.MediaType;
 
@@ -23,8 +22,7 @@ import com.sun.jersey.api.client.WebResource;
 public class LogoutFunctional {
 	
 	private WebResource service;
-    ResourceBundle rb = ResourceBundle.getBundle("Strings");
-
+	
 	@Before
 	public void setup() throws IOException, InterruptedException {
 		service = TestUtils.getRESTClient();
