@@ -16,6 +16,10 @@ dependencies {
 	compile 'org.mindrot:jbcrypt:0.3m'
 }    
 
+test {
+	exclude 'org/denevell/natch/tests/functional/'
+}
+
 task createFunctionalWar(type: War) {
     sourceSets.main.resources.srcDirs = ['src/test/resources']
     classifier = 'Functional'
