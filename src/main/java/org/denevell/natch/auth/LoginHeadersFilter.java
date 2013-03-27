@@ -11,14 +11,16 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.denevell.natch.serv.login.LoginModel;
+
 public class LoginHeadersFilter implements Filter {
 	
 	private static final String AUTHENTICATION_ID = "AuthId";
 	public static final String KEY_SERVLET_REQUEST_LOGGEDIN_USERNAME= "auth";
-	private LoginAuthKeysSingleton mAuthKeys;
+	private LoginModel mLoginModel;
 	
 	public LoginHeadersFilter() {
-		mAuthKeys = LoginAuthKeysSingleton.getInstance();
+		mLoginModel = new LoginModel();
 	}
 
 	@Override
@@ -32,7 +34,7 @@ public class LoginHeadersFilter implements Filter {
 		// Get the auth data from the header
 		String authId = request.getHeader(AUTHENTICATION_ID);
 		// Check it
-		String username = mAuthKeys.retrieveUsername(authId);
+		String username = mLoginModel.loggedInAs(authId);
 		if(username==null || username.trim().length()==0) {
 			HttpServletResponse r = (HttpServletResponse) resp;
 			r.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Doesn't man you need to HTTP auth, but this is a good response fit.
