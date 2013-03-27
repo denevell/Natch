@@ -70,7 +70,7 @@ public class LoginFunctional {
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
 		// Assert
-		assertEquals(rb.getString("incorrect_username"), loginResult.getError());
+		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
 		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
 	}
 	
@@ -86,7 +86,7 @@ public class LoginFunctional {
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
 		// Assert
-		assertEquals(rb.getString("incorrect_username"), loginResult.getError());
+		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
 		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
 	}
 	
@@ -102,7 +102,7 @@ public class LoginFunctional {
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
 		// Assert
-		assertEquals(rb.getString("incorrect_username"), loginResult.getError());
+		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
 		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
 	}
 	
@@ -118,7 +118,7 @@ public class LoginFunctional {
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
 		// Assert
-		assertEquals(rb.getString("incorrect_username"), loginResult.getError());
+		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
 		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
 	}
 	
@@ -134,7 +134,7 @@ public class LoginFunctional {
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
 		// Assert
-		assertEquals(rb.getString("incorrect_username"), loginResult.getError());
+		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
 		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
 	}
 	
@@ -150,7 +150,7 @@ public class LoginFunctional {
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
 		// Assert
-		assertEquals(rb.getString("incorrect_username"), loginResult.getError());
+		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
 	}
 	
 	@Test

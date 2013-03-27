@@ -46,7 +46,7 @@ public class LoginResource {
 		LoginResourceReturnData returnResult = new LoginResourceReturnData();
 		if(loginInput==null) {
 			returnResult.setSuccessful(false);
-			returnResult.setError(rb.getString("incorrect_username"));
+			returnResult.setError(rb.getString(Strings.incorrect_username_or_password));
 			return returnResult;
 		}
 		String username = loginInput.getUsername();
@@ -58,10 +58,10 @@ public class LoginResource {
 		} else if(loginResult.getResult()==LoginEnumResult.CREDENTIALS_INCORRECT
 				|| loginResult.getResult()==LoginEnumResult.USER_INPUT_ERROR){
 			returnResult.setSuccessful(false);
-			returnResult.setError(rb.getString("incorrect_username"));
+			returnResult.setError(rb.getString(Strings.incorrect_username_or_password));
 		} else {
 			returnResult.setSuccessful(false);
-			returnResult.setError(rb.getString("unknown_error"));
+			returnResult.setError(rb.getString(Strings.unknown_error));
 		}
 		return returnResult;
 	}

@@ -59,7 +59,7 @@ public class LogoutResourceTests {
 		
 		// Assert
 		assertFalse(result.isSuccessful());
-		assertEquals("Error json", rb.getString("unknown_error"), result.getError());
+		assertEquals("Error json", rb.getString(Strings.unknown_error), result.getError());
 	}
 	
 }

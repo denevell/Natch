@@ -56,7 +56,7 @@ public class LoginResourceTests {
 		
 		// Assert
 		assertFalse(result.isSuccessful());
-		assertEquals("Error json", rb.getString("incorrect_username"), result.getError());
+		assertEquals("Error json", rb.getString(Strings.incorrect_username_or_password), result.getError());
 	}
 	
 	@Test
@@ -70,7 +70,7 @@ public class LoginResourceTests {
 		
 		// Assert
 		assertFalse("Fail to register", result.isSuccessful());
-		assertEquals("Json error message", rb.getString("incorrect_username"), result.getError());
+		assertEquals("Json error message", rb.getString(Strings.incorrect_username_or_password), result.getError());
 	}
 	
 	@Test
@@ -82,7 +82,7 @@ public class LoginResourceTests {
 		
 		// Assert
 		assertFalse("Fail to register", result.isSuccessful());
-		assertEquals("Json error message", rb.getString("incorrect_username"), result.getError());
+		assertEquals("Json error message", rb.getString(Strings.incorrect_username_or_password), result.getError());
 	}	
 	
 	@Test

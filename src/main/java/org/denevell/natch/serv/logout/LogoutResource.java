@@ -45,7 +45,7 @@ public class LogoutResource {
 			returnResult.setSuccessful(true);
 		} else {
 			returnResult.setSuccessful(false);
-			returnResult.setError(rb.getString("unknown_error"));
+			returnResult.setError(rb.getString(Strings.unknown_error));
 		}
 		return returnResult;
 	}

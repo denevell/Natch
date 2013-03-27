@@ -54,7 +54,7 @@ public class RegisterResourceTests {
 		
 		// Assert
 		assertFalse(result.isSuccessful());
-		assertEquals("Error json", rb.getString("username_exists"), result.getError());
+		assertEquals("Error json", rb.getString(Strings.username_already_exists), result.getError());
 	}
 	
 	@Test
@@ -69,7 +69,7 @@ public class RegisterResourceTests {
 		
 		// Assert
 		assertFalse(result.isSuccessful());
-		assertEquals("Error json", rb.getString("user_pass_cant_be_blank"), result.getError());
+		assertEquals("Error json", rb.getString(Strings.user_pass_cannot_be_blanke), result.getError());
 	}
 	
 	@Test
@@ -83,7 +83,7 @@ public class RegisterResourceTests {
 		
 		// Assert
 		assertFalse(result.isSuccessful());
-		assertEquals("Error json", rb.getString("user_pass_cant_be_blank"), result.getError());
+		assertEquals("Error json", rb.getString(Strings.user_pass_cannot_be_blanke), result.getError());
 	}
 	
 	@Test
@@ -98,7 +98,7 @@ public class RegisterResourceTests {
 		
 		// Assert
 		assertFalse(result.isSuccessful());
-		assertEquals("Error json", rb.getString("unknown_error"), result.getError());
+		assertEquals("Error json", rb.getString(Strings.unknown_error), result.getError());
 	}
 	
 }

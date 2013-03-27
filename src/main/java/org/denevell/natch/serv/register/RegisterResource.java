@@ -49,7 +49,7 @@ public class RegisterResource {
 		RegisterResourceReturnData regReturnData = new RegisterResourceReturnData();
 		if(registerInput==null) {
 			regReturnData.setSuccessful(false);
-			regReturnData.setError(rb.getString("user_pass_cant_be_blank"));
+			regReturnData.setError(rb.getString(Strings.user_pass_cannot_be_blanke));
 			return regReturnData;
 		}
 		RegisterResult okay = mUserModel.addUserToSystem(registerInput.getUsername(), registerInput.getPassword());
@@ -57,13 +57,13 @@ public class RegisterResource {
 			regReturnData.setSuccessful(true);
 		} else if(okay==RegisterResult.USER_INPUT_ERROR) {
 			regReturnData.setSuccessful(false);
-			regReturnData.setError(rb.getString("user_pass_cant_be_blank"));
+			regReturnData.setError(rb.getString(Strings.user_pass_cannot_be_blanke));
 		} else if(okay==RegisterResult.DUPLICATE_USERNAME){
 			regReturnData.setSuccessful(false);
-			regReturnData.setError(rb.getString("username_exists"));
+			regReturnData.setError(rb.getString(Strings.username_already_exists));
 		} else {
 			regReturnData.setSuccessful(false);
-			regReturnData.setError(rb.getString("unknown_error"));
+			regReturnData.setError(rb.getString(Strings.unknown_error));
 		}
 		return regReturnData;
 	}
