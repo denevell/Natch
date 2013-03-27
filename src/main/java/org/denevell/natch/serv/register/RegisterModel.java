@@ -42,7 +42,7 @@ public class RegisterModel {
 			mEntityManager.close();
 			mFactory.close();
 		} catch(Exception e) {
-			// Log
+			//TODO: Log
 		}
 	}	
 	

@@ -20,6 +20,10 @@ test {
 	exclude 'org/denevell/natch/tests/functional/'
 }
 
+task integrationTests(type: Test) {
+	include 'org/denevell/natch/tests/functional/LogoutFunctional.class'
+}
+
 task createFunctionalWar(type: War) {
     sourceSets.main.resources.srcDirs = ['src/test/resources']
     classifier = 'Functional'
@@ -28,6 +32,5 @@ task createFunctionalWar(type: War) {
 task deployFunctionalWar(type:Exec, dependsOn: createFunctionalWar) {
        commandLine = ['cp', 'build/libs/Natch-Functional.war', '/var/lib/tomcat7/webapps/']
 }
-
 
 test.dependsOn deployFunctionalWar
