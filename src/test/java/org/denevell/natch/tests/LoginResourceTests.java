@@ -61,7 +61,6 @@ public class LoginResourceTests {
 		LoginResourceInput loginInput = new LoginResourceInput("username", "password");
 		when(userModel.login("username", "password")).thenReturn(new LoginResult(LoginEnumResult.USER_INPUT_ERROR));
 		
-		
 		// Act
 		LoginResourceReturnData result = resource.login(loginInput);
 		

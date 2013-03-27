@@ -54,10 +54,13 @@ public class LoginResource {
 		if(loginResult.getResult()==LoginEnumResult.LOGGED_IN) {
 			returnResult.setSuccessful(true);
 			returnResult.setAuthKey(loginResult.getAuthKey());
-		} else {
+		} else if(loginResult.getResult()==LoginEnumResult.CREDENTIALS_INCORRECT
+				|| loginResult.getResult()==LoginEnumResult.USER_INPUT_ERROR){
 			returnResult.setSuccessful(false);
 			returnResult.setError(rb.getString("incorrect_username"));
-			
+		} else {
+			returnResult.setSuccessful(false);
+			returnResult.setError(rb.getString("unknown_error"));
 		}
 		return returnResult;
 	}
