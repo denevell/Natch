@@ -4,6 +4,17 @@
 
 	<display-name>hello</display-name>
 	
+	<filter>
+	   <filter-name>Auth Filter</filter-name>
+	   <filter-class>
+	    org.denevell.natch.auth.LoginHeadersFilter
+	   </filter-class>
+	</filter>
+	<filter-mapping>
+	  <filter-name>Auth Filter</filter-name>
+	  <url-pattern>/rest/login/is/*</url-pattern>
+	</filter-mapping>	
+	
 	<servlet>
 		<servlet-name>Jersey REST Service</servlet-name>
 		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer

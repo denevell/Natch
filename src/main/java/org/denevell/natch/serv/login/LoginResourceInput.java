@@ -2,7 +2,7 @@ package org.denevell.natch.serv.login;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.denevell.natch.rest.baseentities.UsernameAndPassword;
+import org.denevell.natch.serv.baseentities.UsernameAndPassword;
 
 @XmlRootElement
 public class LoginResourceInput extends UsernameAndPassword {

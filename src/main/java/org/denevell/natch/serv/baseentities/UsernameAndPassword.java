@@ -1,4 +1,4 @@
-package org.denevell.natch.rest.baseentities;
+package org.denevell.natch.serv.baseentities;
 
 
 public class UsernameAndPassword {
