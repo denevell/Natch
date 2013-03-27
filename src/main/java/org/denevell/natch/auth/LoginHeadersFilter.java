@@ -15,8 +15,9 @@ import org.denevell.natch.serv.login.LoginModel;
 
 public class LoginHeadersFilter implements Filter {
 	
-	private static final String AUTHENTICATION_ID = "AuthId";
-	public static final String KEY_SERVLET_REQUEST_LOGGEDIN_USERNAME= "auth";
+	private static final String AUTHENTICATION_KEY = "AuthKey";
+	public static final String KEY_SERVLET_REQUEST_LOGGEDIN_USERNAME= "authed_username";
+	public static final String KEY_SERVLET_REQUEST_LOGGEDIN_AUTHKEY = "authkey";
 	private LoginModel mLoginModel;
 	
 	public LoginHeadersFilter() {
@@ -32,15 +33,16 @@ public class LoginHeadersFilter implements Filter {
 		// Get the request info for the header
 		HttpServletRequest request = (HttpServletRequest) req;
 		// Get the auth data from the header
-		String authId = request.getHeader(AUTHENTICATION_ID);
+		String authKey = request.getHeader(AUTHENTICATION_KEY);
 		// Check it
-		String username = mLoginModel.loggedInAs(authId);
+		String username = mLoginModel.loggedInAs(authKey);
 		if(username==null || username.trim().length()==0) {
 			HttpServletResponse r = (HttpServletResponse) resp;
 			r.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Doesn't man you need to HTTP auth, but this is a good response fit.
 			return;
 		} else { // Since we're logged in, set the auth object
 			request.setAttribute(KEY_SERVLET_REQUEST_LOGGEDIN_USERNAME, username);
+			request.setAttribute(KEY_SERVLET_REQUEST_LOGGEDIN_AUTHKEY, authKey);
 			chain.doFilter(request, resp);		
 		}
 	}
