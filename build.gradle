@@ -22,7 +22,7 @@ test {
 }
 
 task integrationTests(type: Test) {
-	include 'org/denevell/natch/tests/functional/LogoutFunctional.class'
+	include 'org/denevell/natch/tests/functional/**'
 }
 
 task createFunctionalWar(type: War) {
