@@ -25,7 +25,7 @@ The start of a REST interface for a forum.
 
 ### 0.1 Tech tasks
 
-* Logging intergration
+* ~~Logging intergration~~
 * Re-enable db locking 
 * Tests for entity queries or refactor somewhere else
 * Tests for login header filter

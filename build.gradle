@@ -13,6 +13,7 @@ dependencies {
 	providedCompile	'org.apache.tomcat:tomcat-servlet-api:7.0.37'
 	providedCompile 'com.sun.jersey:jersey-bundle:1.17.1'
 	providedCompile 'org.eclipse.persistence:javax.persistence:2.0.0'
+	compile 'log4j:log4j:1.2.17'
 	compile 'org.mindrot:jbcrypt:0.3m'
 }    
 

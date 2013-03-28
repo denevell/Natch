@@ -2,6 +2,7 @@ package org.denevell.natch.serv.login;
 
 import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.db.entities.UserEntityQueries;
+import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.PasswordSaltUtils;
 
 public class LoginModel {
@@ -60,7 +61,7 @@ public class LoginModel {
 				return new LoginResult(LoginEnumResult.CREDENTIALS_INCORRECT);
 			}
 		} catch(Exception e) {
-			// TODO: Log
+			Log.info(this.getClass(), e.toString());
 			e.printStackTrace();
 			return new LoginResult(LoginEnumResult.UNKNOWN_ERROR);
 		} 

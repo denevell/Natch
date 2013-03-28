@@ -8,6 +8,7 @@ import javax.persistence.Query;
 
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.db.entities.UserEntityQueries;
+import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.PasswordSaltUtils;
 
 public class RegisterModel {
@@ -42,7 +43,7 @@ public class RegisterModel {
 			mEntityManager.close();
 			mFactory.close();
 		} catch(Exception e) {
-			//TODO: Log
+			Log.info(this.getClass(), e.toString());
 		}
 	}	
 	
@@ -75,7 +76,7 @@ public class RegisterModel {
 				return RegisterResult.DUPLICATE_USERNAME;
 			}
 		} catch(Exception e) {
-			// TODO: Log
+			Log.info(this.getClass(), e.toString());
 			e.printStackTrace();
 			if(trans!=null && trans.isActive()) trans.rollback();
 			closeEntityConnection();		
