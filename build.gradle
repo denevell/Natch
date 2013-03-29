@@ -26,8 +26,12 @@ task integrationTests(type: Test) {
 }
 
 task createFunctionalWar(type: War) {
-    //sourceSets.main.resources.srcDirs = ['src/test/resources']
-    classifier = 'Functional'
+	classifier = 'Functional'
+	from('src/test/resources/META-INF'){ 
+		into('WEB-INF/classes/META-INF') 
+		include 'persistence.xml' 
+	} 
+	rootSpec.exclude 'META-INF/persistence.xml'
 }
 
 task deployFunctionalWar(type:Exec, dependsOn: createFunctionalWar) {

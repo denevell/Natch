@@ -27,10 +27,10 @@ The start of a REST interface for a forum.
 
 * ~~Logging intergration~~
 * Re-enable db locking 
+* Login UUID collision prevention
 * Tests for entity queries or refactor somewhere else
 * Tests for login header filter
-* Login UUID collision prevention
-* Way to create a different war with different resources
+* ~~Way to create a different war with different resources~~
 * ~~Strings file somewhere~~
 * ~~tech task: JDNI instead of singleton? -- seems not~~
 * ~~tech task: Gradle build~~
