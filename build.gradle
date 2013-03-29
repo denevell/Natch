@@ -26,7 +26,7 @@ task integrationTests(type: Test) {
 }
 
 task createFunctionalWar(type: War) {
-    sourceSets.main.resources.srcDirs = ['src/test/resources']
+    //sourceSets.main.resources.srcDirs = ['src/test/resources']
     classifier = 'Functional'
 }
 
