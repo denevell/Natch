@@ -62,7 +62,20 @@ public class LoginAuthDataSingletonTests {
 		
 		// Assert
 		assertFalse(authKey.equals(authKey1));
-	}	
+	}
+	
+	@Test
+	public void shouldntLoginWithOldAuthKey() {
+		// Arrange
+		String authKey = authKeyGenerator.generate("username");
+		String authKey1 = authKeyGenerator.generate("username");
+		
+		// Act
+		String username = authKeyGenerator.retrieveUsername(authKey);
+		
+		// Assert
+		assertNull(username);
+	}		
 	
 	@Test
 	public void shouldRetrieveUsernameForKey() {
