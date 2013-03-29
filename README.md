@@ -26,9 +26,7 @@ The start of a REST interface for a forum.
 ### 0.1 Tech tasks
 
 * ~~Logging intergration~~
-* Re-enable db locking 
-* Login UUID collision prevention
-* Tests for entity queries or refactor somewhere else
+* ~~Login UUID collision prevention~~
 * Tests for login header filter
 * ~~Way to create a different war with different resources~~
 * ~~Strings file somewhere~~
@@ -41,6 +39,8 @@ The start of a REST interface for a forum.
 
 ### Backlog 
 
+* Tech task: Tests for entity queries or refactor somewhere else
+* Tech task: Re-enable db locking 
 * Tech task: Better way to clear database on functional tests - put tests in war and access the jpa that way?
 * Tech task: Stop the jpa unknown entity problem
 * Tech task: Speed improvements?
