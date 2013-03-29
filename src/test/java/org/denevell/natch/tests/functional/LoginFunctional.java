@@ -18,6 +18,7 @@ import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
 public class LoginFunctional {
@@ -238,12 +239,12 @@ public class LoginFunctional {
 	    	.path("rest").path("login")
 	    	.type(MediaType.APPLICATION_JSON)
 	    	.post(LoginResourceReturnData.class, loginInput);
-		String authKey = loginResult.getAuthKey();
 	    
 	    // Act
 		LoginResourceLoggedInReturnData authResult = service
-	    		.path("rest").path("login").path("is").path(authKey)
+	    		.path("rest").path("login").path("is")
 	    		.type(MediaType.APPLICATION_JSON)
+				.header("AuthKey", loginResult.getAuthKey())
 	    		.get(LoginResourceLoggedInReturnData.class);
 		
 		// Assert
@@ -262,16 +263,54 @@ public class LoginFunctional {
 	    	.path("rest").path("login")
 	    	.type(MediaType.APPLICATION_JSON)
 	    	.post(LoginResourceReturnData.class, loginInput);
-		String authKey = loginResult.getAuthKey();
+		loginResult.getAuthKey();
 	    
 	    // Act
-		LoginResourceLoggedInReturnData authResult = service
-	    		.path("rest").path("login").path("is").path(authKey+"INCORRECT")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.get(LoginResourceLoggedInReturnData.class);
-		
-		// Assert
-		assertFalse("Should say true to is logged in", authResult.isSuccessful());		
+		try {
+		service
+	    	.path("rest").path("login").path("is")
+	    	.type(MediaType.APPLICATION_JSON)
+			.header("AuthKey", loginResult.getAuthKey()+"INCORRECT")
+	    	.get(LoginResourceLoggedInReturnData.class);
+		} catch(UniformInterfaceException e) {
+			// Assert
+			assertEquals("Should get 401", 401, e.getResponse().getClientResponseStatus().getStatusCode()); 
+			return;
+		}
+		assertTrue("Wanted to see a 401", false);
 	}
+	
+	@Test
+	public void shouldntLoginWithOldAuthKey() {
+		// Arrange 
+	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
+	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
+		service
+	    	.path("rest").path("register").type(MediaType.APPLICATION_JSON)
+	    	.put(RegisterResourceReturnData.class, registerInput);
+		LoginResourceReturnData loginResult = service
+	    	.path("rest").path("login")
+	    	.type(MediaType.APPLICATION_JSON)
+	    	.post(LoginResourceReturnData.class, loginInput);
+		service
+	    	.path("rest").path("login")
+	    	.type(MediaType.APPLICATION_JSON)
+	    	.post(LoginResourceReturnData.class, loginInput);
+	    
+	    // Act
+
+		try {
+			service
+		    	.path("rest").path("login").path("is")
+		    	.type(MediaType.APPLICATION_JSON)
+				.header("AuthKey", loginResult.getAuthKey())
+		    	.get(LoginResourceLoggedInReturnData.class);
+		} catch(UniformInterfaceException e) {
+			// Assert
+			assertEquals("Should get 401", 401, e.getResponse().getClientResponseStatus().getStatusCode()); 
+			return;
+		}
+		assertTrue("Wanted to see a 401", false);		
+	}	
 	
 }

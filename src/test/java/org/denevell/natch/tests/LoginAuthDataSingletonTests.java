@@ -68,7 +68,7 @@ public class LoginAuthDataSingletonTests {
 	public void shouldntLoginWithOldAuthKey() {
 		// Arrange
 		String authKey = authKeyGenerator.generate("username");
-		String authKey1 = authKeyGenerator.generate("username");
+		authKeyGenerator.generate("username");
 		
 		// Act
 		String username = authKeyGenerator.retrieveUsername(authKey);

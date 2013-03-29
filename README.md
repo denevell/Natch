@@ -19,7 +19,7 @@ The start of a REST interface for a forum.
 * ~~login: shouldReturnAuthKey~~
 * ~~login: shouldBeAbleToLoginTwice~~
 * ~~login: shouldLoginWithAuthKey~~
-* login: shouldntBeAbleToLoginTwiceAndLogoutBackInWithTheFirstKey
+* ~~login: shouldntBeAbleToLoginTwiceAndLogoutBackInWithTheFirstKey~~
 * ~~logout: shouldLogout~~
 * ~~logout: shouldSeeErrorJsonIfNotLoggedInAsThatUser -- shows 401 if bad auth data~~
 
