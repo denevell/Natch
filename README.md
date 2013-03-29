@@ -39,13 +39,14 @@ The start of a REST interface for a forum.
 * ~~tech task: Integration tests setup~~
 * ~~tech task: Check for existing username in register~~
 
-### Misc tech tasks
+### Backlog 
 
-* Better war deploy method than cping the war to the directory.
-* Better way to clear database on functional tests - put tests in war and access the jpa that way?
-* Stop the jpa unknown entity problem
-* Speed improvements?
-* Intercept json parsing errors and return 400s: register, login
+* Tech task: Better way to clear database on functional tests - put tests in war and access the jpa that way?
+* Tech task: Stop the jpa unknown entity problem
+* Tech task: Speed improvements?
+* Tech task: Intercept json parsing errors and return 400s: register, login
+* Tech task: Eclipse gradle integration 
+* ~~Better war deploy method than cping the war to the directory.~~
 * ~~Login timeout? -- No, next login will kill old anyway~~
 * ~~Strings file in both test and main java resources?~~
 * ~~Strings file access from unit tests and functional tests~~

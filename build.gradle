@@ -34,8 +34,12 @@ task createFunctionalWar(type: War) {
 	rootSpec.exclude 'META-INF/persistence.xml'
 }
 
-task deployFunctionalWar(type:Exec, dependsOn: createFunctionalWar) {
-       commandLine = ['cp', 'build/libs/Natch-Functional.war', '/var/lib/tomcat7/webapps/']
+task undeployFunctionalWar(type:Exec, dependsOn: createFunctionalWar) {
+	commandLine=['wget', '--http-user=tomcat', '--http-password=tomcat', 'http://localhost:8080/manager/text/undeploy?path=/Natch-Functional', '-O', '-']
+}
+
+task deployFunctionalWar(type:Exec, dependsOn: undeployFunctionalWar) {
+	commandLine=['wget', '--http-user=tomcat', '--http-password=tomcat', 'http://localhost:8080/manager/text/deploy?&path=/Natch-Functional&war=file:/home/user/workspace/Natch/build/libs/Natch-Functional.war', '-O', '-']
 }
 
 test.dependsOn deployFunctionalWar
