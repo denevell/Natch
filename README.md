@@ -27,7 +27,7 @@ The start of a REST interface for a forum.
 
 * ~~Logging intergration~~
 * ~~Login UUID collision prevention~~
-* Tests for login header filter
+* ~~Tests for login header filter~~
 * ~~Way to create a different war with different resources~~
 * ~~Strings file somewhere~~
 * ~~tech task: JDNI instead of singleton? -- seems not~~

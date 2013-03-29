@@ -23,6 +23,13 @@ public class LoginHeadersFilter implements Filter {
 	public LoginHeadersFilter() {
 		mLoginModel = new LoginModel();
 	}
+	
+	/**
+	 * For testing with DI
+	 */
+	public LoginHeadersFilter(LoginModel model) {
+		mLoginModel = model;
+	}
 
 	@Override
 	public void destroy() {
