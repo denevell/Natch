@@ -23,25 +23,27 @@ The start of a REST interface for a forum.
 * ~~logout: shouldLogout~~
 * ~~logout: shouldSeeErrorJsonIfNotLoggedInAsThatUser -- shows 401 if bad auth data~~
 
-### 0.1 Tech tasks
+### 0.2
 
-* ~~Logging intergration~~
-* ~~Login UUID collision prevention~~
-* ~~Tests for login header filter~~
-* ~~Way to create a different war with different resources~~
-* ~~Strings file somewhere~~
-* ~~tech task: JDNI instead of singleton? -- seems not~~
-* ~~tech task: Gradle build~~
-* ~~tech task: Gradle war install~~
-* ~~tech task: Gradle tests run~~ 
-* ~~tech task: Integration tests setup~~
-* ~~tech task: Check for existing username in register~~
+* posts: shouldMakePost (creation date, modification date, subject, content, thread id)
+* posts: shouldSeeJsonErrorPostMake
+* posts: shouldSeeUnauthorisedPostMake
+* posts: shouldEditPost (subject, content, mod date)
+* posts: shouldSeeJsonErrorEdit
+* posts: shouldSeeUnauthorisedPostEdit
+* posts: shouldDeletePost (hard delete)
+* posts: shouldSeeJsonErrorDelete
+* posts: shouldSeeUnauthorisedPostDelete
+* list posts: by modification date
+* list posts: by thread id, earliest as main post
+* list posts: posts in thread by date 
 
 ### Backlog 
 
 * Tech task: Tests for entity queries or refactor somewhere else
 * Tech task: Re-enable db locking 
 * Tech task: Better way to clear database on functional tests - put tests in war and access the jpa that way?
+* Tech task: Use JPA from java se.
 * Tech task: Stop the jpa unknown entity problem
 * Tech task: Speed improvements?
 * Tech task: Intercept json parsing errors and return 400s: register, login
@@ -59,6 +61,7 @@ The start of a REST interface for a forum.
  * Permissions for actions
 * Make post
  * List posts
+ * List by category
  * Edit post
  * Filter posts
  * Thread posts
