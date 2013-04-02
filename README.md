@@ -42,12 +42,13 @@ The start of a REST interface for a forum.
 
 * Tech task: Tests for entity queries or refactor somewhere else
 * Tech task: Re-enable db locking 
-* Tech task: Better way to clear database on functional tests - put tests in war and access the jpa that way?
-* Tech task: Use JPA from java se.
-* Tech task: Stop the jpa unknown entity problem
 * Tech task: Speed improvements?
 * Tech task: Intercept json parsing errors and return 400s: register, login
 * Tech task: Eclipse gradle integration 
+* Test task: Junit tests in a war using normal classes?
+* ~~Tech task: Use JPA from java se.~~
+* ~~Tech task: Stop the jpa unknown entity problem~~
+* ~~Tech task: Better way to clear database on functional tests - put tests in war and access the jpa that way?~~
 * ~~Better war deploy method than cping the war to the directory.~~
 * ~~Login timeout? -- No, next login will kill old anyway~~
 * ~~Strings file in both test and main java resources?~~

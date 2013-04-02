@@ -30,7 +30,7 @@ test {
 }
 
 task functionalTests(type: Test) {
-	include 'org/denevell/natch/tests/functional/Reg*'
+	include 'org/denevell/natch/tests/functional/*'
 }
 
 // ------------------
