@@ -3,27 +3,39 @@ apply plugin: 'eclipse'
 
 repositories {
    mavenCentral()
+    maven {
+        url "http://download.eclipse.org/rt/eclipselink/maven.repo"
+    }   
 }
 
 dependencies {
 	testCompile 'junit:junit:4.11'
 	testCompile 'org.mockito:mockito-all:1.9.5'
-	testCompile 'com.sun.jersey:jersey-bundle:1.17.1'
-	testCompile 'org.codehaus.jackson:jackson-core-asl:1.9.12'
 	providedCompile	'org.apache.tomcat:tomcat-servlet-api:7.0.37'
-	providedCompile 'com.sun.jersey:jersey-bundle:1.17.1'
-	providedCompile 'org.eclipse.persistence:javax.persistence:2.0.0'
+	compile 'org.eclipse.persistence:eclipselink:2.4.0'
+	compile 'org.codehaus.jackson:jackson-core-asl:1.9.12'
+	compile 'org.codehaus.jackson:jackson-jaxrs:1.9.12'
+	compile 'com.sun.jersey:jersey-bundle:1.17.1'
+	compile 'org.xerial:sqlite-jdbc:3.7.2'
 	compile 'log4j:log4j:1.2.17'
 	compile 'org.mindrot:jbcrypt:0.3m'
 }    
+
+// -----
+// Tests
+// -----
 
 test {
 	exclude 'org/denevell/natch/tests/functional/'
 }
 
-task integrationTests(type: Test) {
-	include 'org/denevell/natch/tests/functional/**'
+task functionalTests(type: Test) {
+	include 'org/denevell/natch/tests/functional/Reg*'
 }
+
+// ------------------
+// The functional war
+// ------------------
 
 task createFunctionalWar(type: War) {
 	classifier = 'Functional'

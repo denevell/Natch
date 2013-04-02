@@ -69,7 +69,7 @@ public class RegisterResourceTests {
 		
 		// Assert
 		assertFalse(result.isSuccessful());
-		assertEquals("Error json", rb.getString(Strings.user_pass_cannot_be_blanke), result.getError());
+		assertEquals("Error json", rb.getString(Strings.user_pass_cannot_be_blank), result.getError());
 	}
 	
 	@Test
@@ -83,7 +83,7 @@ public class RegisterResourceTests {
 		
 		// Assert
 		assertFalse(result.isSuccessful());
-		assertEquals("Error json", rb.getString(Strings.user_pass_cannot_be_blanke), result.getError());
+		assertEquals("Error json", rb.getString(Strings.user_pass_cannot_be_blank), result.getError());
 	}
 	
 	@Test
