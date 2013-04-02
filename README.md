@@ -45,7 +45,7 @@ The start of a REST interface for a forum.
 * Tech task: Speed improvements?
 * Tech task: Intercept json parsing errors and return 400s: register, login
 * Tech task: Eclipse gradle integration 
-* Test task: Junit tests in a war using normal classes?
+* ~~Test task: Junit tests in a war using normal classes? Jacksons xc and persistence in the war libs seems to have solved it~~
 * ~~Tech task: Use JPA from java se.~~
 * ~~Tech task: Stop the jpa unknown entity problem~~
 * ~~Tech task: Better way to clear database on functional tests - put tests in war and access the jpa that way?~~
