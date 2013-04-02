@@ -13,6 +13,7 @@ dependencies {
 	testCompile 'org.mockito:mockito-all:1.9.5'
 	providedCompile	'org.apache.tomcat:tomcat-servlet-api:7.0.37'
 	compile 'org.eclipse.persistence:eclipselink:2.4.0'
+	compile 'org.codehaus.jackson:jackson-xc:1.9.12'
 	compile 'org.codehaus.jackson:jackson-core-asl:1.9.12'
 	compile 'org.codehaus.jackson:jackson-jaxrs:1.9.12'
 	compile 'com.sun.jersey:jersey-bundle:1.17.1'
@@ -20,18 +21,6 @@ dependencies {
 	compile 'log4j:log4j:1.2.17'
 	compile 'org.mindrot:jbcrypt:0.3m'
 }    
-
-// -----
-// Tests
-// -----
-
-test {
-	exclude 'org/denevell/natch/tests/functional/'
-}
-
-task functionalTests(type: Test) {
-	include 'org/denevell/natch/tests/functional/*'
-}
 
 // ------------------
 // The functional war
