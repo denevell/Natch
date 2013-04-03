@@ -61,12 +61,9 @@ The start of a REST interface for a forum.
  * Groups
  * Permissions for actions
 * Make post
- * List posts
  * List by category
- * Edit post
  * Filter posts
- * Thread posts
- * Delete post
+ * Soft delete post
 * View users publicly 
  * Choose what details to display publicly
 * Site comms
