@@ -25,7 +25,7 @@ The start of a REST interface for a forum.
 
 ### 0.2
 
-* posts: shouldMakePost (creation date, modification date, subject, content, thread id)
+* ~~posts: shouldMakePost (creation date, modification date, subject, content, thread id)~~
  * posts: shouldSeeJsonErrorPostMake
  * posts: shouldSeeUnauthorisedPostMake
 * posts: shouldEditPost (subject, content, mod date)
@@ -42,7 +42,8 @@ The start of a REST interface for a forum.
 
 ### 0.2 Tech tasks
 * Figure out how to relate user to post.
-
+* Create a method to delete all posts for testing
+  
 ### Backlog 
 
 * Tech task: Tests for entity queries or refactor somewhere else
