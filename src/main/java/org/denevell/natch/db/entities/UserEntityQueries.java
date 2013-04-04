@@ -16,7 +16,7 @@ public class UserEntityQueries {
 	private PasswordSaltUtils mSaltedPasswordUtils;
 
 	public UserEntityQueries(PasswordSaltUtils saltUtils) {
-		mFactory = Persistence.createEntityManagerFactory("users");
+		mFactory = Persistence.createEntityManagerFactory(PersistenceInfo.EntityManagerFactoryName);
 		mEntityManager = mFactory.createEntityManager();		
 		mSaltedPasswordUtils = new PasswordSaltUtils();
 	}	

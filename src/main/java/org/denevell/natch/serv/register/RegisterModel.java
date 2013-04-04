@@ -6,8 +6,10 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+import org.denevell.natch.db.entities.PersistenceInfo;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.db.entities.UserEntityQueries;
+import org.denevell.natch.utils.EntityUtils;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.PasswordSaltUtils;
 
@@ -32,20 +34,11 @@ public class RegisterModel {
 	}
 	
 	public RegisterModel() {
-		mFactory = Persistence.createEntityManagerFactory("users");
+		mFactory = Persistence.createEntityManagerFactory(PersistenceInfo.EntityManagerFactoryName);
 		mEntityManager = mFactory.createEntityManager();		
 		mUserEntityQueries = new UserEntityQueries(new PasswordSaltUtils());
 		mPasswordSalter = new PasswordSaltUtils();
 	}
-	
-	private void closeEntityConnection() {
-		try {
-			mEntityManager.close();
-			mFactory.close();
-		} catch(Exception e) {
-			Log.info(this.getClass(), e.toString());
-		}
-	}	
 	
 	public void clearTestDb() {
 		EntityTransaction trans = mEntityManager.getTransaction();
@@ -53,7 +46,7 @@ public class RegisterModel {
 		Query q = mEntityManager.createQuery("delete from UserEntity");
 		q.executeUpdate();
 		trans.commit();
-		closeEntityConnection();
+		EntityUtils.closeEntityConnection(mFactory, mEntityManager);
 	}
 	
 	public RegisterResult addUserToSystem(String username, String password) {
@@ -79,10 +72,9 @@ public class RegisterModel {
 			Log.info(this.getClass(), e.toString());
 			e.printStackTrace();
 			if(trans!=null && trans.isActive()) trans.rollback();
-			closeEntityConnection();		
 			return RegisterResult.UNKNOWN_ERROR;
 		} finally {
-			closeEntityConnection();		
+			EntityUtils.closeEntityConnection(mFactory, mEntityManager);
 		}
 	}
 

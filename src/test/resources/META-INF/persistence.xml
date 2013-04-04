@@ -5,6 +5,7 @@
      <persistence-unit name="users" transaction-type="RESOURCE_LOCAL">
 	     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 	     <class>org.denevell.natch.db.entities.UserEntity</class>
+	     <class>org.denevell.natch.db.entities.PostEntity</class>
 	     <properties>
 			<property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:sqlite:/var/lib/tomcat7/dbs/test.db" />

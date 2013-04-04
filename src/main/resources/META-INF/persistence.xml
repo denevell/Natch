@@ -5,6 +5,7 @@
      <persistence-unit name="users" transaction-type="RESOURCE_LOCAL">
 	     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 	     <class>org.denevell.natch.db.entities.UserEntity</class>
+	     <class>org.denevell.natch.db.entities.PostEntity</class>
 	     <mapping-file>META-INF/users_mapping.xml</mapping-file>
 	     <properties>
 			<property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
