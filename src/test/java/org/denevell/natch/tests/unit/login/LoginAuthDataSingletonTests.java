@@ -1,4 +1,4 @@
-package org.denevell.natch.tests.login;
+package org.denevell.natch.tests.unit.login;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;

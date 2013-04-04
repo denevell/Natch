@@ -1,4 +1,4 @@
-package org.denevell.natch.tests.register;
+package org.denevell.natch.tests.unit.register;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
