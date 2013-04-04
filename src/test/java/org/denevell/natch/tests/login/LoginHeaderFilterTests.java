@@ -1,4 +1,4 @@
-package org.denevell.natch.tests;
+package org.denevell.natch.tests.login;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
