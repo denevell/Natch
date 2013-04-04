@@ -26,14 +26,16 @@ The start of a REST interface for a forum.
 ### 0.2
 
 * posts: shouldMakePost (creation date, modification date, subject, content, thread id)
-* posts: shouldSeeJsonErrorPostMake
-* posts: shouldSeeUnauthorisedPostMake
+ * posts: shouldSeeJsonErrorPostMake
+ * posts: shouldSeeUnauthorisedPostMake
 * posts: shouldEditPost (subject, content, mod date)
-* posts: shouldSeeJsonErrorEdit
-* posts: shouldSeeUnauthorisedPostEdit
+ * posts: shouldSeeJsonErrorEdit
+ * posts: shouldSeeUnauthorisedPostEdit
 * posts: shouldDeletePost (hard delete)
-* posts: shouldSeeJsonErrorDelete
-* posts: shouldSeeUnauthorisedPostDelete
+ * posts: shouldSeeJsonErrorDelete
+ * posts: shouldSeeUnauthorisedPostDelete
+* threaded posts: Should make a threaded post in response to another
+* threaded posts: Should be able to edit thread title and keep thread
 * list posts: by modification date
 * list posts: by thread id, earliest as main post
 * list posts: posts in thread by date 
