@@ -40,6 +40,9 @@ The start of a REST interface for a forum.
 * list posts: by thread id, earliest as main post
 * list posts: posts in thread by date 
 
+### 0.2 Tech tasks
+* Figure out how to relate user to post.
+
 ### Backlog 
 
 * Tech task: Tests for entity queries or refactor somewhere else

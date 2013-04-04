@@ -32,7 +32,7 @@ public class AddPostModelTests {
 		factory = mock(EntityManagerFactory.class);
 		trans = mock(EntityTransaction.class);
 		postFactory = mock(PostFactory.class);
-		genericPost = new PostEntity();
+		genericPost = new PostEntity(0, 0, "", "", "");
 		when(entityManager.getTransaction()).thenReturn(trans);
 		model = new PostsModel(factory, entityManager, postFactory);
 	}
