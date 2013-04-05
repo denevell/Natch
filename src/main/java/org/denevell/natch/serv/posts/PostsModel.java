@@ -38,7 +38,7 @@ public class PostsModel {
 	
 	public AddPostResult addPost(UserEntity user, String subject, String content) {
 		PostEntity p = mPostFactory.createPost(user, subject, content);
-		if(checkInputParams(subject, content) || p ==null) {
+		if(checkInputParams(user, subject, content) || p ==null) {
 			return AddPostResult.BAD_USER_INPUT;
 		}
 		EntityTransaction trans = null;
@@ -58,8 +58,9 @@ public class PostsModel {
 		}		
 	}
 
-	private boolean checkInputParams(String subject, String content) {
-		return subject==null || content==null || subject.trim().length()==0 || content.trim().length()==0;
+	private boolean checkInputParams(UserEntity user, String subject, String content) {
+		return  user==null || user.getUsername()==null || user.getUsername().trim().length()==0 ||
+				subject==null || content==null || subject.trim().length()==0 || content.trim().length()==0;
 	}
 
 

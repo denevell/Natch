@@ -34,7 +34,7 @@ public class AddPostModelTests {
 		factory = mock(EntityManagerFactory.class);
 		trans = mock(EntityTransaction.class);
 		postFactory = mock(PostFactory.class);
-		userEntity = new UserEntity();
+		userEntity = new UserEntity("user", "pass");
 		genericPost = new PostEntity(userEntity, 0, 0, "", "", "");
 		when(entityManager.getTransaction()).thenReturn(trans);
 		model = new PostsModel(factory, entityManager, postFactory);
@@ -109,7 +109,7 @@ public class AddPostModelTests {
 		when(postFactory.createPost(userEntity, subject, content)).thenReturn(genericPost);
 		
 		// Act
-		AddPostResult result = model.addPost(userEntity, subject, content);
+		AddPostResult result = model.addPost(null, subject, content);
 		
 		// Assert
 		assertEquals(AddPostResult.BAD_USER_INPUT, result);
@@ -174,5 +174,36 @@ public class AddPostModelTests {
 		// Assert
 		assertEquals(AddPostResult.BAD_USER_INPUT, result);
 		verify(entityManager, never()).persist(genericPost);
+	}
+	
+	@Test
+	public void shouldntMakePostOnBlankUser() {
+		// Arrange
+		String content = "asdf";
+		String subject = "dsfsdf";
+		userEntity.setUsername(" ");
+		when(postFactory.createPost(userEntity, subject, content)).thenReturn(genericPost);
+		
+		// Act
+		AddPostResult result = model.addPost(userEntity, subject, content);
+		
+		// Assert
+		assertEquals(AddPostResult.BAD_USER_INPUT, result);
+		verify(entityManager, never()).persist(genericPost);
 	}	
+	
+	@Test
+	public void shouldntMakePostOnNullUser() {
+		// Arrange
+		String content = "asdf";
+		String subject = "dsfsdf";
+		when(postFactory.createPost(null, subject, content)).thenReturn(genericPost);
+		
+		// Act
+		AddPostResult result = model.addPost(userEntity, subject, content);
+		
+		// Assert
+		assertEquals(AddPostResult.BAD_USER_INPUT, result);
+		verify(entityManager, never()).persist(genericPost);
+	}		
 }
