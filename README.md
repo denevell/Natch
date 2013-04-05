@@ -27,7 +27,7 @@ The start of a REST interface for a forum.
 
 * ~~posts: shouldMakePost (creation date, modification date, subject, content, thread id)~~
  * posts: shouldSeeJsonErrorPostMake
- * posts: shouldSeeUnauthorisedPostMake
+ * ~~posts: shouldSeeUnauthorisedPostMake~~
 * posts: shouldEditPost (subject, content, mod date)
  * posts: shouldSeeJsonErrorEdit
  * posts: shouldSeeUnauthorisedPostEdit
@@ -41,7 +41,7 @@ The start of a REST interface for a forum.
 * list posts: posts in thread by date 
 
 ### 0.2 Tech tasks
-* Figure out how to relate user to post.
+* ~~Figure out how to relate user to post.~~
 * ~~Return UserEntity when logged in~~
 * Create a method to delete all posts for testing
   
@@ -78,6 +78,7 @@ The start of a REST interface for a forum.
 * User management 
  * View user details
  * Change user details
+  * Change username
  * Password reset
   * Email users
  * Delete user

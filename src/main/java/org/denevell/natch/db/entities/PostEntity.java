@@ -19,8 +19,11 @@ public class PostEntity {
 	@OneToOne
 	private UserEntity user;
 	
+	public PostEntity() {
+	}
+	
 	public PostEntity(UserEntity user, long created, long modified, String subject, String content, String threadId) {
-		this.setUser(user);
+		this.user = user;
 		this.created = created;
 		this.modified = modified;
 		this.subject = subject;

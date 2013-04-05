@@ -14,6 +14,7 @@
 	  <filter-name>Auth Filter</filter-name>
 	  <url-pattern>/rest/login/is</url-pattern>
 	  <url-pattern>/rest/logout</url-pattern>
+	  <url-pattern>/rest/post</url-pattern>
 	</filter-mapping>	
 	
 	<servlet>

@@ -38,7 +38,8 @@ public class PostsModel {
 	
 	public AddPostResult addPost(UserEntity user, String subject, String content) {
 		PostEntity p = mPostFactory.createPost(user, subject, content);
-		if(checkInputParams(user, subject, content) || p ==null) {
+		if(checkInputParams(user, subject, content) || p==null) {
+			Log.info(this.getClass(), "Bad user input");
 			return AddPostResult.BAD_USER_INPUT;
 		}
 		EntityTransaction trans = null;
