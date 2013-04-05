@@ -26,6 +26,15 @@ public class UserEntity {
 	private String username;
 	private String password;
 	
+	// For testing only
+	public UserEntity(String username, String pass) {
+		this.username = username;
+		this.password = pass;
+	}
+	
+	public UserEntity() {
+	}
+	
 	public String getUsername() {
 		return username;
 	}

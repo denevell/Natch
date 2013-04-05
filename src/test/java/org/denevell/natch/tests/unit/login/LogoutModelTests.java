@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.denevell.natch.auth.LoginAuthKeysSingleton;
+import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.logout.LogoutModel;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +25,7 @@ public class LogoutModelTests {
 	@Test
 	public void shouldLogoutWhenAuthKeyExists() {
 		// Arrange
-		when(authKeyGenerator.retrieveUsername("authKey")).thenReturn(null);
+		when(authKeyGenerator.retrieveUserEntity("authKey")).thenReturn(null);
 		
 		// Act
 		boolean result = logoutModel.logout("authKey");
@@ -36,7 +37,7 @@ public class LogoutModelTests {
 	@Test
 	public void shouldntLogoutWhenAuthKeyStillExists() {
 		// Arrange
-		when(authKeyGenerator.retrieveUsername("otherAuthKey")).thenReturn("something");
+		when(authKeyGenerator.retrieveUserEntity("otherAuthKey")).thenReturn(new UserEntity());
 		
 		// Act
 		boolean result = logoutModel.logout("otherAuthKey");

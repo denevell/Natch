@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
+import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.login.LoginModel;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,14 +40,15 @@ public class LoginHeaderFilterTests {
 	public void shouldAllowLogin() throws IOException, ServletException {
 		// Arrange
 		when(req.getHeader("AuthKey")).thenReturn("authKey");		
-		when(model.loggedInAs("authKey")).thenReturn("username");
+		UserEntity userEntity = new UserEntity("username", "password");
+		when(model.loggedInAs("authKey")).thenReturn(userEntity);
 		
 		// Act
 		filter.doFilter(req, resp, chain);
 		
 		// Assert
 		verify(req).getHeader("AuthKey");
-		verify(req).setAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USERNAME, "username");
+		verify(req).setAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER, userEntity);
 		verify(req).setAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_AUTHKEY, "authKey");
 		verify(chain).doFilter(req, resp);
 	}	

@@ -45,18 +45,22 @@ public class UserEntityQueries {
 		return okay;
 	}
 
-	public boolean areCredentialsCorrect(String username, String password) {
+	public UserEntity areCredentialsCorrect(String username, String password) {
 		List<UserEntity> results = getUserByUsername(username);
 		if(results==null || results.size()<=0) {
-			return false;
+			return null;
 		} else {
 			UserEntity user = results.get(0);
 			String storedPassword = user.getPassword();
 			if(storedPassword==null) {
-				return false;
+				return null;
 			} else {
 				boolean correctPw = mSaltedPasswordUtils.checkSaltedPassword(password, storedPassword);
-				return correctPw;
+				if(correctPw) {
+					return user;
+				} else {
+					return null;
+				}
 			}
 		}
 	}

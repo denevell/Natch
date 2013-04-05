@@ -42,6 +42,7 @@ The start of a REST interface for a forum.
 
 ### 0.2 Tech tasks
 * Figure out how to relate user to post.
+* ~~Return UserEntity when logged in~~
 * Create a method to delete all posts for testing
   
 ### Backlog 

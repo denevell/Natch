@@ -1,6 +1,7 @@
 package org.denevell.natch.serv.login;
 
 import org.denevell.natch.auth.LoginAuthKeysSingleton;
+import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.db.entities.UserEntityQueries;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.PasswordSaltUtils;
@@ -53,9 +54,9 @@ public class LoginModel {
 			return new LoginResult(LoginEnumResult.USER_INPUT_ERROR);
 		}
 		try {
-			boolean res = mUserEntityQueries.areCredentialsCorrect(username, password);
-			if(res) {
-				String authKey = mAuthDataGenerator.generate(username);
+			UserEntity res = mUserEntityQueries.areCredentialsCorrect(username, password);
+			if(res!=null) {
+				String authKey = mAuthDataGenerator.generate(res);
 				return new LoginResult(LoginEnumResult.LOGGED_IN, authKey);
 			} else {
 				return new LoginResult(LoginEnumResult.CREDENTIALS_INCORRECT);
@@ -70,8 +71,8 @@ public class LoginModel {
 	/**
 	 * @return Null when false
 	 */
-	public String loggedInAs(String authKey) {
-		String username = mAuthDataGenerator.retrieveUsername(authKey);
+	public UserEntity loggedInAs(String authKey) {
+		UserEntity username = mAuthDataGenerator.retrieveUserEntity(authKey);
 		return username;
 	}	
 

@@ -1,6 +1,7 @@
 package org.denevell.natch.serv.logout;
 
 import org.denevell.natch.auth.LoginAuthKeysSingleton;
+import org.denevell.natch.db.entities.UserEntity;
 
 public class LogoutModel {
 	
@@ -23,7 +24,7 @@ public class LogoutModel {
 			return false;
 		}
 		mAuthDataGenerator.remove(authKey);
-		String username = mAuthDataGenerator.retrieveUsername(authKey);
+		UserEntity username = mAuthDataGenerator.retrieveUserEntity(authKey);
 		if(username!=null) {
 			return false;
 		} else {

@@ -7,9 +7,11 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
+import org.denevell.natch.db.entities.UserEntity;
+
 public class LoginAuthKeysSingleton {
 	private static LoginAuthKeysSingleton sInstance;
-	Map<String, String> mLoginKeys = Collections.synchronizedMap(new HashMap<String, String>());
+	Map<String, UserEntity> mLoginKeys = Collections.synchronizedMap(new HashMap<String, UserEntity>());
 	
 	private LoginAuthKeysSingleton() {
 	}
@@ -21,26 +23,26 @@ public class LoginAuthKeysSingleton {
 		return sInstance;
 	}
 
-	public String generate(String username) {
-		if(username==null || username.trim().length()==0) {
+	public String generate(UserEntity user) {
+		if(user==null || user.getUsername()==null || user.getUsername().trim().length()==0) {
 			return null;
 		}
 		// Remove entry for this value if exists already
-		Set<Entry<String, String>> entries = mLoginKeys.entrySet();
-		for (Entry<String, String> entry : entries) {
-			if(entry.getValue().equals(username)) {
+		Set<Entry<String, UserEntity>> entries = mLoginKeys.entrySet();
+		for (Entry<String, UserEntity> entry : entries) {
+			if(entry.getValue().getUsername().equals(user.getUsername())) {
 				mLoginKeys.remove(entry.getKey());
 				break;
 			}
 		}
 		String key = UUID.randomUUID().toString();
-		mLoginKeys.put(key, username);
+		mLoginKeys.put(key, user);
 		return key;
 	}
 
-	public String retrieveUsername(String key) {
-		String username = mLoginKeys.get(key);
-		return username;
+	public UserEntity retrieveUserEntity(String key) {
+		UserEntity user = mLoginKeys.get(key);
+		return user;
 	}
 	
 	public void remove(String authKey) {

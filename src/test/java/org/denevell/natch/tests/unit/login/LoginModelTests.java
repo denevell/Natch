@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.denevell.natch.auth.LoginAuthKeysSingleton;
+import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.db.entities.UserEntityQueries;
 import org.denevell.natch.serv.login.LoginModel;
 import org.denevell.natch.serv.login.LoginModel.LoginEnumResult;
@@ -30,7 +31,7 @@ public class LoginModelTests {
 	@Test
 	public void shouldLoginWithUsernameAndPassword() {
 		// Arrange
-		when(queries.areCredentialsCorrect("username", "password")).thenReturn(true);
+		when(queries.areCredentialsCorrect("username", "password")).thenReturn(new UserEntity());
 		
 		// Act
 		LoginResult result = loginModel.login("username", "password");
@@ -42,7 +43,7 @@ public class LoginModelTests {
 	@Test
 	public void shouldntLoginWithIncorrectUsernameAndPassword() {
 		// Arrange
-		when(queries.areCredentialsCorrect("username", "password")).thenReturn(false);
+		when(queries.areCredentialsCorrect("username", "password")).thenReturn(null);
 		
 		// Act
 		LoginResult result = loginModel.login("username", "password");
@@ -120,8 +121,9 @@ public class LoginModelTests {
 	@Test
 	public void shouldReturnLoginAuthKey() {
 		// Arrange
-		when(queries.areCredentialsCorrect("username", "password")).thenReturn(true);
-		when(authKeyGenerator.generate("username")).thenReturn("authKey123");
+		UserEntity userEntity = new UserEntity();
+		when(queries.areCredentialsCorrect("username", "password")).thenReturn(userEntity);
+		when(authKeyGenerator.generate(userEntity)).thenReturn("authKey123");
 		
 		// Act
 		LoginResult result = loginModel.login("username", "password");
@@ -133,7 +135,7 @@ public class LoginModelTests {
 	@Test
 	public void shouldntReturnLoginAuthKeyOnBadCredentials() {
 		// Arrange
-		when(queries.areCredentialsCorrect("username", "password")).thenReturn(false);
+		when(queries.areCredentialsCorrect("username", "password")).thenReturn(null);
 		
 		// Act
 		LoginResult result = loginModel.login("username", "password");
@@ -146,22 +148,23 @@ public class LoginModelTests {
 	public void shouldBeLoggedInWithCorrectAuthKey() {
 		// Arrange
 		String authKey = "auth123";
-		when(authKeyGenerator.retrieveUsername("auth123")).thenReturn("username");
+		UserEntity userEntity = new UserEntity();
+		when(authKeyGenerator.retrieveUserEntity("auth123")).thenReturn(userEntity);
 		
 		// Act
-		String username = loginModel.loggedInAs(authKey);
+		UserEntity username = loginModel.loggedInAs(authKey);
 		
 		// Assert
-		assertEquals("username", username);
+		assertEquals(userEntity, username);
 	}
 	
 	@Test
 	public void shouldntBeLoggedInWithIncorrectAuthKey() {
 		// Arrange
-		when(authKeyGenerator.retrieveUsername("auth123")).thenReturn("username");
+		when(authKeyGenerator.retrieveUserEntity("auth123")).thenReturn(new UserEntity());
 		
 		// Act
-		String username = loginModel.loggedInAs("badAuth123");
+		UserEntity username = loginModel.loggedInAs("badAuth123");
 		
 		// Assert
 		assertNull(username);
@@ -170,7 +173,7 @@ public class LoginModelTests {
 	@Test
 	public void shouldntBeLoggedInWithNull() {
 		// Act
-		String username = loginModel.loggedInAs(null);
+		UserEntity username = loginModel.loggedInAs(null);
 		
 		// Assert
 		assertNull(username);
