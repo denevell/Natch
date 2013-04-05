@@ -26,7 +26,7 @@ The start of a REST interface for a forum.
 ### 0.2
 
 * ~~posts: shouldMakePost (creation date, modification date, subject, content, thread id)~~
- * posts: shouldSeeJsonErrorPostMake
+ * ~~posts: shouldSeeJsonErrorPostMake~~
  * ~~posts: shouldSeeUnauthorisedPostMake~~
 * posts: shouldEditPost (subject, content, mod date)
  * posts: shouldSeeJsonErrorEdit

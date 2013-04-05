@@ -10,7 +10,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.serv.login.LoginResourceInput;
 import org.denevell.natch.serv.login.LoginResourceReturnData;
-import org.denevell.natch.serv.logout.LogoutResourceReturnData;
 import org.denevell.natch.serv.posts.AddPostResourceInput;
 import org.denevell.natch.serv.posts.AddPostResourceReturnData;
 import org.denevell.natch.serv.register.RegisterResourceInput;
@@ -88,13 +87,69 @@ public class AddPostsFunctional {
 	
 	@Test
 	public void shouldSeeErrorOnBlankSubject() {
+		// Arrange 
+		AddPostResourceInput input = new AddPostResourceInput(" ", "cont");
+		
+		// Act
+		AddPostResourceReturnData returnData = service
+		.path("rest").path("post")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input); 
+		
+		// Assert
+		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
+		assertFalse(returnData.isSuccessful());
 	}
 	
 	@Test
 	public void shouldSeeErrorOnBlankContent() {
+		// Arrange 
+		AddPostResourceInput input = new AddPostResourceInput("sub", " ");
+		
+		// Act
+		AddPostResourceReturnData returnData = service
+		.path("rest").path("post")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input); 
+		
+		// Assert
+		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
+		assertFalse(returnData.isSuccessful());
 	}
 	
 	@Test
 	public void shouldSeeErrorOnBlanks() {
+		// Arrange 
+		AddPostResourceInput input = new AddPostResourceInput(" ", " ");
+		
+		// Act
+		AddPostResourceReturnData returnData = service
+		.path("rest").path("post")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input); 
+		
+		// Assert
+		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
+		assertFalse(returnData.isSuccessful());
+	}
+	
+	@Test
+	public void shouldSeeErrorOnNulls() {
+		// Arrange 
+		AddPostResourceInput input = new AddPostResourceInput(null,null);
+		
+		// Act
+		AddPostResourceReturnData returnData = service
+		.path("rest").path("post")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input); 
+		
+		// Assert
+		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
+		assertFalse(returnData.isSuccessful());
 	}
 }
