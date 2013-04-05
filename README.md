@@ -52,6 +52,7 @@ The start of a REST interface for a forum.
 * Tech task: Speed improvements?
 * Tech task: Intercept json parsing errors and return 400s: register, login
 * Tech task: Eclipse gradle integration 
+* Tech task: We're not closing the entity managers when we return with bad user input in models
 * ~~Test task: Junit tests in a war using normal classes? Jacksons xc and persistence in the war libs seems to have solved it~~
 * ~~Tech task: Use JPA from java se.~~
 * ~~Tech task: Stop the jpa unknown entity problem~~
@@ -60,7 +61,6 @@ The start of a REST interface for a forum.
 * ~~Login timeout? -- No, next login will kill old anyway~~
 * ~~Strings file in both test and main java resources?~~
 * ~~Strings file access from unit tests and functional tests~~
-
 
 ### Later features
 * Site management
