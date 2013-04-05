@@ -11,6 +11,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
 import org.denevell.natch.db.entities.PostEntity;
+import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.PostFactory;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.PostsModel.AddPostResult;
@@ -25,6 +26,7 @@ public class AddPostModelTests {
 	private EntityManager entityManager;
 	private PostFactory postFactory;
 	private PostEntity genericPost;
+	private UserEntity userEntity;
 
 	@Before
 	public void setup() {
@@ -32,7 +34,8 @@ public class AddPostModelTests {
 		factory = mock(EntityManagerFactory.class);
 		trans = mock(EntityTransaction.class);
 		postFactory = mock(PostFactory.class);
-		genericPost = new PostEntity(0, 0, "", "", "");
+		userEntity = new UserEntity();
+		genericPost = new PostEntity(userEntity, 0, 0, "", "", "");
 		when(entityManager.getTransaction()).thenReturn(trans);
 		model = new PostsModel(factory, entityManager, postFactory);
 	}
@@ -42,10 +45,10 @@ public class AddPostModelTests {
 		// Arrange
 		String content = "Some content";
 		String subject = "Some subject";
-		when(postFactory.createPost(subject, content)).thenReturn(genericPost);
+		when(postFactory.createPost(userEntity, subject, content)).thenReturn(genericPost);
 		
 		// Act
-		AddPostResult result = model.addPost(subject, content);
+		AddPostResult result = model.addPost(userEntity, subject, content);
 		
 		// Assert
 		assertEquals(AddPostResult.ADDED, result);
@@ -57,11 +60,11 @@ public class AddPostModelTests {
 		// Arrange
 		String content = "Some content";
 		String subject = "Some subject";
-		when(postFactory.createPost(subject, content)).thenReturn(genericPost);
+		when(postFactory.createPost(userEntity, subject, content)).thenReturn(genericPost);
 		when(entityManager.getTransaction()).thenThrow(new RuntimeException());
 		
 		// Act
-		AddPostResult result = model.addPost(subject, content);
+		AddPostResult result = model.addPost(userEntity, subject, content);
 		
 		// Assert
 		assertEquals(AddPostResult.UNKNOWN_ERROR, result);
@@ -73,10 +76,10 @@ public class AddPostModelTests {
 		// Arrange
 		String content = " ";
 		String subject = " ";
-		when(postFactory.createPost(subject, content)).thenReturn(null);
+		when(postFactory.createPost(userEntity, subject, content)).thenReturn(null);
 		
 		// Act
-		AddPostResult result = model.addPost(subject, content);
+		AddPostResult result = model.addPost(userEntity, subject, content);
 		
 		// Assert
 		assertEquals(AddPostResult.BAD_USER_INPUT, result);
@@ -88,10 +91,10 @@ public class AddPostModelTests {
 		// Arrange
 		String content = " ";
 		String subject = " ";
-		when(postFactory.createPost(subject, content)).thenReturn(genericPost);
+		when(postFactory.createPost(userEntity, subject, content)).thenReturn(genericPost);
 		
 		// Act
-		AddPostResult result = model.addPost(subject, content);
+		AddPostResult result = model.addPost(userEntity, subject, content);
 		
 		// Assert
 		assertEquals(AddPostResult.BAD_USER_INPUT, result);
@@ -103,10 +106,10 @@ public class AddPostModelTests {
 		// Arrange
 		String content = null;
 		String subject = null;
-		when(postFactory.createPost(subject, content)).thenReturn(genericPost);
+		when(postFactory.createPost(userEntity, subject, content)).thenReturn(genericPost);
 		
 		// Act
-		AddPostResult result = model.addPost(subject, content);
+		AddPostResult result = model.addPost(userEntity, subject, content);
 		
 		// Assert
 		assertEquals(AddPostResult.BAD_USER_INPUT, result);
@@ -118,10 +121,10 @@ public class AddPostModelTests {
 		// Arrange
 		String content = "sdfsdf";
 		String subject = " ";
-		when(postFactory.createPost(subject, content)).thenReturn(genericPost);
+		when(postFactory.createPost(userEntity, subject, content)).thenReturn(genericPost);
 		
 		// Act
-		AddPostResult result = model.addPost(subject, content);
+		AddPostResult result = model.addPost(userEntity, subject, content);
 		
 		// Assert
 		assertEquals(AddPostResult.BAD_USER_INPUT, result);
@@ -133,10 +136,10 @@ public class AddPostModelTests {
 		// Arrange
 		String content = "dsfsdf";
 		String subject = null;
-		when(postFactory.createPost(subject, content)).thenReturn(genericPost);
+		when(postFactory.createPost(userEntity, subject, content)).thenReturn(genericPost);
 		
 		// Act
-		AddPostResult result = model.addPost(subject, content);
+		AddPostResult result = model.addPost(userEntity, subject, content);
 		
 		// Assert
 		assertEquals(AddPostResult.BAD_USER_INPUT, result);
@@ -148,10 +151,10 @@ public class AddPostModelTests {
 		// Arrange
 		String content = " ";
 		String subject = "dsfsdf";
-		when(postFactory.createPost(subject, content)).thenReturn(genericPost);
+		when(postFactory.createPost(userEntity, subject, content)).thenReturn(genericPost);
 		
 		// Act
-		AddPostResult result = model.addPost(subject, content);
+		AddPostResult result = model.addPost(userEntity, subject, content);
 		
 		// Assert
 		assertEquals(AddPostResult.BAD_USER_INPUT, result);
@@ -163,10 +166,10 @@ public class AddPostModelTests {
 		// Arrange
 		String content = null;
 		String subject = "dsfsdf";
-		when(postFactory.createPost(subject, content)).thenReturn(genericPost);
+		when(postFactory.createPost(userEntity, subject, content)).thenReturn(genericPost);
 		
 		// Act
-		AddPostResult result = model.addPost(subject, content);
+		AddPostResult result = model.addPost(userEntity, subject, content);
 		
 		// Assert
 		assertEquals(AddPostResult.BAD_USER_INPUT, result);

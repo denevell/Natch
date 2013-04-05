@@ -8,6 +8,10 @@ import static org.mockito.Mockito.when;
 
 import java.util.ResourceBundle;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.denevell.natch.auth.LoginHeadersFilter;
+import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.AddPostResourceInput;
 import org.denevell.natch.serv.posts.AddPostResourceReturnData;
 import org.denevell.natch.serv.posts.PostsModel;
@@ -22,18 +26,23 @@ public class AddPostResourceTests {
 	private PostsModel postsModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private PostsResource resource;
+	private UserEntity user;
+	private HttpServletRequest request;
 
 	@Before
 	public void setup() {
 		postsModel = mock(PostsModel.class);
-		resource = new PostsResource(postsModel);
+		user = new UserEntity();
+		request = mock(HttpServletRequest.class);
+		when(request.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER)).thenReturn(user);
+		resource = new PostsResource(postsModel, request);
 	}
 	
 	@Test
 	public void shouldAddPost() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		when(postsModel.addPost("sub", "cont")).thenReturn(AddPostResult.ADDED);
+		when(postsModel.addPost(user, "sub", "cont")).thenReturn(AddPostResult.ADDED);
 		
 		// Act
 		AddPostResourceReturnData result = resource.add(input);
@@ -47,7 +56,7 @@ public class AddPostResourceTests {
 	public void shouldntRegisterWhenModelSaysBadInput() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		when(postsModel.addPost("sub", "cont")).thenReturn(AddPostResult.BAD_USER_INPUT);
+		when(postsModel.addPost(user, "sub", "cont")).thenReturn(AddPostResult.BAD_USER_INPUT);
 		
 		// Act
 		AddPostResourceReturnData result = resource.add(input);
@@ -55,6 +64,21 @@ public class AddPostResourceTests {
 		// Assert
 		assertFalse(result.isSuccessful());
 		assertEquals("Error json", rb.getString(Strings.post_fields_cannot_be_blank), result.getError());
+	}
+	
+	@Test
+	public void shouldntAddWhenDodgyUserObjectInRequest() {
+		// Arrange
+		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
+		when(postsModel.addPost(user, "sub", "cont")).thenReturn(AddPostResult.ADDED);
+		when(request.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER)).thenThrow(new RuntimeException());
+		
+		// Act
+		AddPostResourceReturnData result = resource.add(input);
+		
+		// Assert
+		assertFalse(result.isSuccessful());
+		assertEquals("Error json", rb.getString(Strings.unknown_error), result.getError());
 	}
 	
 	@Test
@@ -73,7 +97,7 @@ public class AddPostResourceTests {
 	public void shouldntRegisterWithUnknownError() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		when(postsModel.addPost("sub", "cont")).thenReturn(AddPostResult.UNKNOWN_ERROR);
+		when(postsModel.addPost(user, "sub", "cont")).thenReturn(AddPostResult.UNKNOWN_ERROR);
 		
 		// Act
 		AddPostResourceReturnData result = resource.add(input);

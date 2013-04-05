@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Date;
 
 import org.denevell.natch.db.entities.PostEntity;
+import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.PostFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,13 +24,15 @@ public class PostFactoryTests {
 		// Arrange
 		factory = new PostFactory();
 		long time = new Date().getTime();
+		UserEntity userEntity = new UserEntity();
 		
 		// Act
-		PostEntity p = factory.createPost("sub", "conte");
+		PostEntity p = factory.createPost(userEntity, "sub", "conte");
 		
 		// Assert
 		assertEquals("sub", p.getSubject());
 		assertEquals("conte", p.getContent());
+		assertEquals(userEntity, p.getUser());
 		assertTrue("Check the created time", p.getCreated() >= time && p.getCreated() <= time+3000);
 		assertTrue("Check the modified time", p.getModified() >= time && p.getModified() <= time+3000);
 	}

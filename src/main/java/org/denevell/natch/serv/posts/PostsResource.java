@@ -12,14 +12,17 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
+import org.denevell.natch.auth.LoginHeadersFilter;
+import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.PostsModel.AddPostResult;
+import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
 @Path("post")
 public class PostsResource {
 	
 	@Context UriInfo info;
-	@Context HttpServletRequest request;
+	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private PostsModel mModel;
@@ -31,8 +34,9 @@ public class PostsResource {
 	/**
 	 * For DI testing.
 	 */
-	public PostsResource(PostsModel postModel) {
+	public PostsResource(PostsModel postModel, HttpServletRequest request) {
 		mModel = postModel;
+		mRequest = request;
 	}
 	
 	@PUT
@@ -45,7 +49,18 @@ public class PostsResource {
 			regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
 			return regReturnData;
 		}
+		UserEntity userEntity = null;
+		try {
+			userEntity = (UserEntity) mRequest.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER);
+		} catch (Exception e) {
+			Log.info(getClass(), e.toString());
+			regReturnData.setSuccessful(false);
+			regReturnData.setError(rb.getString(Strings.unknown_error)); // Unknown as his shouldn't happen
+			return regReturnData;
+		}
+		// End of error checking
 		AddPostResult okay = mModel.addPost(
+				userEntity,
 				input.getSubject(), 
 				input.getContent());
 		if(okay==AddPostResult.ADDED) {

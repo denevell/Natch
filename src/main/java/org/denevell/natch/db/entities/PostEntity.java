@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class PostEntity {
@@ -15,11 +16,11 @@ public class PostEntity {
 	private String subject;
 	private String content;
 	private String threadId;
+	@OneToOne
+	private UserEntity user;
 	
-	public PostEntity() {
-	}
-	
-	public PostEntity(long created, long modified, String subject, String content, String threadId) {
+	public PostEntity(UserEntity user, long created, long modified, String subject, String content, String threadId) {
+		this.setUser(user);
 		this.created = created;
 		this.modified = modified;
 		this.subject = subject;
@@ -73,5 +74,13 @@ public class PostEntity {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public UserEntity getUser() {
+		return user;
+	}
+
+	public void setUser(UserEntity user) {
+		this.user = user;
 	}
 }

@@ -7,6 +7,7 @@ import javax.persistence.Persistence;
 
 import org.denevell.natch.db.entities.PersistenceInfo;
 import org.denevell.natch.db.entities.PostEntity;
+import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.utils.EntityUtils;
 import org.denevell.natch.utils.Log;
 
@@ -35,8 +36,8 @@ public class PostsModel {
 		mPostFactory = postFactory;
 	}
 	
-	public AddPostResult addPost(String subject, String content) {
-		PostEntity p = mPostFactory.createPost(subject, content);
+	public AddPostResult addPost(UserEntity user, String subject, String content) {
+		PostEntity p = mPostFactory.createPost(user, subject, content);
 		if(checkInputParams(subject, content) || p ==null) {
 			return AddPostResult.BAD_USER_INPUT;
 		}
