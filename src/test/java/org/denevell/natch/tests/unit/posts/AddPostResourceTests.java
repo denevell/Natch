@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.UserEntity;
@@ -35,7 +36,8 @@ public class AddPostResourceTests {
 		user = new UserEntity();
 		request = mock(HttpServletRequest.class);
 		when(request.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER)).thenReturn(user);
-		resource = new PostsResource(postsModel, request);
+		HttpServletResponse response = mock(HttpServletResponse.class);
+		resource = new PostsResource(postsModel, request, response);
 	}
 	
 	@Test

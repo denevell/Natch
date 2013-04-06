@@ -47,12 +47,13 @@ The start of a REST interface for a forum.
   
 ### Backlog 
 
-* Tech task: Tests for entity queries or refactor somewhere else
 * Tech task: Re-enable db locking 
 * Tech task: Speed improvements?
 * Tech task: Intercept json parsing errors and return 400s: register, login
 * Tech task: Eclipse gradle integration 
 * Tech task: We're not closing the entity managers when we return with bad user input in models
+* Test task: Tests for entity queries or refactor somewhere else
+* Test task: Test for post resources adapter
 * ~~Test task: Junit tests in a war using normal classes? Jacksons xc and persistence in the war libs seems to have solved it~~
 * ~~Tech task: Use JPA from java se.~~
 * ~~Tech task: Stop the jpa unknown entity problem~~
@@ -67,20 +68,24 @@ The start of a REST interface for a forum.
  * Superuser
  * Groups
  * Permissions for actions
+ * Category/tags only available to some users
 * Make post
  * List by category
  * Filter posts
  * Soft delete post
-* View users publicly 
- * Choose what details to display publicly
 * Site comms
  * Message a user
 * User management 
  * View user details
+ * View users publicly 
+     * Choose what details to display publicly
  * Change user details
-  * Change username
+     * Change username
  * Password reset
-  * Email users
+     * Email users
  * Delete user
+* Users
+    * User id is number not name
+        * Able to change username
 * Misc
  * Base64 login / reg or maybe ssl?

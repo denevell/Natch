@@ -10,7 +10,7 @@ import javax.persistence.OneToOne;
 
 @NamedQueries({
 	@NamedQuery(name=PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE,query=
-		"select u from PostEntity order by c.modified")
+		"select p from PostEntity p order by p.modified")
 	})
 @Entity
 public class PostEntity {

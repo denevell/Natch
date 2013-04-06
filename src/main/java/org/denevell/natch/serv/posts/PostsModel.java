@@ -68,7 +68,7 @@ public class PostsModel {
 		}		
 	}
 
-	public List<PostEntity> listPostsByModificationDate() {
+	public List<PostEntity> listByModificationDate() {
 		TypedQuery<PostEntity> q = mEntityManager.createNamedQuery(PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE, PostEntity.class);
 		List<PostEntity> resultList = q.getResultList();		
 		if(resultList==null) return new ArrayList<PostEntity>();

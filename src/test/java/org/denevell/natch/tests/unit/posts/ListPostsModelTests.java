@@ -13,7 +13,6 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
 import org.denevell.natch.db.entities.PostEntity;
-import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.PostFactory;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.junit.Before;
@@ -26,7 +25,6 @@ public class ListPostsModelTests {
 	private EntityManagerFactory factory;
 	private EntityManager entityManager;
 	private PostFactory postFactory;
-	private UserEntity userEntity;
 	private TypedQuery<PostEntity> queryResults;
 
 	@SuppressWarnings("unchecked")
@@ -36,7 +34,6 @@ public class ListPostsModelTests {
 		factory = mock(EntityManagerFactory.class);
 		trans = mock(EntityTransaction.class);
 		postFactory = mock(PostFactory.class);
-		userEntity = new UserEntity("user", "pass");
 		queryResults = mock(TypedQuery.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
 		model = new PostsModel(factory, entityManager, postFactory);
@@ -52,7 +49,7 @@ public class ListPostsModelTests {
 		when(queryResults.getResultList()).thenReturn(posts);
 		
 		// Act
-		List<PostEntity> result = model.listPostsByModificationDate();
+		List<PostEntity> result = model.listByModificationDate();
 		
 		// Assert
 		assertEquals(2, result.size());
@@ -70,7 +67,7 @@ public class ListPostsModelTests {
 		when(queryResults.getResultList()).thenReturn(posts);
 		
 		// Act
-		List<PostEntity> result = model.listPostsByModificationDate();
+		List<PostEntity> result = model.listByModificationDate();
 		
 		// Assert
 		assertEquals(0, result.size());
@@ -83,7 +80,7 @@ public class ListPostsModelTests {
 		when(queryResults.getResultList()).thenReturn(null);
 		
 		// Act
-		List<PostEntity> result = model.listPostsByModificationDate();
+		List<PostEntity> result = model.listByModificationDate();
 		
 		// Assert
 		assertEquals(0, result.size());
