@@ -4,10 +4,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
+@NamedQueries({
+	@NamedQuery(name=PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE,query=
+		"select u from PostEntity order by c.modified")
+	})
 @Entity
 public class PostEntity {
+	
+	public static final String NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE = "findByModData";
 	
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;

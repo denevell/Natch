@@ -1,9 +1,13 @@
 package org.denevell.natch.serv.posts;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 
 import org.denevell.natch.db.entities.PersistenceInfo;
 import org.denevell.natch.db.entities.PostEntity;
@@ -36,6 +40,11 @@ public class PostsModel {
 		mPostFactory = postFactory;
 	}
 	
+	private boolean checkInputParams(UserEntity user, String subject, String content) {
+		return  user==null || user.getUsername()==null || user.getUsername().trim().length()==0 ||
+				subject==null || content==null || subject.trim().length()==0 || content.trim().length()==0;
+	}
+	
 	public AddPostResult addPost(UserEntity user, String subject, String content) {
 		PostEntity p = mPostFactory.createPost(user, subject, content);
 		if(checkInputParams(user, subject, content) || p==null) {
@@ -59,9 +68,11 @@ public class PostsModel {
 		}		
 	}
 
-	private boolean checkInputParams(UserEntity user, String subject, String content) {
-		return  user==null || user.getUsername()==null || user.getUsername().trim().length()==0 ||
-				subject==null || content==null || subject.trim().length()==0 || content.trim().length()==0;
+	public List<PostEntity> listPostsByModificationDate() {
+		TypedQuery<PostEntity> q = mEntityManager.createNamedQuery(PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE, PostEntity.class);
+		List<PostEntity> resultList = q.getResultList();		
+		if(resultList==null) return new ArrayList<PostEntity>();
+		else return resultList;
 	}
 
 
