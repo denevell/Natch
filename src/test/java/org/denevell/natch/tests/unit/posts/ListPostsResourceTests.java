@@ -41,7 +41,9 @@ public class ListPostsResourceTests {
 	public void shouldListPosts() throws IOException {
 		// Arrange
 		List<PostEntity> posts = new ArrayList<PostEntity>();
-		posts.add(new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", null));
+		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", null);
+		postEntity.setId(400);
+		posts.add(postEntity);
 		posts.add(new PostEntity(new UserEntity("u2", ""), 2, 2, "s2", "c2", null));
 		when(postsModel.listByModificationDate()).thenReturn(posts);
 		
@@ -50,6 +52,7 @@ public class ListPostsResourceTests {
 		
 		// Assert
 		assertEquals(2, result.getPosts().size());
+		assertEquals(400, result.getPosts().get(0).getId());
 		assertEquals(1, result.getPosts().get(0).getCreation());
 		assertEquals(1, result.getPosts().get(0).getModification());
 		assertEquals("u1", result.getPosts().get(0).getUsername());

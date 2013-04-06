@@ -12,6 +12,9 @@ public class PostResource {
 	private long creation;
 	private long modification;
 	
+	public PostResource() {
+	}
+	
 	public PostResource(String username, long created, long modified, String subject, String content) {
 		this.username = username;
 		this.creation = created;

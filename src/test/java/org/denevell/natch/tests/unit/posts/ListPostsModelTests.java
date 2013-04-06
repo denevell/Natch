@@ -44,7 +44,9 @@ public class ListPostsModelTests {
 		// Arrange
 		when(entityManager.createNamedQuery(PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE, PostEntity.class)).thenReturn(queryResults);
 		List<PostEntity> posts = new ArrayList<PostEntity>();
-		posts.add(new PostEntity(null, 1, 1, "s1", null, null));
+		PostEntity postEntity = new PostEntity(null, 1, 1, "s1", null, null);
+		postEntity.setId(400);
+		posts.add(postEntity);
 		posts.add(new PostEntity(null, 2, 2, "s2", null, null));
 		when(queryResults.getResultList()).thenReturn(posts);
 		
@@ -53,6 +55,7 @@ public class ListPostsModelTests {
 		
 		// Assert
 		assertEquals(2, result.size());
+		assertEquals(400, result.get(0).getId());
 		assertEquals(1l, result.get(0).getModified());
 		assertEquals("s1", result.get(0).getSubject());
 		assertEquals(2l, result.get(1).getModified());
