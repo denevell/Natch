@@ -41,6 +41,7 @@ The start of a REST interface for a forum.
 * list posts: posts in thread by date 
 
 ### 0.2 Tech tasks
+* List posts without needing to be logged in
 * ~~Figure out how to relate user to post.~~
 * ~~Return UserEntity when logged in~~
 * ~~Create a method to delete all posts for testing and update list posts test~~

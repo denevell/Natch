@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.login.LoginModel;
 import org.denevell.natch.utils.Log;
-import org.denevell.natch.utils.Strings;
 
 public class LoginHeadersFilter implements Filter {
 	
