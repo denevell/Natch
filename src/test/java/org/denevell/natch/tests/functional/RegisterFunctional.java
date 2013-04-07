@@ -25,7 +25,10 @@ public class RegisterFunctional {
 	@Before
 	public void setup() throws IOException, InterruptedException {
 		registerService = TestUtils.getRESTRegisterClient();
-		registerService.delete();
+		WebResource service = TestUtils.getRESTClient();
+    	service.path("rest")
+    	.path("testutils")
+    	.delete();		
 	}
 
 	@Test

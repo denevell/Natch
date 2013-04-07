@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -35,11 +34,6 @@ public class RegisterResource {
 	 */
 	public RegisterResource(RegisterModel userModel) {
 		mUserModel = userModel;
-	}
-	
-	@DELETE
-	public void clearTestDb() {
-		mUserModel.clearTestDb();
 	}
 	
 	@PUT

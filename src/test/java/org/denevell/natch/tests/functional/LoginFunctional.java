@@ -31,7 +31,7 @@ public class LoginFunctional {
 		service = TestUtils.getRESTClient();
 		service
 	    	.path("rest")
-	    	.path("register")
+	    	.path("testutils")
 	    	.delete();
 	}
 	

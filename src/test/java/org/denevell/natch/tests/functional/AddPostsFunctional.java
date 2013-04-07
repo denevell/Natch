@@ -33,7 +33,7 @@ public class AddPostsFunctional {
 		// Delete all users
 		service
 	    	.path("rest")
-	    	.path("register")
+	    	.path("testutils")
 	    	.delete();	
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    // Register
@@ -63,6 +63,29 @@ public class AddPostsFunctional {
 		// Assert
 		assertEquals("", returnData.getError());
 		assertTrue(returnData.isSuccessful());
+	}
+	
+	@Test public void shouldMakePostWithSameContentAndSubject() {
+		// Arrange 
+		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
+		
+		// Act
+		AddPostResourceReturnData returnData = service
+		.path("rest").path("post")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input); 
+		AddPostResourceReturnData returnData1 = service
+		.path("rest").path("post")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input); 
+		
+		// Assert
+		assertEquals("", returnData.getError());
+		assertEquals("", returnData1.getError());
+		assertTrue(returnData.isSuccessful());
+		assertTrue(returnData1.isSuccessful());
 	}
 	
 	@Test
