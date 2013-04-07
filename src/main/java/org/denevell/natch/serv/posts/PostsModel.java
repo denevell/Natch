@@ -17,6 +17,9 @@ import org.denevell.natch.utils.Log;
 
 public class PostsModel {
 
+	public enum DeletePostResult {
+		DELETED, UNKNOWN_ERROR
+	}
 	public enum AddPostResult {
 		ADDED, UNKNOWN_ERROR, BAD_USER_INPUT
 	}
@@ -74,6 +77,42 @@ public class PostsModel {
 		if(resultList==null) return new ArrayList<PostEntity>();
 		else return resultList;
 	}
+	
+	public PostEntity findPostById(long id) {
+		try {
+			TypedQuery<PostEntity> q = mEntityManager
+					.createNamedQuery(PostEntity.NAMED_QUERY_FIND_BY_ID, PostEntity.class);
+			q.setParameter("id", id);
+			List<PostEntity> resultList = q.getResultList();		
+			if(resultList==null || resultList.size()==0) return null;
+			else return resultList.get(0);
+		} catch(Exception e) {
+			Log.info(getClass(), "Error finding by id: " + e.toString());
+			return null;
+		}
+	}
 
+	public DeletePostResult delete(long postEntityId) {
+		PostEntity pe = findPostById(postEntityId);
+		EntityTransaction trans = mEntityManager.getTransaction();
+		try {
+			trans.begin();
+			mEntityManager.remove(pe);
+			trans.commit();
+			return DeletePostResult.DELETED;
+		} catch(Exception e) {
+			Log.info(getClass(), "Error deleting: " + e.toString());
+			e.printStackTrace();
+			try {
+				trans.rollback();
+			} catch(Exception e1) {
+				Log.info(getClass(), "Error rolling back: " + e.toString());
+				e1.printStackTrace();
+			}
+			return DeletePostResult.UNKNOWN_ERROR;
+		} finally {
+			EntityUtils.closeEntityConnection(mFactory, mEntityManager);
+		}
+	}
 
 }
