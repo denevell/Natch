@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
 import org.denevell.natch.serv.login.LoginModel;
 import org.denevell.natch.serv.login.LoginModel.LoginEnumResult;
 import org.denevell.natch.serv.login.LoginModel.LoginResult;
-import org.denevell.natch.serv.login.LoginResource;
+import org.denevell.natch.serv.login.LoginREST;
 import org.denevell.natch.serv.login.LoginResourceInput;
 import org.denevell.natch.serv.login.LoginResourceReturnData;
 import org.denevell.natch.utils.Strings;
@@ -21,13 +21,13 @@ import org.junit.Test;
 public class LoginResourceTests {
 	
 	private LoginModel userModel;
-	private LoginResource resource;
+	private LoginREST resource;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	
 	@Before
 	public void setup() {
 		userModel = mock(LoginModel.class);
-		resource = new LoginResource(userModel);
+		resource = new LoginREST(userModel);
 	}
 	
 	@Test

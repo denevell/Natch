@@ -16,7 +16,7 @@ import org.denevell.natch.utils.Strings;
 
 
 @Path("logout")
-public class LogoutResource {
+public class LogoutREST {
 	
 	@Context UriInfo mInfo;
 	@Context HttpServletRequest mRequest;
@@ -24,14 +24,14 @@ public class LogoutResource {
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private LogoutModel mLogoutModel;
 	
-	public LogoutResource() {
+	public LogoutREST() {
 		mLogoutModel = new LogoutModel();
 	}
 	
 	/**
 	 * For DI testing.
 	 */
-	public LogoutResource(LogoutModel userModel, HttpServletRequest request) {
+	public LogoutREST(LogoutModel userModel, HttpServletRequest request) {
 		mLogoutModel = userModel;
 		mRequest = request;
 	}

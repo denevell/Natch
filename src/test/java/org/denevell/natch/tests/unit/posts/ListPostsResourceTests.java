@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.PostsModel;
-import org.denevell.natch.serv.posts.PostsResource;
+import org.denevell.natch.serv.posts.PostsREST;
 import org.denevell.natch.serv.posts.resources.ListPostsResource;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
@@ -26,7 +26,7 @@ public class ListPostsResourceTests {
 	
 	private PostsModel postsModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
-	private PostsResource resource;
+	private PostsREST resource;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 
@@ -34,7 +34,7 @@ public class ListPostsResourceTests {
 	public void setup() {
 		postsModel = mock(PostsModel.class);
 		response = mock(HttpServletResponse.class);
-		resource = new PostsResource(postsModel, request, response);
+		resource = new PostsREST(postsModel, request, response);
 	}
 	
 	@Test

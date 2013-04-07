@@ -19,7 +19,7 @@ import org.denevell.natch.utils.Strings;
 
 
 @Path("login")
-public class LoginResource {
+public class LoginREST {
 	
 	@Context UriInfo info;
 	@Context HttpServletRequest request;
@@ -27,14 +27,14 @@ public class LoginResource {
 	private LoginModel mLoginModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	
-	public LoginResource() {
+	public LoginREST() {
 		mLoginModel = new LoginModel();
 	}
 	
 	/**
 	 * For DI testing.
 	 */
-	public LoginResource(LoginModel userModel) {
+	public LoginREST(LoginModel userModel) {
 		mLoginModel = userModel;
 	}
 	

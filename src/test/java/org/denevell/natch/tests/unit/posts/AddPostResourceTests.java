@@ -17,7 +17,7 @@ import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.PostsModel.AddPostResult;
 import org.denevell.natch.serv.posts.resources.AddPostResourceInput;
 import org.denevell.natch.serv.posts.resources.AddPostResourceReturnData;
-import org.denevell.natch.serv.posts.PostsResource;
+import org.denevell.natch.serv.posts.PostsREST;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +26,7 @@ public class AddPostResourceTests {
 	
 	private PostsModel postsModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
-	private PostsResource resource;
+	private PostsREST resource;
 	private UserEntity user;
 	private HttpServletRequest request;
 
@@ -37,7 +37,7 @@ public class AddPostResourceTests {
 		request = mock(HttpServletRequest.class);
 		when(request.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER)).thenReturn(user);
 		HttpServletResponse response = mock(HttpServletResponse.class);
-		resource = new PostsResource(postsModel, request, response);
+		resource = new PostsREST(postsModel, request, response);
 	}
 	
 	@Test

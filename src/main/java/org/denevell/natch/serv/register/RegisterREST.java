@@ -17,7 +17,7 @@ import org.denevell.natch.utils.Strings;
 
 
 @Path("register")
-public class RegisterResource {
+public class RegisterREST {
 	
 	@Context UriInfo info;
 	@Context HttpServletRequest request;
@@ -25,14 +25,14 @@ public class RegisterResource {
 	private RegisterModel mUserModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	
-	public RegisterResource() {
+	public RegisterREST() {
 		mUserModel = new RegisterModel();
 	}
 	
 	/**
 	 * For DI testing.
 	 */
-	public RegisterResource(RegisterModel userModel) {
+	public RegisterREST(RegisterModel userModel) {
 		mUserModel = userModel;
 	}
 	

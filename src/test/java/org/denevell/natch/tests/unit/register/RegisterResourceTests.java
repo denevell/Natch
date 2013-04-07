@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
 
 import org.denevell.natch.serv.register.RegisterModel;
 import org.denevell.natch.serv.register.RegisterModel.RegisterResult;
-import org.denevell.natch.serv.register.RegisterResource;
+import org.denevell.natch.serv.register.RegisterREST;
 import org.denevell.natch.serv.register.RegisterResourceInput;
 import org.denevell.natch.serv.register.RegisterResourceReturnData;
 import org.denevell.natch.utils.Strings;
@@ -30,7 +30,7 @@ public class RegisterResourceTests {
 	@Test
 	public void shouldRegisterWithUsernameAndPassword() {
 		// Arrange
-		RegisterResource resource = new RegisterResource(userModel);
+		RegisterREST resource = new RegisterREST(userModel);
 		RegisterResourceInput registerInput = new RegisterResourceInput("username", "password");
 		when(userModel.addUserToSystem("username", "password")).thenReturn(RegisterResult.REGISTERED);
 		
@@ -45,7 +45,7 @@ public class RegisterResourceTests {
 	@Test
 	public void shouldntRegisterWithDuplicateUsername() {
 		// Arrange
-		RegisterResource resource = new RegisterResource(userModel);
+		RegisterREST resource = new RegisterREST(userModel);
 		RegisterResourceInput registerInput = new RegisterResourceInput("username", "password");
 		when(userModel.addUserToSystem("username", "password")).thenReturn(RegisterResult.DUPLICATE_USERNAME);
 		
@@ -60,7 +60,7 @@ public class RegisterResourceTests {
 	@Test
 	public void shouldntRegisterWhenModelSaysBadInput() {
 		// Arrange
-		RegisterResource resource = new RegisterResource(userModel);
+		RegisterREST resource = new RegisterREST(userModel);
 		RegisterResourceInput registerInput = new RegisterResourceInput("username", "password");
 		when(userModel.addUserToSystem("username", "password")).thenReturn(RegisterResult.USER_INPUT_ERROR);
 		
@@ -75,7 +75,7 @@ public class RegisterResourceTests {
 	@Test
 	public void shouldntRegisterWithNullInputObject() {
 		// Arrange
-		RegisterResource resource = new RegisterResource(userModel);
+		RegisterREST resource = new RegisterREST(userModel);
 		when(userModel.addUserToSystem(null, null)).thenReturn(RegisterResult.USER_INPUT_ERROR);
 		
 		// Act
@@ -89,7 +89,7 @@ public class RegisterResourceTests {
 	@Test
 	public void shouldntRegisterWithUnknownError() {
 		// Arrange
-		RegisterResource resource = new RegisterResource(userModel);
+		RegisterREST resource = new RegisterREST(userModel);
 		RegisterResourceInput registerInput = new RegisterResourceInput("user", "pass");
 		when(userModel.addUserToSystem("user", "pass")).thenReturn(RegisterResult.UNKNOWN_ERROR);
 		

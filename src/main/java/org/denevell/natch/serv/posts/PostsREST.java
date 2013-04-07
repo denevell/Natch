@@ -30,7 +30,7 @@ import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
 @Path("post")
-public class PostsResource {
+public class PostsREST {
 	
 	@Context UriInfo mInfo;
 	@Context HttpServletRequest mRequest;
@@ -39,14 +39,14 @@ public class PostsResource {
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private PostsModel mModel;
 	
-	public PostsResource() {
+	public PostsREST() {
 		mModel = new PostsModel();
 	}
 	
 	/**
 	 * For DI testing.
 	 */
-	public PostsResource(PostsModel postModel, HttpServletRequest request, HttpServletResponse response) {
+	public PostsREST(PostsModel postModel, HttpServletRequest request, HttpServletResponse response) {
 		mModel = postModel;
 		mRequest = request;
 		mResponse = response;
