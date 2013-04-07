@@ -93,6 +93,10 @@ public class PostsModel {
 	}
 
 	public DeletePostResult delete(UserEntity userEntity, long postEntityId) {
+		if(userEntity==null) {
+			Log.info(getClass(), "No user passed to delete method.");
+			return DeletePostResult.UNKNOWN_ERROR;
+		}
 		EntityTransaction trans = mEntityManager.getTransaction();
 		try {
 			PostEntity pe = findPostById(postEntityId);

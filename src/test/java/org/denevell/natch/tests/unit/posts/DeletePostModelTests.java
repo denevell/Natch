@@ -2,6 +2,7 @@ package org.denevell.natch.tests.unit.posts;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -85,5 +86,39 @@ public class DeletePostModelTests {
 		
 		// Verify
 		assertEquals(DeletePostResult.DOESNT_EXIST, result);
+	}
+	
+	@Test
+	public void shouldReturnUnknownErrorOnException() {
+		// Arrange
+		long num = 1;
+		PostEntity post = new PostEntity();
+		post.setUser(new UserEntity("this_person", null));
+		doThrow(new RuntimeException()).when(model).findPostById(num);
+		UserEntity userEntity = new UserEntity();
+		userEntity.setUsername("this_person");
+		
+		// Act
+		DeletePostResult result = model.delete(userEntity, num);
+		
+		// Verify
+		assertEquals(DeletePostResult.UNKNOWN_ERROR, result);
+	}
+	
+	@Test
+	public void shouldReturnUnknownErorrOnNullUser() {
+		// Arrange
+		long num = 1;
+		PostEntity post = new PostEntity();
+		post.setUser(new UserEntity("this_person", null));
+		doThrow(new RuntimeException()).when(model).findPostById(num);
+		UserEntity userEntity = new UserEntity();
+		userEntity.setUsername("this_person");
+		
+		// Act
+		DeletePostResult result = model.delete(null, num);
+		
+		// Verify
+		assertEquals(DeletePostResult.UNKNOWN_ERROR, result);
 	}
 }
