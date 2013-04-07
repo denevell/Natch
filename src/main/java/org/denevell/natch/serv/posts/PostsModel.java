@@ -18,7 +18,7 @@ import org.denevell.natch.utils.Log;
 public class PostsModel {
 
 	public enum DeletePostResult {
-		DELETED, UNKNOWN_ERROR
+		DELETED, UNKNOWN_ERROR, NOT_YOURS_TO_DELETE, DOESNT_EXIST
 	}
 	public enum AddPostResult {
 		ADDED, UNKNOWN_ERROR, BAD_USER_INPUT
@@ -92,10 +92,16 @@ public class PostsModel {
 		}
 	}
 
-	public DeletePostResult delete(long postEntityId) {
-		PostEntity pe = findPostById(postEntityId);
+	public DeletePostResult delete(UserEntity userEntity, long postEntityId) {
 		EntityTransaction trans = mEntityManager.getTransaction();
 		try {
+			PostEntity pe = findPostById(postEntityId);
+			if(pe==null) {
+				return DeletePostResult.DOESNT_EXIST;
+			}
+			else if(!pe.getUser().getUsername().equals(userEntity.getUsername())) {
+				return DeletePostResult.NOT_YOURS_TO_DELETE;
+			}
 			trans.begin();
 			mEntityManager.remove(pe);
 			trans.commit();
