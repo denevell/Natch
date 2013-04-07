@@ -1,9 +1,10 @@
-package org.denevell.natch.serv.posts;
+package org.denevell.natch.serv.posts.resources;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
+
 
 @XmlRootElement
 public class ListPostsResource {

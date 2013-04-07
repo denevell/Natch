@@ -1,4 +1,4 @@
-package org.denevell.natch.serv.posts;
+package org.denevell.natch.serv.posts.resources;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

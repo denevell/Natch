@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.serv.posts.ListPostsResource;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.PostsResource;
+import org.denevell.natch.serv.posts.resources.ListPostsResource;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;

@@ -82,7 +82,7 @@ public class PostsModel {
 		try {
 			TypedQuery<PostEntity> q = mEntityManager
 					.createNamedQuery(PostEntity.NAMED_QUERY_FIND_BY_ID, PostEntity.class);
-			q.setParameter("id", id);
+			q.setParameter(PostEntity.NAMED_QUERY_FIND_BY_ID, id);
 			List<PostEntity> resultList = q.getResultList();		
 			if(resultList==null || resultList.size()==0) return null;
 			else return resultList.get(0);

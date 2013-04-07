@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.denevell.natch.db.entities.PostEntity;
+import org.denevell.natch.serv.posts.resources.ListPostsResource;
+import org.denevell.natch.serv.posts.resources.PostResource;
 
 public class ListPostsResourceAdapter extends ListPostsResource {
 

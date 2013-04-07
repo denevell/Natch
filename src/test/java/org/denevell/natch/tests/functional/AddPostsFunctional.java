@@ -10,8 +10,8 @@ import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.serv.login.LoginResourceInput;
 import org.denevell.natch.serv.login.LoginResourceReturnData;
-import org.denevell.natch.serv.posts.AddPostResourceInput;
-import org.denevell.natch.serv.posts.AddPostResourceReturnData;
+import org.denevell.natch.serv.posts.resources.AddPostResourceInput;
+import org.denevell.natch.serv.posts.resources.AddPostResourceReturnData;
 import org.denevell.natch.serv.register.RegisterResourceInput;
 import org.denevell.natch.serv.register.RegisterResourceReturnData;
 import org.denevell.natch.utils.Strings;

@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.login.LoginModel;
+import org.denevell.natch.utils.Log;
+import org.denevell.natch.utils.Strings;
 
 public class LoginHeadersFilter implements Filter {
 	
@@ -57,6 +59,16 @@ public class LoginHeadersFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
+	}
+	
+	public static UserEntity getLoggedInUser(ServletRequest request) {
+		try {
+			UserEntity userEntity = (UserEntity) request.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER);
+			return userEntity;
+		} catch (Exception e) {
+			Log.info(LoginHeadersFilter.class, "Unable to get logged in user: " + e.toString());
+			return null;
+		}			
 	}
 
 }

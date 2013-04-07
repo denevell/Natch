@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.serv.posts.AddPostResourceInput;
-import org.denevell.natch.serv.posts.AddPostResourceReturnData;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.PostsModel.AddPostResult;
+import org.denevell.natch.serv.posts.resources.AddPostResourceInput;
+import org.denevell.natch.serv.posts.resources.AddPostResourceReturnData;
 import org.denevell.natch.serv.posts.PostsResource;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;

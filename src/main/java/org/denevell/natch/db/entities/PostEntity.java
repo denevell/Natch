@@ -11,14 +11,14 @@ import javax.persistence.OneToOne;
 @NamedQueries({
 	@NamedQuery(name=PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE,query=
 		"select p from PostEntity p order by p.modified"),
-	@NamedQuery(name=PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE,query=
-		"select p from PostEntity p order when p.id = :id")
+	@NamedQuery(name=PostEntity.NAMED_QUERY_FIND_BY_ID,query=
+		"select p from PostEntity p where p.id = :"+PostEntity.NAMED_QUERY_PARAM_ID+"")
 	})
 @Entity
 public class PostEntity {
 	
 	public static final String NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE = "findByModData";
-
+	public static final String NAMED_QUERY_PARAM_ID= "id";
 	public static final String NAMED_QUERY_FIND_BY_ID = "findById";
 	
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)

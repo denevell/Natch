@@ -22,6 +22,10 @@ import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.PostsModel.AddPostResult;
 import org.denevell.natch.serv.posts.PostsModel.DeletePostResult;
+import org.denevell.natch.serv.posts.resources.AddPostResourceInput;
+import org.denevell.natch.serv.posts.resources.AddPostResourceReturnData;
+import org.denevell.natch.serv.posts.resources.DeletePostResource;
+import org.denevell.natch.serv.posts.resources.ListPostsResource;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
@@ -53,17 +57,14 @@ public class PostsResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public AddPostResourceReturnData add(AddPostResourceInput input) {
 		AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
+		regReturnData.setSuccessful(false);
 		if(input==null) {
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
 			return regReturnData;
 		}
-		UserEntity userEntity = null;
-		try {
-			userEntity = (UserEntity) mRequest.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER);
-		} catch (Exception e) {
-			Log.info(getClass(), e.toString());
-			regReturnData.setSuccessful(false);
+		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+		if(userEntity==null) {
 			regReturnData.setError(rb.getString(Strings.unknown_error)); // Unknown as this shouldn't happen
 			return regReturnData;
 		}
@@ -113,15 +114,11 @@ public class PostsResource {
 	public DeletePostResource delete(long number) {
 		DeletePostResource ret = new DeletePostResource();
 		ret.setSuccessful(false);
-		UserEntity userEntity = null;
-		try {
-			userEntity = (UserEntity) mRequest.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER);
-		} catch (Exception e) {
-			Log.info(getClass(), e.toString());
-			ret.setSuccessful(false);
+		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+		if(userEntity==null) {
 			ret.setError(rb.getString(Strings.unknown_error)); // Unknown as this shouldn't happen
 			return ret;
-		}
+		}	
 		try {
 			DeletePostResult result = mModel.delete(userEntity, number);
 			if(result==DeletePostResult.DELETED) {
