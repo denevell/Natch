@@ -32,7 +32,7 @@ The start of a REST interface for a forum.
  * posts: shouldSeeJsonErrorEdit
  * posts: shouldSeeUnauthorisedPostEdit
 * ~~posts: shouldDeletePost (hard delete)~~
- * posts: shouldSeeJsonErrorDelete
+ * ~~posts: shouldSeeJsonErrorDelete~~
  * ~~posts: shouldSeeUnauthorisedPostDelete~~
 * threaded posts: Should make a threaded post in response to another
 * threaded posts: Should be able to edit thread title and keep thread
@@ -42,6 +42,8 @@ The start of a REST interface for a forum.
 
 ### 0.2 Tech tasks
 * List posts without needing to be logged in
+* What happens when main post in thread is deleted but the children remain?
+* Refactor model return codes into json entity responses
 * ~~Figure out how to relate user to post.~~
 * ~~Return UserEntity when logged in~~
 * ~~Create a method to delete all posts for testing and update list posts test~~

@@ -125,9 +125,34 @@ public class DeletePostsFunctional {
 	
 	@Test
 	public void shouldSeeErrorOnUnknownPost() {
+		// Arrange 
+		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
+		service
+		.path("rest").path("post")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input); 
+		ListPostsResource listPosts = service
+		.path("rest").path("post")
+		.header("AuthKey", loginResult.getAuthKey())
+    	.get(ListPostsResource.class); 		
+		
+		// Act
+		DeletePostResource ret = service.path("rest").path("post")
+		.path(String.valueOf(listPosts.getPosts().get(0).getId()+1))
+		.header("AuthKey", loginResult.getAuthKey())
+		.entity(null)
+		.delete(DeletePostResource.class);
+		ListPostsResource listPostsAfter = service
+		.path("rest").path("post")
+		.header("AuthKey", loginResult.getAuthKey())
+    	.get(ListPostsResource.class); 		
+		
+		// Assert
+		assertEquals(rb.getString(Strings.post_doesnt_exist), ret.getError());
+		assertFalse(ret.isSuccessful());		
+		assertEquals(1, listPosts.getPosts().size());		
+		assertEquals(1, listPostsAfter.getPosts().size());				
 	}
 	
-	@Test
-	public void shouldSeeErrorOnBlankThreadId() {
-	}
 }
