@@ -41,7 +41,7 @@ public class EditPostResourceTests {
 	}
 	
 	@Test
-	public void shouldDeletePost() {
+	public void shouldEditPost() {
 		// Arrange
 		EditPostResource editPostResource = null;
 		long postEntityId = 1l;

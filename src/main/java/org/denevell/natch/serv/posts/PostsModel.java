@@ -18,7 +18,7 @@ import org.denevell.natch.utils.Log;
 public class PostsModel {
 
 	public enum EditPostResult {
-		EDITED
+		EDITED, UNKNOWN_ERROR, DOESNT_EXIST, NOT_YOURS_TO_DELETE
 	}
 	public enum DeletePostResult {
 		DELETED, UNKNOWN_ERROR, NOT_YOURS_TO_DELETE, DOESNT_EXIST
@@ -127,8 +127,36 @@ public class PostsModel {
 		}
 	}
 
-	public EditPostResult edit(UserEntity userEntity, long num, PostEntity post) {
-		return null;
+	public EditPostResult edit(UserEntity userEntity, long postEntityId, PostEntity post) {
+		if(userEntity==null || post==null) {
+			Log.info(getClass(), "No user or post passed to edit method");
+			return EditPostResult.UNKNOWN_ERROR;
+		}
+		EntityTransaction trans = mEntityManager.getTransaction();
+		try {
+			PostEntity pe = findPostById(postEntityId);
+			if(pe==null) {
+				return EditPostResult.DOESNT_EXIST;
+			} else if(!pe.getUser().getUsername().equals(userEntity.getUsername())) {
+				return EditPostResult.NOT_YOURS_TO_DELETE;
+			}
+			trans.begin();
+			mEntityManager.merge(post);
+			trans.commit();
+			return EditPostResult.EDITED;
+		} catch(Exception e) {
+			Log.info(getClass(), "Error editing: " + e.toString());
+			e.printStackTrace();
+			try {
+				trans.rollback();
+			} catch(Exception e1) {
+				Log.info(getClass(), "Error rolling back: " + e.toString());
+				e1.printStackTrace();
+			}
+			return EditPostResult.UNKNOWN_ERROR;
+		} finally {
+			EntityUtils.closeEntityConnection(mFactory, mEntityManager);
+		}
 	}
 
 }
