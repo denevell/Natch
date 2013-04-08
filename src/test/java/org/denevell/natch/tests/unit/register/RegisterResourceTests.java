@@ -10,9 +10,9 @@ import java.util.ResourceBundle;
 
 import org.denevell.natch.serv.register.RegisterModel;
 import org.denevell.natch.serv.register.RegisterModel.RegisterResult;
+import org.denevell.natch.serv.register.resources.RegisterResourceInput;
+import org.denevell.natch.serv.register.resources.RegisterResourceReturnData;
 import org.denevell.natch.serv.register.RegisterREST;
-import org.denevell.natch.serv.register.RegisterResourceInput;
-import org.denevell.natch.serv.register.RegisterResourceReturnData;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;

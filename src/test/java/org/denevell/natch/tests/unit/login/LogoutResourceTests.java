@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.serv.logout.LogoutModel;
 import org.denevell.natch.serv.logout.LogoutREST;
-import org.denevell.natch.serv.logout.LogoutResourceReturnData;
+import org.denevell.natch.serv.logout.resources.LogoutResourceReturnData;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;

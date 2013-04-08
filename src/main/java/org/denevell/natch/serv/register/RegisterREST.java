@@ -13,6 +13,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.serv.register.RegisterModel.RegisterResult;
+import org.denevell.natch.serv.register.resources.RegisterResourceInput;
+import org.denevell.natch.serv.register.resources.RegisterResourceReturnData;
 import org.denevell.natch.utils.Strings;
 
 

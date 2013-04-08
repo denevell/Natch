@@ -1,10 +1,9 @@
-package org.denevell.natch.serv.logout;
+package org.denevell.natch.serv.register.resources;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.denevell.natch.serv.baseentities.SuccessOrError;
 
 @XmlRootElement
-public class LogoutResourceReturnData extends SuccessOrError {
-
+public class RegisterResourceReturnData extends SuccessOrError {
 }

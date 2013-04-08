@@ -1,4 +1,4 @@
-package org.denevell.natch.serv.login;
+package org.denevell.natch.serv.login.resources;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

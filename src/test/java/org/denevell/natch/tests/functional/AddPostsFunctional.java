@@ -8,12 +8,12 @@ import java.util.ResourceBundle;
 
 import javax.ws.rs.core.MediaType;
 
-import org.denevell.natch.serv.login.LoginResourceInput;
-import org.denevell.natch.serv.login.LoginResourceReturnData;
+import org.denevell.natch.serv.login.resources.LoginResourceInput;
+import org.denevell.natch.serv.login.resources.LoginResourceReturnData;
 import org.denevell.natch.serv.posts.resources.AddPostResourceInput;
 import org.denevell.natch.serv.posts.resources.AddPostResourceReturnData;
-import org.denevell.natch.serv.register.RegisterResourceInput;
-import org.denevell.natch.serv.register.RegisterResourceReturnData;
+import org.denevell.natch.serv.register.resources.RegisterResourceInput;
+import org.denevell.natch.serv.register.resources.RegisterResourceReturnData;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;

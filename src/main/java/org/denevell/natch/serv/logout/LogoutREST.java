@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
+import org.denevell.natch.serv.logout.resources.LogoutResourceReturnData;
 import org.denevell.natch.utils.Strings;
 
 

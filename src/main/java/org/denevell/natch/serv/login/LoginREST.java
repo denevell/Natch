@@ -15,6 +15,9 @@ import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.serv.login.LoginModel.LoginEnumResult;
 import org.denevell.natch.serv.login.LoginModel.LoginResult;
+import org.denevell.natch.serv.login.resources.LoginResourceInput;
+import org.denevell.natch.serv.login.resources.LoginResourceLoggedInReturnData;
+import org.denevell.natch.serv.login.resources.LoginResourceReturnData;
 import org.denevell.natch.utils.Strings;
 
 
