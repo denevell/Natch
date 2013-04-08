@@ -12,7 +12,7 @@ import org.denevell.natch.serv.login.resources.LoginResourceInput;
 import org.denevell.natch.serv.login.resources.LoginResourceReturnData;
 import org.denevell.natch.serv.posts.resources.AddPostResourceInput;
 import org.denevell.natch.serv.posts.resources.AddPostResourceReturnData;
-import org.denevell.natch.serv.posts.resources.DeletePostResource;
+import org.denevell.natch.serv.posts.resources.DeletePostResourceReturnData;
 import org.denevell.natch.serv.posts.resources.ListPostsResource;
 import org.denevell.natch.serv.register.resources.RegisterResourceInput;
 import org.denevell.natch.serv.register.resources.RegisterResourceReturnData;
@@ -64,11 +64,11 @@ public class DeletePostsFunctional {
     	.get(ListPostsResource.class); 		
 		
 		// Act
-		DeletePostResource ret = service.path("rest").path("post")
+		DeletePostResourceReturnData ret = service.path("rest").path("post")
 		.path(String.valueOf(listPosts.getPosts().get(0).getId()))
 		.header("AuthKey", loginResult.getAuthKey())
 		.entity(null)
-		.delete(DeletePostResource.class);
+		.delete(DeletePostResourceReturnData.class);
 		ListPostsResource listPostsAfter = service
 		.path("rest").path("post")
 		.header("AuthKey", loginResult.getAuthKey())
@@ -106,11 +106,11 @@ public class DeletePostsFunctional {
     	.get(ListPostsResource.class); 		
 		
 		// Act - delete with second user then list
-		DeletePostResource ret = service.path("rest").path("post")
+		DeletePostResourceReturnData ret = service.path("rest").path("post")
 		.path(String.valueOf(listPosts.getPosts().get(0).getId()))
 		.header("AuthKey", loginResult1.getAuthKey())
 		.entity(null)
-		.delete(DeletePostResource.class);
+		.delete(DeletePostResourceReturnData.class);
 		ListPostsResource listPostsAfter = service
 		.path("rest").path("post")
 		.header("AuthKey", loginResult.getAuthKey())
@@ -138,11 +138,11 @@ public class DeletePostsFunctional {
     	.get(ListPostsResource.class); 		
 		
 		// Act
-		DeletePostResource ret = service.path("rest").path("post")
+		DeletePostResourceReturnData ret = service.path("rest").path("post")
 		.path(String.valueOf(listPosts.getPosts().get(0).getId()+1))
 		.header("AuthKey", loginResult.getAuthKey())
 		.entity(null)
-		.delete(DeletePostResource.class);
+		.delete(DeletePostResourceReturnData.class);
 		ListPostsResource listPostsAfter = service
 		.path("rest").path("post")
 		.header("AuthKey", loginResult.getAuthKey())

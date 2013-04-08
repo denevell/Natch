@@ -1,7 +1,6 @@
 package org.denevell.natch.tests.unit.posts;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -12,16 +11,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
+import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.PostsModel;
-import org.denevell.natch.serv.posts.PostsModel.DeletePostResult;
-import org.denevell.natch.serv.posts.resources.DeletePostResourceReturnData;
+import org.denevell.natch.serv.posts.PostsModel.EditPostResult;
 import org.denevell.natch.serv.posts.PostsREST;
+import org.denevell.natch.serv.posts.resources.EditPostResource;
+import org.denevell.natch.serv.posts.resources.EditPostResourceReturnData;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
 
-public class DeletePostResourceTests {
+public class EditPostResourceTests {
 	
 	private PostsModel postsModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
@@ -42,11 +43,13 @@ public class DeletePostResourceTests {
 	@Test
 	public void shouldDeletePost() {
 		// Arrange
+		EditPostResource editPostResource = null;
 		long postEntityId = 1l;
-		when(postsModel.delete(user, postEntityId)).thenReturn(DeletePostResult.DELETED);
+		PostEntity postEntity = new PostEntity();
+		when(postsModel.edit(user, postEntityId, postEntity)).thenReturn(EditPostResult.EDITED);
 		
 		// Act
-		DeletePostResourceReturnData result = resource.delete(postEntityId);
+		EditPostResourceReturnData result = resource.edit(editPostResource);
 		
 		// Assert
 		assertTrue(result.isSuccessful());
@@ -55,44 +58,14 @@ public class DeletePostResourceTests {
 	
 	@Test
 	public void shouldShowNotYoursError() {
-		// Arrange
-		long postEntityId = 1l;
-		when(postsModel.delete(user, postEntityId)).thenReturn(DeletePostResult.NOT_YOURS_TO_DELETE);
-		
-		// Act
-		DeletePostResourceReturnData result = resource.delete(postEntityId);
-		
-		// Assert
-		assertFalse(result.isSuccessful());
-		assertEquals("Error json", rb.getString(Strings.post_not_yours_to_delete), result.getError());
 	}
 	
 	@Test
 	public void shouldShowUnknownPostError() {
-		// Arrange
-		long postEntityId = 1l;
-		when(postsModel.delete(user, postEntityId)).thenReturn(DeletePostResult.DOESNT_EXIST);
-		
-		// Act
-		DeletePostResourceReturnData result = resource.delete(postEntityId);
-		
-		// Assert
-		assertFalse(result.isSuccessful());
-		assertEquals("Error json", rb.getString(Strings.post_doesnt_exist), result.getError());
 	}
 	
 	@Test
 	public void shouldShowUnknownErrorOnException() {
-		// Arrange
-		long postEntityId = 1l;
-		when(postsModel.delete(user, postEntityId)).thenThrow(new RuntimeException());
-		
-		// Act
-		DeletePostResourceReturnData result = resource.delete(postEntityId);
-		
-		// Assert
-		assertFalse(result.isSuccessful());
-		assertEquals("Error json", rb.getString(Strings.unknown_error), result.getError());
 	}
 		
 }

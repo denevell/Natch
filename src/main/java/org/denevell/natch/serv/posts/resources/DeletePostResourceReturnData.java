@@ -5,6 +5,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.denevell.natch.serv.baseentities.SuccessOrError;
 
 @XmlRootElement
-public class DeletePostResource extends SuccessOrError {
+public class DeletePostResourceReturnData extends SuccessOrError {
 
 }

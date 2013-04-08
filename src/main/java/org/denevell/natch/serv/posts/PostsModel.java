@@ -17,13 +17,15 @@ import org.denevell.natch.utils.Log;
 
 public class PostsModel {
 
+	public enum EditPostResult {
+		EDITED
+	}
 	public enum DeletePostResult {
 		DELETED, UNKNOWN_ERROR, NOT_YOURS_TO_DELETE, DOESNT_EXIST
 	}
 	public enum AddPostResult {
 		ADDED, UNKNOWN_ERROR, BAD_USER_INPUT
 	}
-
 	private EntityManagerFactory mFactory;
 	private EntityManager mEntityManager;
 	private PostFactory mPostFactory;
@@ -123,6 +125,10 @@ public class PostsModel {
 		} finally {
 			EntityUtils.closeEntityConnection(mFactory, mEntityManager);
 		}
+	}
+
+	public EditPostResult edit(UserEntity userEntity, long num, PostEntity post) {
+		return null;
 	}
 
 }

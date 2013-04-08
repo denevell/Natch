@@ -25,7 +25,9 @@ import org.denevell.natch.serv.posts.PostsModel.AddPostResult;
 import org.denevell.natch.serv.posts.PostsModel.DeletePostResult;
 import org.denevell.natch.serv.posts.resources.AddPostResourceInput;
 import org.denevell.natch.serv.posts.resources.AddPostResourceReturnData;
-import org.denevell.natch.serv.posts.resources.DeletePostResource;
+import org.denevell.natch.serv.posts.resources.DeletePostResourceReturnData;
+import org.denevell.natch.serv.posts.resources.EditPostResource;
+import org.denevell.natch.serv.posts.resources.EditPostResourceReturnData;
 import org.denevell.natch.serv.posts.resources.ListPostsResource;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
@@ -113,8 +115,8 @@ public class PostsREST {
 	@DELETE
 	@Path("/{q}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public DeletePostResource delete(@PathParam("q") long number) {
-		DeletePostResource ret = new DeletePostResource();
+	public DeletePostResourceReturnData delete(@PathParam("q") long number) {
+		DeletePostResourceReturnData ret = new DeletePostResourceReturnData();
 		ret.setSuccessful(false);
 		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
 		if(userEntity==null) {
@@ -138,6 +140,10 @@ public class PostsREST {
 			ret.setError(rb.getString(Strings.unknown_error));
 			return ret;
 		} 
+	}
+
+	public EditPostResourceReturnData edit(EditPostResource editPostResource) {
+		return null;
 	}
 
 }
