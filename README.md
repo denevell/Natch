@@ -31,9 +31,9 @@ The start of a REST interface for a forum.
 * posts: shouldEditPost (subject, content, mod date)
  * posts: shouldSeeJsonErrorEdit
  * posts: shouldSeeUnauthorisedPostEdit
-* posts: shouldDeletePost (hard delete)
+* ~~posts: shouldDeletePost (hard delete)~~
  * posts: shouldSeeJsonErrorDelete
- * posts: shouldSeeUnauthorisedPostDelete
+ * ~~posts: shouldSeeUnauthorisedPostDelete~~
 * threaded posts: Should make a threaded post in response to another
 * threaded posts: Should be able to edit thread title and keep thread
 * ~~list posts: by modification date~~
