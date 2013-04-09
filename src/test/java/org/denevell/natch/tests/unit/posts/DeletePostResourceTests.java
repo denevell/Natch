@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.UserEntity;
+import org.denevell.natch.serv.posts.PostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.PostsModel.DeletePostResult;
 import org.denevell.natch.serv.posts.resources.DeletePostResourceReturnData;
@@ -36,7 +37,8 @@ public class DeletePostResourceTests {
 		request = mock(HttpServletRequest.class);
 		when(request.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER)).thenReturn(user);
 		HttpServletResponse response = mock(HttpServletResponse.class);
-		resource = new PostsREST(postsModel, request, response);
+		PostEntityAdapter postAdapter = mock(PostEntityAdapter.class);
+		resource = new PostsREST(postsModel, request, response, postAdapter);
 	}
 	
 	@Test
@@ -64,7 +66,7 @@ public class DeletePostResourceTests {
 		
 		// Assert
 		assertFalse(result.isSuccessful());
-		assertEquals("Error json", rb.getString(Strings.post_not_yours_to_delete), result.getError());
+		assertEquals("Error json", rb.getString(Strings.post_not_yours), result.getError());
 	}
 	
 	@Test

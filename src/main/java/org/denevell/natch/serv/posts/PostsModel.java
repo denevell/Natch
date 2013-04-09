@@ -127,9 +127,10 @@ public class PostsModel {
 		}
 	}
 
-	public EditPostResult edit(UserEntity userEntity, long postEntityId, PostEntity post) {
-		if(userEntity==null || post==null) {
-			Log.info(getClass(), "No user or post passed to edit method");
+	public EditPostResult edit(UserEntity userEntity, long postEntityId, PostEntityAdapter postAdapter) {
+		PostEntity post;
+		if(userEntity==null || postAdapter==null) {
+			Log.info(getClass(), "No user or postadapter passed to edit method");
 			return EditPostResult.UNKNOWN_ERROR;
 		}
 		EntityTransaction trans = mEntityManager.getTransaction();
@@ -139,6 +140,11 @@ public class PostsModel {
 				return EditPostResult.DOESNT_EXIST;
 			} else if(!pe.getUser().getUsername().equals(userEntity.getUsername())) {
 				return EditPostResult.NOT_YOURS_TO_DELETE;
+			}
+			post = postAdapter.createPost(pe, userEntity);
+			if(post==null) {
+				Log.info(getClass(), "Edit post: PostAdapter returned null");
+				return EditPostResult.UNKNOWN_ERROR;
 			}
 			trans.begin();
 			mEntityManager.merge(post);

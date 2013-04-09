@@ -9,7 +9,7 @@ public class Strings {
 	}
 	
 	public static final String post_doesnt_exist = "post_doesnt_exist";
-	public static final String post_not_yours_to_delete = "post_not_yours_to_delete";
+	public static final String post_not_yours = "post_not_yours";
 	public static final String unknown_error = "unknown_error";
 	public static final String incorrect_username_or_password = "incorrect_username";
 	public static final String username_already_exists = "username_exists";

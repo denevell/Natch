@@ -117,7 +117,7 @@ public class DeletePostsFunctional {
     	.get(ListPostsResource.class); 		
 		
 		// Assert
-		assertEquals(rb.getString(Strings.post_not_yours_to_delete), ret.getError());
+		assertEquals(rb.getString(Strings.post_not_yours), ret.getError());
 		assertFalse(ret.isSuccessful());		
 		assertEquals(1, listPosts.getPosts().size());		
 		assertEquals(1, listPostsAfter.getPosts().size());		

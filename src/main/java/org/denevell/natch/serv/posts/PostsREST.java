@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -23,6 +24,7 @@ import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.PostsModel.AddPostResult;
 import org.denevell.natch.serv.posts.PostsModel.DeletePostResult;
+import org.denevell.natch.serv.posts.PostsModel.EditPostResult;
 import org.denevell.natch.serv.posts.resources.AddPostResourceInput;
 import org.denevell.natch.serv.posts.resources.AddPostResourceReturnData;
 import org.denevell.natch.serv.posts.resources.DeletePostResourceReturnData;
@@ -41,18 +43,22 @@ public class PostsREST {
 	@Context HttpServletResponse mResponse;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private PostsModel mModel;
+	private PostEntityAdapter mEditPostAdapter;
 	
 	public PostsREST() {
 		mModel = new PostsModel();
+		mEditPostAdapter = new EditPostResourcePostEntityAdapter();
 	}
 	
 	/**
 	 * For DI testing.
+	 * @param editPostAdapter 
 	 */
-	public PostsREST(PostsModel postModel, HttpServletRequest request, HttpServletResponse response) {
+	public PostsREST(PostsModel postModel, HttpServletRequest request, HttpServletResponse response, PostEntityAdapter editPostAdapter) {
 		mModel = postModel;
 		mRequest = request;
 		mResponse = response;
+		mEditPostAdapter = editPostAdapter;
 	}
 	
 	@PUT
@@ -130,7 +136,7 @@ public class PostsREST {
 			} else if(result==DeletePostResult.DOESNT_EXIST) {
 				ret.setError(rb.getString(Strings.post_doesnt_exist));
 			} else if(result==DeletePostResult.NOT_YOURS_TO_DELETE) {
-				ret.setError(rb.getString(Strings.post_not_yours_to_delete));
+				ret.setError(rb.getString(Strings.post_not_yours));
 			} else if(result==DeletePostResult.UNKNOWN_ERROR) {
 				ret.setError(rb.getString(Strings.unknown_error));
 			}
@@ -142,8 +148,35 @@ public class PostsREST {
 		} 
 	}
 
-	public EditPostResourceReturnData edit(EditPostResource editPostResource) {
-		return null;
+	@POST
+	@Path("/{q}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public EditPostResourceReturnData edit(@PathParam(value="q") long postId, EditPostResource editPostResource) {
+		EditPostResourceReturnData ret = new EditPostResourceReturnData();
+		ret.setSuccessful(false);
+		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+		if(userEntity==null) {
+			ret.setError(rb.getString(Strings.unknown_error)); // Unknown as this shouldn't happen
+			return ret;
+		}	
+		try {
+			mEditPostAdapter.setPostWithNewData(editPostResource);
+			EditPostResult result = mModel.edit(userEntity, postId, mEditPostAdapter); 
+			if(result==EditPostResult.EDITED) {
+				ret.setSuccessful(true);
+			} else if(result==EditPostResult.DOESNT_EXIST) {
+				ret.setError(rb.getString(Strings.post_doesnt_exist));
+			} else if(result==EditPostResult.NOT_YOURS_TO_DELETE) {
+				ret.setError(rb.getString(Strings.post_not_yours));
+			} else if(result==EditPostResult.UNKNOWN_ERROR) {
+				ret.setError(rb.getString(Strings.unknown_error));
+			}
+			return ret;
+		} catch(Exception e) {
+			Log.info(getClass(), "Couldn't edit post: " + e.toString());
+			ret.setError(rb.getString(Strings.unknown_error));
+			return ret;
+		} 		
 	}
 
 }
