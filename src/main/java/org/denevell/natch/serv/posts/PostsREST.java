@@ -170,6 +170,8 @@ public class PostsREST {
 				ret.setError(rb.getString(Strings.post_not_yours));
 			} else if(result==EditPostResult.UNKNOWN_ERROR) {
 				ret.setError(rb.getString(Strings.unknown_error));
+			} else if(result==EditPostResult.BAD_USER_INPUT) {
+				ret.setError(rb.getString(Strings.post_fields_cannot_be_blank));
 			}
 			return ret;
 		} catch(Exception e) {

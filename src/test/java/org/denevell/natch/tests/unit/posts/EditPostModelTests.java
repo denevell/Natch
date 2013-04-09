@@ -44,12 +44,13 @@ public class EditPostModelTests {
 	public void shouldEditPost() {
 		// Arrange
 		long num = 1;
-		PostEntity post = new PostEntity();
+		PostEntity post = new PostEntity(null, 1, 1, "df", "sdf", null);
 		post.setUser(new UserEntity("this_person", null));
 		doReturn(post).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");
-		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(post);
+		PostEntity postToBeEdited = new PostEntity(null, 1, 1, "xxx", "xxx", null);
+		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(postToBeEdited);
 		
 		// Act
 		EditPostResult result = model.edit(userEntity, num, postEntityAdapter);
@@ -145,6 +146,63 @@ public class EditPostModelTests {
 		
 		// Assert 
 		assertEquals(EditPostResult.UNKNOWN_ERROR, result);
+	}
+	
+	@Test
+	public void shouldReturnBadUserInputOnBlanks() {
+		// Arrange
+		long num = 1;
+		PostEntity post = new PostEntity();
+		post.setUser(new UserEntity("this_person", null));
+		doReturn(post).when(model).findPostById(num);
+		UserEntity userEntity = new UserEntity();
+		userEntity.setUsername("this_person");
+		PostEntity postToEdit = new PostEntity(null, 1, 1, " ", " ", null);
+		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(postToEdit);
+		
+		// Act
+		EditPostResult result = model.edit(userEntity, num, postEntityAdapter);
+		
+		// Assert 
+		assertEquals(EditPostResult.BAD_USER_INPUT, result);
+	}
+	
+	@Test
+	public void shouldReturnBadUserInputOnNull() {
+		// Arrange
+		long num = 1;
+		PostEntity post = new PostEntity();
+		post.setUser(new UserEntity("this_person", null));
+		doReturn(post).when(model).findPostById(num);
+		UserEntity userEntity = new UserEntity();
+		userEntity.setUsername("this_person");
+		PostEntity postToEdit = new PostEntity(null, 1, 1, null, null, null);
+		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(postToEdit);
+		
+		// Act
+		EditPostResult result = model.edit(userEntity, num, postEntityAdapter);
+		
+		// Assert 
+		assertEquals(EditPostResult.BAD_USER_INPUT, result);
+	}
+	
+	@Test
+	public void shouldReturnBadUserInputOnBlankSubject() {
+		// Arrange
+		long num = 1;
+		PostEntity post = new PostEntity();
+		post.setUser(new UserEntity("this_person", null));
+		doReturn(post).when(model).findPostById(num);
+		UserEntity userEntity = new UserEntity();
+		userEntity.setUsername("this_person");
+		PostEntity postToEdit = new PostEntity(null, 1, 1, " ", "sdfsdf", null);
+		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(postToEdit);
+		
+		// Act
+		EditPostResult result = model.edit(userEntity, num, postEntityAdapter);
+		
+		// Assert 
+		assertEquals(EditPostResult.BAD_USER_INPUT, result);
 	}
 	
 	@Test

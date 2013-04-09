@@ -18,7 +18,7 @@ import org.denevell.natch.utils.Log;
 public class PostsModel {
 
 	public enum EditPostResult {
-		EDITED, UNKNOWN_ERROR, DOESNT_EXIST, NOT_YOURS_TO_DELETE
+		EDITED, UNKNOWN_ERROR, DOESNT_EXIST, NOT_YOURS_TO_DELETE, BAD_USER_INPUT
 	}
 	public enum DeletePostResult {
 		DELETED, UNKNOWN_ERROR, NOT_YOURS_TO_DELETE, DOESNT_EXIST
@@ -145,6 +145,10 @@ public class PostsModel {
 			if(post==null) {
 				Log.info(getClass(), "Edit post: PostAdapter returned null");
 				return EditPostResult.UNKNOWN_ERROR;
+			}
+			if(checkInputParams(userEntity, post.getSubject(), post.getContent())) {
+				Log.info(this.getClass(), "Edit user: Bad user input");
+				return EditPostResult.BAD_USER_INPUT;
 			}
 			trans.begin();
 			mEntityManager.merge(post);
