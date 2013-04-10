@@ -43,7 +43,7 @@ public class PostsREST {
 	@Context HttpServletResponse mResponse;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private PostsModel mModel;
-	private PostEntityAdapter mEditPostAdapter;
+	private EditPostResourcePostEntityAdapter mEditPostAdapter;
 	
 	public PostsREST() {
 		mModel = new PostsModel();
@@ -54,7 +54,7 @@ public class PostsREST {
 	 * For DI testing.
 	 * @param editPostAdapter 
 	 */
-	public PostsREST(PostsModel postModel, HttpServletRequest request, HttpServletResponse response, PostEntityAdapter editPostAdapter) {
+	public PostsREST(PostsModel postModel, HttpServletRequest request, HttpServletResponse response, EditPostResourcePostEntityAdapter editPostAdapter) {
 		mModel = postModel;
 		mRequest = request;
 		mResponse = response;
