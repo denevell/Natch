@@ -8,26 +8,29 @@ import static org.mockito.Mockito.when;
 
 import java.util.ResourceBundle;
 
-import org.denevell.natch.serv.login.LoginModel;
-import org.denevell.natch.serv.login.LoginModel.LoginEnumResult;
-import org.denevell.natch.serv.login.LoginModel.LoginResult;
-import org.denevell.natch.serv.login.resources.LoginResourceInput;
-import org.denevell.natch.serv.login.resources.LoginResourceReturnData;
-import org.denevell.natch.serv.login.LoginREST;
+import javax.servlet.http.HttpServletRequest;
+
+import org.denevell.natch.serv.users.UsersModel;
+import org.denevell.natch.serv.users.UsersREST;
+import org.denevell.natch.serv.users.UsersModel.LoginEnumResult;
+import org.denevell.natch.serv.users.UsersModel.LoginResult;
+import org.denevell.natch.serv.users.resources.LoginResourceInput;
+import org.denevell.natch.serv.users.resources.LoginResourceReturnData;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
 
 public class LoginResourceTests {
 	
-	private LoginModel userModel;
-	private LoginREST resource;
+	private UsersModel userModel;
+	private UsersREST resource;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	
 	@Before
 	public void setup() {
-		userModel = mock(LoginModel.class);
-		resource = new LoginREST(userModel);
+		userModel = mock(UsersModel.class);
+		HttpServletRequest request = mock(HttpServletRequest.class);
+		resource = new UsersREST(userModel, request);
 	}
 	
 	@Test

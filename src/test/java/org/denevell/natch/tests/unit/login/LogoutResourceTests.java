@@ -11,25 +11,25 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
-import org.denevell.natch.serv.logout.LogoutModel;
-import org.denevell.natch.serv.logout.LogoutREST;
-import org.denevell.natch.serv.logout.resources.LogoutResourceReturnData;
+import org.denevell.natch.serv.users.UsersModel;
+import org.denevell.natch.serv.users.UsersREST;
+import org.denevell.natch.serv.users.resources.LogoutResourceReturnData;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
 
 public class LogoutResourceTests {
 	
-	private LogoutModel userModel;
-	private LogoutREST resource;
+	private UsersModel userModel;
+	private UsersREST resource;
 	private HttpServletRequest requestContext;
     ResourceBundle rb = Strings.getMainResourceBundle();
 
 	@Before
 	public void setup() {
-		userModel = mock(LogoutModel.class);
+		userModel = mock(UsersModel.class);
 		requestContext = mock(HttpServletRequest.class);
-		resource = new LogoutREST(userModel, requestContext);
+		resource = new UsersREST(userModel, requestContext);
 	}
 	
 	@Test

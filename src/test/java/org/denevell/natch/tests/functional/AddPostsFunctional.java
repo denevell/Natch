@@ -8,12 +8,12 @@ import java.util.ResourceBundle;
 
 import javax.ws.rs.core.MediaType;
 
-import org.denevell.natch.serv.login.resources.LoginResourceInput;
-import org.denevell.natch.serv.login.resources.LoginResourceReturnData;
 import org.denevell.natch.serv.posts.resources.AddPostResourceInput;
 import org.denevell.natch.serv.posts.resources.AddPostResourceReturnData;
-import org.denevell.natch.serv.register.resources.RegisterResourceInput;
-import org.denevell.natch.serv.register.resources.RegisterResourceReturnData;
+import org.denevell.natch.serv.users.resources.LoginResourceInput;
+import org.denevell.natch.serv.users.resources.LoginResourceReturnData;
+import org.denevell.natch.serv.users.resources.RegisterResourceInput;
+import org.denevell.natch.serv.users.resources.RegisterResourceReturnData;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,12 +38,12 @@ public class AddPostsFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    // Register
 		service
-	    	.path("rest").path("register").type(MediaType.APPLICATION_JSON)
+	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);
 		// Login
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 		loginResult = service
-	    		.path("rest").path("login")
+	    		.path("rest").path("user").path("login")
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.post(LoginResourceReturnData.class, loginInput);		
 	}

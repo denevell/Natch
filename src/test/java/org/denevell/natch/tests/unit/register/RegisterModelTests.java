@@ -8,9 +8,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
+import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.db.entities.UserEntityQueries;
-import org.denevell.natch.serv.register.RegisterModel;
-import org.denevell.natch.serv.register.RegisterModel.RegisterResult;
+import org.denevell.natch.serv.users.UsersModel;
+import org.denevell.natch.serv.users.UsersModel.RegisterResult;
 import org.denevell.natch.utils.PasswordSaltUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +23,7 @@ public class RegisterModelTests {
 	private EntityManager entityManager;
 	private EntityManagerFactory factory;
 	private PasswordSaltUtils salter;
+	private LoginAuthKeysSingleton authManager;
 
 	@Before
 	public void setup() {
@@ -30,13 +32,14 @@ public class RegisterModelTests {
 		salter = mock(PasswordSaltUtils.class);
 		entityManager = mock(EntityManager.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
+		authManager = mock(LoginAuthKeysSingleton.class);
 		queries = mock(UserEntityQueries.class);
 	}
 	
 	@Test
 	public void shouldRegisterWithUsernameAndPassword() {
 		// Arrange
-		RegisterModel um = new RegisterModel(entityManager, factory, queries, salter);
+		UsersModel um = new UsersModel(queries, authManager, factory, entityManager, salter);
 		
 		// Act
 		RegisterResult result = um.addUserToSystem("user", "pass");
@@ -48,7 +51,7 @@ public class RegisterModelTests {
 	@Test
 	public void shouldntRegisterWithBlankUsername() {
 		// Arrange
-		RegisterModel um = new RegisterModel(entityManager, factory, queries, salter);
+		UsersModel um = new UsersModel(queries, authManager, factory, entityManager, salter);
 		
 		// Act
 		RegisterResult result = um.addUserToSystem("", "asd");
@@ -60,7 +63,7 @@ public class RegisterModelTests {
 	@Test
 	public void shouldntRegisterWithNullUsername() {
 		// Arrange
-		RegisterModel um = new RegisterModel(entityManager, factory, queries, salter);
+		UsersModel um = new UsersModel(queries, authManager, factory, entityManager, salter);
 		
 		// Act
 		RegisterResult result = um.addUserToSystem(null, "asd");
@@ -72,7 +75,7 @@ public class RegisterModelTests {
 	@Test
 	public void shouldntRegisterWithBlankPassword() {
 		// Arrange
-		RegisterModel um = new RegisterModel(entityManager, factory, queries, salter);
+		UsersModel um = new UsersModel(queries, authManager, factory, entityManager, salter);
 		
 		// Act
 		RegisterResult result = um.addUserToSystem("dsfd", "");
@@ -84,7 +87,7 @@ public class RegisterModelTests {
 	@Test
 	public void shouldntRegisterWithNullPassword() {
 		// Arrange
-		RegisterModel um = new RegisterModel(entityManager, factory, queries, salter);
+		UsersModel um = new UsersModel(queries, authManager, factory, entityManager, salter);
 		
 		// Act
 		RegisterResult result = um.addUserToSystem("dsfd", null);
@@ -97,7 +100,7 @@ public class RegisterModelTests {
 	public void shouldntRegisterWithEntityMangerException() { 
 		// Arrange
 		when(entityManager.getTransaction()).thenThrow(new RuntimeException());
-		RegisterModel um = new RegisterModel(entityManager, factory, queries, salter);
+		UsersModel um = new UsersModel(queries, authManager, factory, entityManager, salter);
 		
 		// Act
 		RegisterResult result = um.addUserToSystem("dsfd", "dsfsdf");
@@ -110,7 +113,7 @@ public class RegisterModelTests {
 	public void shouldntRegisterWithDuplicateUsername() { 
 		// Arrange
 		when(queries.doesUsernameExist("username")).thenReturn(true);
-		RegisterModel um = new RegisterModel(entityManager, factory, queries, salter);
+		UsersModel um = new UsersModel(queries, authManager, factory, entityManager, salter);
 		
 		// Act
 		RegisterResult result = um.addUserToSystem("username", "dsfsdf");

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.serv.login.LoginModel;
+import org.denevell.natch.serv.users.UsersModel;
 import org.denevell.natch.utils.Log;
 
 public class LoginHeadersFilter implements Filter {
@@ -20,16 +20,16 @@ public class LoginHeadersFilter implements Filter {
 	private static final String AUTHENTICATION_KEY = "AuthKey";
 	public static final String KEY_SERVLET_REQUEST_LOGGEDIN_USER= "authed_username";
 	public static final String KEY_SERVLET_REQUEST_LOGGEDIN_AUTHKEY = "authkey";
-	private LoginModel mLoginModel;
+	private UsersModel mLoginModel;
 	
 	public LoginHeadersFilter() {
-		mLoginModel = new LoginModel();
+		mLoginModel = new UsersModel();
 	}
 	
 	/**
 	 * For testing with DI
 	 */
-	public LoginHeadersFilter(LoginModel model) {
+	public LoginHeadersFilter(UsersModel model) {
 		mLoginModel = model;
 	}
 

@@ -9,8 +9,8 @@ import java.util.ResourceBundle;
 
 import javax.ws.rs.core.MediaType;
 
-import org.denevell.natch.serv.register.resources.RegisterResourceInput;
-import org.denevell.natch.serv.register.resources.RegisterResourceReturnData;
+import org.denevell.natch.serv.users.resources.RegisterResourceInput;
+import org.denevell.natch.serv.users.resources.RegisterResourceReturnData;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;

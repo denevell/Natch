@@ -5,21 +5,38 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+
 import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.serv.logout.LogoutModel;
+import org.denevell.natch.db.entities.UserEntityQueries;
+import org.denevell.natch.serv.users.UsersModel;
+import org.denevell.natch.utils.PasswordSaltUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 public class LogoutModelTests {
 	
-	private LogoutModel logoutModel;
+	private UsersModel loginModel;
 	private LoginAuthKeysSingleton authKeyGenerator;
+	private EntityManagerFactory factory;
+	private EntityTransaction trans;
+	private PasswordSaltUtils salter;
+	private EntityManager entityManager;
+	private UserEntityQueries queries;
 
 	@Before
 	public void setup() {
+		factory = mock(EntityManagerFactory.class);
+		trans = mock(EntityTransaction.class);
+		salter = mock(PasswordSaltUtils.class);
+		entityManager = mock(EntityManager.class);
+		when(entityManager.getTransaction()).thenReturn(trans);
+		queries = mock(UserEntityQueries.class);
 		authKeyGenerator = mock(LoginAuthKeysSingleton.class);
-		logoutModel = new LogoutModel(authKeyGenerator);
+		loginModel = new UsersModel(queries, authKeyGenerator, factory, entityManager, salter);		
 	}
 	
 	@Test
@@ -28,7 +45,7 @@ public class LogoutModelTests {
 		when(authKeyGenerator.retrieveUserEntity("authKey")).thenReturn(null);
 		
 		// Act
-		boolean result = logoutModel.logout("authKey");
+		boolean result = loginModel.logout("authKey");
 		
 		// Assert
 		assertTrue(result);
@@ -40,7 +57,7 @@ public class LogoutModelTests {
 		when(authKeyGenerator.retrieveUserEntity("otherAuthKey")).thenReturn(new UserEntity());
 		
 		// Act
-		boolean result = logoutModel.logout("otherAuthKey");
+		boolean result = loginModel.logout("otherAuthKey");
 		
 		// Assert
 		assertFalse(result);
@@ -51,7 +68,7 @@ public class LogoutModelTests {
 		// Arrange
 		
 		// Act
-		boolean result = logoutModel.logout(null);
+		boolean result = loginModel.logout(null);
 		
 		// Assert
 		assertFalse(result);
@@ -62,7 +79,7 @@ public class LogoutModelTests {
 		// Arrange
 		
 		// Act
-		boolean result = logoutModel.logout(" ");
+		boolean result = loginModel.logout(" ");
 		
 		// Assert
 		assertFalse(result);

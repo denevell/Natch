@@ -9,11 +9,11 @@ import java.util.ResourceBundle;
 
 import javax.ws.rs.core.MediaType;
 
-import org.denevell.natch.serv.login.resources.LoginResourceInput;
-import org.denevell.natch.serv.login.resources.LoginResourceLoggedInReturnData;
-import org.denevell.natch.serv.login.resources.LoginResourceReturnData;
-import org.denevell.natch.serv.register.resources.RegisterResourceInput;
-import org.denevell.natch.serv.register.resources.RegisterResourceReturnData;
+import org.denevell.natch.serv.users.resources.LoginResourceInput;
+import org.denevell.natch.serv.users.resources.LoginResourceLoggedInReturnData;
+import org.denevell.natch.serv.users.resources.LoginResourceReturnData;
+import org.denevell.natch.serv.users.resources.RegisterResourceInput;
+import org.denevell.natch.serv.users.resources.RegisterResourceReturnData;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,12 +41,12 @@ public class LoginFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 		service
-	    	.path("rest").path("register").type(MediaType.APPLICATION_JSON)
+	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);
 	    
 	    // Act
 		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("login")
+	    		.path("rest").path("user").path("login")
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
@@ -61,12 +61,12 @@ public class LoginFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passyWRONG");
 		service
-	    	.path("rest").path("register").type(MediaType.APPLICATION_JSON)
+	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);
 	    
 	    // Act
 		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("login")
+	    		.path("rest").path("user").path("login")
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
@@ -82,7 +82,7 @@ public class LoginFunctional {
 	    
 	    // Act
 		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("login")
+	    		.path("rest").path("user").path("login")
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
@@ -98,7 +98,7 @@ public class LoginFunctional {
 	    
 	    // Act
 		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("login")
+	    		.path("rest").path("user").path("login")
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
@@ -114,7 +114,7 @@ public class LoginFunctional {
 	    
 	    // Act
 		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("login")
+	    		.path("rest").path("user").path("login")
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
@@ -130,7 +130,7 @@ public class LoginFunctional {
 	    
 	    // Act
 		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("login")
+	    		.path("rest").path("user").path("login")
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
@@ -146,7 +146,7 @@ public class LoginFunctional {
 	    
 	    // Act
 		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("login")
+	    		.path("rest").path("user").path("login")
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
@@ -165,16 +165,16 @@ public class LoginFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 		service
-	    	.path("rest").path("register").type(MediaType.APPLICATION_JSON)
+	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);
 	    
 	    // Act
 		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("login")
+	    		.path("rest").path("user").path("login")
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.post(LoginResourceReturnData.class, loginInput);
 		LoginResourceReturnData loginResult2 = service
-	    		.path("rest").path("login")
+	    		.path("rest").path("user").path("login")
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
@@ -191,12 +191,12 @@ public class LoginFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 		service
-	    	.path("rest").path("register").type(MediaType.APPLICATION_JSON)
+	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);
 	    
 	    // Act
 		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("login")
+	    		.path("rest").path("user").path("login")
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
@@ -210,16 +210,16 @@ public class LoginFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 		service
-	    	.path("rest").path("register").type(MediaType.APPLICATION_JSON)
+	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);
 	    
 	    // Act
 		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("login")
+	    		.path("rest").path("user").path("login")
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.post(LoginResourceReturnData.class, loginInput);
 		LoginResourceReturnData loginResult1 = service
-	    		.path("rest").path("login")
+	    		.path("rest").path("user").path("login")
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.post(LoginResourceReturnData.class, loginInput);
 		
@@ -233,16 +233,16 @@ public class LoginFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 		service
-	    	.path("rest").path("register").type(MediaType.APPLICATION_JSON)
+	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);
 		LoginResourceReturnData loginResult = service
-	    	.path("rest").path("login")
+	    	.path("rest").path("user").path("login")
 	    	.type(MediaType.APPLICATION_JSON)
 	    	.post(LoginResourceReturnData.class, loginInput);
 	    
 	    // Act
 		LoginResourceLoggedInReturnData authResult = service
-	    		.path("rest").path("login").path("is")
+	    		.path("rest").path("user").path("is")
 	    		.type(MediaType.APPLICATION_JSON)
 				.header("AuthKey", loginResult.getAuthKey())
 	    		.get(LoginResourceLoggedInReturnData.class);
@@ -257,10 +257,10 @@ public class LoginFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 		service
-	    	.path("rest").path("register").type(MediaType.APPLICATION_JSON)
+	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);
 		LoginResourceReturnData loginResult = service
-	    	.path("rest").path("login")
+	    	.path("rest").path("user").path("login")
 	    	.type(MediaType.APPLICATION_JSON)
 	    	.post(LoginResourceReturnData.class, loginInput);
 		loginResult.getAuthKey();
@@ -268,7 +268,7 @@ public class LoginFunctional {
 	    // Act
 		try {
 		service
-	    	.path("rest").path("login").path("is")
+	    	.path("rest").path("user").path("is")
 	    	.type(MediaType.APPLICATION_JSON)
 			.header("AuthKey", loginResult.getAuthKey()+"INCORRECT")
 	    	.get(LoginResourceLoggedInReturnData.class);
@@ -286,14 +286,14 @@ public class LoginFunctional {
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 		service
-	    	.path("rest").path("register").type(MediaType.APPLICATION_JSON)
+	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);
 		LoginResourceReturnData loginResult = service
-	    	.path("rest").path("login")
+	    	.path("rest").path("user").path("login")
 	    	.type(MediaType.APPLICATION_JSON)
 	    	.post(LoginResourceReturnData.class, loginInput);
 		service
-	    	.path("rest").path("login")
+	    	.path("rest").path("user").path("login")
 	    	.type(MediaType.APPLICATION_JSON)
 	    	.post(LoginResourceReturnData.class, loginInput);
 	    
@@ -301,7 +301,7 @@ public class LoginFunctional {
 
 		try {
 			service
-		    	.path("rest").path("login").path("is")
+		    	.path("rest").path("user").path("is")
 		    	.type(MediaType.APPLICATION_JSON)
 				.header("AuthKey", loginResult.getAuthKey())
 		    	.get(LoginResourceLoggedInReturnData.class);

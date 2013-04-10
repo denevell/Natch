@@ -8,29 +8,34 @@ import static org.mockito.Mockito.when;
 
 import java.util.ResourceBundle;
 
-import org.denevell.natch.serv.register.RegisterModel;
-import org.denevell.natch.serv.register.RegisterModel.RegisterResult;
-import org.denevell.natch.serv.register.resources.RegisterResourceInput;
-import org.denevell.natch.serv.register.resources.RegisterResourceReturnData;
-import org.denevell.natch.serv.register.RegisterREST;
+import javax.servlet.http.HttpServletRequest;
+
+import org.denevell.natch.serv.users.UsersModel;
+import org.denevell.natch.serv.users.UsersREST;
+import org.denevell.natch.serv.users.UsersModel.RegisterResult;
+import org.denevell.natch.serv.users.resources.RegisterResourceInput;
+import org.denevell.natch.serv.users.resources.RegisterResourceReturnData;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
 
 public class RegisterResourceTests {
 	
-	private RegisterModel userModel;
+	private UsersModel userModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
+	private HttpServletRequest requestContext;
+	private UsersREST resource;
 
 	@Before
 	public void setup() {
-		userModel = mock(RegisterModel.class);
+		userModel = mock(UsersModel.class);
+		requestContext = mock(HttpServletRequest.class);
+		resource = new UsersREST(userModel, requestContext);		
 	}
 	
 	@Test
 	public void shouldRegisterWithUsernameAndPassword() {
 		// Arrange
-		RegisterREST resource = new RegisterREST(userModel);
 		RegisterResourceInput registerInput = new RegisterResourceInput("username", "password");
 		when(userModel.addUserToSystem("username", "password")).thenReturn(RegisterResult.REGISTERED);
 		
@@ -45,7 +50,6 @@ public class RegisterResourceTests {
 	@Test
 	public void shouldntRegisterWithDuplicateUsername() {
 		// Arrange
-		RegisterREST resource = new RegisterREST(userModel);
 		RegisterResourceInput registerInput = new RegisterResourceInput("username", "password");
 		when(userModel.addUserToSystem("username", "password")).thenReturn(RegisterResult.DUPLICATE_USERNAME);
 		
@@ -60,7 +64,6 @@ public class RegisterResourceTests {
 	@Test
 	public void shouldntRegisterWhenModelSaysBadInput() {
 		// Arrange
-		RegisterREST resource = new RegisterREST(userModel);
 		RegisterResourceInput registerInput = new RegisterResourceInput("username", "password");
 		when(userModel.addUserToSystem("username", "password")).thenReturn(RegisterResult.USER_INPUT_ERROR);
 		
@@ -75,7 +78,6 @@ public class RegisterResourceTests {
 	@Test
 	public void shouldntRegisterWithNullInputObject() {
 		// Arrange
-		RegisterREST resource = new RegisterREST(userModel);
 		when(userModel.addUserToSystem(null, null)).thenReturn(RegisterResult.USER_INPUT_ERROR);
 		
 		// Act
@@ -89,7 +91,6 @@ public class RegisterResourceTests {
 	@Test
 	public void shouldntRegisterWithUnknownError() {
 		// Arrange
-		RegisterREST resource = new RegisterREST(userModel);
 		RegisterResourceInput registerInput = new RegisterResourceInput("user", "pass");
 		when(userModel.addUserToSystem("user", "pass")).thenReturn(RegisterResult.UNKNOWN_ERROR);
 		

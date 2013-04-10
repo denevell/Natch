@@ -12,8 +12,8 @@
 	</filter>
 	<filter-mapping>
 	  <filter-name>Auth Filter</filter-name>
-	  <url-pattern>/rest/login/is</url-pattern>
-	  <url-pattern>/rest/logout</url-pattern>
+	  <url-pattern>/rest/user/logout</url-pattern>
+	  <url-pattern>/rest/user/is</url-pattern>
 	  <url-pattern>/rest/post</url-pattern>
 	  <url-pattern>/rest/post/*</url-pattern>
 	</filter-mapping>	
@@ -28,7 +28,7 @@
 	    </init-param>		
 	    <init-param>
 	    	<param-name>com.sun.jersey.config.property.packages</param-name>
-			<param-value>org.denevell.natch.serv.testutils;org.denevell.natch.serv.posts;org.denevell.natch.serv.register;org.denevell.natch.serv.login;org.denevell.natch.serv.logout</param-value>
+			<param-value>org.denevell.natch.serv.testutils;org.denevell.natch.serv.posts;org.denevell.natch.serv.users</param-value>
 	    </init-param>
 	    <load-on-startup>1</load-on-startup>
 	</servlet>

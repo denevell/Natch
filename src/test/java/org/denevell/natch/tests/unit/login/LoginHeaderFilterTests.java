@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.serv.login.LoginModel;
+import org.denevell.natch.serv.users.UsersModel;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,14 +22,14 @@ public class LoginHeaderFilterTests {
 	
 
 	private LoginHeadersFilter filter;
-	private LoginModel model;
+	private UsersModel model;
 	private HttpServletResponse resp;
 	private HttpServletRequest req;
 	private FilterChain chain;
 
 	@Before
 	public void setup() {
-		model = mock(LoginModel.class);
+		model = mock(UsersModel.class);
 		filter = new LoginHeadersFilter(model);
 		chain = mock(FilterChain.class);
 		req = mock(HttpServletRequest.class);

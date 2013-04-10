@@ -7,13 +7,13 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.denevell.natch.serv.login.LoginModel;
+import org.denevell.natch.serv.users.UsersModel;
 
 public class Log {
 	
 	static {
 	    try {
-		    Reader isr = new InputStreamReader(LoginModel.class.getClassLoader().getResourceAsStream("log4j.properties"));
+		    Reader isr = new InputStreamReader(UsersModel.class.getClassLoader().getResourceAsStream("log4j.properties"));
 		    Properties p = new Properties();
 			p.load(isr);
 			PropertyConfigurator.configure(p);
