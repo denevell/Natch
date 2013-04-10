@@ -50,8 +50,8 @@ public class PostsModel {
 				subject==null || content==null || subject.trim().length()==0 || content.trim().length()==0;
 	}
 	
-	public AddPostResult addPost(UserEntity user, String subject, String content) {
-		PostEntity p = mPostFactory.createPost(user, subject, content);
+	public AddPostResult addPost(UserEntity user, String subject, String content, String threadId) {
+		PostEntity p = mPostFactory.createPost(user, subject, content, threadId);
 		if(checkInputParams(user, subject, content) || p==null) {
 			Log.info(this.getClass(), "Bad user input");
 			return AddPostResult.BAD_USER_INPUT;

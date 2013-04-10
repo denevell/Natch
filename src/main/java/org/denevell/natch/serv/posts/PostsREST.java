@@ -67,7 +67,7 @@ public class PostsREST {
 	public AddPostResourceReturnData add(AddPostResourceInput input) {
 		AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 		regReturnData.setSuccessful(false);
-		if(input==null) {
+		if(input==null || input.getContent()==null || input.getSubject()==null) {
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
 			return regReturnData;
@@ -81,7 +81,13 @@ public class PostsREST {
 		AddPostResult okay = mModel.addPost(
 				userEntity,
 				input.getSubject(), 
-				input.getContent());
+				input.getContent(), 
+				null);
+		generateAddPostReturnResource(regReturnData, okay);
+		return regReturnData;
+	}
+
+	private void generateAddPostReturnResource( AddPostResourceReturnData regReturnData, AddPostResult okay) {
 		if(okay==AddPostResult.ADDED) {
 			regReturnData.setSuccessful(true);
 		} else if(okay==AddPostResult.BAD_USER_INPUT) {
@@ -94,8 +100,6 @@ public class PostsREST {
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.unknown_error));
 		}
-		
-		return regReturnData;
 	}
 
 	@GET
@@ -130,22 +134,27 @@ public class PostsREST {
 			return ret;
 		}	
 		try {
-			DeletePostResult result = mModel.delete(userEntity, number);
-			if(result==DeletePostResult.DELETED) {
-				ret.setSuccessful(true);
-			} else if(result==DeletePostResult.DOESNT_EXIST) {
-				ret.setError(rb.getString(Strings.post_doesnt_exist));
-			} else if(result==DeletePostResult.NOT_YOURS_TO_DELETE) {
-				ret.setError(rb.getString(Strings.post_not_yours));
-			} else if(result==DeletePostResult.UNKNOWN_ERROR) {
-				ret.setError(rb.getString(Strings.unknown_error));
-			}
+			generateDeleteReturnResource(number, ret, userEntity);
 			return ret;
 		} catch(Exception e) {
 			Log.info(getClass(), "Couldn't delete post: " + e.toString());
 			ret.setError(rb.getString(Strings.unknown_error));
 			return ret;
 		} 
+	}
+
+	private void generateDeleteReturnResource(long number,
+			DeletePostResourceReturnData ret, UserEntity userEntity) {
+		DeletePostResult result = mModel.delete(userEntity, number);
+		if(result==DeletePostResult.DELETED) {
+			ret.setSuccessful(true);
+		} else if(result==DeletePostResult.DOESNT_EXIST) {
+			ret.setError(rb.getString(Strings.post_doesnt_exist));
+		} else if(result==DeletePostResult.NOT_YOURS_TO_DELETE) {
+			ret.setError(rb.getString(Strings.post_not_yours));
+		} else if(result==DeletePostResult.UNKNOWN_ERROR) {
+			ret.setError(rb.getString(Strings.unknown_error));
+		}
 	}
 
 	@POST
@@ -162,23 +171,28 @@ public class PostsREST {
 		try {
 			mEditPostAdapter.setPostWithNewData(editPostResource);
 			EditPostResult result = mModel.edit(userEntity, postId, mEditPostAdapter); 
-			if(result==EditPostResult.EDITED) {
-				ret.setSuccessful(true);
-			} else if(result==EditPostResult.DOESNT_EXIST) {
-				ret.setError(rb.getString(Strings.post_doesnt_exist));
-			} else if(result==EditPostResult.NOT_YOURS_TO_DELETE) {
-				ret.setError(rb.getString(Strings.post_not_yours));
-			} else if(result==EditPostResult.UNKNOWN_ERROR) {
-				ret.setError(rb.getString(Strings.unknown_error));
-			} else if(result==EditPostResult.BAD_USER_INPUT) {
-				ret.setError(rb.getString(Strings.post_fields_cannot_be_blank));
-			}
+			generateEditReturnResource(ret, result);
 			return ret;
 		} catch(Exception e) {
 			Log.info(getClass(), "Couldn't edit post: " + e.toString());
 			ret.setError(rb.getString(Strings.unknown_error));
 			return ret;
 		} 		
+	}
+
+	private void generateEditReturnResource(EditPostResourceReturnData ret,
+			EditPostResult result) {
+		if(result==EditPostResult.EDITED) {
+			ret.setSuccessful(true);
+		} else if(result==EditPostResult.DOESNT_EXIST) {
+			ret.setError(rb.getString(Strings.post_doesnt_exist));
+		} else if(result==EditPostResult.NOT_YOURS_TO_DELETE) {
+			ret.setError(rb.getString(Strings.post_not_yours));
+		} else if(result==EditPostResult.UNKNOWN_ERROR) {
+			ret.setError(rb.getString(Strings.unknown_error));
+		} else if(result==EditPostResult.BAD_USER_INPUT) {
+			ret.setError(rb.getString(Strings.post_fields_cannot_be_blank));
+		}
 	}
 
 }

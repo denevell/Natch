@@ -7,8 +7,11 @@ import org.denevell.natch.db.entities.UserEntity;
 
 public class PostFactory {
 
-	public PostEntity createPost(UserEntity user, String subject, String content) {
+	public PostEntity createPost(UserEntity user, String subject, String content, String threadId) {
 		long time = new Date().getTime();
-		return new PostEntity(user, time, time, subject, content, null); 
+		if(threadId==null) {
+			threadId = String.valueOf(time)+String.valueOf(subject.hashCode());
+		}
+		return new PostEntity(user, time, time, subject, content, threadId); 
 	}	
 }
