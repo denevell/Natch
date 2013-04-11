@@ -122,6 +122,28 @@ public class PostsREST {
 		}
 	}
 	
+	@GET
+	@Path("/{q}")
+	@Produces(MediaType.APPLICATION_JSON)	
+	public ListPostsResource listByThreadId(@PathParam("q") String threadId) throws IOException {
+		List<PostEntity> posts = null;
+		try {
+			posts = mModel.listByThreadId(threadId);
+		} catch(Exception e) {
+			Log.info(getClass(), "Couldn't list posts: " + e.toString());
+			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
+			return null;
+		}
+		if(posts==null) {
+			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
+			return null;
+		} else {
+			ListPostsResource adaptedPosts = new ListPostsResourceAdapter(posts);
+			return adaptedPosts;
+		}
+	}
+
+	
 	@DELETE
 	@Path("/{q}")
 	@Produces(MediaType.APPLICATION_JSON)

@@ -120,4 +120,32 @@ public class ListPostsResourceTests {
 		// Assert
 		assertEquals("threadId", result.getPosts().get(0).getThreadId());
 	}	
+	
+	@Test
+	public void shouldListPostsByThread() throws IOException {
+		// Arrange
+		List<PostEntity> posts = new ArrayList<PostEntity>();
+		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", "t");
+		postEntity.setId(400);
+		posts.add(postEntity);
+		posts.add(new PostEntity(new UserEntity("u2", ""), 2, 2, "s2", "c2", "t"));
+		when(postsModel.listByThreadId("t")).thenReturn(posts);
+		
+		// Act
+		ListPostsResource result = resource.listByThreadId("t");
+		
+		// Assert
+		assertEquals(2, result.getPosts().size());
+		assertEquals(400, result.getPosts().get(0).getId());
+		assertEquals(1, result.getPosts().get(0).getCreation());
+		assertEquals(1, result.getPosts().get(0).getModification());
+		assertEquals("u1", result.getPosts().get(0).getUsername());
+		assertEquals("s1", result.getPosts().get(0).getSubject());
+		assertEquals("c1", result.getPosts().get(0).getContent());
+		assertEquals(2, result.getPosts().get(1).getCreation());
+		assertEquals(2, result.getPosts().get(1).getModification());
+		assertEquals("u2", result.getPosts().get(1).getUsername());
+		assertEquals("s2", result.getPosts().get(1).getSubject());
+		assertEquals("c2", result.getPosts().get(1).getContent());
+	}
 }
