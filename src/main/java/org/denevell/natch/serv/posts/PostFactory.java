@@ -31,7 +31,7 @@ public class PostFactory {
 				e.printStackTrace();
 				threadId = String.valueOf(subject.hashCode());
 			}
-			threadId = String.valueOf(time)+threadId;
+			threadId = threadId+String.valueOf(time);
 		}
 		return threadId;
 	}	
