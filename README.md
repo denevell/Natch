@@ -34,17 +34,15 @@ The start of a REST interface for a forum.
 * ~~posts: shouldDeletePost (hard delete)~~
  * ~~posts: shouldSeeJsonErrorDelete~~
  * ~~posts: shouldSeeUnauthorisedPostDelete~~
-* threaded posts: Should make a threaded post in response to another
+* ~~threaded posts: Should make a threaded post in response to another~~
 * threaded posts: Should be able to edit thread title and keep thread
 * ~~list posts: by modification date~~
 * list posts: by thread id, earliest as main post
-* list posts: posts in thread by date 
+* list posts: ~~posts in thread by date~~
 
 ### 0.2 Tech tasks
-* Enum model returns to json return entities.
 * List posts without needing to be logged in
 * What happens when main post in thread is deleted but the children remain?
-* Refactor model return codes into json entity responses
 * ~~Figure out how to relate user to post.~~
 * ~~Return UserEntity when logged in~~
 * ~~Create a method to delete all posts for testing and update list posts test~~

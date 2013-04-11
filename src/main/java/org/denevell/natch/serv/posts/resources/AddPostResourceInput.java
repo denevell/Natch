@@ -18,6 +18,12 @@ public class AddPostResourceInput {
 		this.content = content;
 	}
 	
+	public AddPostResourceInput(String subject, String content, String threadId) {
+		this.subject = subject;
+		this.content = content;
+		this.thread = threadId;
+	}
+	
 	public String getSubject() {
 		return subject;
 	}

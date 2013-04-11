@@ -7,13 +7,13 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
-import javax.persistence.Parameter;
 
 @NamedQueries({
 	@NamedQuery(name=PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE,query=
 		"select p from PostEntity p order by p.modified"),
 	@NamedQuery(name=PostEntity.NAMED_QUERY_FIND_BY_THREADID,query=
-		"select p from PostEntity p where p.threadId = :"+PostEntity.NAMED_QUERY_FIND_BY_THREADID),
+		"select p from PostEntity p where p.threadId = :"+PostEntity.NAMED_QUERY_PARAM_THREADID
+	    + " order by p.created"),
 	@NamedQuery(name=PostEntity.NAMED_QUERY_FIND_BY_ID,query=
 		"select p from PostEntity p where p.id = :"+PostEntity.NAMED_QUERY_PARAM_ID)
 	})
