@@ -1,5 +1,6 @@
 package org.denevell.natch.serv.posts.resources;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -7,6 +8,7 @@ public class AddPostResourceInput {
 	
 	private String subject;
 	private String content;
+	private String thread;
 	
 	public AddPostResourceInput() {
 	}
@@ -27,6 +29,15 @@ public class AddPostResourceInput {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public String getThread() {
+		return thread;
+	}
+
+	@XmlElement(required=false)
+	public void setThread(String thread) {
+		this.thread = thread;
 	}
 
 }

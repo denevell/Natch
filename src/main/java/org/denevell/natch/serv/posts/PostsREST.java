@@ -82,7 +82,7 @@ public class PostsREST {
 				userEntity,
 				input.getSubject(), 
 				input.getContent(), 
-				null);
+				input.getThread());
 		generateAddPostReturnResource(regReturnData, okay);
 		return regReturnData;
 	}

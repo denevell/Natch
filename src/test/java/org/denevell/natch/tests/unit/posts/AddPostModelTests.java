@@ -56,6 +56,21 @@ public class AddPostModelTests {
 	}
 	
 	@Test
+	public void shouldMakePostOnNullThreadId() {
+		// Arrange
+		String content = "Some content";
+		String subject = "Some subject";
+		when(postFactory.createPost(userEntity, subject, content, null)).thenReturn(genericPost);
+		
+		// Act
+		AddPostResult result = model.addPost(userEntity, subject, content, null);
+		
+		// Assert
+		assertEquals(AddPostResult.ADDED, result);
+		verify(entityManager).persist(genericPost);
+	}	
+	
+	@Test
 	public void shouldReturnUnknownErrorOnEntityManagerException() {
 		// Arrange
 		String content = "Some content";

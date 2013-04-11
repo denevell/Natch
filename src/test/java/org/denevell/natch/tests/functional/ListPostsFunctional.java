@@ -86,7 +86,7 @@ public class ListPostsFunctional {
 	}
 	
 	@Test
-	public void shouldListByModificationDateWithThreadId() {
+	public void shouldListByModificationDateWithNonSpecifiedThreadId() {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
 		service
@@ -103,6 +103,27 @@ public class ListPostsFunctional {
 		
 		// Assert
 		assertNotNull(returnData.getPosts().get(0).getThreadId());
+	}	
+	
+	@Test
+	public void shouldListByModificationDateWithSpecifiedThreadId() {
+		// Arrange 
+		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
+		input.setThread("threadId");
+		service
+		.path("rest").path("post")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input); 
+		
+		// Act
+		ListPostsResource returnData = service
+		.path("rest").path("post")
+		.header("AuthKey", loginResult.getAuthKey())
+    	.get(ListPostsResource.class); 
+		
+		// Assert
+		assertEquals("threadId", returnData.getPosts().get(0).getThreadId());
 	}	
 	
 	@Test
