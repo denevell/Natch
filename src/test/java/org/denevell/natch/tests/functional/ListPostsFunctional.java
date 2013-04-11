@@ -1,6 +1,7 @@
 package org.denevell.natch.tests.functional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import javax.ws.rs.core.MediaType;
@@ -83,6 +84,26 @@ public class ListPostsFunctional {
 		assertEquals("sub2", returnData.getPosts().get(2).getSubject());
 		assertEquals("cont2", returnData.getPosts().get(2).getContent());
 	}
+	
+	@Test
+	public void shouldListByModificationDateWithThreadId() {
+		// Arrange 
+		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
+		service
+		.path("rest").path("post")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input); 
+		
+		// Act
+		ListPostsResource returnData = service
+		.path("rest").path("post")
+		.header("AuthKey", loginResult.getAuthKey())
+    	.get(ListPostsResource.class); 
+		
+		// Assert
+		assertNotNull(returnData.getPosts().get(0).getThreadId());
+	}	
 	
 	@Test
 	public void shouldListByThreadId() {

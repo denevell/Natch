@@ -46,7 +46,7 @@ public class AddPostResourceTests {
 	public void shouldAddPost() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		when(postsModel.addPost(user, "sub", "cont")).thenReturn(AddPostResult.ADDED);
+		when(postsModel.addPost(user, "sub", "cont", null)).thenReturn(AddPostResult.ADDED);
 		
 		// Act
 		AddPostResourceReturnData result = resource.add(input);
@@ -60,7 +60,7 @@ public class AddPostResourceTests {
 	public void shouldntRegisterWhenModelSaysBadInput() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		when(postsModel.addPost(user, "sub", "cont")).thenReturn(AddPostResult.BAD_USER_INPUT);
+		when(postsModel.addPost(user, "sub", "cont", null)).thenReturn(AddPostResult.BAD_USER_INPUT);
 		
 		// Act
 		AddPostResourceReturnData result = resource.add(input);
@@ -74,7 +74,7 @@ public class AddPostResourceTests {
 	public void shouldntAddWhenDodgyUserObjectInRequest() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		when(postsModel.addPost(user, "sub", "cont")).thenReturn(AddPostResult.ADDED);
+		when(postsModel.addPost(user, "sub", "cont", null)).thenReturn(AddPostResult.ADDED);
 		when(request.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER)).thenThrow(new RuntimeException());
 		
 		// Act
@@ -101,7 +101,7 @@ public class AddPostResourceTests {
 	public void shouldntRegisterWithUnknownError() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		when(postsModel.addPost(user, "sub", "cont")).thenReturn(AddPostResult.UNKNOWN_ERROR);
+		when(postsModel.addPost(user, "sub", "cont", null)).thenReturn(AddPostResult.UNKNOWN_ERROR);
 		
 		// Act
 		AddPostResourceReturnData result = resource.add(input);

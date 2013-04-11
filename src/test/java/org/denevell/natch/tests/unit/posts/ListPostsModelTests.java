@@ -88,4 +88,22 @@ public class ListPostsModelTests {
 		// Assert
 		assertEquals(0, result.size());
 	}
+	
+	@Test
+	public void shouldReturnListOfPostsWithThreadId() {
+		// Arrange
+		when(entityManager.createNamedQuery(PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE, PostEntity.class)).thenReturn(queryResults);
+		List<PostEntity> posts = new ArrayList<PostEntity>();
+		PostEntity postEntity = new PostEntity(null, 1, 1, "s1", "c1", "threadId");
+		postEntity.setId(400);
+		posts.add(postEntity);
+		when(queryResults.getResultList()).thenReturn(posts);
+		
+		// Act
+		List<PostEntity> result = model.listByModificationDate();
+		
+		// Assert
+		assertEquals("threadId", result.get(0).getThreadId());
+	}	
+	
 }

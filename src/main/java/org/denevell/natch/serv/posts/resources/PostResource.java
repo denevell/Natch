@@ -9,6 +9,7 @@ public class PostResource {
 	private String username;
 	private String subject;
 	private String content;
+	private String threadId;
 	private long creation;
 	private long modification;
 	
@@ -58,5 +59,11 @@ public class PostResource {
 	}
 	public void setModification(long modification) {
 		this.modification = modification;
+	}
+	public String getThreadId() {
+		return threadId;
+	}
+	public void setThreadId(String threadId) {
+		this.threadId = threadId;
 	}
 }

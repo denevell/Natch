@@ -104,4 +104,20 @@ public class ListPostsResourceTests {
 		// Assert
 		verify(response).sendError(500, "Unexcepted error");
 	}
+	
+	@Test
+	public void shouldListPostsWithThreadId() throws IOException {
+		// Arrange
+		List<PostEntity> posts = new ArrayList<PostEntity>();
+		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", "threadId");
+		postEntity.setId(400);
+		posts.add(postEntity);
+		when(postsModel.listByModificationDate()).thenReturn(posts);
+		
+		// Act
+		ListPostsResource result = resource.listByModificationDate();
+		
+		// Assert
+		assertEquals("threadId", result.getPosts().get(0).getThreadId());
+	}	
 }
