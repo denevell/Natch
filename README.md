@@ -35,10 +35,10 @@ The start of a REST interface for a forum.
  * ~~posts: shouldSeeJsonErrorDelete~~
  * ~~posts: shouldSeeUnauthorisedPostDelete~~
 * ~~threaded posts: Should make a threaded post in response to another~~
-* threaded posts: Should be able to edit thread title and keep thread
+* ~~threaded posts: Should be able to edit thread title and keep thread -- in main edit functional test~~
 * ~~list posts: by modification date~~
 * list posts: by thread id, earliest as main post
-* list posts: ~~posts in thread by date~~
+* ~~list posts: posts in thread by date~~
 
 ### 0.2 Tech tasks
 * List posts without needing to be logged in

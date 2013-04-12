@@ -99,7 +99,6 @@ public class EditPostsFunctional {
 		assertEquals("sup", newListedPosts.getPosts().get(0).getContent());
 		assertEquals("sup two?", newListedPosts.getPosts().get(0).getSubject());
 		assertTrue(newListedPosts.getPosts().get(0).getModification() > initialPost.getModification());
-		
 	}
 	
 	@Test
