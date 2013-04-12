@@ -88,6 +88,13 @@ public class PostsModel {
 		else return resultList;
 	}
 	
+	public List<PostEntity> listThreads() {
+		TypedQuery<PostEntity> q = mEntityManager.createNamedQuery(PostEntity.NAMED_QUERY_FIND_THREADS, PostEntity.class);
+		List<PostEntity> resultList = q.getResultList();		
+		if(resultList==null) return new ArrayList<PostEntity>();
+		else return resultList;
+	}	
+	
 	public PostEntity findPostById(long id) {
 		try {
 			TypedQuery<PostEntity> q = mEntityManager

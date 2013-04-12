@@ -15,7 +15,9 @@ import javax.persistence.OneToOne;
 		"select p from PostEntity p where p.threadId = :"+PostEntity.NAMED_QUERY_PARAM_THREADID
 	    + " order by p.created"),
 	@NamedQuery(name=PostEntity.NAMED_QUERY_FIND_BY_ID,query=
-		"select p from PostEntity p where p.id = :"+PostEntity.NAMED_QUERY_PARAM_ID)
+		"select p from PostEntity p where p.id = :"+PostEntity.NAMED_QUERY_PARAM_ID),
+	@NamedQuery(name=PostEntity.NAMED_QUERY_FIND_THREADS,query=
+		"select p from PostEntity p group by p.threadId order by p.created asc")
 	})
 @Entity
 public class PostEntity {
@@ -25,6 +27,7 @@ public class PostEntity {
 	public static final String NAMED_QUERY_PARAM_ID= "id";
 	public static final String NAMED_QUERY_PARAM_THREADID = "threadId";
 	public static final String NAMED_QUERY_FIND_BY_ID = "findById";
+	public static final String NAMED_QUERY_FIND_THREADS = "findThreads";
 	
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;

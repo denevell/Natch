@@ -42,21 +42,20 @@ The start of a REST interface for a forum.
 
 ### 0.2 Tech tasks
 * List posts without needing to be logged in
-* What happens when main post in thread is deleted but the children remain?
 * ~~Figure out how to relate user to post.~~
 * ~~Return UserEntity when logged in~~
 * ~~Create a method to delete all posts for testing and update list posts test~~
   
 ### Backlog 
 
-* Tech task: Entity bean null / blank problem?
-* Tech task: Decide whether to use entity query classes - if so test them.
-* Tech task: Re-enable db locking 
-* Tech task: Speed improvements?
-* Tech task: Intercept json parsing errors and return 400s: register, login
-* Tech task: Eclipse gradle integration 
-* Tech task: We're not closing the entity managers when we return with bad user input in models
-* Test task: Tests for post resources adapters
+* Tech task ###: Json auto generated docs
+* Tech task ###: We're not closing the entity managers when we return with bad user input in models - memory problem.
+* Tech task ###: Re-enable db locking 
+* Tech task ##: Entity bean null / blank problem?
+* Tech task #: Decide whether to use entity query classes - if so test them.
+* Test task #: Tests for post resources adapters
+* Tech task #: Intercept json parsing errors and return 400s: register, login
+* Tech task #: Speed improvements?
 * ~~Test task: Junit tests in a war using normal classes? Jacksons xc and persistence in the war libs seems to have solved it~~
 * ~~Tech task: Use JPA from java se.~~
 * ~~Tech task: Stop the jpa unknown entity problem~~
@@ -73,7 +72,9 @@ The start of a REST interface for a forum.
  * Permissions for actions
  * Category/tags only available to some users
 * Make post
+ * Html encode data
  * List by category
+ * What happens when main post in thread is deleted but the children remain?
  * Filter posts
  * Soft delete post
 * Site comms
