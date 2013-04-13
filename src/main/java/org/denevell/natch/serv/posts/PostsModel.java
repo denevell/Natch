@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.denevell.natch.db.entities.PersistenceInfo;
@@ -88,9 +89,16 @@ public class PostsModel {
 		else return resultList;
 	}
 	
+	/**
+	 * Unchecked generic conversion may throw exception if error.
+	 * @return
+	 */
 	public List<PostEntity> listThreads() {
-		TypedQuery<PostEntity> q = mEntityManager.createNamedQuery(PostEntity.NAMED_QUERY_FIND_THREADS, PostEntity.class);
-		List<PostEntity> resultList = q.getResultList();		
+		Query q = mEntityManager.
+				createNativeQuery("select * from (select * from PostEntity order by created desc) as tmp group by tmp.threadId", 
+						PostEntity.class);		
+		@SuppressWarnings("unchecked")
+		List<PostEntity> resultList = q.getResultList();
 		if(resultList==null) return new ArrayList<PostEntity>();
 		else return resultList;
 	}	
