@@ -167,6 +167,42 @@ public class ListPostsFunctional {
 	}
 	
 	@Test
-	public void shouldListPostsInThread() {
+	public void shouldListThreads() {
+		// Arrange 
+		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
+		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
+		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
+		service
+		.path("rest").path("post")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input); 
+		service
+		.path("rest").path("post")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input1); 
+		service
+		.path("rest").path("post")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input2); 
+		
+		// Act
+		ListPostsResource returnData = service
+		.path("rest").path("post").path("threads")
+		.header("AuthKey", loginResult.getAuthKey())
+    	.get(ListPostsResource.class); 
+		
+		// Assert
+		assertEquals(2, returnData.getPosts().size());
+		assertTrue(returnData.getPosts().get(0).getId()!=0);
+		assertTrue(returnData.getPosts().get(1).getId()!=0);
+		assertEquals("sub1", returnData.getPosts().get(0).getSubject());
+		assertEquals("cont1", returnData.getPosts().get(0).getContent());		
+		assertEquals("other", returnData.getPosts().get(0).getThreadId());		
+		assertEquals("sub", returnData.getPosts().get(1).getSubject());
+		assertEquals("cont", returnData.getPosts().get(1).getContent());
+		assertEquals("t", returnData.getPosts().get(1).getThreadId());
 	}
 }

@@ -37,7 +37,7 @@ The start of a REST interface for a forum.
 * ~~threaded posts: Should make a threaded post in response to another~~
 * ~~threaded posts: Should be able to edit thread title and keep thread -- in main edit functional test~~
 * ~~list posts: by modification date~~
-* list posts: by thread id, earliest as main post
+* ~~list posts: by thread id, earliest as main post~~
 * ~~list posts: posts in thread by date~~
 
 ### 0.2 Tech tasks

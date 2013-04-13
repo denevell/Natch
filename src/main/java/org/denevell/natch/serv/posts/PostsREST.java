@@ -146,7 +146,7 @@ public class PostsREST {
 	@GET
 	@Path("/threads")
 	@Produces(MediaType.APPLICATION_JSON)	
-	public ListPostsResource listhreads() throws IOException {
+	public ListPostsResource listThreads() throws IOException {
 		List<PostEntity> posts = null;
 		try {
 			posts = mModel.listThreads();

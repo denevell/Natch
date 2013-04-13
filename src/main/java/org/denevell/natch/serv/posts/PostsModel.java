@@ -95,7 +95,7 @@ public class PostsModel {
 	 */
 	public List<PostEntity> listThreads() {
 		Query q = mEntityManager.
-				createNativeQuery("select * from (select * from PostEntity order by created desc) as tmp group by tmp.threadId", 
+				createNativeQuery(PostEntity.NATIVE_QUERY_FIND_THREADS,
 						PostEntity.class);		
 		@SuppressWarnings("unchecked")
 		List<PostEntity> resultList = q.getResultList();

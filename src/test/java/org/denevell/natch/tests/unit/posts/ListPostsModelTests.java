@@ -122,4 +122,20 @@ public class ListPostsModelTests {
 		assertEquals(2, result.size());
 	}	
 	
+	@Test
+	public void shouldReturnListOfPostsByGroupedByThread() {
+		// Arrange
+		when(entityManager.createNativeQuery(PostEntity.NATIVE_QUERY_FIND_THREADS, PostEntity.class)).thenReturn(queryResults);
+		List<PostEntity> posts = new ArrayList<PostEntity>();
+		posts.add(new PostEntity(null, 2, 2, "s1", "c1", "t"));
+		posts.add(new PostEntity(null, 3, 3, "s2", "c2", "c"));
+		when(queryResults.getResultList()).thenReturn(posts);
+		
+		// Act
+		List<PostEntity> result = model.listThreads();
+		
+		// Assert
+		assertEquals(2, result.size());
+	}		
+	
 }
