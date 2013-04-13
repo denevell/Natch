@@ -46,6 +46,13 @@ The start of a REST interface for a forum.
 * ~~Return UserEntity when logged in~~
 * ~~Create a method to delete all posts for testing and update list posts test~~
   
+### 0.3
+
+* posts: html escape content
+* posts: Specify category in posts
+* list posts: list threads by category
+* list posts: Pagination
+
 ### Backlog 
 
 * Tech task ###: Json auto generated docs
