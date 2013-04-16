@@ -41,7 +41,7 @@ public class PostsREST {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-    ResourceBundle rb = Strings.getMainResourceBundle();
+	ResourceBundle rb = Strings.getMainResourceBundle();
 	private PostsModel mModel;
 	private EditPostResourcePostEntityAdapter mEditPostAdapter;
 	
@@ -62,6 +62,7 @@ public class PostsREST {
 	}
 	
 	@PUT
+	@Path("add") // Explicit for the servlet filter
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public AddPostResourceReturnData add(AddPostResourceInput input) {
@@ -165,7 +166,7 @@ public class PostsREST {
 	}	
 
 	@DELETE
-	@Path("/{q}")
+	@Path("del/{q}") // Explicit for the servlet filter
 	@Produces(MediaType.APPLICATION_JSON)
 	public DeletePostResourceReturnData delete(@PathParam("q") long number) {
 		DeletePostResourceReturnData ret = new DeletePostResourceReturnData();
@@ -200,7 +201,7 @@ public class PostsREST {
 	}
 
 	@POST
-	@Path("/{q}")
+	@Path("edit/{q}") // Explicit for the servlet filter
 	@Produces(MediaType.APPLICATION_JSON)
 	public EditPostResourceReturnData edit(@PathParam(value="q") long postId, EditPostResource editPostResource) {
 		EditPostResourceReturnData ret = new EditPostResourceReturnData();

@@ -8,10 +8,16 @@ repositories {
     }   
 }
 
+compileJava {
+  sourceCompatibility = 1.6
+  targetCompatibility = 1.6
+}
+
 dependencies {
 	testCompile 'junit:junit:4.11'
 	testCompile 'org.mockito:mockito-all:1.9.5'
 	providedCompile	'org.apache.tomcat:tomcat-servlet-api:7.0.37'
+	compile 'asm:asm:3.3.1'
 	compile 'org.eclipse.persistence:eclipselink:2.4.0'
 	compile 'org.codehaus.jackson:jackson-xc:1.9.12'
 	compile 'org.codehaus.jackson:jackson-core-asl:1.9.12'

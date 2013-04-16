@@ -54,7 +54,7 @@ public class DeletePostsFunctional {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
 		service
-		.path("rest").path("post")
+		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input); 
@@ -64,7 +64,7 @@ public class DeletePostsFunctional {
     	.get(ListPostsResource.class); 		
 		
 		// Act
-		DeletePostResourceReturnData ret = service.path("rest").path("post")
+		DeletePostResourceReturnData ret = service.path("rest").path("post").path("del")
 		.path(String.valueOf(listPosts.getPosts().get(0).getId()))
 		.header("AuthKey", loginResult.getAuthKey())
 		.entity(null)
@@ -96,7 +96,7 @@ public class DeletePostsFunctional {
 		// Make post with first user
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
 		service
-		.path("rest").path("post")
+		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input); 
@@ -106,7 +106,7 @@ public class DeletePostsFunctional {
     	.get(ListPostsResource.class); 		
 		
 		// Act - delete with second user then list
-		DeletePostResourceReturnData ret = service.path("rest").path("post")
+		DeletePostResourceReturnData ret = service.path("rest").path("post").path("del")
 		.path(String.valueOf(listPosts.getPosts().get(0).getId()))
 		.header("AuthKey", loginResult1.getAuthKey())
 		.entity(null)
@@ -128,7 +128,7 @@ public class DeletePostsFunctional {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
 		service
-		.path("rest").path("post")
+		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input); 
@@ -138,7 +138,7 @@ public class DeletePostsFunctional {
     	.get(ListPostsResource.class); 		
 		
 		// Act
-		DeletePostResourceReturnData ret = service.path("rest").path("post")
+		DeletePostResourceReturnData ret = service.path("rest").path("post").path("del")
 		.path(String.valueOf(listPosts.getPosts().get(0).getId()+1))
 		.header("AuthKey", loginResult.getAuthKey())
 		.entity(null)

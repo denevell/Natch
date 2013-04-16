@@ -36,12 +36,12 @@ public class AddPostsFunctional {
 	    	.path("testutils")
 	    	.delete();	
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
-	    // Register
+		// Register
 		service
 	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);
 		// Login
-	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
+		 LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 		loginResult = service
 	    		.path("rest").path("user").path("login")
 	    		.type(MediaType.APPLICATION_JSON)
@@ -55,10 +55,10 @@ public class AddPostsFunctional {
 		
 		// Act
 		AddPostResourceReturnData returnData = service
-		.path("rest").path("post")
-	    .type(MediaType.APPLICATION_JSON)
+		.path("rest").path("post").path("add")
+	    	.type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
+		.put(AddPostResourceReturnData.class, input); 
 		
 		// Assert
 		assertEquals("", returnData.getError());
@@ -71,15 +71,15 @@ public class AddPostsFunctional {
 		
 		// Act
 		AddPostResourceReturnData returnData = service
-		.path("rest").path("post")
-	    .type(MediaType.APPLICATION_JSON)
+		.path("rest").path("post").path("add")
+	    	.type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
+		.put(AddPostResourceReturnData.class, input); 
 		AddPostResourceReturnData returnData1 = service
-		.path("rest").path("post")
-	    .type(MediaType.APPLICATION_JSON)
+		.path("rest").path("post").path("add")
+	    	.type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
+		.put(AddPostResourceReturnData.class, input); 
 		
 		// Assert
 		assertEquals("", returnData.getError());
@@ -96,9 +96,9 @@ public class AddPostsFunctional {
 		// Act
 		try {
 			service
-				.path("rest").path("post")
-			    .type(MediaType.APPLICATION_JSON)
-				.header("AuthKey", loginResult.getAuthKey()+"BAD")
+			.path("rest").path("post").path("add")
+		   	.type(MediaType.APPLICATION_JSON)
+			.header("AuthKey", loginResult.getAuthKey()+"BAD")
 		    	.put(AddPostResourceReturnData.class, input); 
 		} catch(UniformInterfaceException e) {
 			// Assert
@@ -115,10 +115,10 @@ public class AddPostsFunctional {
 		
 		// Act
 		AddPostResourceReturnData returnData = service
-		.path("rest").path("post")
-	    .type(MediaType.APPLICATION_JSON)
+		.path("rest").path("post").path("add")
+	    	.type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
+		.put(AddPostResourceReturnData.class, input); 
 		
 		// Assert
 		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
@@ -132,10 +132,10 @@ public class AddPostsFunctional {
 		
 		// Act
 		AddPostResourceReturnData returnData = service
-		.path("rest").path("post")
-	    .type(MediaType.APPLICATION_JSON)
+		.path("rest").path("post").path("add")
+	    	.type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
+		.put(AddPostResourceReturnData.class, input); 
 		
 		// Assert
 		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
@@ -149,10 +149,10 @@ public class AddPostsFunctional {
 		
 		// Act
 		AddPostResourceReturnData returnData = service
-		.path("rest").path("post")
-	    .type(MediaType.APPLICATION_JSON)
+		.path("rest").path("post").path("add")
+	    	.type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
+		.put(AddPostResourceReturnData.class, input); 
 		
 		// Assert
 		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
@@ -166,10 +166,10 @@ public class AddPostsFunctional {
 		
 		// Act
 		AddPostResourceReturnData returnData = service
-		.path("rest").path("post")
-	    .type(MediaType.APPLICATION_JSON)
+		.path("rest").path("post").path("add")
+	    	.type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
+		.put(AddPostResourceReturnData.class, input); 
 		
 		// Assert
 		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());

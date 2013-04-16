@@ -55,7 +55,7 @@ public class EditPostsFunctional {
 		// Add post
 		initalInput = new AddPostResourceInput("sub", "cont");
 		service
-		.path("rest").path("post")
+		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, initalInput); 		
@@ -80,7 +80,7 @@ public class EditPostsFunctional {
 		
 		// Act - edit then list
 		EditPostResourceReturnData editReturnData = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("edit")
 		.path(String.valueOf(initialPost.getId()))
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
@@ -119,7 +119,7 @@ public class EditPostsFunctional {
 		
 		// Act - edit with different user then list
 		EditPostResourceReturnData editReturnData = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("edit")
 		.path(String.valueOf(initialPost.getId()))
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult1.getAuthKey())
@@ -145,7 +145,7 @@ public class EditPostsFunctional {
 		
 		// Act - edit then list
 		EditPostResourceReturnData editReturnData = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("edit")
 		.path(String.valueOf(initialPost.getId()))
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
@@ -171,7 +171,7 @@ public class EditPostsFunctional {
 		
 		// Act - edit then list
 		EditPostResourceReturnData editReturnData = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("edit")
 		.path(String.valueOf(initialPost.getId()))
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
@@ -197,7 +197,7 @@ public class EditPostsFunctional {
 		
 		// Act - edit then list
 		EditPostResourceReturnData editReturnData = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("edit")
 		.path(String.valueOf(initialPost.getId()))
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())

@@ -51,17 +51,17 @@ public class ListPostsFunctional {
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1");
 		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2");
 		service
-		.path("rest").path("post")
+		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input); 
 		service
-		.path("rest").path("post")
+		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input1); 
 		service
-		.path("rest").path("post")
+		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input2); 
@@ -69,7 +69,6 @@ public class ListPostsFunctional {
 		// Act
 		ListPostsResource returnData = service
 		.path("rest").path("post")
-		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 
 		
 		// Assert
@@ -90,7 +89,7 @@ public class ListPostsFunctional {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
 		service
-		.path("rest").path("post")
+		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input); 
@@ -98,7 +97,6 @@ public class ListPostsFunctional {
 		// Act
 		ListPostsResource returnData = service
 		.path("rest").path("post")
-		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 
 		
 		// Assert
@@ -111,7 +109,7 @@ public class ListPostsFunctional {
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
 		input.setThread("threadId");
 		service
-		.path("rest").path("post")
+		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input); 
@@ -119,7 +117,6 @@ public class ListPostsFunctional {
 		// Act
 		ListPostsResource returnData = service
 		.path("rest").path("post")
-		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 
 		
 		// Assert
@@ -133,17 +130,17 @@ public class ListPostsFunctional {
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
 		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
 		service
-		.path("rest").path("post")
+		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input); 
 		service
-		.path("rest").path("post")
+		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input1); 
 		service
-		.path("rest").path("post")
+		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input2); 
@@ -151,7 +148,6 @@ public class ListPostsFunctional {
 		// Act
 		ListPostsResource returnData = service
 		.path("rest").path("post").path("t")
-		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 
 		
 		// Assert
@@ -173,17 +169,17 @@ public class ListPostsFunctional {
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
 		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
 		service
-		.path("rest").path("post")
+		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input); 
 		service
-		.path("rest").path("post")
+		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input1); 
 		service
-		.path("rest").path("post")
+		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input2); 
@@ -191,7 +187,6 @@ public class ListPostsFunctional {
 		// Act
 		ListPostsResource returnData = service
 		.path("rest").path("post").path("threads")
-		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 
 		
 		// Assert

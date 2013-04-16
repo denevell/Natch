@@ -40,12 +40,6 @@ The start of a REST interface for a forum.
 * ~~list posts: by thread id, earliest as main post~~
 * ~~list posts: posts in thread by date~~
 
-### 0.2 Tech tasks
-* List posts without needing to be logged in
-* ~~Figure out how to relate user to post.~~
-* ~~Return UserEntity when logged in~~
-* ~~Create a method to delete all posts for testing and update list posts test~~
-  
 ### 0.3
 
 * posts: html escape content
@@ -55,10 +49,11 @@ The start of a REST interface for a forum.
 
 ### Backlog 
 
-* Tech task ###: Json auto generated docs
+* Tech task ###: Move over to openjpa or fix the strange language problem with eclipselink
 * Tech task ###: We're not closing the entity managers when we return with bad user input in models - memory problem.
 * Tech task ###: Re-enable db locking 
 * Tech task ##: Entity bean null / blank problem?
+* Tech task #: Json auto generated docs
 * Tech task #: Decide whether to use entity query classes - if so test them.
 * Test task #: Tests for post resources adapters
 * Tech task #: Intercept json parsing errors and return 400s: register, login
