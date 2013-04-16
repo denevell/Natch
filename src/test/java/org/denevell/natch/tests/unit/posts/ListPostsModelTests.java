@@ -63,22 +63,6 @@ public class ListPostsModelTests {
 	}
 	
 	@Test
-	public void shouldHtmlEscapeSubjectAndContent() {
-		// Arrange
-		when(entityManager.createNamedQuery(PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE, PostEntity.class)).thenReturn(queryResults);
-		List<PostEntity> posts = new ArrayList<PostEntity>();
-		posts.add(new PostEntity(null, 2, 2, "<hi>", "<there>", null));
-		when(queryResults.getResultList()).thenReturn(posts);
-		
-		// Act
-		List<PostEntity> result = model.listByModificationDate();
-		
-		// Assert
-		assertEquals("&lt;hi&gt;", result.get(0).getSubject());
-		assertEquals("&lt;there&gt;", result.get(0).getContent());
-	}	
-	
-	@Test
 	public void shouldReturnEmptyList() {
 		// Arrange
 		when(entityManager.createNamedQuery(PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE, PostEntity.class)).thenReturn(queryResults);

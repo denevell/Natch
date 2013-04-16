@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.ws.rs.core.MediaType;
@@ -46,7 +48,8 @@ public class AddPostsFunctional {
 	@Test
 	public void shouldMakePost() {
 		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
+		List<String> tags = Arrays.asList("tag1", "tag2");
+		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", tags);
 		
 		// Act
 		AddPostResourceReturnData returnData = 

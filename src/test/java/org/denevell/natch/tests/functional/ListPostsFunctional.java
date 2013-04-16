@@ -3,9 +3,14 @@ package org.denevell.natch.tests.functional;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
+import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.serv.posts.resources.AddPostResourceInput;
 import org.denevell.natch.serv.posts.resources.AddPostResourceReturnData;
 import org.denevell.natch.serv.posts.resources.ListPostsResource;
@@ -83,6 +88,27 @@ public class ListPostsFunctional {
 		assertEquals("sub2", returnData.getPosts().get(2).getSubject());
 		assertEquals("cont2", returnData.getPosts().get(2).getContent());
 	}
+	
+	
+	@Test
+	public void shouldHtmlEscapeSubjectAndContent() {
+		// Arrange 
+		AddPostResourceInput input = new AddPostResourceInput("<hi>", "<there>");
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input); 
+		
+		// Act
+		ListPostsResource returnData = service
+		.path("rest").path("post")
+    	.get(ListPostsResource.class); 		
+		
+		// Assert
+		assertEquals("&lt;hi&gt;", returnData.getPosts().get(0).getSubject());
+		assertEquals("&lt;there&gt;", returnData.getPosts().get(0).getContent());
+	}		
 	
 	@Test
 	public void shouldListByModificationDateWithNonSpecifiedThreadId() {
