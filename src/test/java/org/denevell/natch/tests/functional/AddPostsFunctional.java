@@ -23,29 +23,24 @@ import com.sun.jersey.api.client.WebResource;
 
 public class AddPostsFunctional {
 	
-	private WebResource service;
+	private WebResource addPostService;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private LoginResourceReturnData loginResult;
 	
 	@Before
 	public void setup() {
-		service = TestUtils.getRESTClient();
-		// Delete all users
-		service
-	    	.path("rest")
-	    	.path("testutils")
-	    	.delete();	
+		addPostService = TestUtils.getAddPostClient();
+		TestUtils.deleteAllDbs();
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 		// Register
-		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
+		TestUtils.getRegisterClient()
+		.type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);
 		// Login
-		 LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-		loginResult = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput);		
+		LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
+		loginResult = TestUtils.getLoginClient()
+		.type(MediaType.APPLICATION_JSON)
+	    	.post(LoginResourceReturnData.class, loginInput);		
 	}
 	
 	@Test
@@ -54,10 +49,10 @@ public class AddPostsFunctional {
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
 		
 		// Act
-		AddPostResourceReturnData returnData = service
-		.path("rest").path("post").path("add")
-	    	.type(MediaType.APPLICATION_JSON)
+		AddPostResourceReturnData returnData = 
+		addPostService
 		.header("AuthKey", loginResult.getAuthKey())
+		.type(MediaType.APPLICATION_JSON)
 		.put(AddPostResourceReturnData.class, input); 
 		
 		// Assert
@@ -70,15 +65,15 @@ public class AddPostsFunctional {
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
 		
 		// Act
-		AddPostResourceReturnData returnData = service
-		.path("rest").path("post").path("add")
-	    	.type(MediaType.APPLICATION_JSON)
+		AddPostResourceReturnData returnData = 
+		addPostService
 		.header("AuthKey", loginResult.getAuthKey())
+		.type(MediaType.APPLICATION_JSON)
 		.put(AddPostResourceReturnData.class, input); 
-		AddPostResourceReturnData returnData1 = service
-		.path("rest").path("post").path("add")
-	    	.type(MediaType.APPLICATION_JSON)
+		AddPostResourceReturnData returnData1 = 
+		addPostService
 		.header("AuthKey", loginResult.getAuthKey())
+		.type(MediaType.APPLICATION_JSON)
 		.put(AddPostResourceReturnData.class, input); 
 		
 		// Assert
@@ -95,10 +90,9 @@ public class AddPostsFunctional {
 		
 		// Act
 		try {
-			service
-			.path("rest").path("post").path("add")
-		   	.type(MediaType.APPLICATION_JSON)
+			addPostService
 			.header("AuthKey", loginResult.getAuthKey()+"BAD")
+			.type(MediaType.APPLICATION_JSON)
 		    	.put(AddPostResourceReturnData.class, input); 
 		} catch(UniformInterfaceException e) {
 			// Assert
@@ -114,10 +108,10 @@ public class AddPostsFunctional {
 		AddPostResourceInput input = new AddPostResourceInput(" ", "cont");
 		
 		// Act
-		AddPostResourceReturnData returnData = service
-		.path("rest").path("post").path("add")
-	    	.type(MediaType.APPLICATION_JSON)
+		AddPostResourceReturnData returnData = 
+		addPostService
 		.header("AuthKey", loginResult.getAuthKey())
+		.type(MediaType.APPLICATION_JSON)
 		.put(AddPostResourceReturnData.class, input); 
 		
 		// Assert
@@ -131,10 +125,10 @@ public class AddPostsFunctional {
 		AddPostResourceInput input = new AddPostResourceInput("sub", " ");
 		
 		// Act
-		AddPostResourceReturnData returnData = service
-		.path("rest").path("post").path("add")
-	    	.type(MediaType.APPLICATION_JSON)
+		AddPostResourceReturnData returnData = 
+		addPostService
 		.header("AuthKey", loginResult.getAuthKey())
+		.type(MediaType.APPLICATION_JSON)
 		.put(AddPostResourceReturnData.class, input); 
 		
 		// Assert
@@ -148,10 +142,10 @@ public class AddPostsFunctional {
 		AddPostResourceInput input = new AddPostResourceInput(" ", " ");
 		
 		// Act
-		AddPostResourceReturnData returnData = service
-		.path("rest").path("post").path("add")
-	    	.type(MediaType.APPLICATION_JSON)
+		AddPostResourceReturnData returnData = 
+		addPostService
 		.header("AuthKey", loginResult.getAuthKey())
+		.type(MediaType.APPLICATION_JSON)
 		.put(AddPostResourceReturnData.class, input); 
 		
 		// Assert
@@ -165,10 +159,10 @@ public class AddPostsFunctional {
 		AddPostResourceInput input = new AddPostResourceInput(null,null);
 		
 		// Act
-		AddPostResourceReturnData returnData = service
-		.path("rest").path("post").path("add")
-	    	.type(MediaType.APPLICATION_JSON)
+		AddPostResourceReturnData returnData = 
+		addPostService
 		.header("AuthKey", loginResult.getAuthKey())
+		.type(MediaType.APPLICATION_JSON)
 		.put(AddPostResourceReturnData.class, input); 
 		
 		// Assert
