@@ -97,4 +97,4 @@ The start of a REST interface for a forum.
         * Able to change username
 * Misc
  * Base64 login / reg or maybe ssl?
- * Limit the thread ids and usernames to certain character
+ * Limit the thread ids, tags and usernames to certain character
