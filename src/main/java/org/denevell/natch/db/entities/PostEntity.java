@@ -8,6 +8,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 @NamedQueries({
 	@NamedQuery(name=PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE,query=
 		"select p from PostEntity p order by p.modified"),
@@ -67,7 +69,8 @@ public class PostEntity {
 	}
 
 	public String getSubject() {
-		return subject;
+		String escaped = StringEscapeUtils.escapeHtml(subject);
+		return escaped;
 	}
 
 	public void setSubject(String subject) {
@@ -75,7 +78,8 @@ public class PostEntity {
 	}
 
 	public String getContent() {
-		return content;
+		String escaped = StringEscapeUtils.escapeHtml(content);
+		return escaped;
 	}
 
 	public void setContent(String content) {

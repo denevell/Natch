@@ -42,10 +42,14 @@ The start of a REST interface for a forum.
 
 ### 0.3
 
-* posts: html escape content
-* posts: Specify category in posts
-* list posts: list threads by category
-* list posts: Pagination
+* ~~posts: should escape html content~~
+* posts: should add a tag to a post
+* list posts: should see tags on a post
+* threaded posts: should list threads by tag (in last modified order)
+* threaded posts: should list posts by date of their last entry
+* list posts: should paginate list all posts by x number 
+* list posts: should paginate list single thread posts by x number 
+* list posts: should paginate list threads by x number 
 
 ### Backlog 
 
@@ -73,12 +77,10 @@ The start of a REST interface for a forum.
  * Groups
  * Permissions for actions
  * Category/tags only available to some users
-* Make post
- * Html encode data
- * List by category
+* Posts
  * What happens when main post in thread is deleted but the children remain?
- * Filter posts
  * Soft delete post
+ * Search
 * Site comms
  * Message a user
 * User management 
@@ -95,3 +97,4 @@ The start of a REST interface for a forum.
         * Able to change username
 * Misc
  * Base64 login / reg or maybe ssl?
+ * Limit the thread ids and usernames to certain character
