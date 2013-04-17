@@ -3,14 +3,9 @@ package org.denevell.natch.tests.functional;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
-import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.serv.posts.resources.AddPostResourceInput;
 import org.denevell.natch.serv.posts.resources.AddPostResourceReturnData;
 import org.denevell.natch.serv.posts.resources.ListPostsResource;
@@ -50,7 +45,7 @@ public class ListPostsFunctional {
 	}
 	
 	@Test
-	public void shouldListByModificationDate() {
+	public void shouldListByCreationDate() {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1");
@@ -81,12 +76,12 @@ public class ListPostsFunctional {
 		assertTrue(returnData.getPosts().get(0).getId()!=0);
 		assertTrue(returnData.getPosts().get(1).getId()!=0);
 		assertTrue(returnData.getPosts().get(2).getId()!=0);
-		assertEquals("sub", returnData.getPosts().get(0).getSubject());
-		assertEquals("cont", returnData.getPosts().get(0).getContent());
+		assertEquals("sub2", returnData.getPosts().get(0).getSubject());
+		assertEquals("cont2", returnData.getPosts().get(0).getContent());
 		assertEquals("sub1", returnData.getPosts().get(1).getSubject());
 		assertEquals("cont1", returnData.getPosts().get(1).getContent());
-		assertEquals("sub2", returnData.getPosts().get(2).getSubject());
-		assertEquals("cont2", returnData.getPosts().get(2).getContent());
+		assertEquals("sub", returnData.getPosts().get(2).getSubject());
+		assertEquals("cont", returnData.getPosts().get(2).getContent());
 	}
 	
 	
@@ -189,7 +184,7 @@ public class ListPostsFunctional {
 	}
 	
 	@Test
-	public void shouldListThreads() {
+	public void shouldListThreadsByPostLastModified() {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");

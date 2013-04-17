@@ -12,7 +12,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 
 @NamedQueries({
 	@NamedQuery(name=PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE,query=
-		"select p from PostEntity p order by p.modified"),
+		"select p from PostEntity p order by p.modified desc"),
 	@NamedQuery(name=PostEntity.NAMED_QUERY_FIND_BY_THREADID,query=
 		"select p from PostEntity p where p.threadId = :"+PostEntity.NAMED_QUERY_PARAM_THREADID
 	    + " order by p.created"),
@@ -28,7 +28,10 @@ public class PostEntity {
 	public static final String NAMED_QUERY_PARAM_THREADID = "threadId";
 	public static final String NAMED_QUERY_FIND_BY_ID = "findById";
 	public static final String NAMED_QUERY_FIND_THREADS = "findThreads";
-	public static final String NATIVE_QUERY_FIND_THREADS = "select * from (select * from PostEntity order by created desc) as tmp group by tmp.threadId";
+	public static final String NATIVE_QUERY_FIND_THREADS = 
+			"select * from " + 
+			"(select * from PostEntity order by created desc) "+
+			"as tmp group by tmp.threadId";
 	
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
