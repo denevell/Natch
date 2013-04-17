@@ -57,11 +57,11 @@ The start of a REST interface for a forum.
 * Tech task ###: We're not closing the entity managers when we return with bad user input in models - memory problem.
 * Tech task ###: Re-enable db locking 
 * Tech task ##: Entity bean null / blank problem?
-* Tech task #: Json auto generated docs
 * Tech task #: Decide whether to use entity query classes - if so test them.
 * Test task #: Tests for post resources adapters
 * Tech task #: Intercept json parsing errors and return 400s: register, login
 * Tech task #: Speed improvements?
+* ~~Tech task #: Json auto generated docs~~
 * ~~Test task: Junit tests in a war using normal classes? Jacksons xc and persistence in the war libs seems to have solved it~~
 * ~~Tech task: Use JPA from java se.~~
 * ~~Tech task: Stop the jpa unknown entity problem~~
@@ -98,3 +98,4 @@ The start of a REST interface for a forum.
 * Misc
  * Base64 login / reg or maybe ssl?
  * Limit the thread ids, tags and usernames to certain character
+ * Some kind of captcha thing on registeration.
