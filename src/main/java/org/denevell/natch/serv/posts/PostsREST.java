@@ -34,14 +34,19 @@ import org.denevell.natch.serv.posts.resources.ListPostsResource;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+
 @Path("post")
+@Api(value="/post", description="Adds, Deletes, Edits and Lists posts")
 public class PostsREST {
 	
 	@Context UriInfo mInfo;
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-	ResourceBundle rb = Strings.getMainResourceBundle();
+	private ResourceBundle rb = Strings.getMainResourceBundle();
 	private PostsModel mModel;
 	private EditPostResourcePostEntityAdapter mEditPostAdapter;
 	
@@ -62,10 +67,12 @@ public class PostsREST {
 	}
 	
 	@PUT
-	@Path("add") // Explicit for the servlet filter
+	@Path("/add") // Explicit for the servlet filter
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public AddPostResourceReturnData add(AddPostResourceInput input) {
+	@ApiOperation(value = "Add a post", responseClass="org.denevell.natch.serv.posts.resources.AddPostResourceReturnData")
+	public AddPostResourceReturnData add(
+			@ApiParam(name="input") AddPostResourceInput input) {
 		AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 		regReturnData.setSuccessful(false);
 		if(input==null || input.getContent()==null || input.getSubject()==null) {
@@ -88,7 +95,7 @@ public class PostsREST {
 		return regReturnData;
 	}
 
-	private void generateAddPostReturnResource( AddPostResourceReturnData regReturnData, AddPostResult okay) {
+	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, AddPostResult okay) {
 		if(okay==AddPostResult.ADDED) {
 			regReturnData.setSuccessful(true);
 		} else if(okay==AddPostResult.BAD_USER_INPUT) {
@@ -105,6 +112,7 @@ public class PostsREST {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Lists posts by modification date", responseClass="org.denevell.natch.serv.posts.resources.ListPostsResource")
 	public ListPostsResource listByModificationDate() throws IOException {
 		List<PostEntity> posts = null;
 		try {
@@ -126,7 +134,9 @@ public class PostsREST {
 	@GET
 	@Path("/{q}")
 	@Produces(MediaType.APPLICATION_JSON)	
-	public ListPostsResource listByThreadId(@PathParam("q") String threadId) throws IOException {
+	@ApiOperation(value = "Lists posts within the thread specified", responseClass="org.denevell.natch.serv.posts.resources.ListPostsResource")
+	public ListPostsResource listByThreadId(
+			@ApiParam(name="threadId") @PathParam("q") String threadId) throws IOException {
 		List<PostEntity> posts = null;
 		try {
 			posts = mModel.listByThreadId(threadId);
@@ -147,6 +157,7 @@ public class PostsREST {
 	@GET
 	@Path("/threads")
 	@Produces(MediaType.APPLICATION_JSON)	
+	@ApiOperation(value = "Lists threads, mostly recently created first", responseClass="org.denevell.natch.serv.posts.resources.ListPostsResource")
 	public ListPostsResource listThreads() throws IOException {
 		List<PostEntity> posts = null;
 		try {
@@ -166,9 +177,11 @@ public class PostsREST {
 	}	
 
 	@DELETE
-	@Path("del/{q}") // Explicit for the servlet filter
+	@Path("/del/{q}") // Explicit for the servlet filter
 	@Produces(MediaType.APPLICATION_JSON)
-	public DeletePostResourceReturnData delete(@PathParam("q") long number) {
+	@ApiOperation(value = "Delete a post", responseClass="org.denevell.natch.serv.posts.resources.DeletePostResourceReturnData")
+	public DeletePostResourceReturnData delete(
+			@ApiParam(name="postId") @PathParam("q") long number) {
 		DeletePostResourceReturnData ret = new DeletePostResourceReturnData();
 		ret.setSuccessful(false);
 		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
@@ -201,9 +214,12 @@ public class PostsREST {
 	}
 
 	@POST
-	@Path("edit/{q}") // Explicit for the servlet filter
+	@Path("/edit/{q}") // Explicit for the servlet filter
 	@Produces(MediaType.APPLICATION_JSON)
-	public EditPostResourceReturnData edit(@PathParam(value="q") long postId, EditPostResource editPostResource) {
+	@ApiOperation(value = "Edit a post", responseClass="org.denevell.natch.serv.posts.resources.EditPostResourceReturnData")
+	public EditPostResourceReturnData edit(
+			@ApiParam(name="postId") @PathParam(value="q") long postId, 
+			@ApiParam(name="editParam") EditPostResource editPostResource) {
 		EditPostResourceReturnData ret = new EditPostResourceReturnData();
 		ret.setSuccessful(false);
 		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);

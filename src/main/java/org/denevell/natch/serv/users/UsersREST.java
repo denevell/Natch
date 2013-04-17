@@ -27,8 +27,13 @@ import org.denevell.natch.serv.users.resources.RegisterResourceInput;
 import org.denevell.natch.serv.users.resources.RegisterResourceReturnData;
 import org.denevell.natch.utils.Strings;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+
 
 @Path("user")
+@Api(value="/user", description="Register, login, logout and see if a user is logged in.")
 public class UsersREST {
 	
 	@Context UriInfo info;
@@ -54,7 +59,9 @@ public class UsersREST {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public RegisterResourceReturnData register(RegisterResourceInput registerInput) {
+	@ApiOperation(value = "Registers a user", responseClass="org.denevell.natch.serv.users.resources.RegisterResourceReturnData")
+	public RegisterResourceReturnData register(
+			@ApiParam(name="registerInput") RegisterResourceInput registerInput) {
 		RegisterResourceReturnData regReturnData = new RegisterResourceReturnData();
 		if(registerInput==null) {
 			regReturnData.setSuccessful(false);
@@ -78,10 +85,12 @@ public class UsersREST {
 	}	
 	
 	@POST
-	@Path("login") // So we can url match for servlet filters
+	@Path("/login") // So we can url match for servlet filters
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public LoginResourceReturnData login(LoginResourceInput loginInput) {
+	@ApiOperation(value = "Login", 
+		responseClass="org.denevell.natch.serv.users.resources.LoginResourceReturnData")
+	public LoginResourceReturnData login(@ApiParam(name="loginInput") LoginResourceInput loginInput) {
 		LoginResourceReturnData returnResult = new LoginResourceReturnData();
 		if(loginInput==null) {
 			returnResult.setSuccessful(false);
@@ -106,8 +115,11 @@ public class UsersREST {
 	}
 
 	@GET
-	@Path("is")
+	@Path("/is")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Check if logged in", 
+		notes="Must contain the ApiKey header.",
+		responseClass="org.denevell.natch.serv.users.resources.LoginResourceLoggedInReturnData")
 	public LoginResourceLoggedInReturnData isLoggedIn() {
 		// If we get here, the login filter failed.
 		LoginResourceLoggedInReturnData ret = new LoginResourceLoggedInReturnData();
@@ -116,8 +128,11 @@ public class UsersREST {
 	}
 	
 	@DELETE
-	@Path("logout") // So we can url match a 'logout' in the servlet filter
+	@Path("/logout") // So we can url match a 'logout' in the servlet filter
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Logout", 
+		notes="Must contain the ApiKey header.",
+		responseClass="org.denevell.natch.serv.users.resources.LogoutResourceReturnData")
 	public LogoutResourceReturnData logout() {
 		LogoutResourceReturnData returnResult = new LogoutResourceReturnData();
 		String authKey = mRequest.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_AUTHKEY).toString();
