@@ -29,21 +29,18 @@ public class PostsModel {
 	}
 	private EntityManagerFactory mFactory;
 	private EntityManager mEntityManager;
-	private PostFactory mPostFactory;
 
 	public PostsModel() {
 		mFactory = Persistence.createEntityManagerFactory(PersistenceInfo.EntityManagerFactoryName);
 		mEntityManager = mFactory.createEntityManager();		
-		mPostFactory = new PostFactory();
 	}
 	
 	/**
 	 * For testing / di
 	 */
-	public PostsModel(EntityManagerFactory factory, EntityManager entityManager, PostFactory postFactory) {
+	public PostsModel(EntityManagerFactory factory, EntityManager entityManager) {
 		mFactory = factory;
 		mEntityManager = entityManager;
-		mPostFactory = postFactory;
 	}
 	
 	private boolean checkInputParams(UserEntity user, String subject, String content) {
@@ -51,9 +48,9 @@ public class PostsModel {
 				subject==null || content==null || subject.trim().length()==0 || content.trim().length()==0;
 	}
 	
-	public AddPostResult addPost(UserEntity user, String subject, String content, String threadId) {
-		PostEntity p = mPostFactory.createPost(user, subject, content, threadId);
-		if(checkInputParams(user, subject, content) || p==null) {
+	public AddPostResult addPost(UserEntity user, PostEntityAdapter adapter) {
+		PostEntity p = adapter.createPost(null, user);
+		if(p==null || checkInputParams(user, p.getSubject(), p.getContent())) {
 			Log.info(this.getClass(), "Bad user input");
 			return AddPostResult.BAD_USER_INPUT;
 		}

@@ -6,18 +6,34 @@ import java.util.Date;
 
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.UserEntity;
+import org.denevell.natch.serv.posts.resources.AddPostResourceInput;
 import org.denevell.natch.utils.Log;
 
-public class PostFactory {
+public class AddPostResourcePostEntityAdapter implements PostEntityAdapter {
+	
+	private PostEntity mPost;
 
-	public PostEntity createPost(UserEntity user, String subject, String content, String threadId) {
-		long time = new Date().getTime();
-		threadId = getThreadId(subject, threadId, time);
-		return new PostEntity(user, time, time, subject, content, threadId); 
+	public void create(AddPostResourceInput input) {
+		mPost = new PostEntity();
+		mPost.setContent(input.getContent());
+		mPost.setSubject(input.getSubject());
+		long created = new Date().getTime();
+		String thread = getThreadId(input.getSubject(), input.getThread(), created);
+		mPost.setThreadId(thread);
+		mPost.setTags(input.getTags());
 	}
 
+	@Override
+	public PostEntity createPost(PostEntity pe, UserEntity userEntity) {
+		mPost.setUser(userEntity);
+		long created = new Date().getTime();
+		mPost.setCreated(created);
+		mPost.setModified(created);
+		return mPost;
+	}
+	
 	private String getThreadId(String subject, String threadId, long time) {
-		if(threadId==null) {
+		if(threadId==null || threadId.trim().length()==0) {
 			try {
 				MessageDigest md5Algor = MessageDigest.getInstance("MD5");
 				StringBuffer sb = new StringBuffer();
@@ -34,5 +50,6 @@ public class PostFactory {
 			threadId = threadId+String.valueOf(time);
 		}
 		return threadId;
-	}	
+	}		
+
 }

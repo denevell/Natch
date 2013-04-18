@@ -1,5 +1,7 @@
 package org.denevell.natch.db.entities;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -40,6 +43,8 @@ public class PostEntity {
 	private String subject;
 	private String content;
 	private String threadId;
+	@XmlElement(required=false)
+	private List<String> tags;
 	@OneToOne
 	private UserEntity user;
 	
@@ -111,5 +116,13 @@ public class PostEntity {
 
 	public void setUser(UserEntity user) {
 		this.user = user;
+	}
+
+	public List<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
 	}
 }

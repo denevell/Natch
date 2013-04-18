@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.UserEntity;
+import org.denevell.natch.serv.posts.AddPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.EditPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.PostsModel.EditPostResult;
@@ -31,6 +32,7 @@ public class EditPostResourceTests {
 	private UserEntity user;
 	private HttpServletRequest request;
 	private EditPostResourcePostEntityAdapter postEntityAdapter;
+	private AddPostResourcePostEntityAdapter addPostAdapter;
 
 	@Before
 	public void setup() {
@@ -40,7 +42,8 @@ public class EditPostResourceTests {
 		when(request.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER)).thenReturn(user);
 		HttpServletResponse response = mock(HttpServletResponse.class);
 		postEntityAdapter = mock(EditPostResourcePostEntityAdapter.class);
-		resource = new PostsREST(postsModel, request, response, postEntityAdapter);
+		addPostAdapter = mock(AddPostResourcePostEntityAdapter.class);
+		resource = new PostsREST(postsModel, request, response, postEntityAdapter, addPostAdapter);
 	}
 	
 	@Test

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.UserEntity;
+import org.denevell.natch.serv.posts.AddPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.EditPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.PostsModel.AddPostResult;
@@ -30,6 +31,7 @@ public class AddPostResourceTests {
 	private PostsREST resource;
 	private UserEntity user;
 	private HttpServletRequest request;
+	private AddPostResourcePostEntityAdapter addPostAdapter;
 
 	@Before
 	public void setup() {
@@ -38,15 +40,16 @@ public class AddPostResourceTests {
 		request = mock(HttpServletRequest.class);
 		when(request.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER)).thenReturn(user);
 		HttpServletResponse response = mock(HttpServletResponse.class);
-		EditPostResourcePostEntityAdapter postAdapter = mock(EditPostResourcePostEntityAdapter.class);
-		resource = new PostsREST(postsModel, request, response, postAdapter);
+		EditPostResourcePostEntityAdapter editPostAdapter = mock(EditPostResourcePostEntityAdapter.class);
+		addPostAdapter = mock(AddPostResourcePostEntityAdapter.class);
+		resource = new PostsREST(postsModel, request, response, editPostAdapter, addPostAdapter);
 	}
 	
 	@Test
 	public void shouldAddPost() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		when(postsModel.addPost(user, "sub", "cont", null)).thenReturn(AddPostResult.ADDED);
+		when(postsModel.addPost(user, addPostAdapter)).thenReturn(AddPostResult.ADDED);
 		
 		// Act
 		AddPostResourceReturnData result = resource.add(input);
@@ -60,7 +63,7 @@ public class AddPostResourceTests {
 	public void shouldntRegisterWhenModelSaysBadInput() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		when(postsModel.addPost(user, "sub", "cont", null)).thenReturn(AddPostResult.BAD_USER_INPUT);
+		when(postsModel.addPost(user, addPostAdapter)).thenReturn(AddPostResult.BAD_USER_INPUT);
 		
 		// Act
 		AddPostResourceReturnData result = resource.add(input);
@@ -74,7 +77,7 @@ public class AddPostResourceTests {
 	public void shouldntAddWhenDodgyUserObjectInRequest() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		when(postsModel.addPost(user, "sub", "cont", null)).thenReturn(AddPostResult.ADDED);
+		when(postsModel.addPost(user, addPostAdapter)).thenReturn(AddPostResult.ADDED);
 		when(request.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER)).thenThrow(new RuntimeException());
 		
 		// Act
@@ -101,7 +104,7 @@ public class AddPostResourceTests {
 	public void shouldntRegisterWithUnknownError() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		when(postsModel.addPost(user, "sub", "cont", null)).thenReturn(AddPostResult.UNKNOWN_ERROR);
+		when(postsModel.addPost(user, addPostAdapter)).thenReturn(AddPostResult.UNKNOWN_ERROR);
 		
 		// Act
 		AddPostResourceReturnData result = resource.add(input);

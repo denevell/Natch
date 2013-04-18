@@ -49,21 +49,24 @@ public class PostsREST {
 	private ResourceBundle rb = Strings.getMainResourceBundle();
 	private PostsModel mModel;
 	private EditPostResourcePostEntityAdapter mEditPostAdapter;
+	private AddPostResourcePostEntityAdapter mAddPostAdapter;
 	
 	public PostsREST() {
 		mModel = new PostsModel();
 		mEditPostAdapter = new EditPostResourcePostEntityAdapter();
+		mAddPostAdapter = new AddPostResourcePostEntityAdapter();
 	}
 	
 	/**
 	 * For DI testing.
 	 * @param editPostAdapter 
 	 */
-	public PostsREST(PostsModel postModel, HttpServletRequest request, HttpServletResponse response, EditPostResourcePostEntityAdapter editPostAdapter) {
+	public PostsREST(PostsModel postModel, HttpServletRequest request, HttpServletResponse response, EditPostResourcePostEntityAdapter editPostAdapter, AddPostResourcePostEntityAdapter addPostAdapter) {
 		mModel = postModel;
 		mRequest = request;
 		mResponse = response;
 		mEditPostAdapter = editPostAdapter;
+		mAddPostAdapter = addPostAdapter;
 	}
 	
 	@PUT
@@ -85,12 +88,8 @@ public class PostsREST {
 			regReturnData.setError(rb.getString(Strings.unknown_error)); // Unknown as this shouldn't happen
 			return regReturnData;
 		}
-		// End of error checking
-		AddPostResult okay = mModel.addPost(
-				userEntity,
-				input.getSubject(), 
-				input.getContent(), 
-				input.getThread());
+		mAddPostAdapter.create(input);
+		AddPostResult okay = mModel.addPost(userEntity, mAddPostAdapter);
 		generateAddPostReturnResource(regReturnData, okay);
 		return regReturnData;
 	}

@@ -16,7 +16,8 @@ public class ListPostsResourceAdapter extends ListPostsResource {
 					p.getCreated(), 
 					p.getModified(), 
 					p.getSubject(), 
-					p.getContent());
+					p.getContent(),
+					p.getTags());
 			postResource.setId(p.getId());
 			postResource.setThreadId(p.getThreadId());
 			postsResources.add(postResource);

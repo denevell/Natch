@@ -13,7 +13,6 @@ import javax.persistence.EntityTransaction;
 
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.serv.posts.PostFactory;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.PostsModel.DeletePostResult;
 import org.junit.Before;
@@ -25,16 +24,14 @@ public class DeletePostModelTests {
 	private EntityTransaction trans;
 	private EntityManagerFactory factory;
 	private EntityManager entityManager;
-	private PostFactory postFactory;
 
 	@Before
 	public void setup() {
 		entityManager = mock(EntityManager.class);
 		factory = mock(EntityManagerFactory.class);
 		trans = mock(EntityTransaction.class);
-		postFactory = mock(PostFactory.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
-		model = spy(new PostsModel(factory, entityManager, postFactory));
+		model = spy(new PostsModel(factory, entityManager));
 	}
 	
 	@Test

@@ -1,5 +1,7 @@
 package org.denevell.natch.serv.posts.resources;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -12,16 +14,18 @@ public class PostResource {
 	private String threadId;
 	private long creation;
 	private long modification;
+	private List<String> tags;
 	
 	public PostResource() {
 	}
 	
-	public PostResource(String username, long created, long modified, String subject, String content) {
+	public PostResource(String username, long created, long modified, String subject, String content, List<String> tags) {
 		this.username = username;
 		this.creation = created;
 		this.modification = modified;
 		this.subject = subject;
 		this.content = content;
+		this.tags = tags;
 	}
 	
 	public long getId() {
@@ -65,5 +69,11 @@ public class PostResource {
 	}
 	public void setThreadId(String threadId) {
 		this.threadId = threadId;
+	}
+	public List<String> getTags() {
+		return tags;
+	}
+	public void setTags(List<String> tags) {
+		this.tags = tags;
 	}
 }

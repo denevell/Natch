@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
 import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.serv.posts.resources.AddPostResourceInput;
@@ -15,6 +17,8 @@ import org.denevell.natch.serv.users.resources.RegisterResourceInput;
 import org.denevell.natch.serv.users.resources.RegisterResourceReturnData;
 import org.junit.Before;
 import org.junit.Test;
+
+import scala.actors.threadpool.Arrays;
 
 import com.sun.jersey.api.client.WebResource;
 
@@ -44,10 +48,13 @@ public class ListPostsFunctional {
 	    		.post(LoginResourceReturnData.class, loginInput);		
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void shouldListByCreationDate() {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
+		List asList = Arrays.asList(new String[] {"tagy", "tagy1"});
+		input.setTags(asList);
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1");
 		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2");
 		service
@@ -82,6 +89,7 @@ public class ListPostsFunctional {
 		assertEquals("cont1", returnData.getPosts().get(1).getContent());
 		assertEquals("sub", returnData.getPosts().get(2).getSubject());
 		assertEquals("cont", returnData.getPosts().get(2).getContent());
+		assertEquals("tagy1", returnData.getPosts().get(2).getTags().get(1));
 	}
 	
 	
