@@ -1,6 +1,7 @@
 package org.denevell.natch.serv.posts;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -12,6 +13,7 @@ import javax.persistence.TypedQuery;
 
 import org.denevell.natch.db.entities.PersistenceInfo;
 import org.denevell.natch.db.entities.PostEntity;
+import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.utils.EntityUtils;
 import org.denevell.natch.utils.Log;
@@ -55,10 +57,11 @@ public class PostsModel {
 			return AddPostResult.BAD_USER_INPUT;
 		}
 		EntityTransaction trans = null;
+		ThreadEntity thread = new ThreadEntity(p, Arrays.asList(p));
 		try {
 			trans = mEntityManager.getTransaction();
 			trans.begin();
-			mEntityManager.persist(p);
+			mEntityManager.persist(thread);
 			trans.commit();
 			return AddPostResult.ADDED;
 		} catch(Exception e) {
