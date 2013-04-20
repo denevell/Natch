@@ -58,6 +58,7 @@ The start of a REST interface for a forum.
 * threaded posts: fix unit tests for adding a post re the thread factory
 * threaded posts: move tags to the thread object and not individual posts?
 * threaded posts: moved creation date to thread?
+* threaded posts: listing threads refactor
 
 ### Backlog 
 
