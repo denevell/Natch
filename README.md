@@ -52,8 +52,16 @@ The start of a REST interface for a forum.
 * list posts: should paginate list single thread posts by x number 
 * list posts: should paginate list threads by x number 
 
+### 0.3 Tech tasks
+
+* threaded posts: factory object for creating the thread
+* threaded posts: fix unit tests for adding a post re the thread factory
+* threaded posts: move tags to the thread object and not individual posts?
+* threaded posts: moved creation date to thread?
+
 ### Backlog 
 
+* Tech task ###: Start using DI
 * Tech task ###: Move over to openjpa or fix the strange language problem with eclipselink
 * Tech task ###: We're not closing the entity managers when we return with bad user input in models - memory problem.
 * Tech task ###: Re-enable db locking 
