@@ -16,6 +16,7 @@ import javax.persistence.TypedQuery;
 
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.serv.posts.PostsModel;
+import org.denevell.natch.serv.posts.ThreadFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,6 +26,7 @@ public class ListPostByIdModelTests {
 	private EntityTransaction trans;
 	private EntityManagerFactory factory;
 	private EntityManager entityManager;
+	private ThreadFactory threadFactory;
 
 	@Before
 	public void setup() {
@@ -32,7 +34,8 @@ public class ListPostByIdModelTests {
 		factory = mock(EntityManagerFactory.class);
 		trans = mock(EntityTransaction.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
-		model = spy(new PostsModel(factory, entityManager));
+		threadFactory = mock(ThreadFactory.class);
+		model = spy(new PostsModel(factory, entityManager, threadFactory));
 	}
 	
 	@Test

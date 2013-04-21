@@ -15,6 +15,7 @@ import javax.persistence.TypedQuery;
 
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.serv.posts.PostsModel;
+import org.denevell.natch.serv.posts.ThreadFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,6 +26,7 @@ public class ListPostsModelTests {
 	private EntityManagerFactory factory;
 	private EntityManager entityManager;
 	private TypedQuery<PostEntity> queryResults;
+	private ThreadFactory threadFactory;
 
 	@SuppressWarnings("unchecked")
 	@Before
@@ -34,7 +36,8 @@ public class ListPostsModelTests {
 		trans = mock(EntityTransaction.class);
 		queryResults = mock(TypedQuery.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
-		model = new PostsModel(factory, entityManager);
+		threadFactory = mock(ThreadFactory.class);
+		model = new PostsModel(factory, entityManager, threadFactory);
 	}
 	
 	@Test

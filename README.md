@@ -54,9 +54,10 @@ The start of a REST interface for a forum.
 
 ### 0.3 Tech tasks
 
-* threaded posts: factory object for creating the thread
-* threaded posts: fix unit tests for adding a post re the thread factory
+* ~~threaded posts: factory object for creating the thread~~
+* ~~threaded posts: fix unit tests for adding a post re the thread factory~~
 * threaded posts: move tags to the thread object and not individual posts?
+* threaded posts: move subject to thread object?
 * threaded posts: moved creation date to thread?
 * threaded posts: listing threads refactor
 

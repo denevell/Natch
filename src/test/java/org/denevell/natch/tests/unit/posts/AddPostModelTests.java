@@ -11,10 +11,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
 import org.denevell.natch.db.entities.PostEntity;
+import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.PostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.PostsModel.AddPostResult;
+import org.denevell.natch.serv.posts.ThreadFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,6 +29,8 @@ public class AddPostModelTests {
 	private PostEntity genericPost;
 	private UserEntity userEntity;
 	private PostEntityAdapter adapter;
+	private ThreadFactory threadFactory;
+	private ThreadEntity genericThread;
 
 	@Before
 	public void setup() {
@@ -35,8 +39,10 @@ public class AddPostModelTests {
 		trans = mock(EntityTransaction.class);
 		userEntity = new UserEntity("user", "pass");
 		genericPost = new PostEntity(userEntity, 0, 0, "", "", "");
+		genericThread = mock(ThreadEntity.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
-		model = new PostsModel(factory, entityManager);
+		threadFactory = mock(ThreadFactory.class);
+		model = new PostsModel(factory, entityManager, threadFactory);
 		adapter = mock(PostEntityAdapter.class);
 	}
 	
@@ -48,13 +54,14 @@ public class AddPostModelTests {
 		genericPost.setContent(content);
 		genericPost.setSubject(subject);
 		when(adapter.createPost(null, userEntity)).thenReturn(genericPost);
+		when(threadFactory.makeThread(genericPost)).thenReturn(genericThread);
 		
 		// Act
 		AddPostResult result = model.addPost(userEntity, adapter);
 		
 		// Assert
 		assertEquals(AddPostResult.ADDED, result);
-		verify(entityManager).persist(genericPost);
+		verify(entityManager).persist(genericThread);
 	}
 	
 	@Test
@@ -66,13 +73,14 @@ public class AddPostModelTests {
 		genericPost.setSubject(subject);
 		genericPost.setThreadId(null);
 		when(adapter.createPost(null, userEntity)).thenReturn(genericPost);
+		when(threadFactory.makeThread(genericPost)).thenReturn(genericThread);
 		
 		// Act
 		AddPostResult result = model.addPost(userEntity, adapter);
 		
 		// Assert
 		assertEquals(AddPostResult.ADDED, result);
-		verify(entityManager).persist(genericPost);
+		verify(entityManager).persist(genericThread);
 	}	
 	
 	@Test
@@ -90,7 +98,7 @@ public class AddPostModelTests {
 		
 		// Assert
 		assertEquals(AddPostResult.UNKNOWN_ERROR, result);
-		verify(entityManager, never()).persist(genericPost);
+		verify(entityManager, never()).persist(genericThread);
 	}
 	
 	@Test
@@ -107,7 +115,7 @@ public class AddPostModelTests {
 		
 		// Assert
 		assertEquals(AddPostResult.BAD_USER_INPUT, result);
-		verify(entityManager, never()).persist(genericPost);
+		verify(entityManager, never()).persist(genericThread);
 	}
 	
 	@Test
@@ -124,7 +132,7 @@ public class AddPostModelTests {
 		
 		// Assert
 		assertEquals(AddPostResult.BAD_USER_INPUT, result);
-		verify(entityManager, never()).persist(genericPost);
+		verify(entityManager, never()).persist(genericThread);
 	}
 	
 	@Test
@@ -139,7 +147,7 @@ public class AddPostModelTests {
 		
 		// Assert
 		assertEquals(AddPostResult.BAD_USER_INPUT, result);
-		verify(entityManager, never()).persist(genericPost);
+		verify(entityManager, never()).persist(genericThread);
 	}
 	
 	@Test
@@ -156,7 +164,7 @@ public class AddPostModelTests {
 		
 		// Assert
 		assertEquals(AddPostResult.BAD_USER_INPUT, result);
-		verify(entityManager, never()).persist(genericPost);
+		verify(entityManager, never()).persist(genericThread);
 	}
 	
 	@Test
@@ -173,7 +181,7 @@ public class AddPostModelTests {
 		
 		// Assert
 		assertEquals(AddPostResult.BAD_USER_INPUT, result);
-		verify(entityManager, never()).persist(genericPost);
+		verify(entityManager, never()).persist(genericThread);
 	}		
 	
 	@Test
@@ -190,7 +198,7 @@ public class AddPostModelTests {
 		
 		// Assert
 		assertEquals(AddPostResult.BAD_USER_INPUT, result);
-		verify(entityManager, never()).persist(genericPost);
+		verify(entityManager, never()).persist(genericThread);
 	}	
 	
 	@Test
@@ -207,7 +215,7 @@ public class AddPostModelTests {
 		
 		// Assert
 		assertEquals(AddPostResult.BAD_USER_INPUT, result);
-		verify(entityManager, never()).persist(genericPost);
+		verify(entityManager, never()).persist(genericThread);
 	}
 	
 	@Test
@@ -225,7 +233,7 @@ public class AddPostModelTests {
 		
 		// Assert
 		assertEquals(AddPostResult.BAD_USER_INPUT, result);
-		verify(entityManager, never()).persist(genericPost);
+		verify(entityManager, never()).persist(genericThread);
 	}	
 	
 	@Test
@@ -242,6 +250,6 @@ public class AddPostModelTests {
 		
 		// Assert
 		assertEquals(AddPostResult.BAD_USER_INPUT, result);
-		verify(entityManager, never()).persist(genericPost);
+		verify(entityManager, never()).persist(genericThread);
 	}		
 }

@@ -31,18 +31,21 @@ public class PostsModel {
 	}
 	private EntityManagerFactory mFactory;
 	private EntityManager mEntityManager;
+	private ThreadFactory mThreadFactory;
 
 	public PostsModel() {
 		mFactory = Persistence.createEntityManagerFactory(PersistenceInfo.EntityManagerFactoryName);
 		mEntityManager = mFactory.createEntityManager();		
+		mThreadFactory = new ThreadFactory();
 	}
 	
 	/**
 	 * For testing / di
 	 */
-	public PostsModel(EntityManagerFactory factory, EntityManager entityManager) {
+	public PostsModel(EntityManagerFactory factory, EntityManager entityManager, ThreadFactory threadFactory) {
 		mFactory = factory;
 		mEntityManager = entityManager;
+		mThreadFactory = threadFactory;
 	}
 	
 	private boolean checkInputParams(UserEntity user, String subject, String content) {
@@ -57,7 +60,7 @@ public class PostsModel {
 			return AddPostResult.BAD_USER_INPUT;
 		}
 		EntityTransaction trans = null;
-		ThreadEntity thread = new ThreadEntity(p, Arrays.asList(p));
+		ThreadEntity thread = mThreadFactory.makeThread(p);
 		try {
 			trans = mEntityManager.getTransaction();
 			trans.begin();

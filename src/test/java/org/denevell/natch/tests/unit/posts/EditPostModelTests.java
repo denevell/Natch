@@ -16,6 +16,7 @@ import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.PostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.PostsModel.EditPostResult;
+import org.denevell.natch.serv.posts.ThreadFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,6 +27,7 @@ public class EditPostModelTests {
 	private EntityManagerFactory factory;
 	private EntityManager entityManager;
 	private PostEntityAdapter postEntityAdapter;
+	private ThreadFactory threadFactory;
 
 	@Before
 	public void setup() {
@@ -34,7 +36,8 @@ public class EditPostModelTests {
 		trans = mock(EntityTransaction.class);
 		postEntityAdapter = mock(PostEntityAdapter.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
-		model = spy(new PostsModel(factory, entityManager));
+		threadFactory = mock(ThreadFactory.class);
+		model = spy(new PostsModel(factory, entityManager, threadFactory));
 	}
 	
 	@Test
