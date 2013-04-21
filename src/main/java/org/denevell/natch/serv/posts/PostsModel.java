@@ -61,6 +61,8 @@ public class PostsModel {
 		ThreadEntity thread = findThreadById(p.getThreadId());
 		if(thread==null) {
 			thread = mThreadFactory.makeThread(p);
+		} else {
+			thread = mThreadFactory.makeThread(thread, p);
 		}
 		try {
 			trans = mEntityManager.getTransaction();

@@ -47,7 +47,7 @@ The start of a REST interface for a forum.
 * ~~list posts: should see tags on a post~~
 * edit post: edit tag
 * threaded posts: should list threads by tag (in last modified order)
-* threaded posts: should list threads by date of their last entry
+* ~~threaded posts: should list threads by date of their last entry~~
 * list posts: should paginate list all posts by x number 
 * list posts: should paginate list single thread posts by x number 
 * list posts: should paginate list threads by x number 
@@ -63,10 +63,11 @@ The start of a REST interface for a forum.
 
 ### Backlog 
 
+* Tech task ###: Add memory dump line to tomcat config.
 * Tech task ###: Start using DI
 * Tech task ###: Move over to openjpa or fix the strange language problem with eclipselink
 * Tech task ###: We're not closing the entity managers when we return with bad user input in models - memory problem.
-* Tech task ###: Re-enable db locking 
+* Tech task ##: Re-enable db locking 
 * Tech task ##: Entity bean null / blank problem?
 * Tech task #: Decide whether to use entity query classes - if so test them.
 * Test task #: Tests for post resources adapters

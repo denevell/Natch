@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -15,7 +13,7 @@ import javax.persistence.OneToOne;
 @NamedQueries(
 	{
 	@NamedQuery(name=ThreadEntity.NAMED_QUERY_LIST_THREADS,query=
-		"select p from ThreadEntity p order by p.latestPost.created desc")
+		"select p from ThreadEntity p order by p.latestPost.created asc")
 	,
 	@NamedQuery(name=ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID,query=
 		"select p from ThreadEntity p where p.id = :" + ThreadEntity.NAMED_QUERY_PARAM_ID)
@@ -23,8 +21,8 @@ import javax.persistence.OneToOne;
 )
 @Entity
 public class ThreadEntity {
-	@Id @GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
+	@Id 
+	private String id;
 	@OneToOne
 	private PostEntity latestPost;
 	@OneToMany(cascade=CascadeType.PERSIST) 
@@ -41,11 +39,11 @@ public class ThreadEntity {
 		this.posts = posts;
 	}
 	
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -61,7 +59,7 @@ public class ThreadEntity {
 		return posts;
 	}
 
-	public void setTags(List<PostEntity> posts) {
+	public void setPosts(List<PostEntity> posts) {
 		this.posts = posts;
 	}
 }

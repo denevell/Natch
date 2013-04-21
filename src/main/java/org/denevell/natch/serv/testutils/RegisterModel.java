@@ -26,6 +26,8 @@ public class RegisterModel {
 		q.executeUpdate();
 		q = mEntityManager.createQuery("delete from PostEntity");
 		q.executeUpdate();
+		q = mEntityManager.createQuery("delete from ThreadEntity");
+		q.executeUpdate();
 		trans.commit();
 		EntityUtils.closeEntityConnection(mFactory, mEntityManager);
 	}
