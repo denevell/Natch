@@ -58,7 +58,10 @@ public class PostsModel {
 			return AddPostResult.BAD_USER_INPUT;
 		}
 		EntityTransaction trans = null;
-		ThreadEntity thread = mThreadFactory.makeThread(p);
+		ThreadEntity thread = findThreadById(p.getThreadId());
+		if(thread==null) {
+			thread = mThreadFactory.makeThread(p);
+		}
 		try {
 			trans = mEntityManager.getTransaction();
 			trans.begin();
@@ -112,10 +115,24 @@ public class PostsModel {
 			if(resultList==null || resultList.size()==0) return null;
 			else return resultList.get(0);
 		} catch(Exception e) {
-			Log.info(getClass(), "Error finding by id: " + e.toString());
+			Log.info(getClass(), "Error finding post by id: " + e.toString());
 			return null;
 		}
 	}
+	
+	public ThreadEntity findThreadById(String id) {
+		try {
+			TypedQuery<ThreadEntity> q = mEntityManager
+					.createNamedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID, ThreadEntity.class);
+			q.setParameter(ThreadEntity.NAMED_QUERY_PARAM_ID, id);
+			List<ThreadEntity> resultList = q.getResultList();		
+			if(resultList==null || resultList.size()==0) return null;
+			else return resultList.get(0);
+		} catch(Exception e) {
+			Log.info(getClass(), "Error finding thread by id: " + e.toString());
+			return null;
+		}
+	}	
 
 	public DeletePostResult delete(UserEntity userEntity, long postEntityId) {
 		if(userEntity==null) {
