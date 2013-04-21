@@ -21,6 +21,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.PostEntity;
+import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.PostsModel.AddPostResult;
 import org.denevell.natch.serv.posts.PostsModel.DeletePostResult;
@@ -158,19 +159,19 @@ public class PostsREST {
 	@Produces(MediaType.APPLICATION_JSON)	
 	@ApiOperation(value = "Lists threads, mostly recently created first", responseClass="org.denevell.natch.serv.posts.resources.ListPostsResource")
 	public ListPostsResource listThreads() throws IOException {
-		List<PostEntity> posts = null;
+		List<ThreadEntity> threads = null;
 		try {
-			posts = mModel.listThreads();
+			threads = mModel.listThreads();
 		} catch(Exception e) {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
 		}
-		if(posts==null) {
+		if(threads==null) {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
 		} else {
-			ListPostsResource adaptedPosts = new ListPostsResourceAdapter(posts);
+			ListPostsResource adaptedPosts = new ListThreadsResourceAdapter(threads);
 			return adaptedPosts;
 		}
 	}	

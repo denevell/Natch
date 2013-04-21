@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.db.entities.PostEntity;
+import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.AddPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.EditPostResourcePostEntityAdapter;
@@ -157,15 +158,17 @@ public class ListPostsResourceTests {
 		assertEquals("c2", result.getPosts().get(1).getContent());
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldListThreads() throws IOException {
 		// Arrange
-		List<PostEntity> posts = new ArrayList<PostEntity>();
 		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", "t");
 		postEntity.setId(400);
-		posts.add(postEntity);
-		posts.add(new PostEntity(new UserEntity("u2", ""), 2, 2, "s2", "c2", "t"));
-		when(postsModel.listThreads()).thenReturn(posts);
+		PostEntity postEntity1 = new PostEntity(new UserEntity("u2", ""), 2, 2, "s2", "c2", "t");
+		List<ThreadEntity> threads = new ArrayList<ThreadEntity>();
+		threads.add(new ThreadEntity(postEntity, Arrays.asList(new PostEntity[] { postEntity } )));
+		threads.add(new ThreadEntity(postEntity1, Arrays.asList(new PostEntity[] { postEntity1 } )));
+		when(postsModel.listThreads()).thenReturn(threads);
 		
 		// Act
 		ListPostsResource result = resource.listThreads();

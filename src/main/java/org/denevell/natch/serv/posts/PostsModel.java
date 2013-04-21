@@ -1,14 +1,12 @@
 package org.denevell.natch.serv.posts;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.denevell.natch.db.entities.PersistenceInfo;
@@ -32,7 +30,7 @@ public class PostsModel {
 	private EntityManagerFactory mFactory;
 	private EntityManager mEntityManager;
 	private ThreadFactory mThreadFactory;
-
+	
 	public PostsModel() {
 		mFactory = Persistence.createEntityManagerFactory(PersistenceInfo.EntityManagerFactoryName);
 		mEntityManager = mFactory.createEntityManager();		
@@ -96,13 +94,12 @@ public class PostsModel {
 	 * Unchecked generic conversion may throw exception if error.
 	 * @return
 	 */
-	public List<PostEntity> listThreads() {
-		Query q = mEntityManager.
-				createNativeQuery(PostEntity.NATIVE_QUERY_FIND_THREADS,
-						PostEntity.class);		
-		@SuppressWarnings("unchecked")
-		List<PostEntity> resultList = q.getResultList();
-		if(resultList==null) return new ArrayList<PostEntity>();
+	public List<ThreadEntity> listThreads() {
+		TypedQuery<ThreadEntity> q = mEntityManager.
+				createNamedQuery(ThreadEntity.NAMED_QUERY_LIST_THREADS,
+						ThreadEntity.class);		
+		List<ThreadEntity> resultList = q.getResultList();
+		if(resultList==null) return new ArrayList<ThreadEntity>();
 		else return resultList;
 	}	
 	

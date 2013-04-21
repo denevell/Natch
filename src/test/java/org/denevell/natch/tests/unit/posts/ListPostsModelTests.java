@@ -14,6 +14,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
 import org.denevell.natch.db.entities.PostEntity;
+import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.ThreadFactory;
 import org.junit.Before;
@@ -26,6 +27,7 @@ public class ListPostsModelTests {
 	private EntityManagerFactory factory;
 	private EntityManager entityManager;
 	private TypedQuery<PostEntity> queryResults;
+	private TypedQuery<ThreadEntity> threadQueryResults;
 	private ThreadFactory threadFactory;
 
 	@SuppressWarnings("unchecked")
@@ -35,6 +37,7 @@ public class ListPostsModelTests {
 		factory = mock(EntityManagerFactory.class);
 		trans = mock(EntityTransaction.class);
 		queryResults = mock(TypedQuery.class);
+		threadQueryResults = mock(TypedQuery.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
 		threadFactory = mock(ThreadFactory.class);
 		model = new PostsModel(factory, entityManager, threadFactory);
@@ -128,14 +131,14 @@ public class ListPostsModelTests {
 	@Test
 	public void shouldReturnListOfPostsByGroupedByThread() {
 		// Arrange
-		when(entityManager.createNativeQuery(PostEntity.NATIVE_QUERY_FIND_THREADS, PostEntity.class)).thenReturn(queryResults);
-		List<PostEntity> posts = new ArrayList<PostEntity>();
-		posts.add(new PostEntity(null, 2, 2, "s1", "c1", "t"));
-		posts.add(new PostEntity(null, 3, 3, "s2", "c2", "c"));
-		when(queryResults.getResultList()).thenReturn(posts);
+		when(entityManager.createNamedQuery(ThreadEntity.NAMED_QUERY_LIST_THREADS, ThreadEntity.class)).thenReturn(threadQueryResults);
+		List<ThreadEntity> threads = new ArrayList<ThreadEntity>();
+		threads.add(new ThreadEntity());
+		threads.add(new ThreadEntity());
+		when(threadQueryResults.getResultList()).thenReturn(threads);
 		
 		// Act
-		List<PostEntity> result = model.listThreads();
+		List<ThreadEntity> result = model.listThreads();
 		
 		// Assert
 		assertEquals(2, result.size());
