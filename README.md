@@ -90,7 +90,8 @@ The start of a REST interface for a forum.
  * Permissions for actions
  * Category/tags only available to some users
 * Posts
- * What happens when main post in thread is deleted but the children remain?
+ * Test when a thread has no children
+ * Thread rest list should list latest post as well
  * Soft delete post
  * Search
 * Site comms

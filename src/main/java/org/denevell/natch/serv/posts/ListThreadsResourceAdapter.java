@@ -12,14 +12,15 @@ public class ListThreadsResourceAdapter extends ListPostsResource {
 	public ListThreadsResourceAdapter(List<ThreadEntity> threads) {
 		List<PostResource> postsResources = new ArrayList<PostResource>();
 		for (ThreadEntity p: threads) {
-			PostResource postResource = new PostResource(p.getLatestPost().getUser().getUsername(), 
-					p.getLatestPost().getCreated(), 
-					p.getLatestPost().getModified(), 
-					p.getLatestPost().getSubject(), 
-					p.getLatestPost().getContent(),
-					p.getLatestPost().getTags());
-			postResource.setId(p.getLatestPost().getId());
-			postResource.setThreadId(p.getLatestPost().getThreadId());
+			PostResource postResource = new PostResource(
+					p.getRootPost().getUser().getUsername(), 
+					p.getRootPost().getCreated(), 
+					p.getRootPost().getModified(), 
+					p.getRootPost().getSubject(), 
+					p.getRootPost().getContent(),
+					p.getRootPost().getTags());
+			postResource.setId(p.getRootPost().getId());
+			postResource.setThreadId(p.getRootPost().getThreadId());
 			postsResources.add(postResource);
 		}
 		setPosts(postsResources);
