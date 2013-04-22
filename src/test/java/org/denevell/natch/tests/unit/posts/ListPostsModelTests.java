@@ -144,4 +144,46 @@ public class ListPostsModelTests {
 		assertEquals(2, result.size());
 	}		
 	
+	@Test
+	public void shouldntReturnListOfPostsByGroupedByThread() {
+		// Arrange
+		when(entityManager.createNamedQuery(ThreadEntity.NAMED_QUERY_LIST_THREADS, ThreadEntity.class)).thenReturn(threadQueryResults);
+		when(threadQueryResults.getResultList()).thenReturn(null);
+		
+		// Act
+		List<ThreadEntity> result = model.listThreads();
+		
+		// Assert
+		assertEquals(0, result.size());
+	}		
+	
+	@Test
+	public void shouldReturnListOfThreadsByTag() {
+		// Arrange
+		when(entityManager.createNamedQuery(ThreadEntity.NAMED_QUERY_LIST_THREADS_BY_TAG, ThreadEntity.class)).thenReturn(threadQueryResults);
+		List<ThreadEntity> threads = new ArrayList<ThreadEntity>();
+		threads.add(new ThreadEntity());
+		threads.add(new ThreadEntity());
+		when(threadQueryResults.getResultList()).thenReturn(threads);
+		
+		// Act
+		List<ThreadEntity> result = model.listThreadsByTag("tagy");
+		
+		// Assert
+		assertEquals(2, result.size());
+	}		
+	
+	@Test
+	public void shouldntReturnListOfThreadsByTag() {
+		// Arrange
+		when(entityManager.createNamedQuery(ThreadEntity.NAMED_QUERY_LIST_THREADS_BY_TAG, ThreadEntity.class)).thenReturn(threadQueryResults);
+		when(threadQueryResults.getResultList()).thenReturn(null);
+		
+		// Act
+		List<ThreadEntity> result = model.listThreadsByTag("tagy");
+		
+		// Assert
+		assertEquals(0, result.size());
+	}		
+	
 }

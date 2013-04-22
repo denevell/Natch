@@ -15,6 +15,9 @@ import javax.persistence.OneToOne;
 	@NamedQuery(name=ThreadEntity.NAMED_QUERY_LIST_THREADS,query=
 		"select p from ThreadEntity p order by p.latestPost.created desc")
 	,
+	@NamedQuery(name=ThreadEntity.NAMED_QUERY_LIST_THREADS_BY_TAG,query=
+		"select p from ThreadEntity p where :" + ThreadEntity.NAMED_QUERY_PARAM_TAG +  " member of p.rootPost.tags order by p.latestPost.created desc")
+	,
 	@NamedQuery(name=ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID,query=
 		"select p from ThreadEntity p where p.id = :" + ThreadEntity.NAMED_QUERY_PARAM_ID)
 	}
@@ -29,8 +32,10 @@ public class ThreadEntity {
 	private List<PostEntity> posts;
 	private PostEntity rootPost;
 	public static final String NAMED_QUERY_LIST_THREADS = "findThreads";
+	public static final String NAMED_QUERY_LIST_THREADS_BY_TAG = "findThreadByTag";
 	public static final String NAMED_QUERY_FIND_THREAD_BY_ID = "findThreadById";
 	public static final String NAMED_QUERY_PARAM_ID = "id";
+	public static final String NAMED_QUERY_PARAM_TAG = "tag";
 	
 	public ThreadEntity() {
 	}

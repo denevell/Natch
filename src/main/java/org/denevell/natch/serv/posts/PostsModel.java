@@ -95,14 +95,20 @@ public class PostsModel {
 		else return resultList;
 	}
 	
-	/**
-	 * Unchecked generic conversion may throw exception if error.
-	 * @return
-	 */
 	public List<ThreadEntity> listThreads() {
 		TypedQuery<ThreadEntity> q = mEntityManager.
 				createNamedQuery(ThreadEntity.NAMED_QUERY_LIST_THREADS,
 						ThreadEntity.class);		
+		List<ThreadEntity> resultList = q.getResultList();
+		if(resultList==null) return new ArrayList<ThreadEntity>();
+		else return resultList;
+	}	
+	
+	public List<ThreadEntity> listThreadsByTag(String tag) {
+		TypedQuery<ThreadEntity> q = mEntityManager.
+				createNamedQuery(ThreadEntity.NAMED_QUERY_LIST_THREADS_BY_TAG,
+						ThreadEntity.class);		
+		q.setParameter(ThreadEntity.NAMED_QUERY_PARAM_TAG, tag);
 		List<ThreadEntity> resultList = q.getResultList();
 		if(resultList==null) return new ArrayList<ThreadEntity>();
 		else return resultList;
@@ -210,5 +216,6 @@ public class PostsModel {
 			EntityUtils.closeEntityConnection(mFactory, mEntityManager);
 		}
 	}
+
 
 }
