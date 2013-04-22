@@ -2,6 +2,7 @@ package org.denevell.natch.db.entities;
 
 import java.util.List;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -40,6 +41,7 @@ public class PostEntity {
 	private String content;
 	private String threadId;
 	@XmlElement(required=false)
+	@ElementCollection
 	private List<String> tags;
 	@OneToOne
 	private UserEntity user;

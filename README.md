@@ -60,6 +60,7 @@ The start of a REST interface for a forum.
 * ~~threaded posts: factory object for creating the thread~~
 * ~~threaded posts: fix unit tests for adding a post re the thread factory~~
 * ~~threaded posts: listing threads refactor~~
+* misc: separate out thread and post code and tests
 
 ### Backlog 
 

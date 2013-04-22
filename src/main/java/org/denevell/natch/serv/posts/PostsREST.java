@@ -175,6 +175,28 @@ public class PostsREST {
 			return adaptedPosts;
 		}
 	}	
+	
+	@GET
+	@Path("/threads/{tag}")
+	@Produces(MediaType.APPLICATION_JSON)	
+	@ApiOperation(value = "Lists threads by tag, mostly recently created first", responseClass="org.denevell.natch.serv.posts.resources.ListPostsResource")
+	public ListPostsResource listThreadsByTag(@ApiParam(name="tag") @PathParam("tag")  String tag) throws IOException {
+		List<ThreadEntity> threads = null;
+		try {
+			threads = mModel.listThreadsByTag(tag);
+		} catch(Exception e) {
+			Log.info(getClass(), "Couldn't list posts: " + e.toString());
+			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
+			return null;
+		}
+		if(threads==null) {
+			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
+			return null;
+		} else {
+			ListPostsResource adaptedPosts = new ListThreadsResourceAdapter(threads);
+			return adaptedPosts;
+		}		
+	}	
 
 	@DELETE
 	@Path("/del/{q}") // Explicit for the servlet filter

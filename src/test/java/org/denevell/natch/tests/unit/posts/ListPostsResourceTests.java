@@ -188,4 +188,34 @@ public class ListPostsResourceTests {
 		assertEquals("c2", result.getPosts().get(1).getContent());
 	}	
 	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void shouldListThreadsByTag() throws IOException {
+		// Arrange
+		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", "t");
+		postEntity.setId(400);
+		PostEntity postEntity1 = new PostEntity(new UserEntity("u2", ""), 2, 2, "s2", "c2", "t");
+		List<ThreadEntity> threads = new ArrayList<ThreadEntity>();
+		threads.add(new ThreadEntity(postEntity, Arrays.asList(new PostEntity[] { postEntity } )));
+		threads.add(new ThreadEntity(postEntity1, Arrays.asList(new PostEntity[] { postEntity1 } )));
+		when(postsModel.listThreadsByTag("tagy")).thenReturn(threads);
+		
+		// Act
+		ListPostsResource result = resource.listThreadsByTag("tagy");
+		
+		// Assert
+		assertEquals(2, result.getPosts().size());
+		assertEquals(400, result.getPosts().get(0).getId());
+		assertEquals(1, result.getPosts().get(0).getCreation());
+		assertEquals(1, result.getPosts().get(0).getModification());
+		assertEquals("u1", result.getPosts().get(0).getUsername());
+		assertEquals("s1", result.getPosts().get(0).getSubject());
+		assertEquals("c1", result.getPosts().get(0).getContent());
+		assertEquals(2, result.getPosts().get(1).getCreation());
+		assertEquals(2, result.getPosts().get(1).getModification());
+		assertEquals("u2", result.getPosts().get(1).getUsername());
+		assertEquals("s2", result.getPosts().get(1).getSubject());
+		assertEquals("c2", result.getPosts().get(1).getContent());
+	}		
+	
 }

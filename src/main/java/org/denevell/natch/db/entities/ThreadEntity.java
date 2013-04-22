@@ -30,6 +30,7 @@ public class ThreadEntity {
 	private PostEntity latestPost;
 	@OneToMany(cascade=CascadeType.PERSIST) 
 	private List<PostEntity> posts;
+	@OneToOne
 	private PostEntity rootPost;
 	public static final String NAMED_QUERY_LIST_THREADS = "findThreads";
 	public static final String NAMED_QUERY_LIST_THREADS_BY_TAG = "findThreadByTag";
