@@ -2,6 +2,7 @@ package org.denevell.natch.tests.functional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ResourceBundle;
@@ -22,6 +23,8 @@ import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
 
+import scala.actors.threadpool.Arrays;
+
 import com.sun.jersey.api.client.WebResource;
 
 public class EditPostsFunctional {
@@ -33,6 +36,7 @@ public class EditPostsFunctional {
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private ListPostsResource originallyListedPosts;
 
+	@SuppressWarnings("unchecked")
 	@Before
 	public void setup() {
 		service = TestUtils.getRESTClient();
@@ -54,6 +58,7 @@ public class EditPostsFunctional {
 	    		.post(LoginResourceReturnData.class, loginInput);			
 		// Add post
 		initalInput = new AddPostResourceInput("sub", "cont");
+		initalInput.setTags(Arrays.asList(new String[] {"tag1", "tag2"}));
 		service
 		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
@@ -71,12 +76,14 @@ public class EditPostsFunctional {
 		assertEquals(initalInput.getSubject(), initialPost.getSubject());
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldEditPost() {
 		// Arrange
 		EditPostResource editedInput = new EditPostResource();
 		editedInput.setContent("sup");
 		editedInput.setSubject("sup two?");
+		editedInput.setTags(Arrays.asList(new String[] {"tagx", "tagy"}));
 		
 		// Act - edit then list
 		EditPostResourceReturnData editReturnData = service
@@ -96,6 +103,8 @@ public class EditPostsFunctional {
 		assertEquals(initialPost.getId(), newListedPosts.getPosts().get(0).getId());
 		assertEquals(initialPost.getCreation(), newListedPosts.getPosts().get(0).getCreation());
 		assertEquals(initialPost.getUsername(), newListedPosts.getPosts().get(0).getUsername());
+		assertEquals("tagx", newListedPosts.getPosts().get(0).getTags().get(1));
+		assertEquals("tagy", newListedPosts.getPosts().get(0).getTags().get(0));
 		assertEquals("sup", newListedPosts.getPosts().get(0).getContent());
 		assertEquals("sup two?", newListedPosts.getPosts().get(0).getSubject());
 		assertTrue(newListedPosts.getPosts().get(0).getModification() > initialPost.getModification());

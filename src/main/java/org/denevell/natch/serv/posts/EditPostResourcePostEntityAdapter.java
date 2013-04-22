@@ -14,6 +14,7 @@ public class EditPostResourcePostEntityAdapter implements PostEntityAdapter {
 		mPe = new PostEntity();
 		mPe.setContent(resource.getContent());
 		mPe.setSubject(resource.getSubject());
+		mPe.setTags(resource.getTags());
 	}
 
 	public PostEntity createPost(PostEntity pe, UserEntity userEntity) {

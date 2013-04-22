@@ -20,8 +20,6 @@ import org.junit.Test;
 
 import scala.actors.threadpool.Arrays;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.WebResource;
 
 public class ListPostsFunctional {
