@@ -46,7 +46,7 @@ The start of a REST interface for a forum.
 * ~~posts: should add a tag to a post~~
 * ~~list posts: should see tags on a post~~
 * edit post: edit tag
-* threaded posts: should list threads by tag (in last modified order)
+* ~~threaded posts: should list threads by tag (in last modified order)~~
 * ~~threaded posts: should list threads by date of their last entry~~
 * list posts: should paginate list all posts by x number 
 * list posts: should paginate list single thread posts by x number 
@@ -61,6 +61,7 @@ The start of a REST interface for a forum.
 * ~~threaded posts: fix unit tests for adding a post re the thread factory~~
 * ~~threaded posts: listing threads refactor~~
 * misc: separate out thread and post code and tests
+* misc: make swagger understand that the 'tags' resource in add post is actually called 'posttags'
 
 ### Backlog 
 

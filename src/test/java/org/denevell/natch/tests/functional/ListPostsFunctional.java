@@ -20,6 +20,8 @@ import org.junit.Test;
 
 import scala.actors.threadpool.Arrays;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.WebResource;
 
 public class ListPostsFunctional {
@@ -229,4 +231,56 @@ public class ListPostsFunctional {
 		assertEquals("cont1", returnData.getPosts().get(1).getContent());		
 		assertEquals("other", returnData.getPosts().get(1).getThreadId());		
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void shouldListThreadsByTag() {
+		// Arrange 
+		AddPostResourceInput input0 = new AddPostResourceInput("x", "x", "x");
+		input0.setTags(Arrays.asList(new String[] {"onetag", "f"})); 
+		// We need two in the list, since our deserialisation doesn't like single item lists.
+		// Works fine on the command line though: curl url ... -d '{"content":"xxx", "posttags": ["t"], "subject":"xxx", "thread":"NEW"}'
+		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
+		input.setTags(Arrays.asList(new String[] {"tag", "onetag"}));
+		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
+		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
+		input2.setTags(Arrays.asList(new String[] {"tag", "onetag"}));
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input0); 
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input); 
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input1); 
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input2); 
+		
+		// Act
+		ListPostsResource returnData = service
+		.path("rest").path("post").path("threads").path("onetag")
+    	.get(ListPostsResource.class); 
+		
+		// Assert
+		assertEquals(2, returnData.getPosts().size());
+		assertEquals("sub", returnData.getPosts().get(0).getSubject());
+		assertEquals("cont", returnData.getPosts().get(0).getContent());
+		assertEquals("t", returnData.getPosts().get(0).getThreadId());
+		assertEquals("onetag", returnData.getPosts().get(0).getTags().get(1));
+		
+		assertEquals("x", returnData.getPosts().get(1).getSubject());
+		assertEquals("x", returnData.getPosts().get(1).getContent());
+		assertEquals("x", returnData.getPosts().get(1).getThreadId());
+		assertEquals("onetag", returnData.getPosts().get(1).getTags().get(0));
+	}	
 }
