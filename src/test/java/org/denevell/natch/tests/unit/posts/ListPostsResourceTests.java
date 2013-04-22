@@ -56,10 +56,10 @@ public class ListPostsResourceTests {
 		postEntity.setId(400);
 		posts.add(postEntity);
 		posts.add(new PostEntity(new UserEntity("u2", ""), 2, 2, "s2", "c2", null));
-		when(postsModel.listByModificationDate()).thenReturn(posts);
+		when(postsModel.listByModificationDate(0, 10)).thenReturn(posts);
 		
 		// Act
-		ListPostsResource result = resource.listByModificationDate();
+		ListPostsResource result = resource.listByModificationDate(0, 10);
 		
 		// Assert
 		assertEquals(2, result.getPosts().size());
@@ -81,10 +81,10 @@ public class ListPostsResourceTests {
 	public void shouldListZeroPosts() throws IOException {
 		// Arrange
 		List<PostEntity> posts = new ArrayList<PostEntity>();
-		when(postsModel.listByModificationDate()).thenReturn(posts);
+		when(postsModel.listByModificationDate(0, 10)).thenReturn(posts);
 		
 		// Act
-		ListPostsResource result = resource.listByModificationDate();
+		ListPostsResource result = resource.listByModificationDate(0, 10);
 		
 		// Assert
 		assertEquals(0, result.getPosts().size());
@@ -93,10 +93,10 @@ public class ListPostsResourceTests {
 	@Test
 	public void shouldThrow500OnNullFromModel() throws IOException {
 		// Arrange
-		when(postsModel.listByModificationDate()).thenReturn(null);
+		when(postsModel.listByModificationDate(0, 10)).thenReturn(null);
 		
 		// Act
-		resource.listByModificationDate();
+		resource.listByModificationDate(0, 10);
 		
 		// Assert
 		verify(response).sendError(500, "Unexcepted error");
@@ -105,10 +105,10 @@ public class ListPostsResourceTests {
 	@Test
 	public void shouldThrow500OnExceptionFromModel() throws IOException {
 		// Arrange
-		when(postsModel.listByModificationDate()).thenThrow(new RuntimeException());
+		when(postsModel.listByModificationDate(0, 10)).thenThrow(new RuntimeException());
 		
 		// Act
-		resource.listByModificationDate();
+		resource.listByModificationDate(0, 10);
 		
 		// Assert
 		verify(response).sendError(500, "Unexcepted error");
@@ -121,10 +121,10 @@ public class ListPostsResourceTests {
 		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", "threadId");
 		postEntity.setId(400);
 		posts.add(postEntity);
-		when(postsModel.listByModificationDate()).thenReturn(posts);
+		when(postsModel.listByModificationDate(0, 10)).thenReturn(posts);
 		
 		// Act
-		ListPostsResource result = resource.listByModificationDate();
+		ListPostsResource result = resource.listByModificationDate(0, 10);
 		
 		// Assert
 		assertEquals("threadId", result.getPosts().get(0).getThreadId());

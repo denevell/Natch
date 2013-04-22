@@ -75,7 +75,7 @@ public class ListPostsFunctional {
 		
 		// Act
 		ListPostsResource returnData = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("0").path("10")
     	.get(ListPostsResource.class); 
 		
 		// Assert
@@ -92,6 +92,39 @@ public class ListPostsFunctional {
 		assertEquals("tagy1", returnData.getPosts().get(2).getTags().get(1));
 	}
 	
+	@Test
+	public void shouldListByCreationDateWithLimit() {
+		// Arrange 
+		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
+		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1");
+		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2");
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input); 
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input1); 
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input2); 
+		
+		// Act
+		ListPostsResource returnData = service
+		.path("rest").path("post").path("0").path("1")
+    	.get(ListPostsResource.class); 
+		
+		// Assert
+		assertEquals(1, returnData.getPosts().size());
+		assertTrue(returnData.getPosts().get(0).getId()!=0);
+		assertEquals("sub2", returnData.getPosts().get(0).getSubject());
+		assertEquals("cont2", returnData.getPosts().get(0).getContent());
+	}	
 	
 	@Test
 	public void shouldHtmlEscapeSubjectAndContent() {

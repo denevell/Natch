@@ -56,7 +56,7 @@ public class ListPostsModelTests {
 		when(queryResults.getResultList()).thenReturn(posts);
 		
 		// Act
-		List<PostEntity> result = model.listByModificationDate();
+		List<PostEntity> result = model.listByModificationDate(0, 100);
 		
 		// Assert
 		assertEquals(2, result.size());
@@ -76,7 +76,7 @@ public class ListPostsModelTests {
 		when(queryResults.getResultList()).thenReturn(posts);
 		
 		// Act
-		List<PostEntity> result = model.listByModificationDate();
+		List<PostEntity> result = model.listByModificationDate(0, 100);
 		
 		// Assert
 		assertEquals(0, result.size());
@@ -89,7 +89,7 @@ public class ListPostsModelTests {
 		when(queryResults.getResultList()).thenReturn(null);
 		
 		// Act
-		List<PostEntity> result = model.listByModificationDate();
+		List<PostEntity> result = model.listByModificationDate(0, 100);
 		
 		// Assert
 		assertEquals(0, result.size());
@@ -106,7 +106,7 @@ public class ListPostsModelTests {
 		when(queryResults.getResultList()).thenReturn(posts);
 		
 		// Act
-		List<PostEntity> result = model.listByModificationDate();
+		List<PostEntity> result = model.listByModificationDate(0, 100);
 		
 		// Assert
 		assertEquals("threadId", result.get(0).getThreadId());

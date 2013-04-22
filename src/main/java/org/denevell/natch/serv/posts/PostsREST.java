@@ -111,12 +111,16 @@ public class PostsREST {
 	}
 
 	@GET
+	@Path("/{start}/{limit}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiOperation(value = "Lists posts by modification date", responseClass="org.denevell.natch.serv.posts.resources.ListPostsResource")
-	public ListPostsResource listByModificationDate() throws IOException {
+	public ListPostsResource listByModificationDate(
+		@ApiParam(name="start") @PathParam("start") int start, 	
+		@ApiParam(name="limit") @PathParam("limit") int limit 	
+			) throws IOException {
 		List<PostEntity> posts = null;
 		try {
-			posts = mModel.listByModificationDate();
+			posts = mModel.listByModificationDate(start, limit);
 		} catch(Exception e) {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
