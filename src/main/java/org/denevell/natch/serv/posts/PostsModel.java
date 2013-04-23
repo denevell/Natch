@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.FlushModeType;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
@@ -161,7 +160,10 @@ public class PostsModel {
 			else if(!pe.getUser().getUsername().equals(userEntity.getUsername())) {
 				return DeletePostResult.NOT_YOURS_TO_DELETE;
 			}
+			ThreadEntity th = findThreadById(pe.getThreadId());
+			th = mThreadFactory.updateThreadToRemovePost(th, pe);
 			trans.begin();
+			mEntityManager.merge(th);
 			mEntityManager.remove(pe);
 			trans.commit();
 			return DeletePostResult.DELETED;

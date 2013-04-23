@@ -122,8 +122,8 @@ public class ListPostsFunctional {
 		// Assert
 		assertEquals(1, returnData.getPosts().size());
 		assertTrue(returnData.getPosts().get(0).getId()!=0);
-		assertEquals("sub2", returnData.getPosts().get(0).getSubject());
-		assertEquals("cont2", returnData.getPosts().get(0).getContent());
+		assertEquals("sub1", returnData.getPosts().get(0).getSubject());
+		assertEquals("cont1", returnData.getPosts().get(0).getContent());
 	}	
 	
 	@Test

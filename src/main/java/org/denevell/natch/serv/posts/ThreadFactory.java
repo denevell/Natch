@@ -29,4 +29,11 @@ public class ThreadFactory {
 		thread.setPosts(posts);
 		return thread;
 	}
+
+	public ThreadEntity updateThreadToRemovePost(ThreadEntity th, PostEntity pe) {
+		th.getPosts().remove(pe);
+		if(th.getRootPost().getId()==pe.getId()) th.setRootPost(null);
+		if(th.getLatestPost().getId()==pe.getId()) th.setLatestPost(null);
+		return th;
+	}
 }

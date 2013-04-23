@@ -12,6 +12,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
 import org.denevell.natch.db.entities.PostEntity;
+import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.ThreadFactory;
@@ -26,6 +27,7 @@ public class DeletePostModelTests {
 	private EntityManagerFactory factory;
 	private EntityManager entityManager;
 	private ThreadFactory threadFactory;
+	private ThreadEntity threadEntity;
 
 	@Before
 	public void setup() {
@@ -35,6 +37,7 @@ public class DeletePostModelTests {
 		when(entityManager.getTransaction()).thenReturn(trans);
 		threadFactory = mock(ThreadFactory.class);
 		model = spy(new PostsModel(factory, entityManager, threadFactory));
+		threadEntity = mock(ThreadEntity.class);
 	}
 	
 	@Test
@@ -46,6 +49,7 @@ public class DeletePostModelTests {
 		doReturn(post).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");
+		when(threadFactory.updateThreadToRemovePost(null, post)).thenReturn(threadEntity);
 		
 		// Act
 		DeletePostResult result = model.delete(userEntity, num);

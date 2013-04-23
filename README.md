@@ -48,38 +48,40 @@ The start of a REST interface for a forum.
 * ~~edit post: edit tag~~
 * ~~threaded posts: should list threads by tag (in last modified order)~~
 * ~~threaded posts: should list threads by date of their last entry~~
-* list posts: should paginate list all posts by x number 
+* ~~list posts: should paginate list all posts by x number~~
 * list posts: should paginate list single thread posts by x number 
 * list posts: should paginate list threads by x number 
 
 ### 0.3 Tech tasks
 
-* threaded posts: move tags to the thread object and not individual posts?
-* threaded posts: move subject to thread object?
-* threaded posts: moved creation date to thread?
 * ~~threaded posts: factory object for creating the thread~~
 * ~~threaded posts: fix unit tests for adding a post re the thread factory~~
 * ~~threaded posts: listing threads refactor~~
-* misc: separate out thread and post code and tests
-* misc: make swagger understand that the 'tags' resource in add post is actually called 'posttags'
+* threaded posts: move tags to the thread object and not individual posts?
+* threaded posts: move subject to thread object?
+* threaded posts: moved creation date to thread?
+* threaded posts: Delete the thread when no more posts in it?
 
 ### Backlog 
 
-* Tech task ###: Add memory dump line to tomcat config.
-* Tech task ###: Start using DI
-* Tech task ###: Move over to openjpa or fix the strange language problem with eclipselink
-* Tech task ###: We're not closing the entity managers when we return with bad user input in models - memory problem.
-* Tech task ##: Re-enable db locking 
-* Tech task ##: Entity bean null / blank problem?
-* Tech task #: Decide whether to use entity query classes - if so test them.
-* Test task #: Tests for post resources adapters
-* Tech task #: Intercept json parsing errors and return 400s: register, login
-* Tech task #: Speed improvements?
-* ~~Tech task #: Json auto generated docs~~
-* ~~Test task: Junit tests in a war using normal classes? Jacksons xc and persistence in the war libs seems to have solved it~~
-* ~~Tech task: Use JPA from java se.~~
-* ~~Tech task: Stop the jpa unknown entity problem~~
-* ~~Tech task: Better way to clear database on functional tests - put tests in war and access the jpa that way?~~
+* ###: Add memory dump line to tomcat config.
+* ###: Start using DI
+* ###: Move over to openjpa or fix the strange language problem with eclipselink
+* ###: We're not closing the entity managers when we return with bad user input in models - memory problem.
+* ##: Re-enable db locking 
+* ##: Entity bean null / blank problem?
+* #: Make swagger understand that the 'tags' resource in add post is actually called 'posttags'
+* #: Decide whether to use entity query classes - if so test them.
+* #: Separate out thread and post code and tests
+* #: Tests for post resources adapters
+* #: Intercept json parsing errors and return 400s: register, login
+* #: Speed improvements?
+* #: Add start derby and stuff to gradle build file?
+* ~~# Json auto generated docs~~
+* ~~Junit tests in a war using normal classes? Jacksons xc and persistence in the war libs seems to have solved it~~
+* ~~Use JPA from java se.~~
+* ~~Stop the jpa unknown entity problem~~
+* ~~Better way to clear database on functional tests - put tests in war and access the jpa that way?~~
 * ~~Better war deploy method than cping the war to the directory.~~
 * ~~Login timeout? -- No, next login will kill old anyway~~
 * ~~Strings file in both test and main java resources?~~

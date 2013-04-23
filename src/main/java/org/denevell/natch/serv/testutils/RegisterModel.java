@@ -22,11 +22,11 @@ public class RegisterModel {
 	public void clearTestDb() {
 		EntityTransaction trans = mEntityManager.getTransaction();
 		trans.begin();
-		Query q = mEntityManager.createQuery("delete from UserEntity");
+		Query q = mEntityManager.createQuery("delete from ThreadEntity");
 		q.executeUpdate();
 		q = mEntityManager.createQuery("delete from PostEntity");
 		q.executeUpdate();
-		q = mEntityManager.createQuery("delete from ThreadEntity");
+		q = mEntityManager.createQuery("delete from UserEntity");
 		q.executeUpdate();
 		trans.commit();
 		EntityUtils.closeEntityConnection(mFactory, mEntityManager);
