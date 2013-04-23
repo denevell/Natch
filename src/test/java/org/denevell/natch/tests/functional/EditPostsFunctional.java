@@ -34,7 +34,6 @@ public class EditPostsFunctional {
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private ListPostsResource originallyListedPosts;
 
-	@SuppressWarnings("unchecked")
 	@Before
 	public void setup() {
 		service = TestUtils.getRESTClient();
@@ -74,7 +73,6 @@ public class EditPostsFunctional {
 		assertEquals(initalInput.getSubject(), initialPost.getSubject());
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldEditPost() {
 		// Arrange
