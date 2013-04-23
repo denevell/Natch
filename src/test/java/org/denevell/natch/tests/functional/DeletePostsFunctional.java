@@ -59,7 +59,7 @@ public class DeletePostsFunctional {
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input); 
 		ListPostsResource listPosts = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("0").path("10")
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 		
 		
@@ -70,7 +70,7 @@ public class DeletePostsFunctional {
 		.entity(null)
 		.delete(DeletePostResourceReturnData.class);
 		ListPostsResource listPostsAfter = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("0").path("10")
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 		
 		
@@ -101,7 +101,7 @@ public class DeletePostsFunctional {
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input); 
 		ListPostsResource listPosts = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("0").path("10")
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 		
 		
@@ -112,7 +112,7 @@ public class DeletePostsFunctional {
 		.entity(null)
 		.delete(DeletePostResourceReturnData.class);
 		ListPostsResource listPostsAfter = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("0").path("10")
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 		
 		
@@ -133,7 +133,7 @@ public class DeletePostsFunctional {
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input); 
 		ListPostsResource listPosts = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("0").path("10")
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 		
 		
@@ -144,7 +144,7 @@ public class DeletePostsFunctional {
 		.entity(null)
 		.delete(DeletePostResourceReturnData.class);
 		ListPostsResource listPostsAfter = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("0").path("10")
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 		
 		

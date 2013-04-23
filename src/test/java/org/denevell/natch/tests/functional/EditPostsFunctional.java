@@ -65,7 +65,7 @@ public class EditPostsFunctional {
     	.put(AddPostResourceReturnData.class, initalInput); 		
 		// List it
 		originallyListedPosts = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("0").path("10")
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 	
 		// save it
@@ -92,7 +92,7 @@ public class EditPostsFunctional {
 		.header("AuthKey", loginResult.getAuthKey())
     	.post(EditPostResourceReturnData.class, editedInput); 		
 		ListPostsResource newListedPosts = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("0").path("10")
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 	
 		
@@ -133,7 +133,7 @@ public class EditPostsFunctional {
 		.header("AuthKey", loginResult1.getAuthKey())
     	.post(EditPostResourceReturnData.class, editedInput); 		
 		ListPostsResource newListedPosts = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("0").path("10")
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 			
 		
@@ -159,7 +159,7 @@ public class EditPostsFunctional {
 		.header("AuthKey", loginResult.getAuthKey())
     	.post(EditPostResourceReturnData.class, editedInput); 		
 		ListPostsResource newListedPosts = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("0").path("10")
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 			
 		
@@ -185,7 +185,7 @@ public class EditPostsFunctional {
 		.header("AuthKey", loginResult.getAuthKey())
     	.post(EditPostResourceReturnData.class, editedInput); 		
 		ListPostsResource newListedPosts = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("0").path("10")
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 			
 		
@@ -211,7 +211,7 @@ public class EditPostsFunctional {
 		.header("AuthKey", loginResult.getAuthKey())
     	.post(EditPostResourceReturnData.class, editedInput); 		
 		ListPostsResource newListedPosts = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("0").path("10")
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 			
 		

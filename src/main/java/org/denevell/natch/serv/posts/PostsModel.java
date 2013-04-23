@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.FlushModeType;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
@@ -83,7 +84,7 @@ public class PostsModel {
 	public List<PostEntity> listByModificationDate(int startPos, int limit) {
 		TypedQuery<PostEntity> q = mEntityManager.createNamedQuery(PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE, PostEntity.class);
 		if(startPos<0) startPos=0; if(limit<0) limit=0;
-		//q.setFirstResult(startPos);
+		q.setFirstResult(startPos);
 		q.setMaxResults(limit);
 		List<PostEntity> resultList = q.getResultList();		
 		if(resultList==null) return new ArrayList<PostEntity>();

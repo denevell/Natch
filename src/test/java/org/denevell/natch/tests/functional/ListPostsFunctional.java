@@ -116,7 +116,7 @@ public class ListPostsFunctional {
 		
 		// Act
 		ListPostsResource returnData = service
-		.path("rest").path("post").path("0").path("1")
+		.path("rest").path("post").path("1").path("1")
     	.get(ListPostsResource.class); 
 		
 		// Assert
@@ -138,7 +138,7 @@ public class ListPostsFunctional {
 		
 		// Act
 		ListPostsResource returnData = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("0").path("10")
     	.get(ListPostsResource.class); 		
 		
 		// Assert
@@ -158,7 +158,7 @@ public class ListPostsFunctional {
 		
 		// Act
 		ListPostsResource returnData = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("0").path("10")
     	.get(ListPostsResource.class); 
 		
 		// Assert
@@ -178,7 +178,7 @@ public class ListPostsFunctional {
 		
 		// Act
 		ListPostsResource returnData = service
-		.path("rest").path("post")
+		.path("rest").path("post").path("0").path("10")
     	.get(ListPostsResource.class); 
 		
 		// Assert
