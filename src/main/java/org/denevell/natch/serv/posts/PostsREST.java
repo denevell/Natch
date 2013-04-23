@@ -159,13 +159,16 @@ public class PostsREST {
 	}
 	
 	@GET
-	@Path("/threads")
+	@Path("/threads/{start}/{limit}")
 	@Produces(MediaType.APPLICATION_JSON)	
 	@ApiOperation(value = "Lists threads, mostly recently created first", responseClass="org.denevell.natch.serv.posts.resources.ListPostsResource")
-	public ListPostsResource listThreads() throws IOException {
+	public ListPostsResource listThreads(
+		@ApiParam(name="start") @PathParam("start") int start, 	
+		@ApiParam(name="limit") @PathParam("limit") int limit 	
+			) throws IOException {
 		List<ThreadEntity> threads = null;
 		try {
-			threads = mModel.listThreads();
+			threads = mModel.listThreads(start, limit);
 		} catch(Exception e) {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");

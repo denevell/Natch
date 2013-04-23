@@ -50,7 +50,7 @@ The start of a REST interface for a forum.
 * ~~threaded posts: should list threads by date of their last entry~~
 * ~~list posts: should paginate list all posts by x number~~
 * list posts: should paginate list single thread posts by x number 
-* list posts: should paginate list threads by x number 
+* ~~list posts: should paginate list threads by x number~~
 
 ### 0.3 Tech tasks
 

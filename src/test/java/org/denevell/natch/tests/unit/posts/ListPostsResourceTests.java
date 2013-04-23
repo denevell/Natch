@@ -168,10 +168,10 @@ public class ListPostsResourceTests {
 		List<ThreadEntity> threads = new ArrayList<ThreadEntity>();
 		threads.add(new ThreadEntity(postEntity, Arrays.asList(new PostEntity[] { postEntity } )));
 		threads.add(new ThreadEntity(postEntity1, Arrays.asList(new PostEntity[] { postEntity1 } )));
-		when(postsModel.listThreads()).thenReturn(threads);
+		when(postsModel.listThreads(0, 10)).thenReturn(threads);
 		
 		// Act
-		ListPostsResource result = resource.listThreads();
+		ListPostsResource result = resource.listThreads(0, 10);
 		
 		// Assert
 		assertEquals(2, result.getPosts().size());

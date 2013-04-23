@@ -248,7 +248,7 @@ public class ListPostsFunctional {
 		
 		// Act
 		ListPostsResource returnData = service
-		.path("rest").path("post").path("threads")
+		.path("rest").path("post").path("threads").path("0").path("10")
     	.get(ListPostsResource.class); 
 		
 		// Assert
@@ -262,6 +262,40 @@ public class ListPostsFunctional {
 		assertEquals("cont1", returnData.getPosts().get(1).getContent());		
 		assertEquals("other", returnData.getPosts().get(1).getThreadId());		
 	}
+	
+	@Test
+	public void shouldListThreadsByPostLastEnteredWithLimit() {
+		// Arrange 
+		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
+		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
+		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input); 
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input1); 
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input2); 
+		
+		// Act
+		ListPostsResource returnData = service
+		.path("rest").path("post").path("threads").path("1").path("1")
+    	.get(ListPostsResource.class); 
+		
+		// Assert
+		assertEquals(1, returnData.getPosts().size());
+		assertEquals("sub1", returnData.getPosts().get(0).getSubject());
+		assertEquals("cont1", returnData.getPosts().get(0).getContent());
+		assertEquals("other", returnData.getPosts().get(0).getThreadId());
+	}	
 	
 	@SuppressWarnings("unchecked")
 	@Test

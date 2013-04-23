@@ -99,10 +99,12 @@ public class PostsModel {
 		else return resultList;
 	}
 	
-	public List<ThreadEntity> listThreads() {
+	public List<ThreadEntity> listThreads(int startPos, int limit) {
 		TypedQuery<ThreadEntity> q = mEntityManager.
-				createNamedQuery(ThreadEntity.NAMED_QUERY_LIST_THREADS,
-						ThreadEntity.class);		
+				createNamedQuery(ThreadEntity.NAMED_QUERY_LIST_THREADS, ThreadEntity.class);		
+		if(startPos<0) startPos=0; if(limit<0) limit=0;
+		q.setFirstResult(startPos);
+		q.setMaxResults(limit);
 		List<ThreadEntity> resultList = q.getResultList();
 		if(resultList==null) return new ArrayList<ThreadEntity>();
 		else return resultList;

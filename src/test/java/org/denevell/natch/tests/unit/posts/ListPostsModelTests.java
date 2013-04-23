@@ -138,7 +138,7 @@ public class ListPostsModelTests {
 		when(threadQueryResults.getResultList()).thenReturn(threads);
 		
 		// Act
-		List<ThreadEntity> result = model.listThreads();
+		List<ThreadEntity> result = model.listThreads(0, 10);
 		
 		// Assert
 		assertEquals(2, result.size());
@@ -151,7 +151,7 @@ public class ListPostsModelTests {
 		when(threadQueryResults.getResultList()).thenReturn(null);
 		
 		// Act
-		List<ThreadEntity> result = model.listThreads();
+		List<ThreadEntity> result = model.listThreads(0, 10);
 		
 		// Assert
 		assertEquals(0, result.size());
