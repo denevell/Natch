@@ -51,32 +51,26 @@ The start of a REST interface for a forum.
 * ~~list posts: should paginate list all posts by x number~~
 * ~~list posts: should paginate list single thread posts by x number~~
 * ~~list posts: should paginate list threads by x number~~
-* list posts: should paginate list threads with tag
-
-### 0.3 Tech tasks
-
-* ~~threaded posts: factory object for creating the thread~~
-* ~~threaded posts: fix unit tests for adding a post re the thread factory~~
-* ~~threaded posts: listing threads refactor~~
-* threaded posts: move tags to the thread object and not individual posts?
-* threaded posts: move subject to thread object?
-* threaded posts: moved creation date to thread?
+* ~~list posts: should paginate list threads with tag~~
 
 ### Backlog 
 
-* ###: Add memory dump line to tomcat config.
-* ###: Start using DI
+* ###: Separate out thread and post code and tests
 * ###: Move over to openjpa or fix the strange language problem with eclipselink
 * ###: We're not closing the entity managers when we return with bad user input in models - memory problem.
 * ##: Re-enable db locking 
 * ##: Entity bean null / blank problem?
+* ##: Profile speed
+* #: Start using DI
 * #: Make swagger understand that the 'tags' resource in add post is actually called 'posttags'
-* #: Decide whether to use entity query classes - if so test them.
-* #: Separate out thread and post code and tests
-* #: Tests for post resources adapters
+* #: Make swaggers requests work - extend .json to request.
 * #: Intercept json parsing errors and return 400s: register, login
-* #: Speed improvements?
 * #: Add start derby and stuff to gradle build file?
+* #: Run code coverage and test non-covered code
+* #: threaded posts: move tags to the thread object and not individual posts?
+* #: threaded posts: move subject to thread object?
+* #: threaded posts: moved creation date to thread?
+* ~~###: Add memory dump line to tomcat config.~~
 * ~~# Json auto generated docs~~
 * ~~Junit tests in a war using normal classes? Jacksons xc and persistence in the war libs seems to have solved it~~
 * ~~Use JPA from java se.~~
