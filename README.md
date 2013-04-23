@@ -49,8 +49,9 @@ The start of a REST interface for a forum.
 * ~~threaded posts: should list threads by tag (in last modified order)~~
 * ~~threaded posts: should list threads by date of their last entry~~
 * ~~list posts: should paginate list all posts by x number~~
-* list posts: should paginate list single thread posts by x number 
+* ~~list posts: should paginate list single thread posts by x number~~
 * ~~list posts: should paginate list threads by x number~~
+* list posts: should paginate list threads with tag
 
 ### 0.3 Tech tasks
 
@@ -60,7 +61,6 @@ The start of a REST interface for a forum.
 * threaded posts: move tags to the thread object and not individual posts?
 * threaded posts: move subject to thread object?
 * threaded posts: moved creation date to thread?
-* threaded posts: Delete the thread when no more posts in it?
 
 ### Backlog 
 
@@ -94,7 +94,7 @@ The start of a REST interface for a forum.
  * Permissions for actions
  * Category/tags only available to some users
 * Posts
- * Test when a thread has no children
+ * Test / delete when a thread has no children
  * Thread rest list should list latest post as well
  * Soft delete post
  * Search

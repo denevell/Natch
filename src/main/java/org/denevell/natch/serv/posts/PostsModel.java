@@ -91,8 +91,11 @@ public class PostsModel {
 		return resultList;
 	}
 	
-	public List<PostEntity> listByThreadId(String threadId) {
+	public List<PostEntity> listByThreadId(String threadId, int startPos, int limit) {
 		TypedQuery<PostEntity> q = mEntityManager.createNamedQuery(PostEntity.NAMED_QUERY_FIND_BY_THREADID, PostEntity.class);
+		if(startPos<0) startPos=0; if(limit<0) limit=0;
+		q.setFirstResult(startPos);
+		q.setMaxResults(limit);
 		q.setParameter(PostEntity.NAMED_QUERY_PARAM_THREADID, threadId);
 		List<PostEntity> resultList = q.getResultList();		
 		if(resultList==null) return new ArrayList<PostEntity>();

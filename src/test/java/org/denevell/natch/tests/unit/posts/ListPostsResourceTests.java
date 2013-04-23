@@ -138,10 +138,10 @@ public class ListPostsResourceTests {
 		postEntity.setId(400);
 		posts.add(postEntity);
 		posts.add(new PostEntity(new UserEntity("u2", ""), 2, 2, "s2", "c2", "t"));
-		when(postsModel.listByThreadId("t")).thenReturn(posts);
+		when(postsModel.listByThreadId("t", 0, 10)).thenReturn(posts);
 		
 		// Act
-		ListPostsResource result = resource.listByThreadId("t");
+		ListPostsResource result = resource.listByThreadId("t", 0, 10);
 		
 		// Assert
 		assertEquals(2, result.getPosts().size());

@@ -122,7 +122,7 @@ public class ListPostsModelTests {
 		when(queryResults.getResultList()).thenReturn(posts);
 		
 		// Act
-		List<PostEntity> result = model.listByThreadId("t");
+		List<PostEntity> result = model.listByThreadId("t", 0, 10);
 		
 		// Assert
 		assertEquals(2, result.size());
