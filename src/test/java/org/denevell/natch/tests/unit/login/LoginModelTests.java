@@ -14,7 +14,6 @@ import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.db.entities.UserEntityQueries;
 import org.denevell.natch.serv.users.UsersModel;
-import org.denevell.natch.serv.users.UsersModel.LoginEnumResult;
 import org.denevell.natch.serv.users.UsersModel.LoginResult;
 import org.denevell.natch.utils.PasswordSaltUtils;
 import org.junit.Before;
@@ -51,7 +50,7 @@ public class LoginModelTests {
 		LoginResult result = loginModel.login("username", "password");
 		
 		// Assert
-		assertEquals("Successfully register", LoginEnumResult.LOGGED_IN, result.getResult());
+		assertEquals("Successfully register", UsersModel.LOGGED_IN, result.getResult());
 	}
 	
 	@Test
@@ -63,7 +62,7 @@ public class LoginModelTests {
 		LoginResult result = loginModel.login("username", "password");
 		
 		// Assert
-		assertEquals("Successfully register", LoginEnumResult.CREDENTIALS_INCORRECT, result.getResult());
+		assertEquals("Successfully register", UsersModel.CREDENTIALS_INCORRECT, result.getResult());
 	}
 	
 	@Test
@@ -74,7 +73,7 @@ public class LoginModelTests {
 		LoginResult result = loginModel.login(" ", " ");
 		
 		// Assert
-		assertEquals("Fail to register", LoginEnumResult.USER_INPUT_ERROR, result.getResult());
+		assertEquals("Fail to register", UsersModel.USER_INPUT_ERROR, result.getResult());
 	}
 	
 	@Test
@@ -85,7 +84,7 @@ public class LoginModelTests {
 		LoginResult result = loginModel.login(" ", "password");
 		
 		// Assert
-		assertEquals("Fail to register", LoginEnumResult.USER_INPUT_ERROR, result.getResult());
+		assertEquals("Fail to register", UsersModel.USER_INPUT_ERROR, result.getResult());
 	}
 	
 	@Test
@@ -96,7 +95,7 @@ public class LoginModelTests {
 		LoginResult result = loginModel.login("username", " ");
 		
 		// Assert
-		assertEquals("Fail to register", LoginEnumResult.USER_INPUT_ERROR, result.getResult());
+		assertEquals("Fail to register", UsersModel.USER_INPUT_ERROR, result.getResult());
 	}
 	
 	@Test
@@ -107,7 +106,7 @@ public class LoginModelTests {
 		LoginResult result = loginModel.login(null, null);
 		
 		// Assert
-		assertEquals("Fail to register", LoginEnumResult.USER_INPUT_ERROR, result.getResult());
+		assertEquals("Fail to register", UsersModel.USER_INPUT_ERROR, result.getResult());
 	}
 	
 	@Test
@@ -118,7 +117,7 @@ public class LoginModelTests {
 		LoginResult result = loginModel.login(null, "password");
 		
 		// Assert
-		assertEquals("Fail to register", LoginEnumResult.USER_INPUT_ERROR, result.getResult());
+		assertEquals("Fail to register", UsersModel.USER_INPUT_ERROR, result.getResult());
 	}
 	
 	@Test
@@ -129,7 +128,7 @@ public class LoginModelTests {
 		LoginResult result = loginModel.login("username", null);
 		
 		// Assert
-		assertEquals("Fail to register", LoginEnumResult.USER_INPUT_ERROR, result.getResult());
+		assertEquals("Fail to register", UsersModel.USER_INPUT_ERROR, result.getResult());
 	}
 	
 	@Test

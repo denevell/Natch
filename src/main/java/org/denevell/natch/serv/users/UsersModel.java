@@ -20,15 +20,18 @@ public class UsersModel {
 	private EntityManagerFactory mFactory;
 	private EntityManager mEntityManager;
 	private PasswordSaltUtils mPasswordSalter;
-	public enum LoginEnumResult { LOGGED_IN, USER_INPUT_ERROR, UNKNOWN_ERROR, CREDENTIALS_INCORRECT };
+	public static String LOGGED_IN = "loggedIn";
+	public static String USER_INPUT_ERROR = "inputError";
+	public static String UNKNOWN_ERROR = "unknownError";
+	public static String CREDENTIALS_INCORRECT = "credIncorect";
 	public enum RegisterResult { REGISTERED, UNKNOWN_ERROR, DUPLICATE_USERNAME, USER_INPUT_ERROR }
 	public static class LoginResult {
 		private String authKey = "";
-		private LoginEnumResult result;
-		public LoginResult(LoginEnumResult result) {
+		private String result;
+		public LoginResult(String result) {
 			this.result = result;
 		}
-		public LoginResult(LoginEnumResult result, String authKey) {
+		public LoginResult(String result, String authKey) {
 			this.result = result;
 			this.authKey = authKey;
 		}
@@ -38,10 +41,10 @@ public class UsersModel {
 		public void setAuthKey(String authKey) {
 			this.authKey = authKey;
 		}
-		public LoginEnumResult getResult() {
+		public String getResult() {
 			return result;
 		}
-		public void setResult(LoginEnumResult result) {
+		public void setResult(String result) {
 			this.result = result;
 		}
 	}
@@ -99,20 +102,20 @@ public class UsersModel {
 
 	public LoginResult login(String username, String password) {
 		if(password==null || password.trim().length()==0 || username==null || username.trim().length()==0) {
-			return new LoginResult(LoginEnumResult.USER_INPUT_ERROR);
+			return new LoginResult(USER_INPUT_ERROR);
 		}
 		try {
 			UserEntity res = mUserEntityQueries.areCredentialsCorrect(username, password);
 			if(res!=null) {
 				String authKey = mAuthDataGenerator.generate(res);
-				return new LoginResult(LoginEnumResult.LOGGED_IN, authKey);
+				return new LoginResult(LOGGED_IN, authKey);
 			} else {
-				return new LoginResult(LoginEnumResult.CREDENTIALS_INCORRECT);
+				return new LoginResult(CREDENTIALS_INCORRECT);
 			}
 		} catch(Exception e) {
 			Log.info(this.getClass(), e.toString());
 			e.printStackTrace();
-			return new LoginResult(LoginEnumResult.UNKNOWN_ERROR);
+			return new LoginResult(UNKNOWN_ERROR);
 		} 
 	}
 	

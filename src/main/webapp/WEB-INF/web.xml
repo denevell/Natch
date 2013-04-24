@@ -19,6 +19,10 @@
 	  <url-pattern>/rest/post/del/*</url-pattern>
 	</filter-mapping>	
 	
+	<listener>
+		<listener-class>org.denevell.natch.auth.LoginClearContextListener</listener-class>
+	</listener>	
+	
 	<servlet>
 		<servlet-name>Jersey REST Service</servlet-name>
 		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer

@@ -11,7 +11,7 @@ import org.denevell.natch.db.entities.UserEntity;
 
 public class LoginAuthKeysSingleton {
 	private static LoginAuthKeysSingleton sInstance;
-	Map<String, UserEntity> mLoginKeys = Collections.synchronizedMap(new HashMap<String, UserEntity>());
+	private Map<String, UserEntity> mLoginKeys = Collections.synchronizedMap(new HashMap<String, UserEntity>());
 	
 	private LoginAuthKeysSingleton() {
 	}
@@ -51,6 +51,11 @@ public class LoginAuthKeysSingleton {
 
 	public void clearAllKeys() {
 		mLoginKeys.clear();
+	}
+	
+	public void kill() {
+		mLoginKeys = null;
+		sInstance = null;
 	}
 
 }

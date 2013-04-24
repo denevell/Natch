@@ -16,7 +16,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
-import org.denevell.natch.serv.users.UsersModel.LoginEnumResult;
 import org.denevell.natch.serv.users.UsersModel.LoginResult;
 import org.denevell.natch.serv.users.UsersModel.RegisterResult;
 import org.denevell.natch.serv.users.resources.LoginResourceInput;
@@ -100,11 +99,11 @@ public class UsersREST {
 		String username = loginInput.getUsername();
 		String password = loginInput.getPassword();
 		LoginResult loginResult = mLoginModel.login(username, password);
-		if(loginResult.getResult()==LoginEnumResult.LOGGED_IN) {
+		if(loginResult.getResult().equals(UsersModel.LOGGED_IN)) {
 			returnResult.setSuccessful(true);
 			returnResult.setAuthKey(loginResult.getAuthKey());
-		} else if(loginResult.getResult()==LoginEnumResult.CREDENTIALS_INCORRECT
-				|| loginResult.getResult()==LoginEnumResult.USER_INPUT_ERROR){
+		} else if(loginResult.getResult().equals(UsersModel.CREDENTIALS_INCORRECT)
+				|| loginResult.getResult().equals(UsersModel.USER_INPUT_ERROR)){
 			returnResult.setSuccessful(false);
 			returnResult.setError(rb.getString(Strings.incorrect_username_or_password));
 		} else {
