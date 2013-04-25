@@ -99,8 +99,8 @@ public class EditPostsFunctional {
 		assertEquals(initialPost.getId(), newListedPosts.getPosts().get(0).getId());
 		assertEquals(initialPost.getCreation(), newListedPosts.getPosts().get(0).getCreation());
 		assertEquals(initialPost.getUsername(), newListedPosts.getPosts().get(0).getUsername());
-		assertEquals("tagx", newListedPosts.getPosts().get(0).getTags().get(1));
-		assertEquals("tagy", newListedPosts.getPosts().get(0).getTags().get(0));
+		assertEquals("tagx", newListedPosts.getPosts().get(0).getTags().get(0));
+		assertEquals("tagy", newListedPosts.getPosts().get(0).getTags().get(1));
 		assertEquals("sup", newListedPosts.getPosts().get(0).getContent());
 		assertEquals("sup two?", newListedPosts.getPosts().get(0).getSubject());
 		assertTrue(newListedPosts.getPosts().get(0).getModification() > initialPost.getModification());
