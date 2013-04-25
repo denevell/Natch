@@ -6,7 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.denevell.natch.db.entities.PersistenceInfo;
@@ -25,14 +25,11 @@ public class PostsModel {
 	public final static String UNKNOWN_ERROR = "unknownerror";
 	public final static String BAD_USER_INPUT = "baduserinput";
 	public final static String NOT_YOURS_TO_DELETE = "notyourtodelete";
-	
-	private EntityManagerFactory mFactory;
+	@PersistenceContext(name=PersistenceInfo.EntityManagerFactoryName)
 	private EntityManager mEntityManager;
 	private ThreadFactory mThreadFactory;
 	
 	public PostsModel() {
-		mFactory = Persistence.createEntityManagerFactory(PersistenceInfo.EntityManagerFactoryName);
-		mEntityManager = mFactory.createEntityManager();		
 		mThreadFactory = new ThreadFactory();
 	}
 	
@@ -40,7 +37,6 @@ public class PostsModel {
 	 * For testing / di
 	 */
 	public PostsModel(EntityManagerFactory factory, EntityManager entityManager, ThreadFactory threadFactory) {
-		mFactory = factory;
 		mEntityManager = entityManager;
 		mThreadFactory = threadFactory;
 	}
@@ -51,19 +47,19 @@ public class PostsModel {
 	}
 	
 	public String addPost(UserEntity user, PostEntityAdapter adapter) {
-		PostEntity p = adapter.createPost(null, user);
-		if(p==null || checkInputParams(user, p.getSubject(), p.getContent())) {
-			Log.info(this.getClass(), "Bad user input");
-			return BAD_USER_INPUT;
-		}
 		EntityTransaction trans = null;
-		ThreadEntity thread = findThreadById(p.getThreadId());
-		if(thread==null) {
-			thread = mThreadFactory.makeThread(p);
-		} else {
-			thread = mThreadFactory.makeThread(thread, p);
-		}
 		try {
+			PostEntity p = adapter.createPost(null, user);
+			if(p==null || checkInputParams(user, p.getSubject(), p.getContent())) {
+				Log.info(this.getClass(), "Bad user input");
+				return BAD_USER_INPUT;
+			}
+			ThreadEntity thread = findThreadById(p.getThreadId());
+			if(thread==null) {
+				thread = mThreadFactory.makeThread(p);
+			} else {
+				thread = mThreadFactory.makeThread(thread, p);
+			}
 			trans = mEntityManager.getTransaction();
 			trans.begin();
 			mEntityManager.persist(thread);
@@ -75,7 +71,7 @@ public class PostsModel {
 			if(trans!=null && trans.isActive()) trans.rollback();
 			return UNKNOWN_ERROR;
 		} finally {
-			EntityUtils.closeEntityConnection(mFactory, mEntityManager);		
+			EntityUtils.closeEntityConnection(null, mEntityManager);		
 		}		
 	}
 
@@ -135,6 +131,8 @@ public class PostsModel {
 		} catch(Exception e) {
 			Log.info(getClass(), "Error finding post by id: " + e.toString());
 			return null;
+		} finally {
+			EntityUtils.closeEntityConnection(null, mEntityManager);
 		}
 	}
 	
@@ -149,16 +147,18 @@ public class PostsModel {
 		} catch(Exception e) {
 			Log.info(getClass(), "Error finding thread by id: " + e.toString());
 			return null;
+		} finally {
+			EntityUtils.closeEntityConnection(null, mEntityManager);
 		}
 	}	
 
 	public String delete(UserEntity userEntity, long postEntityId) {
-		if(userEntity==null) {
-			Log.info(getClass(), "No user passed to delete method.");
-			return UNKNOWN_ERROR;
-		}
 		EntityTransaction trans = mEntityManager.getTransaction();
 		try {
+			if(userEntity==null) {
+				Log.info(getClass(), "No user passed to delete method.");
+				return UNKNOWN_ERROR;
+			}
 			PostEntity pe = findPostById(postEntityId);
 			if(pe==null) {
 				return DOESNT_EXIST;
@@ -184,18 +184,18 @@ public class PostsModel {
 			}
 			return UNKNOWN_ERROR;
 		} finally {
-			EntityUtils.closeEntityConnection(mFactory, mEntityManager);
+			EntityUtils.closeEntityConnection(null, mEntityManager);
 		}
 	}
 
 	public String edit(UserEntity userEntity, long postEntityId, PostEntityAdapter postAdapter) {
-		PostEntity post;
-		if(userEntity==null || postAdapter==null) {
-			Log.info(getClass(), "No user or postadapter passed to edit method");
-			return UNKNOWN_ERROR;
-		}
 		EntityTransaction trans = mEntityManager.getTransaction();
 		try {
+			PostEntity post;
+			if(userEntity==null || postAdapter==null) {
+				Log.info(getClass(), "No user or postadapter passed to edit method");
+				return UNKNOWN_ERROR;
+			}
 			PostEntity pe = findPostById(postEntityId);
 			if(pe==null) {
 				return DOESNT_EXIST;
@@ -226,7 +226,7 @@ public class PostsModel {
 			}
 			return UNKNOWN_ERROR;
 		} finally {
-			EntityUtils.closeEntityConnection(mFactory, mEntityManager);
+			EntityUtils.closeEntityConnection(null, mEntityManager);
 		}
 	}
 

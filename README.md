@@ -58,6 +58,7 @@ The start of a REST interface for a forum.
 * ###: Separate out thread and post code and tests
 * ###: Re-enable db locking 
 * ###: Make swaggers requests work - extend .json to request.
+* ###: Inject the EntityManager via annotations
 * ###: Make swagger understand that the 'tags' resource in add post is actually called 'posttags'
 * ##: Entity bean null / blank problem?
 * ##: Look at hibernate errors and fix

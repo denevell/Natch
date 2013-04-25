@@ -3,9 +3,8 @@ package org.denevell.natch.serv.testutils;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 
 import org.denevell.natch.db.entities.PersistenceInfo;
 import org.denevell.natch.db.entities.PostEntity;
@@ -15,12 +14,10 @@ import org.denevell.natch.utils.EntityUtils;
 
 public class RegisterModel {
 	
-	private EntityManagerFactory mFactory;
+	@PersistenceContext(name=PersistenceInfo.EntityManagerFactoryName)
 	private EntityManager mEntityManager;
 
 	public RegisterModel() {
-		mFactory = Persistence.createEntityManagerFactory(PersistenceInfo.EntityManagerFactoryName);
-		mEntityManager = mFactory.createEntityManager();		
 	}
 	
 	public void clearTestDb() {
@@ -39,7 +36,7 @@ public class RegisterModel {
 			mEntityManager.remove(postEntity);
 		}
 		trans.commit();
-		EntityUtils.closeEntityConnection(mFactory, mEntityManager);
+		EntityUtils.closeEntityConnection(null, mEntityManager);
 	}
 
 }

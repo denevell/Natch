@@ -3,7 +3,7 @@ package org.denevell.natch.serv.users;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 
 import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.db.entities.PersistenceInfo;
@@ -17,7 +17,7 @@ public class UsersModel {
 	
 	private UserEntityQueries mUserEntityQueries;
 	private LoginAuthKeysSingleton mAuthDataGenerator;
-	private EntityManagerFactory mFactory;
+	@PersistenceContext(name=PersistenceInfo.EntityManagerFactoryName)
 	private EntityManager mEntityManager;
 	private PasswordSaltUtils mPasswordSalter;
 	public static String LOGGED_IN = "loggedIn";
@@ -56,7 +56,6 @@ public class UsersModel {
 	public UsersModel(UserEntityQueries ueq, LoginAuthKeysSingleton authKeyGenerator, EntityManagerFactory factory, EntityManager entityManager, PasswordSaltUtils saltUtils) {
 		mUserEntityQueries = ueq;
 		mAuthDataGenerator = authKeyGenerator;
-		mFactory = factory;
 		mEntityManager =  entityManager;
 		mUserEntityQueries = ueq;
 		mPasswordSalter = saltUtils;
@@ -65,23 +64,21 @@ public class UsersModel {
 	public UsersModel() {
 		mUserEntityQueries = new UserEntityQueries(new PasswordSaltUtils());
 		mAuthDataGenerator = LoginAuthKeysSingleton.getInstance();
-		mFactory = Persistence.createEntityManagerFactory(PersistenceInfo.EntityManagerFactoryName);
-		mEntityManager = mFactory.createEntityManager();		
 		mUserEntityQueries = new UserEntityQueries(new PasswordSaltUtils());
 		mPasswordSalter = new PasswordSaltUtils();
 	}
 	
 	
 	public String addUserToSystem(String username, String password) {
-		if(password==null || password.trim().length()==0 || username==null || username.trim().length()==0) {
-			return USER_INPUT_ERROR;
-		}
-		UserEntity u = new UserEntity();
-		password = mPasswordSalter.generatedSaltedPassword(password);
-		u.setPassword(password);
-		u.setUsername(username);
 		EntityTransaction trans = null;
 		try {
+			if(password==null || password.trim().length()==0 || username==null || username.trim().length()==0) {
+				return USER_INPUT_ERROR;
+			}
+			UserEntity u = new UserEntity();
+			password = mPasswordSalter.generatedSaltedPassword(password);
+			u.setPassword(password);
+			u.setUsername(username);
 			trans = mEntityManager.getTransaction();
 			if(!mUserEntityQueries.doesUsernameExist(username)) {
 				trans.begin();
@@ -97,15 +94,15 @@ public class UsersModel {
 			if(trans!=null && trans.isActive()) trans.rollback();
 			return UNKNOWN_ERROR;
 		} finally {
-			EntityUtils.closeEntityConnection(mFactory, mEntityManager);
+			EntityUtils.closeEntityConnection(null, mEntityManager);
 		}
 	}	
 
 	public LoginResult login(String username, String password) {
-		if(password==null || password.trim().length()==0 || username==null || username.trim().length()==0) {
-			return new LoginResult(USER_INPUT_ERROR);
-		}
 		try {
+			if(password==null || password.trim().length()==0 || username==null || username.trim().length()==0) {
+				return new LoginResult(USER_INPUT_ERROR);
+			}
 			UserEntity res = mUserEntityQueries.areCredentialsCorrect(username, password);
 			if(res!=null) {
 				String authKey = mAuthDataGenerator.generate(res);
@@ -117,7 +114,9 @@ public class UsersModel {
 			Log.info(this.getClass(), e.toString());
 			e.printStackTrace();
 			return new LoginResult(UNKNOWN_ERROR);
-		} 
+		} finally {
+			EntityUtils.closeEntityConnection(null, mEntityManager);
+		}
 	}
 	
 	public boolean logout(String authKey) {

@@ -7,8 +7,8 @@ public class EntityUtils {
 	
 	public static void closeEntityConnection(EntityManagerFactory factory, EntityManager entityManager) {
 		try {
-			entityManager.close();
-			factory.close();
+			if(entityManager!=null) entityManager.close();
+			if(factory!=null) factory.close();
 		} catch(Exception e) {
 			Log.info(EntityUtils.class, e.toString());
 		}

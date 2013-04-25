@@ -3,8 +3,7 @@ package org.denevell.natch.db.entities;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.denevell.natch.utils.EntityUtils;
@@ -12,13 +11,11 @@ import org.denevell.natch.utils.PasswordSaltUtils;
 
 public class UserEntityQueries {
 	
-	private EntityManagerFactory mFactory;
+	@PersistenceContext(name=PersistenceInfo.EntityManagerFactoryName)
 	private EntityManager mEntityManager;
 	private PasswordSaltUtils mSaltedPasswordUtils;
 
 	public UserEntityQueries(PasswordSaltUtils saltUtils) {
-		mFactory = Persistence.createEntityManagerFactory(PersistenceInfo.EntityManagerFactoryName);
-		mEntityManager = mFactory.createEntityManager();		
 		mSaltedPasswordUtils = new PasswordSaltUtils();
 	}	
 
@@ -26,7 +23,7 @@ public class UserEntityQueries {
 		TypedQuery<UserEntity> q = mEntityManager.createNamedQuery(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME, UserEntity.class)
 			.setParameter(UserEntity.NAMED_QUERY_PARAM_USERNAME, username);
 		List<UserEntity> resultList = q.getResultList();
-		EntityUtils.closeEntityConnection(mFactory, mEntityManager);
+		EntityUtils.closeEntityConnection(null, mEntityManager);
 		return resultList;
 	}	
 
