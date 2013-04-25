@@ -23,9 +23,6 @@ import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.serv.posts.PostsModel.AddPostResult;
-import org.denevell.natch.serv.posts.PostsModel.DeletePostResult;
-import org.denevell.natch.serv.posts.PostsModel.EditPostResult;
 import org.denevell.natch.serv.posts.resources.AddPostResourceInput;
 import org.denevell.natch.serv.posts.resources.AddPostResourceReturnData;
 import org.denevell.natch.serv.posts.resources.DeletePostResourceReturnData;
@@ -90,18 +87,18 @@ public class PostsREST {
 			return regReturnData;
 		}
 		mAddPostAdapter.create(input);
-		AddPostResult okay = mModel.addPost(userEntity, mAddPostAdapter);
+		String okay = mModel.addPost(userEntity, mAddPostAdapter);
 		generateAddPostReturnResource(regReturnData, okay);
 		return regReturnData;
 	}
 
-	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, AddPostResult okay) {
-		if(okay==AddPostResult.ADDED) {
+	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, String okay) {
+		if(okay.equals(PostsModel.ADDED)) {
 			regReturnData.setSuccessful(true);
-		} else if(okay==AddPostResult.BAD_USER_INPUT) {
+		} else if(okay.equals(PostsModel.BAD_USER_INPUT)) {
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
-		} else if(okay==AddPostResult.UNKNOWN_ERROR){
+		} else if(okay.equals(PostsModel.UNKNOWN_ERROR)){
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.unknown_error));
 		} else {
@@ -235,16 +232,15 @@ public class PostsREST {
 		} 
 	}
 
-	private void generateDeleteReturnResource(long number,
-			DeletePostResourceReturnData ret, UserEntity userEntity) {
-		DeletePostResult result = mModel.delete(userEntity, number);
-		if(result==DeletePostResult.DELETED) {
+	private void generateDeleteReturnResource(long number, DeletePostResourceReturnData ret, UserEntity userEntity) {
+		String result = mModel.delete(userEntity, number);
+		if(result.equals(PostsModel.DELETED)) {
 			ret.setSuccessful(true);
-		} else if(result==DeletePostResult.DOESNT_EXIST) {
+		} else if(result.equals(PostsModel.DOESNT_EXIST)) {
 			ret.setError(rb.getString(Strings.post_doesnt_exist));
-		} else if(result==DeletePostResult.NOT_YOURS_TO_DELETE) {
+		} else if(result.equals(PostsModel.NOT_YOURS_TO_DELETE)) {
 			ret.setError(rb.getString(Strings.post_not_yours));
-		} else if(result==DeletePostResult.UNKNOWN_ERROR) {
+		} else if(result.equals(PostsModel.UNKNOWN_ERROR)) {
 			ret.setError(rb.getString(Strings.unknown_error));
 		}
 	}
@@ -265,7 +261,7 @@ public class PostsREST {
 		}	
 		try {
 			mEditPostAdapter.setPostWithNewData(editPostResource);
-			EditPostResult result = mModel.edit(userEntity, postId, mEditPostAdapter); 
+			String result = mModel.edit(userEntity, postId, mEditPostAdapter); 
 			generateEditReturnResource(ret, result);
 			return ret;
 		} catch(Exception e) {
@@ -276,16 +272,16 @@ public class PostsREST {
 	}
 
 	private void generateEditReturnResource(EditPostResourceReturnData ret,
-			EditPostResult result) {
-		if(result==EditPostResult.EDITED) {
+			String result) {
+		if(result.equals(PostsModel.EDITED)) {
 			ret.setSuccessful(true);
-		} else if(result==EditPostResult.DOESNT_EXIST) {
+		} else if(result.equals(PostsModel.DOESNT_EXIST)) {
 			ret.setError(rb.getString(Strings.post_doesnt_exist));
-		} else if(result==EditPostResult.NOT_YOURS_TO_DELETE) {
+		} else if(result.equals(PostsModel.NOT_YOURS_TO_DELETE)) {
 			ret.setError(rb.getString(Strings.post_not_yours));
-		} else if(result==EditPostResult.UNKNOWN_ERROR) {
+		} else if(result.equals(PostsModel.UNKNOWN_ERROR)) {
 			ret.setError(rb.getString(Strings.unknown_error));
-		} else if(result==EditPostResult.BAD_USER_INPUT) {
+		} else if(result.equals(PostsModel.BAD_USER_INPUT)) {
 			ret.setError(rb.getString(Strings.post_fields_cannot_be_blank));
 		}
 	}

@@ -18,15 +18,14 @@ import org.denevell.natch.utils.Log;
 
 public class PostsModel {
 
-	public enum EditPostResult {
-		EDITED, UNKNOWN_ERROR, DOESNT_EXIST, NOT_YOURS_TO_DELETE, BAD_USER_INPUT
-	}
-	public enum DeletePostResult {
-		DELETED, UNKNOWN_ERROR, NOT_YOURS_TO_DELETE, DOESNT_EXIST
-	}
-	public enum AddPostResult {
-		ADDED, UNKNOWN_ERROR, BAD_USER_INPUT
-	}
+	public final static String EDITED = "edited";
+	public final static String DELETED = "deleted";
+	public final static String ADDED = "added";
+	public final static String DOESNT_EXIST = "doesntexist";
+	public final static String UNKNOWN_ERROR = "unknownerror";
+	public final static String BAD_USER_INPUT = "baduserinput";
+	public final static String NOT_YOURS_TO_DELETE = "notyourtodelete";
+	
 	private EntityManagerFactory mFactory;
 	private EntityManager mEntityManager;
 	private ThreadFactory mThreadFactory;
@@ -51,11 +50,11 @@ public class PostsModel {
 				subject==null || content==null || subject.trim().length()==0 || content.trim().length()==0;
 	}
 	
-	public AddPostResult addPost(UserEntity user, PostEntityAdapter adapter) {
+	public String addPost(UserEntity user, PostEntityAdapter adapter) {
 		PostEntity p = adapter.createPost(null, user);
 		if(p==null || checkInputParams(user, p.getSubject(), p.getContent())) {
 			Log.info(this.getClass(), "Bad user input");
-			return AddPostResult.BAD_USER_INPUT;
+			return BAD_USER_INPUT;
 		}
 		EntityTransaction trans = null;
 		ThreadEntity thread = findThreadById(p.getThreadId());
@@ -69,12 +68,12 @@ public class PostsModel {
 			trans.begin();
 			mEntityManager.persist(thread);
 			trans.commit();
-			return AddPostResult.ADDED;
+			return ADDED;
 		} catch(Exception e) {
 			Log.info(this.getClass(), e.toString());
 			e.printStackTrace();
 			if(trans!=null && trans.isActive()) trans.rollback();
-			return AddPostResult.UNKNOWN_ERROR;
+			return UNKNOWN_ERROR;
 		} finally {
 			EntityUtils.closeEntityConnection(mFactory, mEntityManager);		
 		}		
@@ -153,19 +152,19 @@ public class PostsModel {
 		}
 	}	
 
-	public DeletePostResult delete(UserEntity userEntity, long postEntityId) {
+	public String delete(UserEntity userEntity, long postEntityId) {
 		if(userEntity==null) {
 			Log.info(getClass(), "No user passed to delete method.");
-			return DeletePostResult.UNKNOWN_ERROR;
+			return UNKNOWN_ERROR;
 		}
 		EntityTransaction trans = mEntityManager.getTransaction();
 		try {
 			PostEntity pe = findPostById(postEntityId);
 			if(pe==null) {
-				return DeletePostResult.DOESNT_EXIST;
+				return DOESNT_EXIST;
 			}
 			else if(!pe.getUser().getUsername().equals(userEntity.getUsername())) {
-				return DeletePostResult.NOT_YOURS_TO_DELETE;
+				return NOT_YOURS_TO_DELETE;
 			}
 			ThreadEntity th = findThreadById(pe.getThreadId());
 			th = mThreadFactory.updateThreadToRemovePost(th, pe);
@@ -173,7 +172,7 @@ public class PostsModel {
 			mEntityManager.merge(th);
 			mEntityManager.remove(pe);
 			trans.commit();
-			return DeletePostResult.DELETED;
+			return DELETED;
 		} catch(Exception e) {
 			Log.info(getClass(), "Error deleting: " + e.toString());
 			e.printStackTrace();
@@ -183,39 +182,39 @@ public class PostsModel {
 				Log.info(getClass(), "Error rolling back: " + e.toString());
 				e1.printStackTrace();
 			}
-			return DeletePostResult.UNKNOWN_ERROR;
+			return UNKNOWN_ERROR;
 		} finally {
 			EntityUtils.closeEntityConnection(mFactory, mEntityManager);
 		}
 	}
 
-	public EditPostResult edit(UserEntity userEntity, long postEntityId, PostEntityAdapter postAdapter) {
+	public String edit(UserEntity userEntity, long postEntityId, PostEntityAdapter postAdapter) {
 		PostEntity post;
 		if(userEntity==null || postAdapter==null) {
 			Log.info(getClass(), "No user or postadapter passed to edit method");
-			return EditPostResult.UNKNOWN_ERROR;
+			return UNKNOWN_ERROR;
 		}
 		EntityTransaction trans = mEntityManager.getTransaction();
 		try {
 			PostEntity pe = findPostById(postEntityId);
 			if(pe==null) {
-				return EditPostResult.DOESNT_EXIST;
+				return DOESNT_EXIST;
 			} else if(!pe.getUser().getUsername().equals(userEntity.getUsername())) {
-				return EditPostResult.NOT_YOURS_TO_DELETE;
+				return NOT_YOURS_TO_DELETE;
 			}
 			post = postAdapter.createPost(pe, userEntity);
 			if(post==null) {
 				Log.info(getClass(), "Edit post: PostAdapter returned null");
-				return EditPostResult.UNKNOWN_ERROR;
+				return UNKNOWN_ERROR;
 			}
 			if(checkInputParams(userEntity, post.getSubject(), post.getContent())) {
 				Log.info(this.getClass(), "Edit user: Bad user input");
-				return EditPostResult.BAD_USER_INPUT;
+				return BAD_USER_INPUT;
 			}
 			trans.begin();
 			mEntityManager.merge(post);
 			trans.commit();
-			return EditPostResult.EDITED;
+			return EDITED;
 		} catch(Exception e) {
 			Log.info(getClass(), "Error editing: " + e.toString());
 			e.printStackTrace();
@@ -225,7 +224,7 @@ public class PostsModel {
 				Log.info(getClass(), "Error rolling back: " + e.toString());
 				e1.printStackTrace();
 			}
-			return EditPostResult.UNKNOWN_ERROR;
+			return UNKNOWN_ERROR;
 		} finally {
 			EntityUtils.closeEntityConnection(mFactory, mEntityManager);
 		}

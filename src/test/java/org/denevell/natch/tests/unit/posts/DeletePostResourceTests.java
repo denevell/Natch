@@ -16,7 +16,6 @@ import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.AddPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.EditPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;
-import org.denevell.natch.serv.posts.PostsModel.DeletePostResult;
 import org.denevell.natch.serv.posts.PostsREST;
 import org.denevell.natch.serv.posts.resources.DeletePostResourceReturnData;
 import org.denevell.natch.utils.Strings;
@@ -48,7 +47,7 @@ public class DeletePostResourceTests {
 	public void shouldDeletePost() {
 		// Arrange
 		long postEntityId = 1l;
-		when(postsModel.delete(user, postEntityId)).thenReturn(DeletePostResult.DELETED);
+		when(postsModel.delete(user, postEntityId)).thenReturn(PostsModel.DELETED);
 		
 		// Act
 		DeletePostResourceReturnData result = resource.delete(postEntityId);
@@ -62,7 +61,7 @@ public class DeletePostResourceTests {
 	public void shouldShowNotYoursError() {
 		// Arrange
 		long postEntityId = 1l;
-		when(postsModel.delete(user, postEntityId)).thenReturn(DeletePostResult.NOT_YOURS_TO_DELETE);
+		when(postsModel.delete(user, postEntityId)).thenReturn(PostsModel.NOT_YOURS_TO_DELETE);
 		
 		// Act
 		DeletePostResourceReturnData result = resource.delete(postEntityId);
@@ -76,7 +75,7 @@ public class DeletePostResourceTests {
 	public void shouldShowUnknownPostError() {
 		// Arrange
 		long postEntityId = 1l;
-		when(postsModel.delete(user, postEntityId)).thenReturn(DeletePostResult.DOESNT_EXIST);
+		when(postsModel.delete(user, postEntityId)).thenReturn(PostsModel.DOESNT_EXIST);
 		
 		// Act
 		DeletePostResourceReturnData result = resource.delete(postEntityId);

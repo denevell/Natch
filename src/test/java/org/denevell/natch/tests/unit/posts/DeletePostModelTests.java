@@ -16,7 +16,6 @@ import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.ThreadFactory;
-import org.denevell.natch.serv.posts.PostsModel.DeletePostResult;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -52,10 +51,10 @@ public class DeletePostModelTests {
 		when(threadFactory.updateThreadToRemovePost(null, post)).thenReturn(threadEntity);
 		
 		// Act
-		DeletePostResult result = model.delete(userEntity, num);
+		String result = model.delete(userEntity, num);
 		
 		// Verify
-		assertEquals(DeletePostResult.DELETED, result);
+		assertEquals(PostsModel.DELETED, result);
 	}
 	
 	@Test
@@ -69,10 +68,10 @@ public class DeletePostModelTests {
 		userEntity.setUsername("this_person");
 		
 		// Act
-		DeletePostResult result = model.delete(userEntity, num);
+		String result = model.delete(userEntity, num);
 		
 		// Verify
-		assertEquals(DeletePostResult.NOT_YOURS_TO_DELETE, result);
+		assertEquals(PostsModel.NOT_YOURS_TO_DELETE, result);
 	}
 	
 	@Test
@@ -86,10 +85,10 @@ public class DeletePostModelTests {
 		userEntity.setUsername("this_person");
 		
 		// Act
-		DeletePostResult result = model.delete(userEntity, num);
+		String result = model.delete(userEntity, num);
 		
 		// Verify
-		assertEquals(DeletePostResult.DOESNT_EXIST, result);
+		assertEquals(PostsModel.DOESNT_EXIST, result);
 	}
 	
 	@Test
@@ -103,10 +102,10 @@ public class DeletePostModelTests {
 		userEntity.setUsername("this_person");
 		
 		// Act
-		DeletePostResult result = model.delete(userEntity, num);
+		String result = model.delete(userEntity, num);
 		
 		// Verify
-		assertEquals(DeletePostResult.UNKNOWN_ERROR, result);
+		assertEquals(PostsModel.UNKNOWN_ERROR, result);
 	}
 	
 	@Test
@@ -120,9 +119,9 @@ public class DeletePostModelTests {
 		userEntity.setUsername("this_person");
 		
 		// Act
-		DeletePostResult result = model.delete(null, num);
+		String result = model.delete(null, num);
 		
 		// Verify
-		assertEquals(DeletePostResult.UNKNOWN_ERROR, result);
+		assertEquals(PostsModel.UNKNOWN_ERROR, result);
 	}
 }

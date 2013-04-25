@@ -16,7 +16,6 @@ import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.AddPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.EditPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;
-import org.denevell.natch.serv.posts.PostsModel.AddPostResult;
 import org.denevell.natch.serv.posts.PostsREST;
 import org.denevell.natch.serv.posts.resources.AddPostResourceInput;
 import org.denevell.natch.serv.posts.resources.AddPostResourceReturnData;
@@ -49,7 +48,7 @@ public class AddPostResourceTests {
 	public void shouldAddPost() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		when(postsModel.addPost(user, addPostAdapter)).thenReturn(AddPostResult.ADDED);
+		when(postsModel.addPost(user, addPostAdapter)).thenReturn(PostsModel.ADDED);
 		
 		// Act
 		AddPostResourceReturnData result = resource.add(input);
@@ -63,7 +62,7 @@ public class AddPostResourceTests {
 	public void shouldntRegisterWhenModelSaysBadInput() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		when(postsModel.addPost(user, addPostAdapter)).thenReturn(AddPostResult.BAD_USER_INPUT);
+		when(postsModel.addPost(user, addPostAdapter)).thenReturn(PostsModel.BAD_USER_INPUT);
 		
 		// Act
 		AddPostResourceReturnData result = resource.add(input);
@@ -77,7 +76,7 @@ public class AddPostResourceTests {
 	public void shouldntAddWhenDodgyUserObjectInRequest() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		when(postsModel.addPost(user, addPostAdapter)).thenReturn(AddPostResult.ADDED);
+		when(postsModel.addPost(user, addPostAdapter)).thenReturn(PostsModel.ADDED);
 		when(request.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER)).thenThrow(new RuntimeException());
 		
 		// Act
@@ -104,7 +103,7 @@ public class AddPostResourceTests {
 	public void shouldntRegisterWithUnknownError() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		when(postsModel.addPost(user, addPostAdapter)).thenReturn(AddPostResult.UNKNOWN_ERROR);
+		when(postsModel.addPost(user, addPostAdapter)).thenReturn(PostsModel.UNKNOWN_ERROR);
 		
 		// Act
 		AddPostResourceReturnData result = resource.add(input);

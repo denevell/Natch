@@ -11,7 +11,6 @@ import javax.persistence.EntityTransaction;
 import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.db.entities.UserEntityQueries;
 import org.denevell.natch.serv.users.UsersModel;
-import org.denevell.natch.serv.users.UsersModel.RegisterResult;
 import org.denevell.natch.utils.PasswordSaltUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,10 +41,10 @@ public class RegisterModelTests {
 		UsersModel um = new UsersModel(queries, authManager, factory, entityManager, salter);
 		
 		// Act
-		RegisterResult result = um.addUserToSystem("user", "pass");
+		String result = um.addUserToSystem("user", "pass");
 		
 		// Assert
-		assertEquals("Successfully register", RegisterResult.REGISTERED, result);
+		assertEquals("Successfully register", UsersModel.REGISTERED, result);
 	}
 	
 	@Test
@@ -54,10 +53,10 @@ public class RegisterModelTests {
 		UsersModel um = new UsersModel(queries, authManager, factory, entityManager, salter);
 		
 		// Act
-		RegisterResult result = um.addUserToSystem("", "asd");
+		String result = um.addUserToSystem("", "asd");
 		
 		// Assert
-		assertEquals(RegisterResult.USER_INPUT_ERROR, result);
+		assertEquals(UsersModel.USER_INPUT_ERROR, result);
 	}
 	
 	@Test
@@ -66,10 +65,10 @@ public class RegisterModelTests {
 		UsersModel um = new UsersModel(queries, authManager, factory, entityManager, salter);
 		
 		// Act
-		RegisterResult result = um.addUserToSystem(null, "asd");
+		String result = um.addUserToSystem(null, "asd");
 		
 		// Assert
-		assertEquals(RegisterResult.USER_INPUT_ERROR, result);
+		assertEquals(UsersModel.USER_INPUT_ERROR, result);
 	}
 	
 	@Test
@@ -78,10 +77,10 @@ public class RegisterModelTests {
 		UsersModel um = new UsersModel(queries, authManager, factory, entityManager, salter);
 		
 		// Act
-		RegisterResult result = um.addUserToSystem("dsfd", "");
+		String result = um.addUserToSystem("dsfd", "");
 		
 		// Assert
-		assertEquals(RegisterResult.USER_INPUT_ERROR, result);
+		assertEquals(UsersModel.USER_INPUT_ERROR, result);
 	}
 	
 	@Test
@@ -90,10 +89,10 @@ public class RegisterModelTests {
 		UsersModel um = new UsersModel(queries, authManager, factory, entityManager, salter);
 		
 		// Act
-		RegisterResult result = um.addUserToSystem("dsfd", null);
+		String result = um.addUserToSystem("dsfd", null);
 		
 		// Assert
-		assertEquals(RegisterResult.USER_INPUT_ERROR, result);
+		assertEquals(UsersModel.USER_INPUT_ERROR, result);
 	}
 	
 	@Test
@@ -103,10 +102,10 @@ public class RegisterModelTests {
 		UsersModel um = new UsersModel(queries, authManager, factory, entityManager, salter);
 		
 		// Act
-		RegisterResult result = um.addUserToSystem("dsfd", "dsfsdf");
+		String result = um.addUserToSystem("dsfd", "dsfsdf");
 		
 		// Assert
-		assertEquals(RegisterResult.UNKNOWN_ERROR, result);
+		assertEquals(UsersModel.UNKNOWN_ERROR, result);
 	}
 	
 	@Test
@@ -116,10 +115,10 @@ public class RegisterModelTests {
 		UsersModel um = new UsersModel(queries, authManager, factory, entityManager, salter);
 		
 		// Act
-		RegisterResult result = um.addUserToSystem("username", "dsfsdf");
+		String result = um.addUserToSystem("username", "dsfsdf");
 		
 		// Assert
-		assertEquals(RegisterResult.DUPLICATE_USERNAME, result);
+		assertEquals(UsersModel.DUPLICATE_USERNAME, result);
 	}	
 
 }

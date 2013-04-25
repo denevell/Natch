@@ -24,7 +24,8 @@ public class UsersModel {
 	public static String USER_INPUT_ERROR = "inputError";
 	public static String UNKNOWN_ERROR = "unknownError";
 	public static String CREDENTIALS_INCORRECT = "credIncorect";
-	public enum RegisterResult { REGISTERED, UNKNOWN_ERROR, DUPLICATE_USERNAME, USER_INPUT_ERROR }
+	public static String REGISTERED="registered";
+	public static String DUPLICATE_USERNAME="dupusername";
 	public static class LoginResult {
 		private String authKey = "";
 		private String result;
@@ -71,9 +72,9 @@ public class UsersModel {
 	}
 	
 	
-	public RegisterResult addUserToSystem(String username, String password) {
+	public String addUserToSystem(String username, String password) {
 		if(password==null || password.trim().length()==0 || username==null || username.trim().length()==0) {
-			return RegisterResult.USER_INPUT_ERROR;
+			return USER_INPUT_ERROR;
 		}
 		UserEntity u = new UserEntity();
 		password = mPasswordSalter.generatedSaltedPassword(password);
@@ -86,15 +87,15 @@ public class UsersModel {
 				trans.begin();
 				mEntityManager.persist(u);
 				trans.commit();
-				return RegisterResult.REGISTERED;
+				return REGISTERED;
 			} else {
-				return RegisterResult.DUPLICATE_USERNAME;
+				return DUPLICATE_USERNAME;
 			}
 		} catch(Exception e) {
 			Log.info(this.getClass(), e.toString());
 			e.printStackTrace();
 			if(trans!=null && trans.isActive()) trans.rollback();
-			return RegisterResult.UNKNOWN_ERROR;
+			return UNKNOWN_ERROR;
 		} finally {
 			EntityUtils.closeEntityConnection(mFactory, mEntityManager);
 		}

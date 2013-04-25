@@ -15,7 +15,6 @@ import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.PostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;
-import org.denevell.natch.serv.posts.PostsModel.AddPostResult;
 import org.denevell.natch.serv.posts.ThreadFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,10 +56,10 @@ public class AddPostModelTests {
 		when(threadFactory.makeThread(genericPost)).thenReturn(genericThread);
 		
 		// Act
-		AddPostResult result = model.addPost(userEntity, adapter);
+		String result = model.addPost(userEntity, adapter);
 		
 		// Assert
-		assertEquals(AddPostResult.ADDED, result);
+		assertEquals(PostsModel.ADDED, result);
 		verify(entityManager).persist(genericThread);
 	}
 	
@@ -76,10 +75,10 @@ public class AddPostModelTests {
 		when(threadFactory.makeThread(genericPost)).thenReturn(genericThread);
 		
 		// Act
-		AddPostResult result = model.addPost(userEntity, adapter);
+		String result = model.addPost(userEntity, adapter);
 		
 		// Assert
-		assertEquals(AddPostResult.ADDED, result);
+		assertEquals(PostsModel.ADDED, result);
 		verify(entityManager).persist(genericThread);
 	}	
 	
@@ -94,10 +93,10 @@ public class AddPostModelTests {
 		when(entityManager.getTransaction()).thenThrow(new RuntimeException());
 		
 		// Act
-		AddPostResult result = model.addPost(userEntity, adapter);
+		String result = model.addPost(userEntity, adapter);
 		
 		// Assert
-		assertEquals(AddPostResult.UNKNOWN_ERROR, result);
+		assertEquals(PostsModel.UNKNOWN_ERROR, result);
 		verify(entityManager, never()).persist(genericThread);
 	}
 	
@@ -111,10 +110,10 @@ public class AddPostModelTests {
 		when(adapter.createPost(null, userEntity)).thenReturn(null);
 		
 		// Act
-		AddPostResult result = model.addPost(userEntity, adapter);
+		String result = model.addPost(userEntity, adapter);
 		
 		// Assert
-		assertEquals(AddPostResult.BAD_USER_INPUT, result);
+		assertEquals(PostsModel.BAD_USER_INPUT, result);
 		verify(entityManager, never()).persist(genericThread);
 	}
 	
@@ -128,10 +127,10 @@ public class AddPostModelTests {
 		when(adapter.createPost(null, userEntity)).thenReturn(genericPost);
 		
 		// Act
-		AddPostResult result = model.addPost(userEntity, adapter);
+		String result = model.addPost(userEntity, adapter);
 		
 		// Assert
-		assertEquals(AddPostResult.BAD_USER_INPUT, result);
+		assertEquals(PostsModel.BAD_USER_INPUT, result);
 		verify(entityManager, never()).persist(genericThread);
 	}
 	
@@ -143,10 +142,10 @@ public class AddPostModelTests {
 		when(adapter.createPost(null, userEntity)).thenReturn(genericPost);
 		
 		// Act
-		AddPostResult result = model.addPost(null, adapter);
+		String result = model.addPost(null, adapter);
 		
 		// Assert
-		assertEquals(AddPostResult.BAD_USER_INPUT, result);
+		assertEquals(PostsModel.BAD_USER_INPUT, result);
 		verify(entityManager, never()).persist(genericThread);
 	}
 	
@@ -160,10 +159,10 @@ public class AddPostModelTests {
 		when(adapter.createPost(null, userEntity)).thenReturn(genericPost);
 		
 		// Act
-		AddPostResult result = model.addPost(userEntity, adapter);
+		String result = model.addPost(userEntity, adapter);
 		
 		// Assert
-		assertEquals(AddPostResult.BAD_USER_INPUT, result);
+		assertEquals(PostsModel.BAD_USER_INPUT, result);
 		verify(entityManager, never()).persist(genericThread);
 	}
 	
@@ -177,10 +176,10 @@ public class AddPostModelTests {
 		when(adapter.createPost(null, userEntity)).thenReturn(genericPost);
 		
 		// Act
-		AddPostResult result = model.addPost(userEntity, adapter);
+		String result = model.addPost(userEntity, adapter);
 		
 		// Assert
-		assertEquals(AddPostResult.BAD_USER_INPUT, result);
+		assertEquals(PostsModel.BAD_USER_INPUT, result);
 		verify(entityManager, never()).persist(genericThread);
 	}		
 	
@@ -194,10 +193,10 @@ public class AddPostModelTests {
 		when(adapter.createPost(null, userEntity)).thenReturn(genericPost);
 		
 		// Act
-		AddPostResult result = model.addPost(userEntity, adapter);
+		String result = model.addPost(userEntity, adapter);
 		
 		// Assert
-		assertEquals(AddPostResult.BAD_USER_INPUT, result);
+		assertEquals(PostsModel.BAD_USER_INPUT, result);
 		verify(entityManager, never()).persist(genericThread);
 	}	
 	
@@ -211,10 +210,10 @@ public class AddPostModelTests {
 		when(adapter.createPost(null, userEntity)).thenReturn(genericPost);
 		
 		// Act
-		AddPostResult result = model.addPost(userEntity, adapter);
+		String result = model.addPost(userEntity, adapter);
 		
 		// Assert
-		assertEquals(AddPostResult.BAD_USER_INPUT, result);
+		assertEquals(PostsModel.BAD_USER_INPUT, result);
 		verify(entityManager, never()).persist(genericThread);
 	}
 	
@@ -229,10 +228,10 @@ public class AddPostModelTests {
 		when(adapter.createPost(null, userEntity)).thenReturn(genericPost);
 		
 		// Act
-		AddPostResult result = model.addPost(userEntity, adapter);
+		String result = model.addPost(userEntity, adapter);
 		
 		// Assert
-		assertEquals(AddPostResult.BAD_USER_INPUT, result);
+		assertEquals(PostsModel.BAD_USER_INPUT, result);
 		verify(entityManager, never()).persist(genericThread);
 	}	
 	
@@ -246,10 +245,10 @@ public class AddPostModelTests {
 		when(adapter.createPost(null, userEntity)).thenReturn(genericPost);
 		
 		// Act
-		AddPostResult result = model.addPost(null, adapter);
+		String result = model.addPost(null, adapter);
 		
 		// Assert
-		assertEquals(AddPostResult.BAD_USER_INPUT, result);
+		assertEquals(PostsModel.BAD_USER_INPUT, result);
 		verify(entityManager, never()).persist(genericThread);
 	}		
 }

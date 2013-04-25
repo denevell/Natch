@@ -17,7 +17,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.serv.users.UsersModel.LoginResult;
-import org.denevell.natch.serv.users.UsersModel.RegisterResult;
 import org.denevell.natch.serv.users.resources.LoginResourceInput;
 import org.denevell.natch.serv.users.resources.LoginResourceLoggedInReturnData;
 import org.denevell.natch.serv.users.resources.LoginResourceReturnData;
@@ -67,13 +66,13 @@ public class UsersREST {
 			regReturnData.setError(rb.getString(Strings.user_pass_cannot_be_blank));
 			return regReturnData;
 		}
-		RegisterResult okay = mLoginModel.addUserToSystem(registerInput.getUsername(), registerInput.getPassword());
-		if(okay==RegisterResult.REGISTERED) {
+		String okay = mLoginModel.addUserToSystem(registerInput.getUsername(), registerInput.getPassword());
+		if(okay.equals(UsersModel.REGISTERED)) {
 			regReturnData.setSuccessful(true);
-		} else if(okay==RegisterResult.USER_INPUT_ERROR) {
+		} else if(okay.equals(UsersModel.USER_INPUT_ERROR)) {
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.user_pass_cannot_be_blank));
-		} else if(okay==RegisterResult.DUPLICATE_USERNAME){
+		} else if(okay.equals(UsersModel.DUPLICATE_USERNAME)){
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.username_already_exists));
 		} else {

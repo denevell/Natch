@@ -15,7 +15,6 @@ import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.PostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;
-import org.denevell.natch.serv.posts.PostsModel.EditPostResult;
 import org.denevell.natch.serv.posts.ThreadFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,10 +52,10 @@ public class EditPostModelTests {
 		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(postToBeEdited);
 		
 		// Act
-		EditPostResult result = model.edit(userEntity, num, postEntityAdapter);
+		String result = model.edit(userEntity, num, postEntityAdapter);
 		
 		// Assert 
-		assertEquals(EditPostResult.EDITED, result);
+		assertEquals(PostsModel.EDITED, result);
 	}
 	
 	@Test
@@ -71,10 +70,10 @@ public class EditPostModelTests {
 		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(post);
 		
 		// Act
-		EditPostResult result = model.edit(userEntity, num, postEntityAdapter);
+		String result = model.edit(userEntity, num, postEntityAdapter);
 		
 		// Assert 
-		assertEquals(EditPostResult.NOT_YOURS_TO_DELETE, result);
+		assertEquals(PostsModel.NOT_YOURS_TO_DELETE, result);
 	}
 	
 	@Test
@@ -89,10 +88,10 @@ public class EditPostModelTests {
 		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(post);
 		
 		// Act
-		EditPostResult result = model.edit(userEntity, num, postEntityAdapter);
+		String result = model.edit(userEntity, num, postEntityAdapter);
 		
 		// Assert 
-		assertEquals(EditPostResult.DOESNT_EXIST, result);
+		assertEquals(PostsModel.DOESNT_EXIST, result);
 	}
 	
 	@Test
@@ -107,10 +106,10 @@ public class EditPostModelTests {
 		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(post);
 		
 		// Act
-		EditPostResult result = model.edit(userEntity, num, postEntityAdapter);
+		String result = model.edit(userEntity, num, postEntityAdapter);
 		
 		// Assert 
-		assertEquals(EditPostResult.UNKNOWN_ERROR, result);
+		assertEquals(PostsModel.UNKNOWN_ERROR, result);
 	}
 	
 	@Test
@@ -125,10 +124,10 @@ public class EditPostModelTests {
 		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(post);
 		
 		// Act
-		EditPostResult result = model.edit(null, num, postEntityAdapter);
+		String result = model.edit(null, num, postEntityAdapter);
 		
 		// Assert 
-		assertEquals(EditPostResult.UNKNOWN_ERROR, result);
+		assertEquals(PostsModel.UNKNOWN_ERROR, result);
 	}
 	
 	@Test
@@ -142,10 +141,10 @@ public class EditPostModelTests {
 		userEntity.setUsername("this_person");
 		
 		// Act
-		EditPostResult result = model.edit(userEntity, num, null);
+		String result = model.edit(userEntity, num, null);
 		
 		// Assert 
-		assertEquals(EditPostResult.UNKNOWN_ERROR, result);
+		assertEquals(PostsModel.UNKNOWN_ERROR, result);
 	}
 	
 	@Test
@@ -161,10 +160,10 @@ public class EditPostModelTests {
 		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(postToEdit);
 		
 		// Act
-		EditPostResult result = model.edit(userEntity, num, postEntityAdapter);
+		String result = model.edit(userEntity, num, postEntityAdapter);
 		
 		// Assert 
-		assertEquals(EditPostResult.BAD_USER_INPUT, result);
+		assertEquals(PostsModel.BAD_USER_INPUT, result);
 	}
 	
 	@Test
@@ -180,10 +179,10 @@ public class EditPostModelTests {
 		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(postToEdit);
 		
 		// Act
-		EditPostResult result = model.edit(userEntity, num, postEntityAdapter);
+		String result = model.edit(userEntity, num, postEntityAdapter);
 		
 		// Assert 
-		assertEquals(EditPostResult.BAD_USER_INPUT, result);
+		assertEquals(PostsModel.BAD_USER_INPUT, result);
 	}
 	
 	@Test
@@ -199,10 +198,10 @@ public class EditPostModelTests {
 		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(postToEdit);
 		
 		// Act
-		EditPostResult result = model.edit(userEntity, num, postEntityAdapter);
+		String result = model.edit(userEntity, num, postEntityAdapter);
 		
 		// Assert 
-		assertEquals(EditPostResult.BAD_USER_INPUT, result);
+		assertEquals(PostsModel.BAD_USER_INPUT, result);
 	}
 	
 	@Test
@@ -217,9 +216,9 @@ public class EditPostModelTests {
 		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(null);
 		
 		// Act
-		EditPostResult result = model.edit(userEntity, num, postEntityAdapter);
+		String result = model.edit(userEntity, num, postEntityAdapter);
 		
 		// Assert 
-		assertEquals(EditPostResult.UNKNOWN_ERROR, result);
+		assertEquals(PostsModel.UNKNOWN_ERROR, result);
 	}
 }

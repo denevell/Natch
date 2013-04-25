@@ -16,7 +16,6 @@ import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.AddPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.EditPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;
-import org.denevell.natch.serv.posts.PostsModel.EditPostResult;
 import org.denevell.natch.serv.posts.PostsREST;
 import org.denevell.natch.serv.posts.resources.EditPostResource;
 import org.denevell.natch.serv.posts.resources.EditPostResourceReturnData;
@@ -51,7 +50,7 @@ public class EditPostResourceTests {
 		// Arrange
 		EditPostResource editPostResource = null;
 		long postEntityId = 1l;
-		when(postsModel.edit(user, postEntityId, postEntityAdapter)).thenReturn(EditPostResult.EDITED);
+		when(postsModel.edit(user, postEntityId, postEntityAdapter)).thenReturn(PostsModel.EDITED);
 		
 		// Act
 		EditPostResourceReturnData result = resource.edit(postEntityId, editPostResource);
@@ -66,7 +65,7 @@ public class EditPostResourceTests {
 		// Arrange
 		EditPostResource editPostResource = null;
 		long postEntityId = 1l;
-		when(postsModel.edit(user, postEntityId, postEntityAdapter)).thenReturn(EditPostResult.NOT_YOURS_TO_DELETE);
+		when(postsModel.edit(user, postEntityId, postEntityAdapter)).thenReturn(PostsModel.NOT_YOURS_TO_DELETE);
 		
 		// Act
 		EditPostResourceReturnData result = resource.edit(postEntityId, editPostResource);
@@ -81,7 +80,7 @@ public class EditPostResourceTests {
 		// Arrange
 		EditPostResource editPostResource = null;
 		long postEntityId = 1l;
-		when(postsModel.edit(user, postEntityId, postEntityAdapter)).thenReturn(EditPostResult.DOESNT_EXIST);
+		when(postsModel.edit(user, postEntityId, postEntityAdapter)).thenReturn(PostsModel.DOESNT_EXIST);
 		
 		// Act
 		EditPostResourceReturnData result = resource.edit(postEntityId, editPostResource);
