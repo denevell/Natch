@@ -3,19 +3,22 @@
      xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
      version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
      <persistence-unit name="users" transaction-type="RESOURCE_LOCAL">
-	     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+	     <provider>org.hibernate.ejb.HibernatePersistence</provider>
 	     <class>org.denevell.natch.db.entities.UserEntity</class>
 	     <class>org.denevell.natch.db.entities.PostEntity</class>
 	     <class>org.denevell.natch.db.entities.ThreadEntity</class>
 	     <properties>
-      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver" />
-      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/testNatchDb" />
-      <property name="javax.persistence.jdbc.user" value="app" />
-      <property name="javax.persistence.jdbc.password" value="app" />
-	<!--		<property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:sqlite:/var/lib/tomcat7/dbs/test.db" /> -->
+			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/testNatchDb" />
+			<property name="javax.persistence.jdbc.user" value="app" />
+			<property name="javax.persistence.jdbc.password" value="app" />
+			<property name='hibernate.dialect' value="org.hibernate.dialect.DerbyTenSevenDialect" />
+			<property name='hibernate.hbm2ddl.auto' value='update' />
+			<property name='hibernate.show_sql' value='true' />      
+			<!--		<property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:sqlite:/var/lib/tomcat7/dbs/test.db" /> 
 			<property name="eclipselink.logging.level" value="ALL" />
-			<property name="eclipselink.ddl-generation" value="create-tables" />
+			<property name="eclipselink.ddl-generation" value="create-tables" /> -->
 	     </properties>
      </persistence-unit>
 </persistence>
