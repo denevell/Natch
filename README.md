@@ -58,7 +58,6 @@ The start of a REST interface for a forum.
 * ###: Separate out thread and post code and tests
 * ###: Re-enable db locking 
 * ###: Inject the EntityManager via annotations
-* ###: Make swagger understand that the 'tags' resource in add post is actually called 'posttags'
 * ##: Entity bean null / blank problem?
 * ##: Look at hibernate errors and fix
 * #: Start using DI
@@ -70,6 +69,7 @@ The start of a REST interface for a forum.
 * #: threaded posts: move tags to the thread object and not individual posts?
 * #: threaded posts: move subject to thread object?
 * #: threaded posts: moved creation date to thread?
+* ~~###: Make swagger understand that the 'tags' resource in add post is actually called 'posttags'~~
 * ~~###: Make swaggers requests work - extend .json to request.~~
 * ~~###: Move over to openjpa or fix the strange language problem with eclipselink~~
 * ~~###: Add memory dump line to tomcat config.~~

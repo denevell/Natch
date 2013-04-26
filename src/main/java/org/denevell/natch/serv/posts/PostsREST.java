@@ -33,6 +33,8 @@ import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
 import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiError;
+import com.wordnik.swagger.annotations.ApiErrors;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
@@ -71,7 +73,11 @@ public class PostsREST {
 	@Path("/add") // Explicit for the servlet filter
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Add a post", responseClass="org.denevell.natch.serv.posts.resources.AddPostResourceReturnData")
+	@ApiOperation(value = "Add a post",	notes="Must contain the AuthKey header.",
+		responseClass="org.denevell.natch.serv.posts.resources.AddPostResourceReturnData")
+	@ApiErrors({
+		@ApiError(code=401, reason="Incorrect AuthKey header.")
+	})	
 	public AddPostResourceReturnData add(
 			@ApiParam(name="input") AddPostResourceInput input) {
 		AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
@@ -133,11 +139,11 @@ public class PostsREST {
 	}
 	
 	@GET
-	@Path("/{q}/{start}/{limit}")
+	@Path("/{threadId}/{start}/{limit}")
 	@Produces(MediaType.APPLICATION_JSON)	
 	@ApiOperation(value = "Lists posts within the thread specified", responseClass="org.denevell.natch.serv.posts.resources.ListPostsResource")
 	public ListPostsResource listByThreadId(
-			@ApiParam(name="threadId") @PathParam("q") String threadId,
+			@ApiParam(name="threadId") @PathParam("threadId") String threadId,
 			@ApiParam(name="start") @PathParam("start") int start, 	
 			@ApiParam(name="limit") @PathParam("limit") int limit 	
 			) throws IOException {
@@ -210,11 +216,15 @@ public class PostsREST {
 	}	
 
 	@DELETE
-	@Path("/del/{q}") // Explicit for the servlet filter
+	@Path("/del/{postId}") // Explicit for the servlet filter
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Delete a post", responseClass="org.denevell.natch.serv.posts.resources.DeletePostResourceReturnData")
+	@ApiOperation(value = "Delete a post", 	notes="Must contain the AuthKey header.",
+		responseClass="org.denevell.natch.serv.posts.resources.DeletePostResourceReturnData")
+	@ApiErrors({
+		@ApiError(code=401, reason="Incorrect AuthKey header.")
+	})	
 	public DeletePostResourceReturnData delete(
-			@ApiParam(name="postId") @PathParam("q") long number) {
+			@ApiParam(name="postId") @PathParam("postId") long number) {
 		DeletePostResourceReturnData ret = new DeletePostResourceReturnData();
 		ret.setSuccessful(false);
 		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
@@ -246,11 +256,15 @@ public class PostsREST {
 	}
 
 	@POST
-	@Path("/edit/{q}") // Explicit for the servlet filter
+	@Path("/edit/{postId}") // Explicit for the servlet filter
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Edit a post", responseClass="org.denevell.natch.serv.posts.resources.EditPostResourceReturnData")
+	@ApiOperation(value = "Edit a post", notes="Must contain the AuthKey header.",
+		responseClass="org.denevell.natch.serv.posts.resources.EditPostResourceReturnData")
+	@ApiErrors({
+		@ApiError(code=401, reason="Incorrect AuthKey header.")
+	})	
 	public EditPostResourceReturnData edit(
-			@ApiParam(name="postId") @PathParam(value="q") long postId, 
+			@ApiParam(name="postId") @PathParam(value="postId") long postId, 
 			@ApiParam(name="editParam") EditPostResource editPostResource) {
 		EditPostResourceReturnData ret = new EditPostResourceReturnData();
 		ret.setSuccessful(false);
