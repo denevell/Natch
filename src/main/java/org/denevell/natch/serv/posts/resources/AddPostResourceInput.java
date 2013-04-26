@@ -63,7 +63,7 @@ public class AddPostResourceInput {
 		return tags;
 	}
 
-    @XmlElement(name="posttags")
+    @XmlElement(name="tags")
 	public void setTags(List<String> tags) {
 		this.tags = tags;
 	}
