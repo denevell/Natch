@@ -26,6 +26,8 @@ import org.denevell.natch.serv.users.resources.RegisterResourceReturnData;
 import org.denevell.natch.utils.Strings;
 
 import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiError;
+import com.wordnik.swagger.annotations.ApiErrors;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
@@ -86,7 +88,7 @@ public class UsersREST {
 	@Path("/login") // So we can url match for servlet filters
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Login", 
+	@ApiOperation(value = "Login",  notes="You use the return AuthKey for the future requests which require a AuthKey header",
 		responseClass="org.denevell.natch.serv.users.resources.LoginResourceReturnData")
 	public LoginResourceReturnData login(@ApiParam(name="loginInput") LoginResourceInput loginInput) {
 		LoginResourceReturnData returnResult = new LoginResourceReturnData();
@@ -116,8 +118,11 @@ public class UsersREST {
 	@Path("/is")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiOperation(value = "Check if logged in", 
-		notes="Must contain the ApiKey header.",
+		notes="Must contain the AuthKey header.",
 		responseClass="org.denevell.natch.serv.users.resources.LoginResourceLoggedInReturnData")
+	@ApiErrors({
+		@ApiError(code=401, reason="Incorrect AuthKey header.")
+	})
 	public LoginResourceLoggedInReturnData isLoggedIn() {
 		// If we get here, the login filter failed.
 		LoginResourceLoggedInReturnData ret = new LoginResourceLoggedInReturnData();
@@ -129,8 +134,11 @@ public class UsersREST {
 	@Path("/logout") // So we can url match a 'logout' in the servlet filter
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiOperation(value = "Logout", 
-		notes="Must contain the ApiKey header.",
+		notes="Must contain the AuthKey header.",
 		responseClass="org.denevell.natch.serv.users.resources.LogoutResourceReturnData")
+	@ApiErrors({
+		@ApiError(code=401, reason="Incorrect AuthKey header.")
+	})
 	public LogoutResourceReturnData logout() {
 		LogoutResourceReturnData returnResult = new LogoutResourceReturnData();
 		String authKey = mRequest.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_AUTHKEY).toString();

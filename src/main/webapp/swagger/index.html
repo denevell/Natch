@@ -19,11 +19,12 @@
     <script type="text/javascript">
 	$(function () {
 	    window.swaggerUi = new SwaggerUi({
-                discoveryUrl:"http://localhost:8080/Natch-Functional/rest/api-docs.json",
-                apiKey:"",
+                discoveryUrl:"http://localhost:8080/Natch-Functional/rest/api-docs",
+                apiKey:"ignore",
                 dom_id:"swagger-ui-container",
-                supportHeaderParams: false,
-                supportedSubmitMethods: ['get', 'post', 'put'],
+                supportHeaderParams: true,
+		headers: { },
+                supportedSubmitMethods: ['get', 'post', 'put', 'delete'],
                 onComplete: function(swaggerApi, swaggerUi){
                 	if(console) {
                         console.log("Loaded SwaggerUI")

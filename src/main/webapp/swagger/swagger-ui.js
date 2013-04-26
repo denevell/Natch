@@ -315,7 +315,7 @@ function program9(depth0,data) {
 function program11(depth0,data) {
   
   
-  return "\n                    <div class='sandbox_header'>\n                        <input class='submit' name='commit' type='button' value='Try it out!' />\n                        <a href='#' class='response_hider' style='display:none'>Hide Response</a>\n                        <img alt='Throbber' class='response_throbber' src='images/throbber.gif' style='display:none' />\n                    </div>\n                    ";}
+  return "<h4>'AuthKey' header</h4> <div><input id='AuthKey'></div><br />\n                    <div class='sandbox_header'>\n                        <input class='submit' name='commit' type='button' value='Try it out!' />\n                        <a href='#' class='response_hider' style='display:none'>Hide Response</a>\n                        <img alt='Throbber' class='response_throbber' src='images/throbber.gif' style='display:none' />\n                    </div>\n                    ";}
 
   buffer += "\n    <ul class='operations' >\n      <li class='";
   foundHelper = helpers.httpMethod;
@@ -1655,6 +1655,7 @@ templates['status_code'] = template(function (Handlebars,depth0,helpers,partials
           obj.headers = obj.headers != null ? obj.headers : {};
           obj.headers.accept = responseContentTypeField;
         }
+	obj.headers.AuthKey = $("#AuthKey", this.el).val();
         jQuery.ajax(obj);
         return false;
       }
