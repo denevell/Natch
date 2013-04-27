@@ -62,26 +62,29 @@ public class UsersREST {
 	public RegisterResourceReturnData register(
 			@ApiParam(name="registerInput") RegisterResourceInput registerInput) {
 		RegisterResourceReturnData regReturnData = new RegisterResourceReturnData();
-		if(registerInput==null) {
-			regReturnData.setSuccessful(false);
-			regReturnData.setError(rb.getString(Strings.user_pass_cannot_be_blank));
+		try {
+			if(registerInput==null) {
+				regReturnData.setSuccessful(false);
+				regReturnData.setError(rb.getString(Strings.user_pass_cannot_be_blank));
+				return regReturnData;
+			}
+			String okay = mLoginModel.addUserToSystem(registerInput.getUsername(), registerInput.getPassword());
+			if(okay.equals(UsersModel.REGISTERED)) {
+				regReturnData.setSuccessful(true);
+			} else if(okay.equals(UsersModel.USER_INPUT_ERROR)) {
+				regReturnData.setSuccessful(false);
+				regReturnData.setError(rb.getString(Strings.user_pass_cannot_be_blank));
+			} else if(okay.equals(UsersModel.DUPLICATE_USERNAME)){
+				regReturnData.setSuccessful(false);
+				regReturnData.setError(rb.getString(Strings.username_already_exists));
+			} else {
+				regReturnData.setSuccessful(false);
+				regReturnData.setError(rb.getString(Strings.unknown_error));
+			}
 			return regReturnData;
+		} finally {
+			mLoginModel.close();
 		}
-		String okay = mLoginModel.addUserToSystem(registerInput.getUsername(), registerInput.getPassword());
-		if(okay.equals(UsersModel.REGISTERED)) {
-			regReturnData.setSuccessful(true);
-		} else if(okay.equals(UsersModel.USER_INPUT_ERROR)) {
-			regReturnData.setSuccessful(false);
-			regReturnData.setError(rb.getString(Strings.user_pass_cannot_be_blank));
-		} else if(okay.equals(UsersModel.DUPLICATE_USERNAME)){
-			regReturnData.setSuccessful(false);
-			regReturnData.setError(rb.getString(Strings.username_already_exists));
-		} else {
-			regReturnData.setSuccessful(false);
-			regReturnData.setError(rb.getString(Strings.unknown_error));
-		}
-		mLoginModel.close();
-		return regReturnData;
 	}	
 	
 	@POST
@@ -91,28 +94,31 @@ public class UsersREST {
 	@ApiOperation(value = "Login",  notes="You use the return AuthKey for the future requests which require a AuthKey header",
 		responseClass="org.denevell.natch.serv.users.resources.LoginResourceReturnData")
 	public LoginResourceReturnData login(@ApiParam(name="loginInput") LoginResourceInput loginInput) {
-		LoginResourceReturnData returnResult = new LoginResourceReturnData();
-		if(loginInput==null) {
-			returnResult.setSuccessful(false);
-			returnResult.setError(rb.getString(Strings.incorrect_username_or_password));
+		try {
+			LoginResourceReturnData returnResult = new LoginResourceReturnData();
+			if(loginInput==null) {
+				returnResult.setSuccessful(false);
+				returnResult.setError(rb.getString(Strings.incorrect_username_or_password));
+				return returnResult;
+			}
+			String username = loginInput.getUsername();
+			String password = loginInput.getPassword();
+			LoginResult loginResult = mLoginModel.login(username, password);
+			if(loginResult.getResult().equals(UsersModel.LOGGED_IN)) {
+				returnResult.setSuccessful(true);
+				returnResult.setAuthKey(loginResult.getAuthKey());
+			} else if(loginResult.getResult().equals(UsersModel.CREDENTIALS_INCORRECT)
+					|| loginResult.getResult().equals(UsersModel.USER_INPUT_ERROR)){
+				returnResult.setSuccessful(false);
+				returnResult.setError(rb.getString(Strings.incorrect_username_or_password));
+			} else {
+				returnResult.setSuccessful(false);
+				returnResult.setError(rb.getString(Strings.unknown_error));
+			}
 			return returnResult;
+		} finally {
+			mLoginModel.close();
 		}
-		String username = loginInput.getUsername();
-		String password = loginInput.getPassword();
-		LoginResult loginResult = mLoginModel.login(username, password);
-		if(loginResult.getResult().equals(UsersModel.LOGGED_IN)) {
-			returnResult.setSuccessful(true);
-			returnResult.setAuthKey(loginResult.getAuthKey());
-		} else if(loginResult.getResult().equals(UsersModel.CREDENTIALS_INCORRECT)
-				|| loginResult.getResult().equals(UsersModel.USER_INPUT_ERROR)){
-			returnResult.setSuccessful(false);
-			returnResult.setError(rb.getString(Strings.incorrect_username_or_password));
-		} else {
-			returnResult.setSuccessful(false);
-			returnResult.setError(rb.getString(Strings.unknown_error));
-		}
-		mLoginModel.close();
-		return returnResult;
 	}
 
 	@GET

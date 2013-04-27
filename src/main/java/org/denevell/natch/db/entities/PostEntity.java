@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -41,7 +42,7 @@ public class PostEntity {
 	private String content;
 	private String threadId;
 	@XmlElement(required=false)
-	@ElementCollection
+	@ElementCollection(fetch=FetchType.EAGER)
 	private List<String> tags;
 	@OneToOne
 	private UserEntity user;

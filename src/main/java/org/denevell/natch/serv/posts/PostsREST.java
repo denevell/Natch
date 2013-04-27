@@ -80,23 +80,26 @@ public class PostsREST {
 	})	
 	public AddPostResourceReturnData add(
 			@ApiParam(name="input") AddPostResourceInput input) {
-		AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
-		regReturnData.setSuccessful(false);
-		if(input==null || input.getContent()==null || input.getSubject()==null) {
+		try {
+			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 			regReturnData.setSuccessful(false);
-			regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
+			if(input==null || input.getContent()==null || input.getSubject()==null) {
+				regReturnData.setSuccessful(false);
+				regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
+				return regReturnData;
+			}
+			UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+			if(userEntity==null) {
+				regReturnData.setError(rb.getString(Strings.unknown_error)); // Unknown as this shouldn't happen
+				return regReturnData;
+			}
+			mAddPostAdapter.create(input);
+			String okay = mModel.addPost(userEntity, mAddPostAdapter);
+			generateAddPostReturnResource(regReturnData, okay);
 			return regReturnData;
+		} finally {
+			mModel.close();
 		}
-		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-		if(userEntity==null) {
-			regReturnData.setError(rb.getString(Strings.unknown_error)); // Unknown as this shouldn't happen
-			return regReturnData;
-		}
-		mAddPostAdapter.create(input);
-		String okay = mModel.addPost(userEntity, mAddPostAdapter);
-		generateAddPostReturnResource(regReturnData, okay);
-		mModel.close();
-		return regReturnData;
 	}
 
 	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, String okay) {
@@ -130,7 +133,7 @@ public class PostsREST {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
 		} finally {
-			//mModel.close();
+			mModel.close();
 		}
 		if(posts==null) {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
@@ -157,7 +160,9 @@ public class PostsREST {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
-		} 
+		} finally {
+			mModel.close();
+		}
 		if(posts==null) {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			//mModel.close();
@@ -185,7 +190,7 @@ public class PostsREST {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
 		} finally {
-			//mModel.close();
+			mModel.close();
 		}
 		if(threads==null) {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
@@ -213,7 +218,7 @@ public class PostsREST {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
 		} finally {
-			//mModel.close();
+			mModel.close();
 		}
 		if(threads==null) {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
@@ -237,11 +242,11 @@ public class PostsREST {
 		DeletePostResourceReturnData ret = new DeletePostResourceReturnData();
 		ret.setSuccessful(false);
 		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-		if(userEntity==null) {
-			ret.setError(rb.getString(Strings.unknown_error)); // Unknown as this shouldn't happen
-			return ret;
-		}	
 		try {
+			if(userEntity==null) {
+				ret.setError(rb.getString(Strings.unknown_error)); // Unknown as this shouldn't happen
+				return ret;
+			}	
 			String result = mModel.delete(userEntity, number);
 			generateDeleteReturnResource(result, ret, userEntity);
 			return ret;
@@ -278,13 +283,13 @@ public class PostsREST {
 			@ApiParam(name="postId") @PathParam(value="postId") long postId, 
 			@ApiParam(name="editParam") EditPostResource editPostResource) {
 		EditPostResourceReturnData ret = new EditPostResourceReturnData();
-		ret.setSuccessful(false);
-		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-		if(userEntity==null) {
-			ret.setError(rb.getString(Strings.unknown_error)); // Unknown as this shouldn't happen
-			return ret;
-		}	
 		try {
+			ret.setSuccessful(false);
+			UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+			if(userEntity==null) {
+				ret.setError(rb.getString(Strings.unknown_error)); // Unknown as this shouldn't happen
+				return ret;
+			}	
 			mEditPostAdapter.setPostWithNewData(editPostResource);
 			String result = mModel.edit(userEntity, postId, mEditPostAdapter); 
 			generateEditReturnResource(ret, result);

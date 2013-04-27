@@ -64,8 +64,6 @@ The start of a REST interface for a forum.
 * #: Intercept json parsing errors and return 400s: register, login
 * #: Add start derby and stuff to gradle build file?
 * #: Run code coverage and test non-covered code
-* #: We're not closing the entity managers when we return with bad user input in models
-* #: Check the memory leak is really fixed in long running tomcat instances 
 * #: threaded posts: move tags to the thread object and not individual posts?
 * #: threaded posts: move subject to thread object?
 * #: threaded posts: moved creation date to thread?
@@ -74,6 +72,8 @@ The start of a REST interface for a forum.
 * ~~###: Move over to openjpa or fix the strange language problem with eclipselink~~
 * ~~###: Add memory dump line to tomcat config.~~
 * ~~##: Profile speed~~
+* ~~#: Check the memory leak is really fixed in long running tomcat instances~~
+* ~~#: We're not closing the entity managers when we return with bad user input in models~~
 * ~~# Json auto generated docs~~
 * ~~Junit tests in a war using normal classes? Jacksons xc and persistence in the war libs seems to have solved it~~
 * ~~Use JPA from java se.~~
