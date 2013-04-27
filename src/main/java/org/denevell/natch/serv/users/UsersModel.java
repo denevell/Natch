@@ -3,13 +3,12 @@ package org.denevell.natch.serv.users;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceContext;
+import javax.persistence.Persistence;
 
 import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.db.entities.PersistenceInfo;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.db.entities.UserEntityQueries;
-import org.denevell.natch.utils.EntityUtils;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.PasswordSaltUtils;
 
@@ -17,7 +16,7 @@ public class UsersModel {
 	
 	private UserEntityQueries mUserEntityQueries;
 	private LoginAuthKeysSingleton mAuthDataGenerator;
-	@PersistenceContext(name=PersistenceInfo.EntityManagerFactoryName)
+	private EntityManagerFactory mFactory;
 	private EntityManager mEntityManager;
 	private PasswordSaltUtils mPasswordSalter;
 	public static String LOGGED_IN = "loggedIn";
@@ -56,18 +55,20 @@ public class UsersModel {
 	public UsersModel(UserEntityQueries ueq, LoginAuthKeysSingleton authKeyGenerator, EntityManagerFactory factory, EntityManager entityManager, PasswordSaltUtils saltUtils) {
 		mUserEntityQueries = ueq;
 		mAuthDataGenerator = authKeyGenerator;
+		mFactory = factory;
 		mEntityManager =  entityManager;
 		mUserEntityQueries = ueq;
 		mPasswordSalter = saltUtils;
 	}
 	
 	public UsersModel() {
+		mFactory = Persistence.createEntityManagerFactory(PersistenceInfo.EntityManagerFactoryName);
+		mEntityManager = mFactory.createEntityManager();   		
 		mUserEntityQueries = new UserEntityQueries(new PasswordSaltUtils());
 		mAuthDataGenerator = LoginAuthKeysSingleton.getInstance();
 		mUserEntityQueries = new UserEntityQueries(new PasswordSaltUtils());
 		mPasswordSalter = new PasswordSaltUtils();
 	}
-	
 	
 	public String addUserToSystem(String username, String password) {
 		EntityTransaction trans = null;
@@ -93,9 +94,7 @@ public class UsersModel {
 			e.printStackTrace();
 			if(trans!=null && trans.isActive()) trans.rollback();
 			return UNKNOWN_ERROR;
-		} finally {
-			EntityUtils.closeEntityConnection(null, mEntityManager);
-		}
+		} 
 	}	
 
 	public LoginResult login(String username, String password) {
@@ -114,9 +113,7 @@ public class UsersModel {
 			Log.info(this.getClass(), e.toString());
 			e.printStackTrace();
 			return new LoginResult(UNKNOWN_ERROR);
-		} finally {
-			EntityUtils.closeEntityConnection(null, mEntityManager);
-		}
+		} 
 	}
 	
 	public boolean logout(String authKey) {

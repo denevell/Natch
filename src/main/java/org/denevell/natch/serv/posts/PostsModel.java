@@ -6,14 +6,13 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceContext;
+import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
 import org.denevell.natch.db.entities.PersistenceInfo;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.utils.EntityUtils;
 import org.denevell.natch.utils.Log;
 
 public class PostsModel {
@@ -25,12 +24,14 @@ public class PostsModel {
 	public final static String UNKNOWN_ERROR = "unknownerror";
 	public final static String BAD_USER_INPUT = "baduserinput";
 	public final static String NOT_YOURS_TO_DELETE = "notyourtodelete";
-	@PersistenceContext(name=PersistenceInfo.EntityManagerFactoryName)
 	private EntityManager mEntityManager;
+	private EntityManagerFactory mFactory;
 	private ThreadFactory mThreadFactory;
 	
 	public PostsModel() {
 		mThreadFactory = new ThreadFactory();
+		mFactory = Persistence.createEntityManagerFactory(PersistenceInfo.EntityManagerFactoryName);
+		mEntityManager = mFactory.createEntityManager(); 
 	}
 	
 	/**
@@ -38,6 +39,7 @@ public class PostsModel {
 	 */
 	public PostsModel(EntityManagerFactory factory, EntityManager entityManager, ThreadFactory threadFactory) {
 		mEntityManager = entityManager;
+		mFactory = factory;
 		mThreadFactory = threadFactory;
 	}
 	
@@ -70,9 +72,7 @@ public class PostsModel {
 			e.printStackTrace();
 			if(trans!=null && trans.isActive()) trans.rollback();
 			return UNKNOWN_ERROR;
-		} finally {
-			EntityUtils.closeEntityConnection(null, mEntityManager);		
-		}		
+		} 
 	}
 
 	public List<PostEntity> listByModificationDate(int startPos, int limit) {
@@ -131,8 +131,6 @@ public class PostsModel {
 		} catch(Exception e) {
 			Log.info(getClass(), "Error finding post by id: " + e.toString());
 			return null;
-		} finally {
-			EntityUtils.closeEntityConnection(null, mEntityManager);
 		}
 	}
 	
@@ -147,9 +145,7 @@ public class PostsModel {
 		} catch(Exception e) {
 			Log.info(getClass(), "Error finding thread by id: " + e.toString());
 			return null;
-		} finally {
-			EntityUtils.closeEntityConnection(null, mEntityManager);
-		}
+		} 
 	}	
 
 	public String delete(UserEntity userEntity, long postEntityId) {
@@ -183,9 +179,7 @@ public class PostsModel {
 				e1.printStackTrace();
 			}
 			return UNKNOWN_ERROR;
-		} finally {
-			EntityUtils.closeEntityConnection(null, mEntityManager);
-		}
+		} 
 	}
 
 	public String edit(UserEntity userEntity, long postEntityId, PostEntityAdapter postAdapter) {
@@ -225,10 +219,7 @@ public class PostsModel {
 				e1.printStackTrace();
 			}
 			return UNKNOWN_ERROR;
-		} finally {
-			EntityUtils.closeEntityConnection(null, mEntityManager);
-		}
+		} 
 	}
-
 
 }
