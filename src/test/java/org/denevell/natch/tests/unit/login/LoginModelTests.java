@@ -44,7 +44,7 @@ public class LoginModelTests {
 	@Test
 	public void shouldLoginWithUsernameAndPassword() {
 		// Arrange
-		when(queries.areCredentialsCorrect("username", "password")).thenReturn(new UserEntity());
+		when(queries.areCredentialsCorrect("username", "password", entityManager)).thenReturn(new UserEntity());
 		
 		// Act
 		LoginResult result = loginModel.login("username", "password");
@@ -56,7 +56,7 @@ public class LoginModelTests {
 	@Test
 	public void shouldntLoginWithIncorrectUsernameAndPassword() {
 		// Arrange
-		when(queries.areCredentialsCorrect("username", "password")).thenReturn(null);
+		when(queries.areCredentialsCorrect("username", "password", entityManager)).thenReturn(null);
 		
 		// Act
 		LoginResult result = loginModel.login("username", "password");
@@ -135,7 +135,7 @@ public class LoginModelTests {
 	public void shouldReturnLoginAuthKey() {
 		// Arrange
 		UserEntity userEntity = new UserEntity();
-		when(queries.areCredentialsCorrect("username", "password")).thenReturn(userEntity);
+		when(queries.areCredentialsCorrect("username", "password", entityManager)).thenReturn(userEntity);
 		when(authKeyGenerator.generate(userEntity)).thenReturn("authKey123");
 		
 		// Act
@@ -148,7 +148,7 @@ public class LoginModelTests {
 	@Test
 	public void shouldntReturnLoginAuthKeyOnBadCredentials() {
 		// Arrange
-		when(queries.areCredentialsCorrect("username", "password")).thenReturn(null);
+		when(queries.areCredentialsCorrect("username", "password", entityManager)).thenReturn(null);
 		
 		// Act
 		LoginResult result = loginModel.login("username", "password");

@@ -81,7 +81,7 @@ public class UsersModel {
 			password = mPasswordSalter.generatedSaltedPassword(password);
 			u.setPassword(password);
 			u.setUsername(username);
-			if(!mUserEntityQueries.doesUsernameExist(username)) {
+			if(!mUserEntityQueries.doesUsernameExist(username, mEntityManager)) {
 				trans = mEntityManager.getTransaction();
 				trans.begin();
 				mEntityManager.persist(u);
@@ -103,7 +103,7 @@ public class UsersModel {
 			if(password==null || password.trim().length()==0 || username==null || username.trim().length()==0) {
 				return new LoginResult(USER_INPUT_ERROR);
 			}
-			UserEntity res = mUserEntityQueries.areCredentialsCorrect(username, password);
+			UserEntity res = mUserEntityQueries.areCredentialsCorrect(username, password, mEntityManager);
 			if(res!=null) {
 				String authKey = mAuthDataGenerator.generate(res);
 				return new LoginResult(LOGGED_IN, authKey);

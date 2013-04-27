@@ -111,7 +111,7 @@ public class RegisterModelTests {
 	@Test
 	public void shouldntRegisterWithDuplicateUsername() { 
 		// Arrange
-		when(queries.doesUsernameExist("username")).thenReturn(true);
+		when(queries.doesUsernameExist("username", entityManager)).thenReturn(true);
 		UsersModel um = new UsersModel(queries, authManager, factory, entityManager, salter);
 		
 		// Act
