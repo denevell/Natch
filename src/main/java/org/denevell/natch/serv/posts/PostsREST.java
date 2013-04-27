@@ -95,6 +95,7 @@ public class PostsREST {
 		mAddPostAdapter.create(input);
 		String okay = mModel.addPost(userEntity, mAddPostAdapter);
 		generateAddPostReturnResource(regReturnData, okay);
+		mModel.close();
 		return regReturnData;
 	}
 
@@ -128,6 +129,8 @@ public class PostsREST {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
+		} finally {
+			//mModel.close();
 		}
 		if(posts==null) {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
@@ -154,12 +157,14 @@ public class PostsREST {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
-		}
+		} 
 		if(posts==null) {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
+			//mModel.close();
 			return null;
 		} else {
 			ListPostsResource adaptedPosts = new ListPostsResourceAdapter(posts);
+			//mModel.close();
 			return adaptedPosts;
 		}
 	}
@@ -179,6 +184,8 @@ public class PostsREST {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
+		} finally {
+			//mModel.close();
 		}
 		if(threads==null) {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
@@ -205,6 +212,8 @@ public class PostsREST {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
+		} finally {
+			//mModel.close();
 		}
 		if(threads==null) {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
@@ -233,17 +242,19 @@ public class PostsREST {
 			return ret;
 		}	
 		try {
-			generateDeleteReturnResource(number, ret, userEntity);
+			String result = mModel.delete(userEntity, number);
+			generateDeleteReturnResource(result, ret, userEntity);
 			return ret;
 		} catch(Exception e) {
 			Log.info(getClass(), "Couldn't delete post: " + e.toString());
 			ret.setError(rb.getString(Strings.unknown_error));
 			return ret;
+		} finally {
+			mModel.close();
 		} 
 	}
 
-	private void generateDeleteReturnResource(long number, DeletePostResourceReturnData ret, UserEntity userEntity) {
-		String result = mModel.delete(userEntity, number);
+	private void generateDeleteReturnResource(String result, DeletePostResourceReturnData ret, UserEntity userEntity) {
 		if(result.equals(PostsModel.DELETED)) {
 			ret.setSuccessful(true);
 		} else if(result.equals(PostsModel.DOESNT_EXIST)) {
@@ -282,6 +293,8 @@ public class PostsREST {
 			Log.info(getClass(), "Couldn't edit post: " + e.toString());
 			ret.setError(rb.getString(Strings.unknown_error));
 			return ret;
+		} finally {
+			mModel.close();
 		} 		
 	}
 

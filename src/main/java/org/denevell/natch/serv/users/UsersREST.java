@@ -55,7 +55,6 @@ public class UsersREST {
 		mRequest = request;
 	}
 	
-	
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -81,6 +80,7 @@ public class UsersREST {
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.unknown_error));
 		}
+		mLoginModel.close();
 		return regReturnData;
 	}	
 	
@@ -111,6 +111,7 @@ public class UsersREST {
 			returnResult.setSuccessful(false);
 			returnResult.setError(rb.getString(Strings.unknown_error));
 		}
+		mLoginModel.close();
 		return returnResult;
 	}
 
@@ -127,6 +128,7 @@ public class UsersREST {
 		// If we get here, the login filter failed.
 		LoginResourceLoggedInReturnData ret = new LoginResourceLoggedInReturnData();
 		ret.setSuccessful(true);
+		mLoginModel.close();
 		return ret;
 	}
 	
@@ -148,6 +150,7 @@ public class UsersREST {
 			returnResult.setSuccessful(false);
 			returnResult.setError(rb.getString(Strings.unknown_error));
 		}
+		mLoginModel.close();
 		return returnResult;
 	}	
 

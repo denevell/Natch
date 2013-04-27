@@ -9,6 +9,7 @@ import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.db.entities.PersistenceInfo;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.db.entities.UserEntityQueries;
+import org.denevell.natch.utils.EntityUtils;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.PasswordSaltUtils;
 
@@ -80,8 +81,8 @@ public class UsersModel {
 			password = mPasswordSalter.generatedSaltedPassword(password);
 			u.setPassword(password);
 			u.setUsername(username);
-			trans = mEntityManager.getTransaction();
 			if(!mUserEntityQueries.doesUsernameExist(username)) {
+				trans = mEntityManager.getTransaction();
 				trans.begin();
 				mEntityManager.persist(u);
 				trans.commit();
@@ -135,6 +136,10 @@ public class UsersModel {
 	public UserEntity loggedInAs(String authKey) {
 		UserEntity username = mAuthDataGenerator.retrieveUserEntity(authKey);
 		return username;
+	}
+
+	public void close() {
+		EntityUtils.closeEntityConnection(mFactory, mEntityManager);
 	}	
 
 }

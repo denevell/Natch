@@ -13,6 +13,7 @@ import org.denevell.natch.db.entities.PersistenceInfo;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
+import org.denevell.natch.utils.EntityUtils;
 import org.denevell.natch.utils.Log;
 
 public class PostsModel {
@@ -220,6 +221,10 @@ public class PostsModel {
 			}
 			return UNKNOWN_ERROR;
 		} 
+	}
+
+	public void close() {
+		EntityUtils.closeEntityConnection(mFactory, mEntityManager); 
 	}
 
 }

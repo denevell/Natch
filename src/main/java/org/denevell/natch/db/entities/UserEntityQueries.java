@@ -7,7 +7,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
-import org.denevell.natch.utils.EntityUtils;
 import org.denevell.natch.utils.PasswordSaltUtils;
 
 public class UserEntityQueries {
@@ -26,7 +25,6 @@ public class UserEntityQueries {
 		TypedQuery<UserEntity> q = mEntityManager.createNamedQuery(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME, UserEntity.class)
 			.setParameter(UserEntity.NAMED_QUERY_PARAM_USERNAME, username);
 		List<UserEntity> resultList = q.getResultList();
-		EntityUtils.closeEntityConnection(mFactory, mEntityManager);
 		return resultList;
 	}	
 

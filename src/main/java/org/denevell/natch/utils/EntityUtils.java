@@ -10,6 +10,7 @@ public class EntityUtils {
 			if(entityManager!=null) entityManager.close();
 			if(factory!=null) factory.close();
 		} catch(Exception e) {
+			e.printStackTrace();
 			Log.info(EntityUtils.class, e.toString());
 		}
 	}		
