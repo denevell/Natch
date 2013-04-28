@@ -57,6 +57,7 @@ The start of a REST interface for a forum.
 
 * ###: Move back to eclipselink to test performance with sqlite
 * ###: Implement proper connection pool in hibernate to test performance
+* ###: Move JPA persistence provider to tomcat lib
 * ##: Entity bean null / blank problem?
 * ##: Re-enable db locking 
 * ##: Separate out thread and post code and tests
