@@ -55,14 +55,14 @@ The start of a REST interface for a forum.
 
 ### Backlog 
 
-* ###: Separate out thread and post code and tests
-* ###: Re-enable db locking 
+* ###: Move back to eclipselink to test performance with sqlite
+* ###: Implement proper connection pool in hibernate to test performance
 * ##: Entity bean null / blank problem?
+* ##: Re-enable db locking 
+* ##: Separate out thread and post code and tests
 * ##: Look at hibernate errors and fix
 * #: Start using DI
 * #: Intercept json parsing errors and return 400s: register, login
-* #: Add start derby and stuff to gradle build file?
-* #: Run code coverage and test non-covered code
 * #: threaded posts: move tags to the thread object and not individual posts?
 * #: threaded posts: move subject to thread object?
 * #: threaded posts: moved creation date to thread?
