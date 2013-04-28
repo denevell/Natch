@@ -13,7 +13,7 @@
 			<property name="javax.persistence.jdbc.user" value="denevell" />
 			<property name="javax.persistence.jdbc.password" value="user" />
 			<property name='hibernate.dialect' value="org.hibernate.dialect.PostgreSQLDialect" />
-			<property name='hibernate.hbm2ddl.auto' value='none' />
+			<property name='hibernate.hbm2ddl.auto' value='update' />
 			<property name='hibernate.show_sql' value='true' />      
 			<!--		<property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:sqlite:/var/lib/tomcat7/dbs/test.db" /> 

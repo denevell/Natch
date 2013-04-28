@@ -29,6 +29,7 @@ dependencies {
 	compile 'log4j:log4j:1.2.17'
 	compile 'org.mindrot:jbcrypt:0.3m'
 	compile 'com.wordnik:swagger-jaxrs_2.9.1:1.2.1'
+	compile 'org.slf4j:slf4j-simple:1.7.5'
 	//compile 'org.eclipse.persistence:eclipselink:2.4.0'
 	//compile 'org.xerial:sqlite-jdbc:3.7.2'
 }    
