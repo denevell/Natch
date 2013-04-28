@@ -19,8 +19,6 @@ dependencies {
 	testCompile 'junit:junit:4.11'
 	testCompile 'org.mockito:mockito-all:1.9.5'
 
-	compile 'asm:asm:3.3.1'
-
 	providedCompile 'org.eclipse.persistence:eclipselink:2.4.0'
 	//compile 'postgresql:postgresql:9.1-901-1.jdbc4'
 	compile 'org.slf4j:slf4j-simple:1.7.5'
@@ -34,6 +32,7 @@ dependencies {
 	compile 'log4j:log4j:1.2.17'
 
 	compile 'org.mindrot:jbcrypt:0.3m'
+
 	compile 'com.wordnik:swagger-jaxrs_2.9.1:1.2.1'
 }    
 

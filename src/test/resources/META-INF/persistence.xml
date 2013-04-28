@@ -22,12 +22,12 @@
 			<property name="hibernate.c3p0.max_statements" value="0" />
 			<property name="hibernate.c3p0.timeout" value="100" />
 
-			<property name="eclipselink.ddl-generation" value="create-tables" /> 
 			-->
 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/testnatch" />
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
 			<property name="javax.persistence.jdbc.user" value="denevell" />
 			<property name="javax.persistence.jdbc.password" value="user" />
+			<property name="eclipselink.ddl-generation" value="create-tables" /> 
 			<property name="eclipselink.logging.level" value="ALL" />
 	     </properties>
      </persistence-unit>
