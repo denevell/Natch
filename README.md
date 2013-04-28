@@ -55,11 +55,8 @@ The start of a REST interface for a forum.
 
 ### Backlog 
 
-* ###: Move back to eclipselink to test performance with sqlite
-* ###: Implement proper connection pool in hibernate to test performance
-* ###: Move JPA persistence provider to tomcat lib
+* ###: Re-enable db locking 
 * ##: Entity bean null / blank problem?
-* ##: Re-enable db locking 
 * ##: Separate out thread and post code and tests
 * ##: Look at hibernate errors and fix
 * #: Start using DI
@@ -68,6 +65,8 @@ The start of a REST interface for a forum.
 * #: threaded posts: move subject to thread object?
 * #: threaded posts: moved creation date to thread?
 * #: Inject the EntityManager via annotations
+* ~~###: Move back to eclipselink to test performance with sqlite~~
+* ~~###: Move JPA persistence provider to tomcat lib~~
 * ~~###: Make swagger understand that the 'tags' resource in add post is actually called 'posttags'~~
 * ~~###: Make swaggers requests work - extend .json to request.~~
 * ~~###: Move over to openjpa or fix the strange language problem with eclipselink~~

@@ -1,4 +1,4 @@
-apply plugin: 'war'
+apply plugin: 'war' 
 apply plugin: 'eclipse'
 
 repositories {
@@ -15,23 +15,26 @@ compileJava {
 
 dependencies {
 	providedCompile	'org.apache.tomcat:tomcat-servlet-api:7.0.37'
+
 	testCompile 'junit:junit:4.11'
 	testCompile 'org.mockito:mockito-all:1.9.5'
+
 	compile 'asm:asm:3.3.1'
-	compile 'postgresql:postgresql:9.1-901-1.jdbc4'
-	compile 'org.hibernate:hibernate-core:4.2.0.Final'
-	compile 'org.hibernate:hibernate-entitymanager:4.2.0.Final'
+
+	providedCompile 'org.eclipse.persistence:eclipselink:2.4.0'
+	//compile 'postgresql:postgresql:9.1-901-1.jdbc4'
+	compile 'org.slf4j:slf4j-simple:1.7.5'
 	compile 'commons-lang:commons-lang:2.6'
+
 	compile 'com.sun.jersey:jersey-bundle:1.17.1'
 	compile 'org.codehaus.jackson:jackson-xc:1.9.12'
 	compile 'org.codehaus.jackson:jackson-core-asl:1.9.12'
 	compile 'org.codehaus.jackson:jackson-jaxrs:1.9.12'
+
 	compile 'log4j:log4j:1.2.17'
+
 	compile 'org.mindrot:jbcrypt:0.3m'
 	compile 'com.wordnik:swagger-jaxrs_2.9.1:1.2.1'
-	compile 'org.slf4j:slf4j-simple:1.7.5'
-	//compile 'org.eclipse.persistence:eclipselink:2.4.0'
-	//compile 'org.xerial:sqlite-jdbc:3.7.2'
 }    
 
 // ------------------

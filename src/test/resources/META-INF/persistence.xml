@@ -3,22 +3,32 @@
      xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
      version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
      <persistence-unit name="users" transaction-type="RESOURCE_LOCAL">
-	     <provider>org.hibernate.ejb.HibernatePersistence</provider>
+	     <!-- <provider>org.hibernate.ejb.HibernatePersistence</provider> -->
+	     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 	     <class>org.denevell.natch.db.entities.UserEntity</class>
 	     <class>org.denevell.natch.db.entities.PostEntity</class>
 	     <class>org.denevell.natch.db.entities.ThreadEntity</class>
 	     <properties>
-			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
+			<!--	
+			<property name='hibernate.dialect' value="org.denevell.natch.SQLiteDialect" />
+			<property name='hibernate.hbm2ddl.auto' value='create' />
+			<property name='hibernate.show_sql' value='true' />      
+
+			<property name="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />
+			<property name="hibernate.c3p0.max_size" value="100" />
+			<property name="hibernate.c3p0.min_size" value="0" />
+			<property name="hibernate.c3p0.acquire_increment" value="1" />
+			<property name="hibernate.c3p0.idle_test_period" value="300" />
+			<property name="hibernate.c3p0.max_statements" value="0" />
+			<property name="hibernate.c3p0.timeout" value="100" />
+
+			<property name="eclipselink.ddl-generation" value="create-tables" /> 
+			-->
 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/testnatch" />
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
 			<property name="javax.persistence.jdbc.user" value="denevell" />
 			<property name="javax.persistence.jdbc.password" value="user" />
-			<property name='hibernate.dialect' value="org.hibernate.dialect.PostgreSQLDialect" />
-			<property name='hibernate.hbm2ddl.auto' value='update' />
-			<property name='hibernate.show_sql' value='true' />      
-			<!--		<property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:sqlite:/var/lib/tomcat7/dbs/test.db" /> 
 			<property name="eclipselink.logging.level" value="ALL" />
-			<property name="eclipselink.ddl-generation" value="create-tables" /> -->
 	     </properties>
      </persistence-unit>
 </persistence>

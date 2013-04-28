@@ -25,12 +25,12 @@ public class RegisterModel {
 	public void clearTestDb() {
 		EntityTransaction trans = mEntityManager.getTransaction();
 		trans.begin();
-		List<PostEntity> result = mEntityManager.createQuery("select a from PostEntity a", PostEntity.class).getResultList();
-		for (PostEntity postEntity : result) {
-			mEntityManager.remove(postEntity);
-		}
 		List<ThreadEntity> resultT = mEntityManager.createQuery("select a from ThreadEntity a", ThreadEntity.class).getResultList();
 		for (ThreadEntity postEntity : resultT) {
+			mEntityManager.remove(postEntity);
+		}
+		List<PostEntity> result = mEntityManager.createQuery("select a from PostEntity a", PostEntity.class).getResultList();
+		for (PostEntity postEntity : result) {
 			mEntityManager.remove(postEntity);
 		}
 		List<UserEntity> resultU = mEntityManager.createQuery("select a from UserEntity a", UserEntity.class).getResultList();
