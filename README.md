@@ -53,8 +53,18 @@ The start of a REST interface for a forum.
 * ~~list posts: should paginate list threads by x number~~
 * ~~list posts: should paginate list threads with tag~~
 
+### 0.3.5 (deployment)
+
+* Disable REST test utilties in production war
+* Map sql via xml, to ease changes of database / provider, database migration
+* Test performance with multiple connections
+* Create production war
+* Backup database
+* New installation and database with newly inserted backup
+
 ### Backlog 
 
+* ###: Update swagger documentation so 'thread' appears as 'threadId'
 * ###: Re-enable db locking 
 * ##: Entity bean null / blank problem?
 * ##: Separate out thread and post code and tests
