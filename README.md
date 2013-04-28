@@ -58,7 +58,6 @@ The start of a REST interface for a forum.
 * ###: Re-enable db locking 
 * ##: Entity bean null / blank problem?
 * ##: Separate out thread and post code and tests
-* ##: Look at hibernate errors and fix
 * #: Start using DI
 * #: Intercept json parsing errors and return 400s: register, login
 * #: threaded posts: move tags to the thread object and not individual posts?
