@@ -1,14 +1,12 @@
 package org.denevell.natch.utils;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 public class EntityUtils {
 	
-	public static void closeEntityConnection(EntityManagerFactory factory, EntityManager entityManager) {
+	public static void closeEntityConnection(EntityManager entityManager) {
 		try {
 			if(entityManager!=null) entityManager.close();
-			if(factory!=null) factory.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 			Log.info(EntityUtils.class, e.toString());

@@ -8,7 +8,6 @@ import java.util.Enumeration;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
- 
 public class LoginClearContextListener implements ServletContextListener{
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {

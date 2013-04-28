@@ -20,17 +20,17 @@ public class LoginHeadersFilter implements Filter {
 	private static final String AUTHENTICATION_KEY = "AuthKey";
 	public static final String KEY_SERVLET_REQUEST_LOGGEDIN_USER= "authed_username";
 	public static final String KEY_SERVLET_REQUEST_LOGGEDIN_AUTHKEY = "authkey";
-	private UsersModel mLoginModel;
+	private LoginAuthKeysSingleton mModel;
 	
 	public LoginHeadersFilter() {
-		mLoginModel = new UsersModel();
+		mModel = LoginAuthKeysSingleton.getInstance();
 	}
 	
 	/**
 	 * For testing with DI
 	 */
-	public LoginHeadersFilter(UsersModel model) {
-		mLoginModel = model;
+	public LoginHeadersFilter(LoginAuthKeysSingleton model) {
+		mModel = model;
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class LoginHeadersFilter implements Filter {
 		// Get the auth data from the header
 		String authKey = request.getHeader(AUTHENTICATION_KEY);
 		// Check it
-		UserEntity username = mLoginModel.loggedInAs(authKey);
+		UserEntity username = mModel.retrieveUserEntity(authKey);
 		if(username==null || username.getUsername()==null || username.getUsername().trim().length()==0) {
 			HttpServletResponse r = (HttpServletResponse) resp;
 			r.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Doesn't man you need to HTTP auth, but this is a good response fit.

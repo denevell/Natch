@@ -6,14 +6,13 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
-import org.denevell.natch.db.entities.PersistenceInfo;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.utils.EntityUtils;
+import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Log;
 
 public class PostsModel {
@@ -31,7 +30,7 @@ public class PostsModel {
 	
 	public PostsModel() {
 		mThreadFactory = new ThreadFactory();
-		mFactory = Persistence.createEntityManagerFactory(PersistenceInfo.EntityManagerFactoryName);
+		mFactory = JPAFactoryContextListener.sFactory;
 		mEntityManager = mFactory.createEntityManager(); 
 	}
 	
@@ -224,7 +223,7 @@ public class PostsModel {
 	}
 
 	public void close() {
-		EntityUtils.closeEntityConnection(mFactory, mEntityManager); 
+		EntityUtils.closeEntityConnection(mEntityManager); 
 	}
 
 }

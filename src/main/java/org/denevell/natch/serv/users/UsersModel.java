@@ -3,13 +3,12 @@ package org.denevell.natch.serv.users;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 
 import org.denevell.natch.auth.LoginAuthKeysSingleton;
-import org.denevell.natch.db.entities.PersistenceInfo;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.db.entities.UserEntityQueries;
 import org.denevell.natch.utils.EntityUtils;
+import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.PasswordSaltUtils;
 
@@ -63,7 +62,7 @@ public class UsersModel {
 	}
 	
 	public UsersModel() {
-		mFactory = Persistence.createEntityManagerFactory(PersistenceInfo.EntityManagerFactoryName);
+		mFactory = JPAFactoryContextListener.sFactory;
 		mEntityManager = mFactory.createEntityManager();   		
 		mUserEntityQueries = new UserEntityQueries(new PasswordSaltUtils());
 		mAuthDataGenerator = LoginAuthKeysSingleton.getInstance();
@@ -139,7 +138,7 @@ public class UsersModel {
 	}
 
 	public void close() {
-		EntityUtils.closeEntityConnection(mFactory, mEntityManager);
+		EntityUtils.closeEntityConnection(mEntityManager);
 	}	
 
 }

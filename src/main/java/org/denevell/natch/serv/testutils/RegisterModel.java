@@ -5,13 +5,12 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 
-import org.denevell.natch.db.entities.PersistenceInfo;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.utils.EntityUtils;
+import org.denevell.natch.utils.JPAFactoryContextListener;
 
 public class RegisterModel {
 	
@@ -19,7 +18,7 @@ public class RegisterModel {
 	private EntityManagerFactory mFactory;
 
 	public RegisterModel() {
-		mFactory = Persistence.createEntityManagerFactory(PersistenceInfo.EntityManagerFactoryName);
+		mFactory = JPAFactoryContextListener.sFactory;
 		mEntityManager = mFactory.createEntityManager(); 		
 	}
 	
@@ -39,7 +38,7 @@ public class RegisterModel {
 			mEntityManager.remove(postEntity);
 		}
 		trans.commit();
-		EntityUtils.closeEntityConnection(mFactory, mEntityManager);
+		EntityUtils.closeEntityConnection(mEntityManager);
 	}
 
 }

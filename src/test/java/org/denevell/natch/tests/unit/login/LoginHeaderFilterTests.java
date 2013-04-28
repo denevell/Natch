@@ -12,9 +12,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.serv.users.UsersModel;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,14 +22,14 @@ public class LoginHeaderFilterTests {
 	
 
 	private LoginHeadersFilter filter;
-	private UsersModel model;
+	private LoginAuthKeysSingleton model;
 	private HttpServletResponse resp;
 	private HttpServletRequest req;
 	private FilterChain chain;
 
 	@Before
 	public void setup() {
-		model = mock(UsersModel.class);
+		model = mock(LoginAuthKeysSingleton.class);
 		filter = new LoginHeadersFilter(model);
 		chain = mock(FilterChain.class);
 		req = mock(HttpServletRequest.class);
@@ -41,7 +41,7 @@ public class LoginHeaderFilterTests {
 		// Arrange
 		when(req.getHeader("AuthKey")).thenReturn("authKey");		
 		UserEntity userEntity = new UserEntity("username", "password");
-		when(model.loggedInAs("authKey")).thenReturn(userEntity);
+		when(model.retrieveUserEntity("authKey")).thenReturn(userEntity);
 		
 		// Act
 		filter.doFilter(req, resp, chain);
@@ -57,7 +57,7 @@ public class LoginHeaderFilterTests {
 	public void shouldntAllowLogin() throws IOException, ServletException {
 		// Arrange
 		when(req.getHeader("AuthKey")).thenReturn("authKey");		
-		when(model.loggedInAs("authKey")).thenReturn(null);
+		when(model.retrieveUserEntity("authKey")).thenReturn(null);
 		
 		// Act
 		filter.doFilter(req, resp, chain);
