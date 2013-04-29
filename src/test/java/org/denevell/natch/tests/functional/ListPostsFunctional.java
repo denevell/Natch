@@ -168,7 +168,7 @@ public class ListPostsFunctional {
 	public void shouldListByModificationDateWithSpecifiedThreadId() {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		input.setThread("threadId");
+		input.setThreadId("threadId");
 		service
 		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)

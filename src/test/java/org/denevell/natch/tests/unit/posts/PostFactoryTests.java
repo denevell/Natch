@@ -52,7 +52,7 @@ public class PostFactoryTests {
 		
 		// Act
 		AddPostResourceInput input = new AddPostResourceInput("sub", "conte"); 
-		input.setThread(null);
+		input.setThreadId(null);
 		factory.create(input);
 		PostEntity p = factory.createPost(null, userEntity); 
 		

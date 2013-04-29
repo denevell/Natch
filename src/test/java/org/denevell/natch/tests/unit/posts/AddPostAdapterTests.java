@@ -30,7 +30,7 @@ public class AddPostAdapterTests {
 		AddPostResourceInput addPostResource = new AddPostResourceInput();
 		addPostResource.setSubject("sub");
 		addPostResource.setContent("conte");
-		addPostResource.setThread("threadid");
+		addPostResource.setThreadId("threadid");
 		
 		// Act
 		adapter.create(addPostResource); 

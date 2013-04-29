@@ -18,7 +18,7 @@ public class AddPostResourcePostEntityAdapter implements PostEntityAdapter {
 		mPost.setContent(input.getContent());
 		mPost.setSubject(input.getSubject());
 		long created = new Date().getTime();
-		String thread = getThreadId(input.getSubject(), input.getThread(), created);
+		String thread = getThreadId(input.getSubject(), input.getThreadId(), created);
 		mPost.setThreadId(thread);
 		mPost.setTags(input.getTags());
 	}

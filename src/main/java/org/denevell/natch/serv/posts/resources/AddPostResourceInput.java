@@ -11,7 +11,7 @@ public class AddPostResourceInput {
 	
 	private String subject;
 	private String content;
-	private String thread;
+	private String threadId;
 	private List<String> tags = new ArrayList<String>();
 	
 	public AddPostResourceInput() {
@@ -31,7 +31,7 @@ public class AddPostResourceInput {
 	public AddPostResourceInput(String subject, String content, String threadId) {
 		this.subject = subject;
 		this.content = content;
-		this.thread = threadId;
+		this.threadId = threadId;
 	}
 	
 	public String getSubject() {
@@ -50,13 +50,13 @@ public class AddPostResourceInput {
 		this.content = content;
 	}
 
-	public String getThread() {
-		return thread;
+	public String getThreadId() {
+		return threadId;
 	}
 
 	@XmlElement(required=false)
-	public void setThread(String thread) {
-		this.thread = thread;
+	public void setThreadId(String thread) {
+		this.threadId = thread;
 	}
 
 	public List<String> getTags() {
