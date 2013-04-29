@@ -6,9 +6,13 @@ import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 public class TestUtils {
+	
+	private static String getHost() {
+		return "http://denevell.org:8080";
+	}
 
 	public static void deleteAllDbs() {
-	    String baseUrl = "http://localhost:8080/Natch-Functional/";
+	    String baseUrl = getHost() + "/Natch-Functional/";
 	    ClientConfig config = new DefaultClientConfig();
 	    Client client = Client.create(config);
 	    WebResource res = client.resource(baseUrl);
@@ -16,63 +20,63 @@ public class TestUtils {
 	}
 
 	public static WebResource getRESTClient() {
-		String baseUrl = "http://localhost:8080/Natch-Functional/";
+		String baseUrl = getHost() + "/Natch-Functional/";
 	    ClientConfig config = new DefaultClientConfig();
 	    Client client = Client.create(config);
 	    return client.resource(baseUrl);		
 	}
 
 	public static WebResource getRESTRegisterClient() {
-		String baseUrl = "http://localhost:8080/Natch-Functional/";
+		String baseUrl = getHost() + "/Natch-Functional/";
 	    ClientConfig config = new DefaultClientConfig();
 	    Client client = Client.create(config);
 	    return client.resource(baseUrl).path("rest").path("user");		
 	}
 
 	public static WebResource getLoginClient() {
-		String baseUrl = "http://localhost:8080/Natch-Functional/";
+		String baseUrl = getHost() + "/Natch-Functional/";
 	    ClientConfig config = new DefaultClientConfig();
 	    Client client = Client.create(config);
 	    return client.resource(baseUrl).path("rest").path("user").path("login");
 	}
 
 	public static WebResource getRegisterClient() {
-		String baseUrl = "http://localhost:8080/Natch-Functional/";
+		String baseUrl = getHost() + "/Natch-Functional/";
 	    ClientConfig config = new DefaultClientConfig();
 	    Client client = Client.create(config);
 	    return client.resource(baseUrl).path("rest").path("user");		
 	}
 
 	public static WebResource getAddPostClient() {
-		String baseUrl = "http://localhost:8080/Natch-Functional/";
+		String baseUrl = getHost() + "/Natch-Functional/";
 		ClientConfig config = new DefaultClientConfig();
 		Client client = Client.create(config);
 		return client.resource(baseUrl).path("rest").path("post").path("add");		
 	}
 
 	public static WebResource getDeletePostClient() {
-		String baseUrl = "http://localhost:8080/Natch-Functional/";
+		String baseUrl = getHost() + "/Natch-Functional/";
 		ClientConfig config = new DefaultClientConfig();
 		Client client = Client.create(config);
 		return client.resource(baseUrl).path("rest").path("post").path("del");		
 	}
 
 	public static WebResource getEditPostClient() {
-		String baseUrl = "http://localhost:8080/Natch-Functional/";
+		String baseUrl = getHost() + "/Natch-Functional/";
 		ClientConfig config = new DefaultClientConfig();
 		Client client = Client.create(config);
 		return client.resource(baseUrl).path("rest").path("post").path("edit");		
 	}
 
 	public static WebResource getListPostsClient() {
-		String baseUrl = "http://localhost:8080/Natch-Functional/";
+		String baseUrl = getHost() + "/Natch-Functional/";
 		ClientConfig config = new DefaultClientConfig();
 		Client client = Client.create(config);
 		return client.resource(baseUrl).path("rest").path("post");		
 	}
 
 	public static WebResource getListPostThreadsPostClient() {
-		String baseUrl = "http://localhost:8080/Natch-Functional/";
+		String baseUrl = getHost() + "/Natch-Functional/";
 		ClientConfig config = new DefaultClientConfig();
 		Client client = Client.create(config);
 		return client.resource(baseUrl).path("rest").path("post").path("threads");		
