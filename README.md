@@ -65,7 +65,6 @@ The start of a REST interface for a forum.
 ### Backlog 
 
 * ###: Re-enable db locking 
-* ###: Packaged json objects for use in the frontend.
 * ##: Entity bean null / blank problem?
 * ##: Separate out thread and post code and tests
 * #: Start using DI
@@ -74,6 +73,7 @@ The start of a REST interface for a forum.
 * #: threaded posts: move subject to thread object?
 * #: threaded posts: moved creation date to thread?
 * #: Inject the EntityManager via annotations
+* ~~###: Packaged json objects for use in the frontend.~~
 * ~~###: Update swagger documentation so 'thread' appears as 'threadId'~~
 * ~~###: Move back to eclipselink to test performance with sqlite~~
 * ~~###: Move JPA persistence provider to tomcat lib~~
