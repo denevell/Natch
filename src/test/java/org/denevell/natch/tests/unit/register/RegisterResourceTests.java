@@ -10,10 +10,10 @@ import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.denevell.natch.io.users.RegisterResourceInput;
+import org.denevell.natch.io.users.RegisterResourceReturnData;
 import org.denevell.natch.serv.users.UsersModel;
 import org.denevell.natch.serv.users.UsersREST;
-import org.denevell.natch.serv.users.resources.RegisterResourceInput;
-import org.denevell.natch.serv.users.resources.RegisterResourceReturnData;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +21,7 @@ import org.junit.Test;
 public class RegisterResourceTests {
 	
 	private UsersModel userModel;
-    ResourceBundle rb = Strings.getMainResourceBundle();
+    private ResourceBundle rb = Strings.getMainResourceBundle();
 	private HttpServletRequest requestContext;
 	private UsersREST resource;
 

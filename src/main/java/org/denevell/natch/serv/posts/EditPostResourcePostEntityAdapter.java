@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.serv.posts.resources.EditPostResource;
+import org.denevell.natch.io.posts.EditPostResource;
 
 public class EditPostResourcePostEntityAdapter implements PostEntityAdapter {
 	

@@ -11,9 +11,9 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
+import org.denevell.natch.io.users.LogoutResourceReturnData;
 import org.denevell.natch.serv.users.UsersModel;
 import org.denevell.natch.serv.users.UsersREST;
-import org.denevell.natch.serv.users.resources.LogoutResourceReturnData;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;

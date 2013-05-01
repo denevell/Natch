@@ -9,11 +9,11 @@ import java.util.ResourceBundle;
 
 import javax.ws.rs.core.MediaType;
 
-import org.denevell.natch.serv.users.resources.LoginResourceInput;
-import org.denevell.natch.serv.users.resources.LoginResourceLoggedInReturnData;
-import org.denevell.natch.serv.users.resources.LoginResourceReturnData;
-import org.denevell.natch.serv.users.resources.RegisterResourceInput;
-import org.denevell.natch.serv.users.resources.RegisterResourceReturnData;
+import org.denevell.natch.io.users.LoginResourceInput;
+import org.denevell.natch.io.users.LoginResourceLoggedInReturnData;
+import org.denevell.natch.io.users.LoginResourceReturnData;
+import org.denevell.natch.io.users.RegisterResourceInput;
+import org.denevell.natch.io.users.RegisterResourceReturnData;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;

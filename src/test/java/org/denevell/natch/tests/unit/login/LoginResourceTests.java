@@ -10,11 +10,11 @@ import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.denevell.natch.io.users.LoginResourceInput;
+import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.serv.users.UsersModel;
 import org.denevell.natch.serv.users.UsersModel.LoginResult;
 import org.denevell.natch.serv.users.UsersREST;
-import org.denevell.natch.serv.users.resources.LoginResourceInput;
-import org.denevell.natch.serv.users.resources.LoginResourceReturnData;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;

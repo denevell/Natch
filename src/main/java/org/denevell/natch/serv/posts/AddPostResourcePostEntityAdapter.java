@@ -6,7 +6,7 @@ import java.util.Date;
 
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.serv.posts.resources.AddPostResourceInput;
+import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.utils.Log;
 
 public class AddPostResourcePostEntityAdapter implements PostEntityAdapter {

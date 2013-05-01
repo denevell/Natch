@@ -8,11 +8,11 @@ import java.io.IOException;
 
 import javax.ws.rs.core.MediaType;
 
-import org.denevell.natch.serv.users.resources.LoginResourceInput;
-import org.denevell.natch.serv.users.resources.LoginResourceReturnData;
-import org.denevell.natch.serv.users.resources.LogoutResourceReturnData;
-import org.denevell.natch.serv.users.resources.RegisterResourceInput;
-import org.denevell.natch.serv.users.resources.RegisterResourceReturnData;
+import org.denevell.natch.io.users.LoginResourceInput;
+import org.denevell.natch.io.users.LoginResourceReturnData;
+import org.denevell.natch.io.users.LogoutResourceReturnData;
+import org.denevell.natch.io.users.RegisterResourceInput;
+import org.denevell.natch.io.users.RegisterResourceReturnData;
 import org.junit.Before;
 import org.junit.Test;
 

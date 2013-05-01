@@ -23,12 +23,12 @@ import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.serv.posts.resources.AddPostResourceInput;
-import org.denevell.natch.serv.posts.resources.AddPostResourceReturnData;
-import org.denevell.natch.serv.posts.resources.DeletePostResourceReturnData;
-import org.denevell.natch.serv.posts.resources.EditPostResource;
-import org.denevell.natch.serv.posts.resources.EditPostResourceReturnData;
-import org.denevell.natch.serv.posts.resources.ListPostsResource;
+import org.denevell.natch.io.posts.AddPostResourceInput;
+import org.denevell.natch.io.posts.AddPostResourceReturnData;
+import org.denevell.natch.io.posts.DeletePostResourceReturnData;
+import org.denevell.natch.io.posts.EditPostResource;
+import org.denevell.natch.io.posts.EditPostResourceReturnData;
+import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
