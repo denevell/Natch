@@ -8,6 +8,8 @@ repositories {
     }   
 }
 
+sourceSets.main.java.srcDirs = ["src/main/java", "../Natch-io/src/main/java"]
+
 compileJava {
   sourceCompatibility = 1.6
   targetCompatibility = 1.6
