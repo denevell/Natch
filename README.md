@@ -103,6 +103,7 @@ The start of a REST interface for a forum.
 * Posts
  * Test / delete when a thread has no children
  * Thread rest list should list latest post as well
+ * Show total number of posts in this listing for pagination information
  * Soft delete post
  * Search
 * Site comms
