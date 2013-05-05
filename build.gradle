@@ -10,6 +10,10 @@ repositories {
 
 sourceSets.main.java.srcDirs = ["src/main/java", "../Natch-io/src/main/java"]
 
+test {
+	include '**/ListPostsFunctional*'
+}
+
 compileJava {
   sourceCompatibility = 1.6
   targetCompatibility = 1.6

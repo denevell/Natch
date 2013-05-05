@@ -55,15 +55,16 @@ The start of a REST interface for a forum.
 
 ### 0.3.5 (deployment)
 
+* Test performance with multiple connections
 * Disable REST test utilties in production war
 * Map sql via xml, to ease changes of database / provider, database migration
-* Test performance with multiple connections
 * Create production war
 * Backup database
 * New installation and database with newly inserted backup
 
 ### Backlog 
 
+* ###: Return user data with logon call
 * ###: Re-enable db locking 
 * ##: Entity bean null / blank problem?
 * ##: Separate out thread and post code and tests
