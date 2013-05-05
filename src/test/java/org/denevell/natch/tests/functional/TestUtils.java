@@ -8,7 +8,7 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 public class TestUtils {
 	
 	private static String getHost() {
-		return "http://denevell.org:8080";
+		return "http://localhost:8080";
 	}
 
 	public static void deleteAllDbs() {
