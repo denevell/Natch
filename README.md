@@ -103,6 +103,7 @@ The start of a REST interface for a forum.
  * Permissions for actions
  * Category/tags only available to some users
 * Posts
+ * More sensible threadid?
  * Test / delete when a thread has no children
  * Thread rest list should list latest post as well
  * Show total number of posts in this listing for pagination information
