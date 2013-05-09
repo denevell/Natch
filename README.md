@@ -65,7 +65,8 @@ The start of a REST interface for a forum.
 ### Backlog 
 
 * ###: Return user data with logon call
-* ###: Re-enable db locking 
+* ###: Null pointer when deleting the head of a thread
+* ##: Re-enable db locking 
 * ##: Entity bean null / blank problem?
 * ##: Separate out thread and post code and tests
 * ##: Can't pass in single item tags list.
