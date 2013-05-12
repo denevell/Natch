@@ -165,7 +165,11 @@ public class PostsModel {
 			ThreadEntity th = findThreadById(pe.getThreadId());
 			th = mThreadFactory.updateThreadToRemovePost(th, pe);
 			trans.begin();
-			mEntityManager.merge(th);
+			if(th.getPosts()==null || th.getPosts().size()==0) {
+				mEntityManager.remove(th);
+			} else {
+				mEntityManager.merge(th);
+			}
 			mEntityManager.remove(pe);
 			trans.commit();
 			return DELETED;

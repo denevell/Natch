@@ -190,6 +190,25 @@ public class ListPostsResourceTests {
 	
 	@SuppressWarnings("unchecked")
 	@Test
+	public void shouldntListThreadsWhenWithAnInitialPostAsNull() throws IOException {
+		// Arrange
+		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", "t");
+		PostEntity postEntity1 = new PostEntity(new UserEntity("u2", ""), 1, 1, "s2", "c2", "t");
+		postEntity.setId(400);
+		List<ThreadEntity> threads = new ArrayList<ThreadEntity>();
+		threads.add(new ThreadEntity(null, Arrays.asList(new PostEntity[] { postEntity } )));
+		threads.add(new ThreadEntity(postEntity1, Arrays.asList(new PostEntity[] { postEntity1 } )));
+		when(postsModel.listThreads(0, 10)).thenReturn(threads);
+		
+		// Act
+		ListPostsResource result = resource.listThreads(0, 10);
+		
+		// Assert
+		assertEquals(1, result.getPosts().size());
+	}		
+	
+	@SuppressWarnings("unchecked")
+	@Test
 	public void shouldListThreadsByTag() throws IOException {
 		// Arrange
 		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", "t");

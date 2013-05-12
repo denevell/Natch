@@ -65,7 +65,6 @@ The start of a REST interface for a forum.
 ### Backlog 
 
 * ###: Return user data with logon call
-* ###: Null pointer when deleting the head of a thread
 * ##: Re-enable db locking 
 * ##: Entity bean null / blank problem?
 * ##: Separate out thread and post code and tests
@@ -76,6 +75,7 @@ The start of a REST interface for a forum.
 * #: threaded posts: move subject to thread object?
 * #: threaded posts: moved creation date to thread?
 * #: Inject the EntityManager via annotations
+* ~~###: Null pointer when deleting the head of a thread~~
 * ~~###: Packaged json objects for use in the frontend.~~
 * ~~###: Update swagger documentation so 'thread' appears as 'threadId'~~
 * ~~###: Move back to eclipselink to test performance with sqlite~~
