@@ -13,7 +13,7 @@ import javax.persistence.OneToOne;
 @NamedQueries(
 	{
 	@NamedQuery(name=ThreadEntity.NAMED_QUERY_LIST_THREADS,query=
-		"select p from ThreadEntity p order by p.latestPost.created desc")
+		"select p from ThreadEntity p where p.rootPost is not null order by p.latestPost.created desc")
 	,
 	@NamedQuery(name=ThreadEntity.NAMED_QUERY_LIST_THREADS_BY_TAG,query=
 		"select p from ThreadEntity p where :" + ThreadEntity.NAMED_QUERY_PARAM_TAG +  " member of p.rootPost.tags order by p.latestPost.created desc")

@@ -65,10 +65,11 @@ The start of a REST interface for a forum.
 ### Backlog 
 
 * ###: Return user data with logon call
-* ##: Re-enable db locking 
-* ##: Entity bean null / blank problem?
-* ##: Separate out thread and post code and tests
+* ###: Separate out thread and post code and tests
 * ##: Can't pass in single item tags list.
+* #: Re-enable db locking 
+* #: Entity bean null / blank problem?
+* #: Test for still getting 5 posts if one root, but not the thread, is deleted.
 * #: Start using DI
 * #: Intercept json parsing errors and return 400s: register, login
 * #: threaded posts: move tags to the thread object and not individual posts?
