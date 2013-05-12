@@ -86,6 +86,46 @@ public class AddPostsFunctional {
 		assertTrue(returnData1.isSuccessful());
 	}
 	
+	@Test 
+	public void shouldMakePostWithLongPost() {
+		// Arrange 
+		AddPostResourceInput input = new AddPostResourceInput("sub", 
+				"Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
+				"sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." +
+				"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
+				"ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit" +
+				"esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, " +
+				"sunt in culpa qui officia deserunt mollit anim id est laborum. 	Lorem ipsum dolor sit " +
+				"amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore " +
+				"magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut " +
+				"aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit " +
+				"esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident," +
+				" sunt in culpa qui officia deserunt mollit anim id est laborum. 	Lorem ipsum dolor sit " +
+				"amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore " +
+				"magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut " +
+				"aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit " +
+				"esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, " +
+				"sunt in culpa qui officia deserunt mollit anim id est laborum.");
+		
+		// Act
+		AddPostResourceReturnData returnData = 
+		addPostService
+		.header("AuthKey", loginResult.getAuthKey())
+		.type(MediaType.APPLICATION_JSON)
+		.put(AddPostResourceReturnData.class, input); 
+		AddPostResourceReturnData returnData1 = 
+		addPostService
+		.header("AuthKey", loginResult.getAuthKey())
+		.type(MediaType.APPLICATION_JSON)
+		.put(AddPostResourceReturnData.class, input); 
+		
+		// Assert
+		assertEquals("", returnData.getError());
+		assertEquals("", returnData1.getError());
+		assertTrue(returnData.isSuccessful());
+		assertTrue(returnData1.isSuccessful());
+	}	
+	
 	@Test
 	public void shouldSeeErrorOnUnAuthorised() {
 		// Arrange 

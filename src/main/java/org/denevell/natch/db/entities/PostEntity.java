@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -39,6 +40,7 @@ public class PostEntity {
 	private long created;
 	private long modified;
 	private String subject;
+	@Lob
 	private String content;
 	private String threadId;
 	@XmlElement(required=false)
