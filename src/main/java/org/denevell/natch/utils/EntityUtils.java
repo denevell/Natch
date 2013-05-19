@@ -6,6 +6,7 @@ public class EntityUtils {
 	
 	public static void closeEntityConnection(EntityManager entityManager) {
 		try {
+			if(entityManager!=null) entityManager.clear();
 			if(entityManager!=null) entityManager.close();
 		} catch(Exception e) {
 			e.printStackTrace();
