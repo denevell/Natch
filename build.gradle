@@ -44,11 +44,6 @@ dependencies {
 
 task createFunctionalWar(type: War) {
 	classifier = 'Functional'
-	from('src/test/resources/META-INF'){ 
-		into('WEB-INF/classes/META-INF') 
-		include 'persistence.xml' 
-	} 
-	rootSpec.exclude 'META-INF/persistence.xml'
 }
 
 task undeployFunctionalWar(type:Exec, dependsOn: createFunctionalWar) {

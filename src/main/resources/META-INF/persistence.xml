@@ -2,15 +2,54 @@
 <persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
      version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
-     <persistence-unit name="users" transaction-type="RESOURCE_LOCAL">
+     <persistence-unit name="prod" transaction-type="RESOURCE_LOCAL">
 	     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 	     <class>org.denevell.natch.db.entities.UserEntity</class>
 	     <class>org.denevell.natch.db.entities.PostEntity</class>
-	     <mapping-file>META-INF/users_mapping.xml</mapping-file>
+	     <class>org.denevell.natch.db.entities.ThreadEntity</class>
 	     <properties>
-			<property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:sqlite:/var/lib/tomcat7/dbs/users.db" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/prodnatch" />
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
+			<property name="javax.persistence.jdbc.user" value="denevell" />
+			<property name="javax.persistence.jdbc.password" value="user" />
+			<property name="eclipselink.ddl-generation" value="create-tables" /> 
+			<property name="eclipselink.logging.level" value="ALL" />
+	     </properties>
+     </persistence-unit>     
+     <persistence-unit name="test" transaction-type="RESOURCE_LOCAL">
+	     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+	     <class>org.denevell.natch.db.entities.UserEntity</class>
+	     <class>org.denevell.natch.db.entities.PostEntity</class>
+	     <class>org.denevell.natch.db.entities.ThreadEntity</class>
+	     <properties>
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/testnatch" />
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
+			<property name="javax.persistence.jdbc.user" value="denevell" />
+			<property name="javax.persistence.jdbc.password" value="user" />
+			<property name="eclipselink.ddl-generation" value="create-tables" /> 
 			<property name="eclipselink.logging.level" value="ALL" />
 	     </properties>
      </persistence-unit>     
 </persistence>
+
+<!--
+			<property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:sqlite:/var/lib/tomcat7/dbs/users.db" />
+			<property name="eclipselink.logging.level" value="ALL" />
+-->
+	     <!-- <mapping-file>META-INF/users_mapping.xml</mapping-file> -->
+	     <!-- <provider>org.hibernate.ejb.HibernatePersistence</provider> -->
+			<!--	
+			<property name='hibernate.dialect' value="org.denevell.natch.SQLiteDialect" />
+			<property name='hibernate.hbm2ddl.auto' value='create' />
+			<property name='hibernate.show_sql' value='true' />      
+
+			<property name="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />
+			<property name="hibernate.c3p0.max_size" value="100" />
+			<property name="hibernate.c3p0.min_size" value="0" />
+			<property name="hibernate.c3p0.acquire_increment" value="1" />
+			<property name="hibernate.c3p0.idle_test_period" value="300" />
+			<property name="hibernate.c3p0.max_statements" value="0" />
+			<property name="hibernate.c3p0.timeout" value="100" />
+
+			-->
