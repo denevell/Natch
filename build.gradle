@@ -38,12 +38,18 @@ dependencies {
 	compile 'com.wordnik:swagger-jaxrs_2.9.1:1.2.1'
 }    
 
+task createProductionWar(type: War) {
+	classifier = 'Production'
+	manifest { attributes "ISPROD": "TRUE" }
+}
+
 // ------------------
 // The functional war
 // ------------------
 
 task createFunctionalWar(type: War) {
 	classifier = 'Functional'
+	manifest { attributes "ISPROD": "FALSE" }
 }
 
 task undeployFunctionalWar(type:Exec, dependsOn: createFunctionalWar) {

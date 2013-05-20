@@ -1,7 +1,13 @@
 package org.denevell.natch.utils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
+
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -19,6 +25,26 @@ public class JPAFactoryContextListener implements ServletContextListener{
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 		System.out.println("JPA context listener started");
-		sFactory = Persistence.createEntityManagerFactory(PersistenceInfo.EntityManagerFactoryName);		
+		try {
+			Manifest manif = getManifest(arg0.getServletContext());
+			Attributes attr = manif.getMainAttributes();
+			String isProd = attr.getValue("ISPROD");
+			if(isProd !=null && isProd.equals("TRUE")) {
+				Log.info(getClass(), "Using production database.");
+				sFactory = Persistence.createEntityManagerFactory(PersistenceInfo.ProdEntityManagerFactoryName);		
+			} else {
+				Log.info(getClass(), "Using test database.");
+				sFactory = Persistence.createEntityManagerFactory(PersistenceInfo.TestEntityManagerFactoryName);		
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Couldn't find manifest.mf. Running from Eclipse?");
+		}
+	}
+
+	private Manifest getManifest(ServletContext ctx) throws IOException {
+		InputStream inputStream = ctx.getResourceAsStream("/META-INF/MANIFEST.MF");
+		Manifest manifest = new Manifest(inputStream);		
+		return manifest;
 	}
 }
