@@ -55,12 +55,12 @@ The start of a REST interface for a forum.
 
 ### 0.3.5 (deployment)
 
-* Test performance with multiple connections
 * Disable REST test utilties in production war
+* Test performance with multiple connections
 * Map sql via xml, to ease changes of database / provider, database migration
-* Create production war
 * Backup database
 * New installation and database with newly inserted backup
+* ~~Create production war~~
 
 ### Backlog 
 
