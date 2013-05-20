@@ -55,11 +55,11 @@ The start of a REST interface for a forum.
 
 ### 0.3.5 (deployment)
 
-* Disable REST test utilties in production war
 * Test performance with multiple connections
 * Map sql via xml, to ease changes of database / provider, database migration
 * Backup database
 * New installation and database with newly inserted backup
+* ~~Disable REST test utilties in production war~~
 * ~~Create production war~~
 
 ### Backlog 

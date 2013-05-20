@@ -15,6 +15,7 @@ import org.denevell.natch.db.entities.PersistenceInfo;
 
 public class JPAFactoryContextListener implements ServletContextListener{
 	public static EntityManagerFactory sFactory;
+	public static boolean sTestDb = false;
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
@@ -26,14 +27,15 @@ public class JPAFactoryContextListener implements ServletContextListener{
 	public void contextInitialized(ServletContextEvent arg0) {
 		System.out.println("JPA context listener started");
 		try {
-			Manifest manif = getManifest(arg0.getServletContext());
-			Attributes attr = manif.getMainAttributes();
+			Attributes attr = getManifest(arg0.getServletContext());
 			String isProd = attr.getValue("ISPROD");
 			if(isProd !=null && isProd.equals("TRUE")) {
 				Log.info(getClass(), "Using production database.");
+				sTestDb = false;
 				sFactory = Persistence.createEntityManagerFactory(PersistenceInfo.ProdEntityManagerFactoryName);		
 			} else {
 				Log.info(getClass(), "Using test database.");
+				sTestDb = true;
 				sFactory = Persistence.createEntityManagerFactory(PersistenceInfo.TestEntityManagerFactoryName);		
 			}
 		} catch (IOException e) {
@@ -42,9 +44,9 @@ public class JPAFactoryContextListener implements ServletContextListener{
 		}
 	}
 
-	private Manifest getManifest(ServletContext ctx) throws IOException {
+	private Attributes getManifest(ServletContext ctx) throws IOException {
 		InputStream inputStream = ctx.getResourceAsStream("/META-INF/MANIFEST.MF");
-		Manifest manifest = new Manifest(inputStream);		
-		return manifest;
+		Manifest manifest = new Manifest(inputStream);	
+		return manifest.getMainAttributes();
 	}
 }

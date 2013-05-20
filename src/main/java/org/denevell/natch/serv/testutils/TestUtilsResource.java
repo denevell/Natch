@@ -8,13 +8,13 @@ import javax.ws.rs.Path;
 import org.denevell.natch.utils.Strings;
 
 @Path("testutils")
-public class RegisterResource {
+public class TestUtilsResource {
 	
-	private RegisterModel mUserModel;
+	private TestUtilsModel mUserModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	
-	public RegisterResource() {
-		mUserModel = new RegisterModel();
+	public TestUtilsResource() {
+		mUserModel = new TestUtilsModel();
 	}
 	
 	@DELETE
