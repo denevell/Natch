@@ -65,6 +65,7 @@ The start of a REST interface for a forum.
 ### Backlog 
 
 * ###: Add init method to models to start the entity manager there
+* ###: Access jpa database in the test.
 * ##: Can't pass in single item tags list.
 * #: Return user data with logon call
 * #: Re-enable db locking 
