@@ -64,9 +64,9 @@ The start of a REST interface for a forum.
 
 ### Backlog 
 
-* ###: Return user data with logon call
-* ###: Separate out thread and post code and tests
+* ###: Add init method to models to start the entity manager there
 * ##: Can't pass in single item tags list.
+* #: Return user data with logon call
 * #: Re-enable db locking 
 * #: Entity bean null / blank problem?
 * #: Test for still getting 5 posts if one root, but not the thread, is deleted.
