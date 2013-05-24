@@ -25,8 +25,8 @@ public class TestUtilsModel {
 		if(JPAFactoryContextListener.sTestDb == false) {
 			throw new RuntimeException("Computer says no.");
 		} else {
-			mEntityManager = mFactory.createEntityManager(); 		
 			try {
+				mEntityManager = mFactory.createEntityManager(); 		
 				EntityTransaction trans = mEntityManager.getTransaction();
 				trans.begin();
 				List<ThreadEntity> resultT = mEntityManager.createQuery("select a from ThreadEntity a", ThreadEntity.class).getResultList();

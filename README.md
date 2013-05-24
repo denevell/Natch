@@ -64,7 +64,6 @@ The start of a REST interface for a forum.
 
 ### Backlog 
 
-* ###: Add init method to models to start the entity manager there
 * ###: Access jpa database in the test.
 * ##: Can't pass in single item tags list.
 * #: Return user data with logon call
@@ -77,6 +76,7 @@ The start of a REST interface for a forum.
 * #: threaded posts: move subject to thread object?
 * #: threaded posts: moved creation date to thread?
 * #: Inject the EntityManager via annotations
+* ~~###: Add init method to models to start the entity manager there~~
 * ~~###: Null pointer when deleting the head of a thread~~
 * ~~###: Packaged json objects for use in the frontend.~~
 * ~~###: Update swagger documentation so 'thread' appears as 'threadId'~~

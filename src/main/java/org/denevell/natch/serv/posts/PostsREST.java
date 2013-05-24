@@ -81,6 +81,7 @@ public class PostsREST {
 	public AddPostResourceReturnData add(
 			@ApiParam(name="input") AddPostResourceInput input) {
 		try {
+			mModel.init();
 			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 			regReturnData.setSuccessful(false);
 			if(input==null || input.getContent()==null || input.getSubject()==null) {
@@ -127,6 +128,7 @@ public class PostsREST {
 			) throws IOException {
 		List<PostEntity> posts = null;
 		try {
+			mModel.init();
 			posts = mModel.listByModificationDate(start, limit);
 		} catch(Exception e) {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
@@ -155,6 +157,7 @@ public class PostsREST {
 			) throws IOException {
 		List<PostEntity> posts = null;
 		try {
+			mModel.init();
 			posts = mModel.listByThreadId(threadId, start, limit);
 		} catch(Exception e) {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
@@ -184,6 +187,7 @@ public class PostsREST {
 			) throws IOException {
 		List<ThreadEntity> threads = null;
 		try {
+			mModel.init();
 			threads = mModel.listThreads(start, limit);
 		} catch(Exception e) {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
@@ -212,6 +216,7 @@ public class PostsREST {
 			) throws IOException {
 		List<ThreadEntity> threads = null;
 		try {
+			mModel.init();
 			threads = mModel.listThreadsByTag(tag, start, limit);
 		} catch(Exception e) {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
@@ -243,6 +248,7 @@ public class PostsREST {
 		ret.setSuccessful(false);
 		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
 		try {
+			mModel.init();
 			if(userEntity==null) {
 				ret.setError(rb.getString(Strings.unknown_error)); // Unknown as this shouldn't happen
 				return ret;
@@ -284,6 +290,7 @@ public class PostsREST {
 			@ApiParam(name="editParam") EditPostResource editPostResource) {
 		EditPostResourceReturnData ret = new EditPostResourceReturnData();
 		try {
+			mModel.init();
 			ret.setSuccessful(false);
 			UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
 			if(userEntity==null) {

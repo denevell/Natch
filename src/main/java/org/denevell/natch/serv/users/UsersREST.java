@@ -63,6 +63,7 @@ public class UsersREST {
 			@ApiParam(name="registerInput") RegisterResourceInput registerInput) {
 		RegisterResourceReturnData regReturnData = new RegisterResourceReturnData();
 		try {
+			mLoginModel.init();
 			if(registerInput==null) {
 				regReturnData.setSuccessful(false);
 				regReturnData.setError(rb.getString(Strings.user_pass_cannot_be_blank));
@@ -95,6 +96,7 @@ public class UsersREST {
 		responseClass="org.denevell.natch.serv.users.resources.LoginResourceReturnData")
 	public LoginResourceReturnData login(@ApiParam(name="loginInput") LoginResourceInput loginInput) {
 		try {
+			mLoginModel.init();
 			LoginResourceReturnData returnResult = new LoginResourceReturnData();
 			if(loginInput==null) {
 				returnResult.setSuccessful(false);
@@ -131,11 +133,14 @@ public class UsersREST {
 		@ApiError(code=401, reason="Incorrect AuthKey header.")
 	})
 	public LoginResourceLoggedInReturnData isLoggedIn() {
-		// If we get here, the login filter failed.
-		LoginResourceLoggedInReturnData ret = new LoginResourceLoggedInReturnData();
-		ret.setSuccessful(true);
-		mLoginModel.close();
-		return ret;
+		try {
+			mLoginModel.init();
+			LoginResourceLoggedInReturnData ret = new LoginResourceLoggedInReturnData();
+			ret.setSuccessful(true);
+			return ret;
+		} finally {
+			mLoginModel.close();
+		}
 	}
 	
 	@DELETE
@@ -148,16 +153,20 @@ public class UsersREST {
 		@ApiError(code=401, reason="Incorrect AuthKey header.")
 	})
 	public LogoutResourceReturnData logout() {
-		LogoutResourceReturnData returnResult = new LogoutResourceReturnData();
-		String authKey = mRequest.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_AUTHKEY).toString();
-		if(mLoginModel.logout(authKey)) {
-			returnResult.setSuccessful(true);
-		} else {
-			returnResult.setSuccessful(false);
-			returnResult.setError(rb.getString(Strings.unknown_error));
+		try {
+			mLoginModel.init();
+			LogoutResourceReturnData returnResult = new LogoutResourceReturnData();
+			String authKey = mRequest.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_AUTHKEY).toString();
+			if(mLoginModel.logout(authKey)) {
+				returnResult.setSuccessful(true);
+			} else {
+				returnResult.setSuccessful(false);
+				returnResult.setError(rb.getString(Strings.unknown_error));
+			}
+			return returnResult;
+		} finally {
+			mLoginModel.close();
 		}
-		mLoginModel.close();
-		return returnResult;
 	}	
 
 }

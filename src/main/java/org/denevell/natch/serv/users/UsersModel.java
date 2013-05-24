@@ -16,7 +16,6 @@ public class UsersModel {
 	
 	private UserEntityQueries mUserEntityQueries;
 	private LoginAuthKeysSingleton mAuthDataGenerator;
-	private EntityManagerFactory mFactory;
 	private EntityManager mEntityManager;
 	private PasswordSaltUtils mPasswordSalter;
 	public static String LOGGED_IN = "loggedIn";
@@ -55,15 +54,12 @@ public class UsersModel {
 	public UsersModel(UserEntityQueries ueq, LoginAuthKeysSingleton authKeyGenerator, EntityManagerFactory factory, EntityManager entityManager, PasswordSaltUtils saltUtils) {
 		mUserEntityQueries = ueq;
 		mAuthDataGenerator = authKeyGenerator;
-		mFactory = factory;
 		mEntityManager =  entityManager;
 		mUserEntityQueries = ueq;
 		mPasswordSalter = saltUtils;
 	}
 	
 	public UsersModel() {
-		mFactory = JPAFactoryContextListener.sFactory;
-		mEntityManager = mFactory.createEntityManager();   		
 		mUserEntityQueries = new UserEntityQueries(new PasswordSaltUtils());
 		mAuthDataGenerator = LoginAuthKeysSingleton.getInstance();
 		mUserEntityQueries = new UserEntityQueries(new PasswordSaltUtils());
@@ -135,6 +131,11 @@ public class UsersModel {
 	public UserEntity loggedInAs(String authKey) {
 		UserEntity username = mAuthDataGenerator.retrieveUserEntity(authKey);
 		return username;
+	}
+	
+	public void init() {
+		EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
+		mEntityManager = factory.createEntityManager();   		
 	}
 
 	public void close() {

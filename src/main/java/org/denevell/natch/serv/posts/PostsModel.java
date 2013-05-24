@@ -25,13 +25,19 @@ public class PostsModel {
 	public final static String BAD_USER_INPUT = "baduserinput";
 	public final static String NOT_YOURS_TO_DELETE = "notyourtodelete";
 	private EntityManager mEntityManager;
-	private EntityManagerFactory mFactory;
 	private ThreadFactory mThreadFactory;
 	
 	public PostsModel() {
 		mThreadFactory = new ThreadFactory();
-		mFactory = JPAFactoryContextListener.sFactory;
-		mEntityManager = mFactory.createEntityManager(); 
+	}
+	
+	public void init() {
+		EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
+		mEntityManager = factory.createEntityManager(); 
+	}
+	
+	public void close() {
+		EntityUtils.closeEntityConnection(mEntityManager); 
 	}
 	
 	/**
@@ -39,7 +45,6 @@ public class PostsModel {
 	 */
 	public PostsModel(EntityManagerFactory factory, EntityManager entityManager, ThreadFactory threadFactory) {
 		mEntityManager = entityManager;
-		mFactory = factory;
 		mThreadFactory = threadFactory;
 	}
 	
@@ -224,10 +229,6 @@ public class PostsModel {
 			}
 			return UNKNOWN_ERROR;
 		} 
-	}
-
-	public void close() {
-		EntityUtils.closeEntityConnection(mEntityManager); 
 	}
 
 }
