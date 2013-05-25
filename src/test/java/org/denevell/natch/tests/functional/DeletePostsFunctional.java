@@ -32,10 +32,7 @@ public class DeletePostsFunctional {
 	public void setup() {
 		service = TestUtils.getRESTClient();
 		// Delete all users
-		service
-	    	.path("rest")
-	    	.path("testutils")
-	    	.delete();	
+		TestUtils.deleteAllDbs();
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    // Register
 		service

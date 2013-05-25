@@ -29,10 +29,7 @@ public class LoginFunctional {
 	@Before
 	public void setup() throws IOException, InterruptedException {
 		service = TestUtils.getRESTClient();
-		service
-	    	.path("rest")
-	    	.path("testutils")
-	    	.delete();
+		TestUtils.deleteAllDbs();
 	}
 	
 	@Test
