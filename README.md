@@ -64,9 +64,6 @@ The start of a REST interface for a forum.
 
 ### Backlog 
 
-* ~~###: Access jpa database in the test.~~
-* ~~###: Refactor functional test to delete the db the jpa way.~~
-* ###: Delete the api to delete the database.
 * ##: Can't pass in single item tags list.
 * #: Return user data with logon call
 * #: Re-enable db locking 
@@ -78,6 +75,9 @@ The start of a REST interface for a forum.
 * #: threaded posts: move subject to thread object?
 * #: threaded posts: moved creation date to thread?
 * #: Inject the EntityManager via annotations
+* ~~###: Access jpa database in the test.~~
+* ~~###: Refactor functional test to delete the db the jpa way.~~
+* ~~###: Delete the api to delete the database.~~
 * ~~###: Add init method to models to start the entity manager there~~
 * ~~###: Null pointer when deleting the head of a thread~~
 * ~~###: Packaged json objects for use in the frontend.~~
