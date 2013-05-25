@@ -15,7 +15,7 @@ import org.denevell.natch.db.entities.PersistenceInfo;
 
 public class JPAFactoryContextListener implements ServletContextListener{
 	public static EntityManagerFactory sFactory;
-	public static boolean sTestDb = false;
+	public static boolean sIsRunningAgainstTestDb = false;
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
@@ -31,11 +31,11 @@ public class JPAFactoryContextListener implements ServletContextListener{
 			String isProd = attr.getValue("ISPROD");
 			if(isProd !=null && isProd.equals("TRUE")) {
 				Log.info(getClass(), "Using production database.");
-				sTestDb = false;
+				sIsRunningAgainstTestDb = false;
 				sFactory = Persistence.createEntityManagerFactory(PersistenceInfo.ProdEntityManagerFactoryName);		
 			} else {
 				Log.info(getClass(), "Using test database.");
-				sTestDb = true;
+				sIsRunningAgainstTestDb = true;
 				sFactory = Persistence.createEntityManagerFactory(PersistenceInfo.TestEntityManagerFactoryName);		
 			}
 		} catch (IOException e) {

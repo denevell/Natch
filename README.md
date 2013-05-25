@@ -64,8 +64,9 @@ The start of a REST interface for a forum.
 
 ### Backlog 
 
-* ###: Access jpa database in the test.
-* ###: Refactor functional test to delete the db the jpa way.
+* ~~###: Access jpa database in the test.~~
+* ~~###: Refactor functional test to delete the db the jpa way.~~
+* ###: Delete the api to delete the database.
 * ##: Can't pass in single item tags list.
 * #: Return user data with logon call
 * #: Re-enable db locking 

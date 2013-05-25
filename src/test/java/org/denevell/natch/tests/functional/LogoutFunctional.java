@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-
 import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.io.users.LoginResourceInput;
@@ -24,12 +22,9 @@ public class LogoutFunctional {
 	private WebResource service;
 	
 	@Before
-	public void setup() throws IOException, InterruptedException {
+	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
-		service
-	    	.path("rest")
-	    	.path("testutils")
-	    	.delete();
+		TestUtils.deleteTestDb();
 	}
 	
 	@Test

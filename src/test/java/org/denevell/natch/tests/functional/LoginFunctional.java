@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
 import java.util.ResourceBundle;
 
 import javax.ws.rs.core.MediaType;
@@ -27,9 +26,9 @@ public class LoginFunctional {
     ResourceBundle rb = Strings.getMainResourceBundle();
 
 	@Before
-	public void setup() throws IOException, InterruptedException {
+	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
-		TestUtils.deleteAllDbs();
+		TestUtils.deleteTestDb();
 	}
 	
 	@Test

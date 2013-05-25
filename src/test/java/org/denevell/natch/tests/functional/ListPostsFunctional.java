@@ -27,10 +27,10 @@ public class ListPostsFunctional {
 	private WebResource service;
 
 	@Before
-	public void setup() {
+	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
 		// Delete all users
-		TestUtils.deleteAllDbs();
+		TestUtils.deleteTestDb();
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    // Register
 		service

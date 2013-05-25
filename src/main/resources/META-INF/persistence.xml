@@ -17,6 +17,7 @@
 	     </properties>
      </persistence-unit>     
      <persistence-unit name="test" transaction-type="RESOURCE_LOCAL">
+         <shared-cache-mode>NONE</shared-cache-mode>
 	     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 	     <class>org.denevell.natch.db.entities.UserEntity</class>
 	     <class>org.denevell.natch.db.entities.PostEntity</class>

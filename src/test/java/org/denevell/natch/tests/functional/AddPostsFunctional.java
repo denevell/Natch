@@ -4,18 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.ws.rs.core.MediaType;
 
-import org.denevell.natch.db.entities.PersistenceInfo;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.users.LoginResourceInput;
@@ -36,11 +30,9 @@ public class AddPostsFunctional {
 	private LoginResourceReturnData loginResult;
 	
 	@Before
-	public void setup() throws FileNotFoundException {
-		//Scanner in = new Scanner(new FileReader("/META-INF/persistence.xml"));
-		EntityManagerFactory f = Persistence.createEntityManagerFactory(PersistenceInfo.TestEntityManagerFactoryName);		
+	public void setup() throws Exception {
 		addPostService = TestUtils.getAddPostClient();
-		TestUtils.deleteAllDbs();
+		TestUtils.deleteTestDb();
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 		// Register
 		TestUtils.getRegisterClient()
