@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import org.denevell.natch.io.users.RegisterResourceInput;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
 import org.denevell.natch.utils.Strings;
+import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 

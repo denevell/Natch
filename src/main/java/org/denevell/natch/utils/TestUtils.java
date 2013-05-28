@@ -1,4 +1,4 @@
-package org.denevell.natch.tests.functional;
+package org.denevell.natch.utils;
 
 import java.util.List;
 
