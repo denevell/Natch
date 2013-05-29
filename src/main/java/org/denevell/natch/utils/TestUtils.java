@@ -13,9 +13,12 @@ import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
+import org.denevell.natch.io.users.LoginResourceInput;
+import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.RegisterResourceInput;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
 import org.denevell.natch.utils.EntityUtils;
+import org.eclipse.persistence.sessions.Login;
 
 import com.google.common.collect.Lists;
 import com.sun.jersey.api.client.Client;
@@ -126,11 +129,20 @@ public class TestUtils {
 		.type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);		
 	}
+	
+	public static String loginUser(String username, String password) {
+	    LoginResourceInput input = new LoginResourceInput(username, password);
+		LoginResourceReturnData ret = TestUtils.getLoginClient()
+		.type(MediaType.APPLICATION_JSON)
+	    .post(LoginResourceReturnData.class, input);		
+		return ret.getAuthKey();
+	}
 
-	public static void addThread(String sub, String cont, String singleTag) {
-		AddPostResourceInput addInput = new AddPostResourceInput(sub, cont, Lists.newArrayList(singleTag));
+	public static void addThread(String authKey, String sub, String cont, String singleTag) {
+		AddPostResourceInput addInput = new AddPostResourceInput(sub, cont, Lists.newArrayList(singleTag, "other"));
 		TestUtils.getAddPostClient()
 		.type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", authKey)
 		.put(AddPostResourceInput.class, addInput);
 	}
 
