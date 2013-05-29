@@ -12,10 +12,12 @@ import org.denevell.natch.db.entities.PersistenceInfo;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
+import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.users.RegisterResourceInput;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
 import org.denevell.natch.utils.EntityUtils;
 
+import com.google.common.collect.Lists;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
@@ -123,6 +125,13 @@ public class TestUtils {
 		TestUtils.getRegisterClient()
 		.type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);		
+	}
+
+	public static void addThread(String sub, String cont, String singleTag) {
+		AddPostResourceInput addInput = new AddPostResourceInput(sub, cont, Lists.newArrayList(singleTag));
+		TestUtils.getAddPostClient()
+		.type(MediaType.APPLICATION_JSON)
+		.put(AddPostResourceInput.class, addInput);
 	}
 
 }
