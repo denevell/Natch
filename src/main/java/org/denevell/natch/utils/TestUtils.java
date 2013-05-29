@@ -6,11 +6,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.db.entities.PersistenceInfo;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
+import org.denevell.natch.io.users.RegisterResourceInput;
+import org.denevell.natch.io.users.RegisterResourceReturnData;
 import org.denevell.natch.utils.EntityUtils;
 
 import com.sun.jersey.api.client.Client;
@@ -113,6 +116,13 @@ public class TestUtils {
 		ClientConfig config = new DefaultClientConfig();
 		Client client = Client.create(config);
 		return client.resource(baseUrl).path("rest").path("post").path("threads");		
+	}
+
+	public static void addUser(String username, String password) {
+	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron", "aaron");
+		TestUtils.getRegisterClient()
+		.type(MediaType.APPLICATION_JSON)
+	    	.put(RegisterResourceReturnData.class, registerInput);		
 	}
 
 }
