@@ -32,9 +32,11 @@ public class ThreadFactory {
 
 	public ThreadEntity updateThreadToRemovePost(ThreadEntity th, PostEntity pe) {
 		th.getPosts().remove(pe);
-		if(th.getRootPost()!=null) {
-			if(th.getRootPost().getId()==pe.getId()) th.setRootPost(null);
-			if(th.getLatestPost().getId()==pe.getId()) th.setLatestPost(null);
+		if(th.getRootPost()!=null && th.getRootPost().getId()==pe.getId()) {
+			th.setRootPost(null);
+		}
+		if(th.getLatestPost()!=null && th.getLatestPost().getId()==pe.getId() && th.getPosts()!=null && th.getPosts().size()>=1) {
+			th.setLatestPost(th.getPosts().get(th.getPosts().size()-1));
 		}
 		return th;
 	}

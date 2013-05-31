@@ -163,13 +163,13 @@ public class PostsModel {
 			PostEntity pe = findPostById(postEntityId);
 			if(pe==null) {
 				return DOESNT_EXIST;
-			}
-			else if(!pe.getUser().getUsername().equals(userEntity.getUsername())) {
+			} else if(!pe.getUser().getUsername().equals(userEntity.getUsername())) {
 				return NOT_YOURS_TO_DELETE;
 			}
 			ThreadEntity th = findThreadById(pe.getThreadId());
 			th = mThreadFactory.updateThreadToRemovePost(th, pe);
 			trans.begin();
+			// Remote thread if needs be
 			if(th.getPosts()==null || th.getPosts().size()==0) {
 				mEntityManager.remove(th);
 			} else {

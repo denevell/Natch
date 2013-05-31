@@ -137,9 +137,14 @@ public class TestUtils {
 	    .post(LoginResourceReturnData.class, input);		
 		return ret.getAuthKey();
 	}
-
+	
 	public static void addThread(String authKey, String sub, String cont, String singleTag) {
+		addThread(authKey, sub, cont, singleTag, null);
+	}
+
+	public static void addThread(String authKey, String sub, String cont, String singleTag, String threadId) {
 		AddPostResourceInput addInput = new AddPostResourceInput(sub, cont, Lists.newArrayList(singleTag, "other"));
+		if(threadId!=null) addInput.setThreadId(threadId);
 		TestUtils.getAddPostClient()
 		.type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", authKey)

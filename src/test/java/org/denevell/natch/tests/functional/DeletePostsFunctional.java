@@ -50,14 +50,14 @@ public class DeletePostsFunctional {
 	@Test
 	public void shouldDeletePost() {
 		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
+		TestUtils.addThread(loginResult.getAuthKey(), "a", "b", "adsf", "thread");
+		TestUtils.addThread(loginResult.getAuthKey(), "c", "d", "adsf", "thread");
 		ListPostsResource listPosts = service
 		.path("rest").path("post").path("0").path("10")
+		.header("AuthKey", loginResult.getAuthKey())
+    	.get(ListPostsResource.class); 		
+		ListPostsResource threadsBefore = TestUtils.getListPostThreadsPostClient()
+		.path("0").path("10")
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 		
 		
@@ -71,12 +71,18 @@ public class DeletePostsFunctional {
 		.path("rest").path("post").path("0").path("10")
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 		
+		ListPostsResource threadsAfter = TestUtils.getListPostThreadsPostClient()
+		.path("0").path("10")
+		.header("AuthKey", loginResult.getAuthKey())
+    	.get(ListPostsResource.class); 		
 		
 		// Assert
 		assertEquals("", ret.getError());
 		assertTrue(ret.isSuccessful());		
-		assertEquals(1, listPosts.getPosts().size());		
-		assertEquals(0, listPostsAfter.getPosts().size());		
+		assertEquals(2, listPosts.getPosts().size());		
+		assertEquals(1, listPostsAfter.getPosts().size());		
+		assertEquals(1, threadsBefore.getPosts().size());		
+		assertEquals(1, threadsAfter.getPosts().size());		
 	}
 	
 	@Test
