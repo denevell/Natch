@@ -96,15 +96,20 @@ public class PostsREST {
 			}
 			mAddPostAdapter.create(input);
 			String okay = mModel.addPost(userEntity, mAddPostAdapter);
-			generateAddPostReturnResource(regReturnData, okay);
+			generateAddPostReturnResource(regReturnData, okay, mAddPostAdapter);
 			return regReturnData;
 		} finally {
 			mModel.close();
 		}
 	}
 
-	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, String okay) {
+	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, String okay, AddPostResourcePostEntityAdapter adapterThatCreatePost) {
 		if(okay.equals(PostsModel.ADDED)) {
+			if(adapterThatCreatePost!=null && adapterThatCreatePost.getCreatedPost()!=null) {
+				regReturnData.setThreadId(adapterThatCreatePost.getCreatedPost().getThreadId());
+			} else {
+				Log.info(getClass(), "Added a post but the thread id was null when sending the json response...");
+			}
 			regReturnData.setSuccessful(true);
 		} else if(okay.equals(PostsModel.BAD_USER_INPUT)) {
 			regReturnData.setSuccessful(false);

@@ -32,6 +32,15 @@ public class AddPostResourcePostEntityAdapter implements PostEntityAdapter {
 		return mPost;
 	}
 	
+	/**
+	 * Not necessarily saved to database if error.
+	 * Use the return of whatever uses this to see if the db persist was successful
+	 * @return
+	 */
+	public PostEntity getCreatedPost() {
+		return mPost;
+	}
+	
 	private String getThreadId(String subject, String threadId, long time) {
 		if(threadId==null || threadId.trim().length()==0) {
 			try {

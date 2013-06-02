@@ -2,6 +2,7 @@ package org.denevell.natch.tests.functional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -61,6 +62,7 @@ public class AddPostsFunctional {
 		
 		// Assert
 		assertEquals("", returnData.getError());
+		assertNotNull(returnData.getThreadId());
 		assertTrue(returnData.isSuccessful());
 	}
 	

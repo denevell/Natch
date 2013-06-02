@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
+import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
@@ -48,6 +49,7 @@ public class AddPostResourceTests {
 	public void shouldAddPost() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
+		when(addPostAdapter.getCreatedPost()).thenReturn(new PostEntity(null, 123, 123, "a", "dsf", "thready"));
 		when(postsModel.addPost(user, addPostAdapter)).thenReturn(PostsModel.ADDED);
 		
 		// Act
@@ -56,6 +58,7 @@ public class AddPostResourceTests {
 		// Assert
 		assertTrue(result.isSuccessful());
 		assertEquals("Error json", "", result.getError());
+		assertEquals("ThreadId", "thready", result.getThreadId());
 	}
 	
 	@Test
