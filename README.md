@@ -62,8 +62,9 @@ The start of a REST interface for a forum.
 * ~~Disable REST test utilties in production war~~
 * ~~Create production war~~
 
-### Backlog 
+### Tech tasks 
 
+* ##: Return threadid on new thread
 * ##: Can't pass in single item tags list.
 * #: Return user data with logon call
 * #: Re-enable db locking 
