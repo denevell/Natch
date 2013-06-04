@@ -64,17 +64,18 @@ The start of a REST interface for a forum.
 
 ### Tech tasks 
 
-* ##: Can't pass in single item tags list.
-* #: Return user data with logon call
-* #: Re-enable db locking 
-* #: Entity bean null / blank problem?
+* ##: Cannot pass in single item tags list.
+* #: Change error return strings to ints
 * #: Test for still getting 5 posts if one root, but not the thread, is deleted.
+* #: Return user data with logon call
+* #: Entity bean null / blank problem?
 * #: Start using DI
 * #: Intercept json parsing errors and return 400s: register, login
 * #: threaded posts: move tags to the thread object and not individual posts?
 * #: threaded posts: move subject to thread object?
 * #: threaded posts: moved creation date to thread?
 * #: Inject the EntityManager via annotations
+* #: Re-enable db locking 
 * ~~##: Return threadid on new thread~~
 * ~~###: Access jpa database in the test.~~
 * ~~###: Refactor functional test to delete the db the jpa way.~~
