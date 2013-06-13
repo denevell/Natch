@@ -17,8 +17,6 @@ import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.RegisterResourceInput;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
-import org.denevell.natch.utils.EntityUtils;
-import org.eclipse.persistence.sessions.Login;
 
 import com.google.common.collect.Lists;
 import com.sun.jersey.api.client.Client;
@@ -124,7 +122,7 @@ public class TestUtils {
 	}
 
 	public static void addUser(String username, String password) {
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron", "aaron");
+	    RegisterResourceInput registerInput = new RegisterResourceInput(username, password);
 		TestUtils.getRegisterClient()
 		.type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);		
@@ -138,17 +136,23 @@ public class TestUtils {
 		return ret.getAuthKey();
 	}
 	
-	public static void addThread(String authKey, String sub, String cont, String singleTag) {
-		addThread(authKey, sub, cont, singleTag, null);
+	public static String addThread(String authKey, String sub, String cont, String singleTag) {
+		return addThread(authKey, sub, cont, singleTag, null);
+	}
+	
+	public static String addPost(String threadId, String authKey, String sub, String cont, String singleTag) {
+		// Same call as add thread, but with threadid
+		return addThread(authKey, sub, cont, singleTag, threadId);
 	}
 
-	public static void addThread(String authKey, String sub, String cont, String singleTag, String threadId) {
+	public static String addThread(String authKey, String sub, String cont, String singleTag, String threadId) {
 		AddPostResourceInput addInput = new AddPostResourceInput(sub, cont, Lists.newArrayList(singleTag, "other"));
 		if(threadId!=null) addInput.setThreadId(threadId);
-		TestUtils.getAddPostClient()
+		AddPostResourceInput ret = TestUtils.getAddPostClient()
 		.type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", authKey)
 		.put(AddPostResourceInput.class, addInput);
+		return ret.getThreadId();
 	}
 
 }
