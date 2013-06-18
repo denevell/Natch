@@ -152,7 +152,7 @@ public class PostsModel {
 			return null;
 		} 
 	}	
-
+	
 	public String delete(UserEntity userEntity, long postEntityId) {
 		EntityTransaction trans = mEntityManager.getTransaction();
 		try {

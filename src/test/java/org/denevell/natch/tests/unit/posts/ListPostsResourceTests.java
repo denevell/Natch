@@ -17,6 +17,7 @@ import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.ListPostsResource;
+import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.serv.posts.AddPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.EditPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;
@@ -45,6 +46,30 @@ public class ListPostsResourceTests {
 		addPostAdapter = mock(AddPostResourcePostEntityAdapter.class);
 		resource = new PostsREST(postsModel, request, response, postAdapter, addPostAdapter);
 	}
+	
+	@Test
+	public void shouldFindSinglePost() throws IOException {
+		// Arrange
+		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", null);
+		@SuppressWarnings("unchecked") List<String> asList = Arrays.asList(new String[] {"tag1"});
+		postEntity.setTags(asList);
+		postEntity.setId(400);
+		postEntity.setThreadId("1234");
+		when(postsModel.findPostById(0)).thenReturn(postEntity);
+		
+		// Act
+		PostResource result = resource.findById(0);
+		
+		// Assert
+		assertEquals(1, result.getCreation());
+		assertEquals(1, result.getModification());
+		assertEquals("1234", result.getThreadId());
+		assertEquals("u1", result.getUsername());
+		assertEquals("s1", result.getSubject());
+		assertEquals("c1", result.getContent());
+		assertEquals("tag1", result.getTags().get(0));
+		assertEquals(400, result.getId());
+	}	
 	
 	@Test
 	public void shouldListPosts() throws IOException {

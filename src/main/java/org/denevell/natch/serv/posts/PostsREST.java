@@ -29,6 +29,7 @@ import org.denevell.natch.io.posts.DeletePostResourceReturnData;
 import org.denevell.natch.io.posts.EditPostResource;
 import org.denevell.natch.io.posts.EditPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
+import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
@@ -122,6 +123,40 @@ public class PostsREST {
 			regReturnData.setError(rb.getString(Strings.unknown_error));
 		}
 	}
+	
+	@GET
+	@Path("/{postId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Get post by id", responseClass="org.denevell.natch.serv.posts.resources.PostResource")
+	public PostResource findById(
+		@ApiParam(name="postId") @PathParam("postId") long postId 
+			) throws IOException {
+		PostEntity post = null;
+		try {
+			mModel.init();
+			post = mModel.findPostById(postId);
+		} catch(Exception e) {
+			Log.info(getClass(), "Couldn't find post: " + e.toString());
+			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
+			return null;
+		} finally {
+			mModel.close();
+		}
+		if(post==null) {
+			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
+			return null;
+		} else {
+			PostResource postResource = new PostResource(post.getUser().getUsername(), 
+					post.getCreated(), 
+					post.getModified(), 
+					post.getSubject(), 
+					post.getContent(), 
+					post.getTags());
+			postResource.setId(post.getId());
+			postResource.setThreadId(post.getThreadId());
+			return postResource;
+		}
+	}	
 
 	@GET
 	@Path("/{start}/{limit}")

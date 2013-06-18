@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
+import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.RegisterResourceInput;
@@ -141,6 +142,31 @@ public class ListPostsFunctional {
 		// Assert
 		assertEquals("&lt;hi&gt;", returnData.getPosts().get(0).getSubject());
 		assertEquals("&lt;there&gt;", returnData.getPosts().get(0).getContent());
+	}		
+	
+	@Test
+	public void shouldFindPost() {
+		// Arrange 
+		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input); 
+		// Get Id
+		ListPostsResource returnList = service
+		.path("rest").path("post").path("0").path("10")
+    	.get(ListPostsResource.class); 		
+		long id = returnList.getPosts().get(0).getId();
+		
+		// Act
+		PostResource returnData = service
+		.path("rest").path("post").path(String.valueOf(id))
+    	.get(PostResource.class); 
+		
+		// Assert
+		assertNotNull(returnData);
+		assertEquals("sub", returnData.getSubject());
 	}		
 	
 	@Test
