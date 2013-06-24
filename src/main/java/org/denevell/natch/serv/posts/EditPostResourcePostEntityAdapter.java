@@ -20,6 +20,7 @@ public class EditPostResourcePostEntityAdapter implements PostEntityAdapter {
 	public PostEntity createPost(PostEntity pe, UserEntity userEntity) {
 		mPe.setCreated(pe.getCreated());
 		mPe.setId(pe.getId());
+		mPe.setThreadId(pe.getThreadId());
 		mPe.setModified(new Date().getTime());
 		mPe.setUser(userEntity);
 		return mPe;
