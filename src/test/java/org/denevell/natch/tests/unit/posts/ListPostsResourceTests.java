@@ -21,6 +21,7 @@ import org.denevell.natch.serv.posts.AddPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.EditPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.PostsREST;
+import org.denevell.natch.serv.threads.ThreadResource;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
@@ -165,13 +166,14 @@ public class ListPostsResourceTests {
 		when(postsModel.listByThreadId("t", 0, 10)).thenReturn(posts);
 		
 		// Act
-		ListPostsResource result = resource.listByThreadId("t", 0, 10);
+		ThreadResource result = resource.listByThreadId("t", 0, 10);
 		
 		// Assert
 		assertEquals(2, result.getPosts().size());
 		assertEquals(400, result.getPosts().get(0).getId());
 		assertEquals(1, result.getPosts().get(0).getCreation());
 		assertEquals(1, result.getPosts().get(0).getModification());
+		assertEquals("s1", result.getSubject());
 		assertEquals("u1", result.getPosts().get(0).getUsername());
 		assertEquals("s1", result.getPosts().get(0).getSubject());
 		assertEquals("c1", result.getPosts().get(0).getContent());

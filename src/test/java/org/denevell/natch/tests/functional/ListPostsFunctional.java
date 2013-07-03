@@ -17,6 +17,7 @@ import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.RegisterResourceInput;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
+import org.denevell.natch.serv.threads.ThreadResource;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -231,15 +232,15 @@ public class ListPostsFunctional {
     	.put(AddPostResourceReturnData.class, input2); 
 		
 		// Act
-		ListPostsResource returnData = service
+		ThreadResource returnData = service
 		.path("rest").path("post").path("t").path("0").path("20")
-    	.get(ListPostsResource.class); 
+    	.get(ThreadResource.class); 
 		
 		// Assert
 		assertEquals(2, returnData.getPosts().size());
 		assertTrue(returnData.getPosts().get(0).getId()!=0);
 		assertTrue(returnData.getPosts().get(1).getId()!=0);
-		assertEquals("sub", returnData.getPosts().get(0).getSubject());
+		assertEquals("sub", returnData.getSubject());
 		assertEquals("cont", returnData.getPosts().get(0).getContent());
 		assertEquals("t", returnData.getPosts().get(0).getThreadId());
 		assertEquals("sub2", returnData.getPosts().get(1).getSubject());
@@ -270,15 +271,29 @@ public class ListPostsFunctional {
     	.put(AddPostResourceReturnData.class, input2); 
 		
 		// Act
-		ListPostsResource returnData = service
+		ThreadResource returnData = service
 		.path("rest").path("post").path("t").path("1").path("1")
-    	.get(ListPostsResource.class); 
+    	.get(ThreadResource.class); 
 		
 		// Assert
 		assertEquals(1, returnData.getPosts().size());
-		assertEquals("sub2", returnData.getPosts().get(0).getSubject());
+		assertEquals("sub2", returnData.getSubject());
 		assertEquals("cont2", returnData.getPosts().get(0).getContent());
 		assertEquals("t", returnData.getPosts().get(0).getThreadId());
 	}		
+	
+	@Test
+	public void shouldShowBlankOnBadThreadId() {
+		// Arrange 
+		
+		// Act
+		ThreadResource returnData = service
+		.path("rest").path("post").path("xxxxxxxxxxx").path("0").path("20")
+    	.get(ThreadResource.class); 
+		
+		// Assert
+		assertEquals(0, returnData.getPosts().size());
+		assertEquals(null, returnData.getSubject());
+	}	
 	
 }

@@ -29,6 +29,7 @@ import org.denevell.natch.io.posts.EditPostResource;
 import org.denevell.natch.io.posts.EditPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.posts.PostResource;
+import org.denevell.natch.serv.threads.ThreadResource;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
@@ -188,8 +189,8 @@ public class PostsREST {
 	@GET
 	@Path("/{threadId}/{start}/{limit}")
 	@Produces(MediaType.APPLICATION_JSON)	
-	@ApiOperation(value = "Lists posts within the thread specified", responseClass="org.denevell.natch.serv.posts.resources.ListPostsResource")
-	public ListPostsResource listByThreadId(
+	@ApiOperation(value = "Lists posts within the thread specified", responseClass="org.denevell.natch.serv.posts.resources.ThreadResource")
+	public ThreadResource listByThreadId(
 			@ApiParam(name="threadId") @PathParam("threadId") String threadId,
 			@ApiParam(name="start") @PathParam("start") int start, 	
 			@ApiParam(name="limit") @PathParam("limit") int limit 	
@@ -209,7 +210,7 @@ public class PostsREST {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
 		} else {
-			ListPostsResource adaptedPosts = new ListPostsResourceAdapter(posts);
+			ThreadResource adaptedPosts = new ThreadResourceAdapter(posts);
 			return adaptedPosts;
 		}
 	}

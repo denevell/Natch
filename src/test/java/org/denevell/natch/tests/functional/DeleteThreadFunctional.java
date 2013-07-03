@@ -15,6 +15,7 @@ import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.RegisterResourceInput;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
+import org.denevell.natch.serv.threads.ThreadResource;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
@@ -74,10 +75,10 @@ public class DeleteThreadFunctional {
 		.header("AuthKey", loginResult.getAuthKey())
 		.entity(null)
 		.delete(DeletePostResourceReturnData.class);
-		ListPostsResource listThreadsAfter = service
-		.path("rest").path("post").path("threads").path("0").path("10")
+		ThreadResource listThreadsAfter = service
+		.path("rest").path("threads").path("0").path("10")
 		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListPostsResource.class); 		
+    	.get(ThreadResource.class); 		
 		
 		// Assert
 		assertEquals("", ret.getError());
