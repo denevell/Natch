@@ -64,7 +64,7 @@ public class DeleteThreadFunctional {
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input1); 
 		ListPostsResource listThreads = service
-		.path("rest").path("post").path("threads").path("0").path("10")
+		.path("rest").path("threads").path("0").path("10")
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 		
 		

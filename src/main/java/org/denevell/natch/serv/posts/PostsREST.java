@@ -21,7 +21,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.PostEntity;
-import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
@@ -208,71 +207,12 @@ public class PostsREST {
 		}
 		if(posts==null) {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
-			//mModel.close();
 			return null;
 		} else {
 			ListPostsResource adaptedPosts = new ListPostsResourceAdapter(posts);
-			//mModel.close();
 			return adaptedPosts;
 		}
 	}
-	
-	@GET
-	@Path("/threads/{start}/{limit}")
-	@Produces(MediaType.APPLICATION_JSON)	
-	@ApiOperation(value = "Lists threads, mostly recently created first", responseClass="org.denevell.natch.serv.posts.resources.ListPostsResource")
-	public ListPostsResource listThreads(
-		@ApiParam(name="start") @PathParam("start") int start, 	
-		@ApiParam(name="limit") @PathParam("limit") int limit 	
-			) throws IOException {
-		List<ThreadEntity> threads = null;
-		try {
-			mModel.init();
-			threads = mModel.listThreads(start, limit);
-		} catch(Exception e) {
-			Log.info(getClass(), "Couldn't list posts: " + e.toString());
-			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
-			return null;
-		} finally {
-			mModel.close();
-		}
-		if(threads==null) {
-			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
-			return null;
-		} else {
-			ListPostsResource adaptedPosts = new ListThreadsResourceAdapter(threads);
-			return adaptedPosts;
-		}
-	}	
-	
-	@GET
-	@Path("/threads/{tag}/{start}/{limit}")
-	@Produces(MediaType.APPLICATION_JSON)	
-	@ApiOperation(value = "Lists threads by tag, mostly recently created first", responseClass="org.denevell.natch.serv.posts.resources.ListPostsResource")
-	public ListPostsResource listThreadsByTag(
-			@ApiParam(name="tag") @PathParam("tag")  String tag,
-		@ApiParam(name="start") @PathParam("start") int start, 	
-		@ApiParam(name="limit") @PathParam("limit") int limit 	
-			) throws IOException {
-		List<ThreadEntity> threads = null;
-		try {
-			mModel.init();
-			threads = mModel.listThreadsByTag(tag, start, limit);
-		} catch(Exception e) {
-			Log.info(getClass(), "Couldn't list posts: " + e.toString());
-			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
-			return null;
-		} finally {
-			mModel.close();
-		}
-		if(threads==null) {
-			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
-			return null;
-		} else {
-			ListPostsResource adaptedPosts = new ListThreadsResourceAdapter(threads);
-			return adaptedPosts;
-		}		
-	}	
 
 	@DELETE
 	@Path("/del/{postId}") // Explicit for the servlet filter

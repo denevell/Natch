@@ -1,18 +1,15 @@
 package org.denevell.natch.tests.functional;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
-import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
-import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.RegisterResourceInput;
@@ -23,7 +20,7 @@ import org.junit.Test;
 
 import com.sun.jersey.api.client.WebResource;
 
-public class ListPostsFunctional {
+public class ListThreadsFunctional {
 	
 	private LoginResourceReturnData loginResult;
 	private WebResource service;
@@ -45,171 +42,10 @@ public class ListPostsFunctional {
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.post(LoginResourceReturnData.class, loginInput);		
 	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Test
-	public void shouldListByCreationDate() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		List asList = Arrays.asList(new String[] {"tagy", "tagy1"});
-		input.setTags(asList);
-		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1");
-		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2");
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input1); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input2); 
-		
-		// Act
-		ListPostsResource returnData = service
-		.path("rest").path("post").path("0").path("10")
-    	.get(ListPostsResource.class); 
-		
-		// Assert
-		assertEquals(3, returnData.getPosts().size());
-		assertTrue(returnData.getPosts().get(0).getId()!=0);
-		assertTrue(returnData.getPosts().get(1).getId()!=0);
-		assertTrue(returnData.getPosts().get(2).getId()!=0);
-		assertEquals("sub2", returnData.getPosts().get(0).getSubject());
-		assertEquals("cont2", returnData.getPosts().get(0).getContent());
-		assertEquals("sub1", returnData.getPosts().get(1).getSubject());
-		assertEquals("cont1", returnData.getPosts().get(1).getContent());
-		assertEquals("sub", returnData.getPosts().get(2).getSubject());
-		assertEquals("cont", returnData.getPosts().get(2).getContent());
-		assertEquals("tagy1", returnData.getPosts().get(2).getTags().get(1));
-	}
+
 	
 	@Test
-	public void shouldListByCreationDateWithLimit() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1");
-		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2");
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input1); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input2); 
-		
-		// Act
-		ListPostsResource returnData = service
-		.path("rest").path("post").path("1").path("1")
-    	.get(ListPostsResource.class); 
-		
-		// Assert
-		assertEquals(1, returnData.getPosts().size());
-		assertTrue(returnData.getPosts().get(0).getId()!=0);
-		assertEquals("sub1", returnData.getPosts().get(0).getSubject());
-		assertEquals("cont1", returnData.getPosts().get(0).getContent());
-	}	
-	
-	@Test
-	public void shouldHtmlEscapeSubjectAndContent() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("<hi>", "<there>");
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
-		
-		// Act
-		ListPostsResource returnData = service
-		.path("rest").path("post").path("0").path("10")
-    	.get(ListPostsResource.class); 		
-		
-		// Assert
-		assertEquals("&lt;hi&gt;", returnData.getPosts().get(0).getSubject());
-		assertEquals("&lt;there&gt;", returnData.getPosts().get(0).getContent());
-	}		
-	
-	@Test
-	public void shouldFindPost() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
-		// Get Id
-		ListPostsResource returnList = service
-		.path("rest").path("post").path("0").path("10")
-    	.get(ListPostsResource.class); 		
-		long id = returnList.getPosts().get(0).getId();
-		
-		// Act
-		PostResource returnData = service
-		.path("rest").path("post").path(String.valueOf(id))
-    	.get(PostResource.class); 
-		
-		// Assert
-		assertNotNull(returnData);
-		assertEquals("sub", returnData.getSubject());
-	}		
-	
-	@Test
-	public void shouldListByModificationDateWithNonSpecifiedThreadId() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
-		
-		// Act
-		ListPostsResource returnData = service
-		.path("rest").path("post").path("0").path("10")
-    	.get(ListPostsResource.class); 
-		
-		// Assert
-		assertNotNull(returnData.getPosts().get(0).getThreadId());
-	}	
-	
-	@Test
-	public void shouldListByModificationDateWithSpecifiedThreadId() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		input.setThreadId("threadId");
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
-		
-		// Act
-		ListPostsResource returnData = service
-		.path("rest").path("post").path("0").path("10")
-    	.get(ListPostsResource.class); 
-		
-		// Assert
-		assertEquals("threadId", returnData.getPosts().get(0).getThreadId());
-	}	
-	
-	@Test
-	public void shouldPostsListByThreadId() {
+	public void shouldListThreadsByPostLastEntered() {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
@@ -232,7 +68,7 @@ public class ListPostsFunctional {
 		
 		// Act
 		ListPostsResource returnData = service
-		.path("rest").path("post").path("t").path("0").path("20")
+		.path("rest").path("threads").path("0").path("10")
     	.get(ListPostsResource.class); 
 		
 		// Assert
@@ -242,13 +78,13 @@ public class ListPostsFunctional {
 		assertEquals("sub", returnData.getPosts().get(0).getSubject());
 		assertEquals("cont", returnData.getPosts().get(0).getContent());
 		assertEquals("t", returnData.getPosts().get(0).getThreadId());
-		assertEquals("sub2", returnData.getPosts().get(1).getSubject());
-		assertEquals("cont2", returnData.getPosts().get(1).getContent());		
-		assertEquals("t", returnData.getPosts().get(1).getThreadId());
+		assertEquals("sub1", returnData.getPosts().get(1).getSubject());
+		assertEquals("cont1", returnData.getPosts().get(1).getContent());		
+		assertEquals("other", returnData.getPosts().get(1).getThreadId());		
 	}
 	
 	@Test
-	public void shouldListPostsByThreadIdWithLimit() {
+	public void shouldListThreadsByPostLastEnteredWithLimit() {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
@@ -271,14 +107,110 @@ public class ListPostsFunctional {
 		
 		// Act
 		ListPostsResource returnData = service
-		.path("rest").path("post").path("t").path("1").path("1")
+		.path("rest").path("threads").path("1").path("1")
     	.get(ListPostsResource.class); 
 		
 		// Assert
 		assertEquals(1, returnData.getPosts().size());
-		assertEquals("sub2", returnData.getPosts().get(0).getSubject());
-		assertEquals("cont2", returnData.getPosts().get(0).getContent());
-		assertEquals("t", returnData.getPosts().get(0).getThreadId());
-	}		
+		assertEquals("sub1", returnData.getPosts().get(0).getSubject());
+		assertEquals("cont1", returnData.getPosts().get(0).getContent());
+		assertEquals("other", returnData.getPosts().get(0).getThreadId());
+	}	
 	
+	@Test
+	public void shouldListThreadsByTag() {
+		// Arrange 
+		AddPostResourceInput input0 = new AddPostResourceInput("x", "x", "x");
+		input0.setTags(Arrays.asList(new String[] {"onetag", "f"})); 
+		// We need two in the list, since our deserialisation doesn't like single item lists.
+		// Works fine on the command line though: curl url ... -d '{"content":"xxx", "posttags": ["t"], "subject":"xxx", "thread":"NEW"}'
+		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
+		input.setTags(Arrays.asList(new String[] {"tag", "onetag"}));
+		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
+		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
+		input2.setTags(Arrays.asList(new String[] {"tag", "onetag"}));
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input0); 
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input); 
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input1); 
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input2); 
+		
+		// Act
+		ListPostsResource returnData = service
+		.path("rest").path("threads").path("onetag").path("0").path("10")
+    	.get(ListPostsResource.class); 
+		
+		// Assert
+		assertEquals(2, returnData.getPosts().size());
+		assertEquals("sub", returnData.getPosts().get(0).getSubject());
+		assertEquals("cont", returnData.getPosts().get(0).getContent());
+		assertEquals("t", returnData.getPosts().get(0).getThreadId());
+		assertEquals("onetag", returnData.getPosts().get(0).getTags().get(1));
+		
+		assertEquals("x", returnData.getPosts().get(1).getSubject());
+		assertEquals("x", returnData.getPosts().get(1).getContent());
+		assertEquals("x", returnData.getPosts().get(1).getThreadId());
+		assertEquals("onetag", returnData.getPosts().get(1).getTags().get(0));
+	}	
+	
+	@Test
+	public void shouldListThreadsByTagWithLimit() {
+		// Arrange 
+		AddPostResourceInput input0 = new AddPostResourceInput("x", "x", "x");
+		input0.setTags(Arrays.asList(new String[] {"onetag", "f"})); 
+		// We need two in the list, since our deserialisation doesn't like single item lists.
+		// Works fine on the command line though: curl url ... -d '{"content":"xxx", "posttags": ["t"], "subject":"xxx", "thread":"NEW"}'
+		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
+		input.setTags(Arrays.asList(new String[] {"tag", "onetag"}));
+		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
+		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
+		input2.setTags(Arrays.asList(new String[] {"tag", "onetag"}));
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input0); 
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input); 
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input1); 
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input2); 
+		
+		// Act
+		ListPostsResource returnData = service
+		.path("rest").path("threads").path("onetag").path("1").path("1")
+    	.get(ListPostsResource.class); 
+		
+		// Assert
+		assertEquals(1, returnData.getPosts().size());
+		assertEquals("x", returnData.getPosts().get(0).getSubject());
+		assertEquals("x", returnData.getPosts().get(0).getContent());
+		assertEquals("x", returnData.getPosts().get(0).getThreadId());
+		assertEquals("onetag", returnData.getPosts().get(0).getTags().get(0));
+	}		
 }

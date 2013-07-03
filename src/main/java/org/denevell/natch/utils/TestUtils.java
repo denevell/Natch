@@ -118,7 +118,7 @@ public class TestUtils {
 		String baseUrl = getHost() + "/Natch-Functional/";
 		ClientConfig config = new DefaultClientConfig();
 		Client client = Client.create(config);
-		return client.resource(baseUrl).path("rest").path("post").path("threads");		
+		return client.resource(baseUrl).path("rest").path("threads");		
 	}
 
 	public static void addUser(String username, String password) {
