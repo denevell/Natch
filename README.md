@@ -55,6 +55,7 @@ The start of a REST interface for a forum.
 
 ### 0.3.5 (deployment)
 
+* Make it so you can list a new 'Thread' object from the db.
 * Test performance with multiple connections
 * Map sql via xml, to ease changes of database / provider, database migration
 * Backup database
