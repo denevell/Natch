@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.io.posts.PostResource;
-import org.denevell.natch.serv.threads.ThreadResource;
+import org.denevell.natch.io.threads.ThreadResource;
 
 public class ThreadResourceAdapter extends ThreadResource {
 

@@ -29,7 +29,7 @@ import org.denevell.natch.io.posts.EditPostResource;
 import org.denevell.natch.io.posts.EditPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.posts.PostResource;
-import org.denevell.natch.serv.threads.ThreadResource;
+import org.denevell.natch.io.threads.ThreadResource;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 

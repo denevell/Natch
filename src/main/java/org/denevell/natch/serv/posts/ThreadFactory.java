@@ -18,7 +18,11 @@ public class ThreadFactory {
 		return threadEntity;
 	}
 
+	/**
+	 * Making a thread based on an existing thread
+	 */
 	public ThreadEntity makeThread(ThreadEntity thread, PostEntity p) {
+		p.setSubject(thread.getRootPost().getSubject());
 		thread.setLatestPost(p);
 		List<PostEntity> posts = thread.getPosts();
 		if(posts!=null) {

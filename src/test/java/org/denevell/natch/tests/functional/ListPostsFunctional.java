@@ -13,11 +13,11 @@ import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.posts.PostResource;
+import org.denevell.natch.io.threads.ThreadResource;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.RegisterResourceInput;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
-import org.denevell.natch.serv.threads.ThreadResource;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -253,7 +253,7 @@ public class ListPostsFunctional {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
-		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
+		AddPostResourceInput input2 = new AddPostResourceInput("rubbish", "cont2", "t");
 		service
 		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
@@ -277,7 +277,7 @@ public class ListPostsFunctional {
 		
 		// Assert
 		assertEquals(1, returnData.getPosts().size());
-		assertEquals("sub2", returnData.getSubject());
+		assertEquals("sub", returnData.getSubject());
 		assertEquals("cont2", returnData.getPosts().get(0).getContent());
 		assertEquals("t", returnData.getPosts().get(0).getThreadId());
 	}		

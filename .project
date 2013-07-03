@@ -37,6 +37,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>src/main/java/org/denevell/natch/io/threads</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>src/main/java/org/denevell/natch/io/users</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -80,6 +85,11 @@
 			<name>src/main/java/org/denevell/natch/io/posts/PostResource.java</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Natch-io/src/main/java/org/denevell/natch/io/posts/PostResource.java</locationURI>
+		</link>
+		<link>
+			<name>src/main/java/org/denevell/natch/io/threads/ThreadResource.java</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Natch-io/src/main/java/org/denevell/natch/io/threads/ThreadResource.java</locationURI>
 		</link>
 		<link>
 			<name>src/main/java/org/denevell/natch/io/users/LoginResourceInput.java</name>

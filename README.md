@@ -76,6 +76,7 @@ The start of a REST interface for a forum.
 * #: threaded posts: moved creation date to thread?
 * #: Inject the EntityManager via annotations
 * #: Re-enable db locking 
+* #: Update swagger
 * ~~##: Return threadid on new thread~~
 * ~~###: Access jpa database in the test.~~
 * ~~###: Refactor functional test to delete the db the jpa way.~~
