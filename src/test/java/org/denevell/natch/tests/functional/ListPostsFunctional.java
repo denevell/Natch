@@ -243,7 +243,7 @@ public class ListPostsFunctional {
 		assertEquals("sub", returnData.getSubject());
 		assertEquals("cont", returnData.getPosts().get(0).getContent());
 		assertEquals("t", returnData.getPosts().get(0).getThreadId());
-		assertEquals("sub2", returnData.getPosts().get(1).getSubject());
+		assertEquals("sub", returnData.getPosts().get(1).getSubject());
 		assertEquals("cont2", returnData.getPosts().get(1).getContent());		
 		assertEquals("t", returnData.getPosts().get(1).getThreadId());
 	}
