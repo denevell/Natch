@@ -159,11 +159,13 @@ public class ListPostsResourceTests {
 	public void shouldListPostsByThread() throws IOException {
 		// Arrange
 		List<PostEntity> posts = new ArrayList<PostEntity>();
-		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", "t");
+		UserEntity ue = new UserEntity("u1", "");
+		PostEntity postEntity = new PostEntity(ue, 1, 1, "s1", "c1", "t");
 		postEntity.setId(400);
 		posts.add(postEntity);
 		posts.add(new PostEntity(new UserEntity("u2", ""), 2, 2, "s2", "c2", "t"));
 		when(postsModel.listByThreadId("t", 0, 10)).thenReturn(posts);
+		when(postsModel.findThreadAuthor("t")).thenReturn(ue);
 		
 		// Act
 		ThreadResource result = resource.listByThreadId("t", 0, 10);
@@ -174,6 +176,7 @@ public class ListPostsResourceTests {
 		assertEquals(1, result.getPosts().get(0).getCreation());
 		assertEquals(1, result.getPosts().get(0).getModification());
 		assertEquals("s1", result.getSubject());
+		assertEquals("u1", result.getAuthor());
 		assertEquals("u1", result.getPosts().get(0).getUsername());
 		assertEquals("s1", result.getPosts().get(0).getSubject());
 		assertEquals("c1", result.getPosts().get(0).getContent());

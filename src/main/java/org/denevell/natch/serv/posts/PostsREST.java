@@ -196,9 +196,11 @@ public class PostsREST {
 			@ApiParam(name="limit") @PathParam("limit") int limit 	
 			) throws IOException {
 		List<PostEntity> posts = null;
+		UserEntity threadAuthor = null;
 		try {
 			mModel.init();
 			posts = mModel.listByThreadId(threadId, start, limit);
+			threadAuthor = mModel.findThreadAuthor(threadId);
 		} catch(Exception e) {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
@@ -206,11 +208,14 @@ public class PostsREST {
 		} finally {
 			mModel.close();
 		}
-		if(posts==null) {
+		if(posts!=null && posts.size()==0) {
+			mResponse.sendError(HttpServletResponse.SC_NOT_FOUND, "Unexcepted error");
+			return null;
+		} else if(posts==null || threadAuthor==null || threadAuthor.getUsername()==null) {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
 		} else {
-			ThreadResource adaptedPosts = new ThreadResourceAdapter(posts);
+			ThreadResource adaptedPosts = new ThreadResourceAdapter(threadAuthor.getUsername(), posts);
 			return adaptedPosts;
 		}
 	}

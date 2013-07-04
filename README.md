@@ -55,11 +55,11 @@ The start of a REST interface for a forum.
 
 ### 0.3.5 (deployment)
 
-* Make it so you can list a new 'Thread' object from the db.
 * Test performance with multiple connections
 * Map sql via xml, to ease changes of database / provider, database migration
 * Backup database
 * New installation and database with newly inserted backup
+* ~~Make it so you can list a new 'Thread' object from the db.~~
 * ~~Disable REST test utilties in production war~~
 * ~~Create production war~~
 
@@ -78,6 +78,7 @@ The start of a REST interface for a forum.
 * #: Inject the EntityManager via annotations
 * #: Re-enable db locking 
 * #: Update swagger
+* #: Update so you do not need two db calls to get thread.
 * ~~##: Return threadid on new thread~~
 * ~~###: Access jpa database in the test.~~
 * ~~###: Refactor functional test to delete the db the jpa way.~~

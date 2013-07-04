@@ -98,8 +98,7 @@ public class PostsModel {
 		q.setMaxResults(limit);
 		q.setParameter(PostEntity.NAMED_QUERY_PARAM_THREADID, threadId);
 		List<PostEntity> resultList = q.getResultList();		
-		if(resultList==null) return new ArrayList<PostEntity>();
-		else return resultList;
+		return resultList;
 	}
 	
 	public PostEntity findPostById(long id) {
@@ -206,6 +205,20 @@ public class PostsModel {
 			}
 			return UNKNOWN_ERROR;
 		} 
+	}
+
+	public UserEntity findThreadAuthor(String threadId) {
+		try {
+			TypedQuery<UserEntity> q = mEntityManager
+					.createNamedQuery(ThreadEntity.NAMED_QUERY_FIND_AUTHOR, UserEntity.class);
+			q.setParameter(ThreadEntity.NAMED_QUERY_PARAM_ID, threadId);
+			List<UserEntity> resultList = q.getResultList();		
+			if(resultList==null || resultList.size()==0) return null;
+			else return resultList.get(0);
+		} catch(Exception e) {
+			Log.info(getClass(), "Error finding author by thread by id: " + e.toString());
+			return null;
+		} 		
 	}
 
 }

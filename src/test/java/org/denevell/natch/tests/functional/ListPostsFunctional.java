@@ -22,6 +22,7 @@ import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
 public class ListPostsFunctional {
@@ -241,6 +242,7 @@ public class ListPostsFunctional {
 		assertTrue(returnData.getPosts().get(0).getId()!=0);
 		assertTrue(returnData.getPosts().get(1).getId()!=0);
 		assertEquals("sub", returnData.getSubject());
+		assertEquals("aaron@aaron.com", returnData.getAuthor());
 		assertEquals("cont", returnData.getPosts().get(0).getContent());
 		assertEquals("t", returnData.getPosts().get(0).getThreadId());
 		assertEquals("sub", returnData.getPosts().get(1).getSubject());
@@ -278,6 +280,7 @@ public class ListPostsFunctional {
 		// Assert
 		assertEquals(1, returnData.getPosts().size());
 		assertEquals("sub", returnData.getSubject());
+		assertEquals("aaron@aaron.com", returnData.getAuthor());
 		assertEquals("cont2", returnData.getPosts().get(0).getContent());
 		assertEquals("t", returnData.getPosts().get(0).getThreadId());
 	}		
@@ -287,13 +290,20 @@ public class ListPostsFunctional {
 		// Arrange 
 		
 		// Act
-		ThreadResource returnData = service
-		.path("rest").path("post").path("xxxxxxxxxxx").path("0").path("20")
-    	.get(ThreadResource.class); 
+		try {
+			ThreadResource returnData = service
+			.path("rest").path("post").path("xxxxxxxxxxx").path("0").path("20")
+	    	.get(ThreadResource.class); 
+		} catch (UniformInterfaceException e) {
+			assertEquals(404, e.getResponse().getStatus());
+			return;
+		} catch(Exception e) {
+			assertTrue("Expected 404", false);
+			return;
+		}
 		
 		// Assert
-		assertEquals(0, returnData.getPosts().size());
-		assertEquals(null, returnData.getSubject());
+		assertTrue("Expected 404", false);
 	}	
 	
 }
