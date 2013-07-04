@@ -16,7 +16,7 @@ import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.ListPostsResource;
-import org.denevell.natch.serv.posts.PostsModel;
+import org.denevell.natch.serv.threads.ThreadModel;
 import org.denevell.natch.serv.threads.ThreadsREST;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
@@ -26,7 +26,7 @@ import scala.actors.threadpool.Arrays;
 
 public class ListThreadsResourceTests {
 	
-	private PostsModel postsModel;
+	private ThreadModel threadModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private ThreadsREST resource;
 	private HttpServletRequest request;
@@ -34,10 +34,10 @@ public class ListThreadsResourceTests {
 
 	@Before
 	public void setup() {
-		postsModel = mock(PostsModel.class);
+		threadModel = mock(ThreadModel.class);
 		response = mock(HttpServletResponse.class);
 		request = mock(HttpServletRequest.class);
-		resource = new ThreadsREST(postsModel, request, response);
+		resource = new ThreadsREST(threadModel, request, response);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -50,7 +50,7 @@ public class ListThreadsResourceTests {
 		List<ThreadEntity> threads = new ArrayList<ThreadEntity>();
 		threads.add(new ThreadEntity(postEntity, Arrays.asList(new PostEntity[] { postEntity } )));
 		threads.add(new ThreadEntity(postEntity1, Arrays.asList(new PostEntity[] { postEntity1 } )));
-		when(postsModel.listThreads(0, 10)).thenReturn(threads);
+		when(threadModel.listThreads(0, 10)).thenReturn(threads);
 		
 		// Act
 		ListPostsResource result = resource.listThreads(0, 10);
@@ -80,7 +80,7 @@ public class ListThreadsResourceTests {
 		List<ThreadEntity> threads = new ArrayList<ThreadEntity>();
 		threads.add(new ThreadEntity(null, Arrays.asList(new PostEntity[] { postEntity } )));
 		threads.add(new ThreadEntity(postEntity1, Arrays.asList(new PostEntity[] { postEntity1 } )));
-		when(postsModel.listThreads(0, 10)).thenReturn(threads);
+		when(threadModel.listThreads(0, 10)).thenReturn(threads);
 		
 		// Act
 		ListPostsResource result = resource.listThreads(0, 10);
@@ -99,7 +99,7 @@ public class ListThreadsResourceTests {
 		List<ThreadEntity> threads = new ArrayList<ThreadEntity>();
 		threads.add(new ThreadEntity(postEntity, Arrays.asList(new PostEntity[] { postEntity } )));
 		threads.add(new ThreadEntity(postEntity1, Arrays.asList(new PostEntity[] { postEntity1 } )));
-		when(postsModel.listThreadsByTag("tagy", 0, 10)).thenReturn(threads);
+		when(threadModel.listThreadsByTag("tagy", 0, 10)).thenReturn(threads);
 		
 		// Act
 		ListPostsResource result = resource.listThreadsByTag("tagy", 0, 10);

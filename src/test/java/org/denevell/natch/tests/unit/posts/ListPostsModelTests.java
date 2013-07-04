@@ -14,7 +14,6 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
 import org.denevell.natch.db.entities.PostEntity;
-import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.ThreadFactory;
 import org.junit.Before;
@@ -27,7 +26,6 @@ public class ListPostsModelTests {
 	private EntityManagerFactory factory;
 	private EntityManager entityManager;
 	private TypedQuery<PostEntity> queryResults;
-	private TypedQuery<ThreadEntity> threadQueryResults;
 	private ThreadFactory threadFactory;
 
 	@SuppressWarnings("unchecked")
@@ -37,7 +35,6 @@ public class ListPostsModelTests {
 		factory = mock(EntityManagerFactory.class);
 		trans = mock(EntityTransaction.class);
 		queryResults = mock(TypedQuery.class);
-		threadQueryResults = mock(TypedQuery.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
 		threadFactory = mock(ThreadFactory.class);
 		model = new PostsModel(factory, entityManager, threadFactory);
@@ -127,63 +124,5 @@ public class ListPostsModelTests {
 		// Assert
 		assertEquals(2, result.size());
 	}	
-	
-	@Test
-	public void shouldReturnListOfPostsByGroupedByThread() {
-		// Arrange
-		when(entityManager.createNamedQuery(ThreadEntity.NAMED_QUERY_LIST_THREADS, ThreadEntity.class)).thenReturn(threadQueryResults);
-		List<ThreadEntity> threads = new ArrayList<ThreadEntity>();
-		threads.add(new ThreadEntity());
-		threads.add(new ThreadEntity());
-		when(threadQueryResults.getResultList()).thenReturn(threads);
-		
-		// Act
-		List<ThreadEntity> result = model.listThreads(0, 10);
-		
-		// Assert
-		assertEquals(2, result.size());
-	}		
-	
-	@Test
-	public void shouldntReturnListOfPostsByGroupedByThread() {
-		// Arrange
-		when(entityManager.createNamedQuery(ThreadEntity.NAMED_QUERY_LIST_THREADS, ThreadEntity.class)).thenReturn(threadQueryResults);
-		when(threadQueryResults.getResultList()).thenReturn(null);
-		
-		// Act
-		List<ThreadEntity> result = model.listThreads(0, 10);
-		
-		// Assert
-		assertEquals(0, result.size());
-	}		
-	
-	@Test
-	public void shouldReturnListOfThreadsByTag() {
-		// Arrange
-		when(entityManager.createNamedQuery(ThreadEntity.NAMED_QUERY_LIST_THREADS_BY_TAG, ThreadEntity.class)).thenReturn(threadQueryResults);
-		List<ThreadEntity> threads = new ArrayList<ThreadEntity>();
-		threads.add(new ThreadEntity());
-		threads.add(new ThreadEntity());
-		when(threadQueryResults.getResultList()).thenReturn(threads);
-		
-		// Act
-		List<ThreadEntity> result = model.listThreadsByTag("tagy", 0, 10);
-		
-		// Assert
-		assertEquals(2, result.size());
-	}		
-	
-	@Test
-	public void shouldntReturnListOfThreadsByTag() {
-		// Arrange
-		when(entityManager.createNamedQuery(ThreadEntity.NAMED_QUERY_LIST_THREADS_BY_TAG, ThreadEntity.class)).thenReturn(threadQueryResults);
-		when(threadQueryResults.getResultList()).thenReturn(null);
-		
-		// Act
-		List<ThreadEntity> result = model.listThreadsByTag("tagy", 0, 10);
-		
-		// Assert
-		assertEquals(0, result.size());
-	}		
 	
 }

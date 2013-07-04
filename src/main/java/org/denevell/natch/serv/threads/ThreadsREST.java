@@ -16,8 +16,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.io.posts.ListPostsResource;
-import org.denevell.natch.serv.posts.ListThreadsResourceAdapter;
-import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.utils.Log;
 
 import com.wordnik.swagger.annotations.Api;
@@ -32,17 +30,17 @@ public class ThreadsREST {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-	private PostsModel mModel;
+	private ThreadModel mModel;
 	
 	public ThreadsREST() {
-		mModel = new PostsModel();
+		mModel = new ThreadModel();
 	}
 	
 	/**
 	 * For DI testing.
 	 * @param editPostAdapter 
 	 */
-	public ThreadsREST(PostsModel postModel, HttpServletRequest request, HttpServletResponse response) {
+	public ThreadsREST(ThreadModel postModel, HttpServletRequest request, HttpServletResponse response) {
 		mModel = postModel;
 		mRequest = request;
 		mResponse = response;

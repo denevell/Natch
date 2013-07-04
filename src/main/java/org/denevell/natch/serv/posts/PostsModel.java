@@ -102,29 +102,6 @@ public class PostsModel {
 		else return resultList;
 	}
 	
-	public List<ThreadEntity> listThreads(int startPos, int limit) {
-		TypedQuery<ThreadEntity> q = mEntityManager.
-				createNamedQuery(ThreadEntity.NAMED_QUERY_LIST_THREADS, ThreadEntity.class);		
-		if(startPos<0) startPos=0; if(limit<0) limit=0;
-		q.setFirstResult(startPos);
-		q.setMaxResults(limit);
-		List<ThreadEntity> resultList = q.getResultList();
-		if(resultList==null) return new ArrayList<ThreadEntity>();
-		else return resultList;
-	}	
-	
-	public List<ThreadEntity> listThreadsByTag(String tag, int startPos, int limit) {
-		TypedQuery<ThreadEntity> q = mEntityManager.
-				createNamedQuery(ThreadEntity.NAMED_QUERY_LIST_THREADS_BY_TAG, ThreadEntity.class);		
-		if(startPos<0) startPos=0; if(limit<0) limit=0;
-		q.setFirstResult(startPos);
-		q.setMaxResults(limit);
-		q.setParameter(ThreadEntity.NAMED_QUERY_PARAM_TAG, tag);
-		List<ThreadEntity> resultList = q.getResultList();
-		if(resultList==null) return new ArrayList<ThreadEntity>();
-		else return resultList;
-	}	
-	
 	public PostEntity findPostById(long id) {
 		try {
 			TypedQuery<PostEntity> q = mEntityManager
