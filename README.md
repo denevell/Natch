@@ -26,14 +26,14 @@ The start of a REST interface for a forum.
 ### 0.2
 
 * ~~posts: shouldMakePost (creation date, modification date, subject, content, thread id)~~
- * ~~posts: shouldSeeJsonErrorPostMake~~
- * ~~posts: shouldSeeUnauthorisedPostMake~~
+* ~~posts: shouldSeeJsonErrorPostMake~~
+* ~~posts: shouldSeeUnauthorisedPostMake~~
 * ~~posts: shouldEditPost (subject, content, mod date)~~
- * ~~posts: shouldSeeJsonErrorEdit~~
- * ~~posts: shouldSeeUnauthorisedPostEdit~~
+* ~~posts: shouldSeeJsonErrorEdit~~
+* ~~posts: shouldSeeUnauthorisedPostEdit~~
 * ~~posts: shouldDeletePost (hard delete)~~
- * ~~posts: shouldSeeJsonErrorDelete~~
- * ~~posts: shouldSeeUnauthorisedPostDelete~~
+* ~~posts: shouldSeeJsonErrorDelete~~
+* ~~posts: shouldSeeUnauthorisedPostDelete~~
 * ~~threaded posts: Should make a threaded post in response to another~~
 * ~~threaded posts: Should be able to edit thread title and keep thread -- in main edit functional test~~
 * ~~list posts: by modification date~~
@@ -63,8 +63,9 @@ The start of a REST interface for a forum.
 * ~~Disable REST test utilties in production war~~
 * ~~Create production war~~
 
-### Tech tasks 
+### Tasks 
 
+* ###: Refactor list thread model to have subject, thread etc and a list of paginated posts.
 * ##: Cannot pass in single item tags list.
 * #: Change error return strings to ints
 * #: Test for still getting 5 posts if one root, but not the thread, is deleted.
