@@ -20,7 +20,7 @@ public class ListThreadsResourceAdapter extends ListPostsResource {
 				PostResource postResource = new PostResource(
 						p.getRootPost().getUser().getUsername(), 
 						p.getRootPost().getCreated(), 
-						p.getRootPost().getModified(), 
+						p.getLatestPost().getModified(), 
 						p.getRootPost().getSubject(), 
 						p.getRootPost().getContent(),
 						p.getRootPost().getTags());

@@ -11,7 +11,6 @@ The start of a REST interface for a forum.
 
 ### Backlog
 
-* Refactor list thread model to have subject, thread etc and a list of paginated posts.
 
 ### Dev complete
 
@@ -104,6 +103,9 @@ The start of a REST interface for a forum.
 
 ### Icebox 
 
+* Code quality based
+ * Refactor list thread model to have subject, thread etc and a list of paginated posts.
+ * Change ListPostResources to a thread specific entity. 
 * Site management
  * Superuser
  * Groups
