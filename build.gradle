@@ -38,26 +38,26 @@ dependencies {
 	compile 'com.wordnik:swagger-jaxrs_2.9.1:1.2.1'
 }    
 
-task createProductionWar(type: War) {
+task createProductionRestWar(type: War) {
 	classifier = 'Production'
 	manifest { attributes "ISPROD": "TRUE" }
 }
 
 // ------------------
-// The functional war
+// The rest war - used for testing
 // ------------------
 
-task createFunctionalWar(type: War) {
+task createRestWar(type: War) {
 	classifier = 'Functional'
 	manifest { attributes "ISPROD": "FALSE" }
 }
 
-task undeployFunctionalWar(type:Exec, dependsOn: createFunctionalWar) {
+task undeployRestWar(type:Exec, dependsOn: createRestWar) {
 	commandLine=['wget', '--http-user=tomcat', '--http-password=tomcat', 'http://localhost:8080/manager/text/undeploy?path=/Natch-Functional', '-O', '-']
 }
 
-task deployFunctionalWar(type:Exec, dependsOn: undeployFunctionalWar) {
-	commandLine=['wget', '--http-user=tomcat', '--http-password=tomcat', 'http://localhost:8080/manager/text/deploy?&path=/Natch-Functional&war=file:/home/user/workspace/Natch-Jsp/Natch/build/libs/Natch-Functional.war', '-O', '-']
+task deployRestWar(type:Exec, dependsOn: undeployRestWar) {
+	commandLine=['wget', '--http-user=tomcat', '--http-password=tomcat', 'http://localhost:8080/manager/text/deploy?&path=/Natch-Functional&war=file:'+file(".")+'/build/libs/Natch-Functional.war', '-O', '-']
 }
 
-test.dependsOn deployFunctionalWar
+test.dependsOn deployRestWar
