@@ -53,11 +53,11 @@ task createRestWar(type: War) {
 }
 
 task undeployRestWar(type:Exec, dependsOn: createRestWar) {
-	commandLine=['wget', '--http-user=tomcat', '--http-password=tomcat', 'http://localhost:8080/manager/text/undeploy?path=/Natch-Functional', '-O', '-']
+        commandLine=['wget', '--http-user=tomcat', '--http-password=tomcat', 'http://localhost:8080/manager/text/undeploy?path=/'+project.name+'-Functional', '-O', '-']
 }
 
 task deployRestWar(type:Exec, dependsOn: undeployRestWar) {
-	commandLine=['wget', '--http-user=tomcat', '--http-password=tomcat', 'http://localhost:8080/manager/text/deploy?&path=/Natch-Functional&war=file:'+file(".")+'/build/libs/Natch-Functional.war', '-O', '-']
+        commandLine=['wget', '--http-user=tomcat', '--http-password=tomcat', 'http://localhost:8080/manager/text/deploy?&path=/'+project.name+'-Functional&war=file:'+file(".")+'/build/libs/'+project.name+'-Functional.war', '-O', '-']
 }
 
 test.dependsOn deployRestWar
