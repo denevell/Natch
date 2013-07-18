@@ -291,7 +291,7 @@ public class ListPostsFunctional {
 		
 		// Act
 		try {
-			ThreadResource returnData = service
+			service
 			.path("rest").path("post").path("xxxxxxxxxxx").path("0").path("20")
 	    	.get(ThreadResource.class); 
 		} catch (UniformInterfaceException e) {

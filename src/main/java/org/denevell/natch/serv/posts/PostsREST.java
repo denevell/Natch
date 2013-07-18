@@ -143,7 +143,7 @@ public class PostsREST {
 			mModel.close();
 		}
 		if(post==null) {
-			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
+			mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return null;
 		} else {
 			PostResource postResource = new PostResource(post.getUser().getUsername(), 
