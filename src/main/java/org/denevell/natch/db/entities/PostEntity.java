@@ -14,7 +14,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.xml.bind.annotation.XmlElement;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 @NamedQueries({
 	@NamedQuery(name=PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE,query=
@@ -78,7 +78,7 @@ public class PostEntity {
 	}
 
 	public String getSubject() {
-		String escaped = StringEscapeUtils.escapeHtml(subject);
+		String escaped = StringEscapeUtils.escapeHtml4(subject);
 		return escaped;
 	}
 
@@ -87,7 +87,7 @@ public class PostEntity {
 	}
 
 	public String getContent() {
-		String escaped = StringEscapeUtils.escapeHtml(content);
+		String escaped = StringEscapeUtils.escapeHtml4(content);
 		return escaped;
 	}
 
