@@ -4,6 +4,8 @@ The start of a REST interface for a forum.
 
 ### Current
 
+* Gradle task to check for postgres
+* Gradle task to check for tomcat
 * Backup database
 * New installation and database with newly inserted backup
 * Test performance with multiple connections
@@ -11,6 +13,11 @@ The start of a REST interface for a forum.
 
 ### Backlog
 
+* ##: Cannot pass in single item tags list.
+* #: Refactor list thread model to have subject, thread etc and a list of paginated posts.
+* #: Change ListPostResources to a thread specific entity. 
+* #: Test for still getting 5 posts if one root, but not the thread, is deleted.
+* #: Re-enable db locking 
 
 ### Dev complete
 
@@ -55,57 +62,37 @@ The start of a REST interface for a forum.
 * ~~list posts: should paginate list single thread posts by x number~~
 * ~~list posts: should paginate list threads by x number~~
 * ~~list posts: should paginate list threads with tag~~
-
-### Tech Tasks 
-
-* ##: Cannot pass in single item tags list.
-* #: Change error return strings to ints
-* #: Test for still getting 5 posts if one root, but not the thread, is deleted.
-* #: Return user data with logon call
-* #: Entity bean null / blank problem?
-* #: Start using DI
-* #: Intercept json parsing errors and return 400s: register, login
-* #: threaded posts: move tags to the thread object and not individual posts?
-* #: threaded posts: move subject to thread object?
-* #: threaded posts: moved creation date to thread?
-* #: Inject the EntityManager via annotations
-* #: Re-enable db locking 
-* #: Update swagger
-* #: Update so you do not need two db calls to get thread.
 * ~~Tech task: Disable REST test utilties in production war~~
-* ~~Create production war~~
-* ~~Return threadid on new thread~~
-* ~~Access jpa database in the test.~~
-* ~~Refactor functional test to delete the db the jpa way.~~
-* ~~Delete the api to delete the database.~~
-* ~~Add init method to models to start the entity manager there~~
-* ~~Null pointer when deleting the head of a thread~~
-* ~~Packaged json objects for use in the frontend.~~
-* ~~Update swagger documentation so 'thread' appears as 'threadId'~~
-* ~~Move back to eclipselink to test performance with sqlite~~
-* ~~Move JPA persistence provider to tomcat lib~~
-* ~~Make swagger understand that the 'tags' resource in add post is actually called 'posttags'~~
-* ~~Make swaggers requests work - extend .json to request.~~
-* ~~Move over to openjpa or fix the strange language problem with eclipselink~~
-* ~~Add memory dump line to tomcat config.~~
-* ~~Profile speed~~
-* ~~Check the memory leak is really fixed in long running tomcat instances~~
-* ~~We are not closing the entity managers when we return with bad user input in models~~
-* ~~Json auto generated docs~~
-* ~~Junit tests in a war using normal classes? Jacksons xc and persistence in the war libs seems to have solved it~~
-* ~~Use JPA from java se.~~
-* ~~Stop the jpa unknown entity problem~~
-* ~~Better way to clear database on functional tests - put tests in war and access the jpa that way?~~
-* ~~Better war deploy method than cping the war to the directory.~~
-* ~~Login timeout? -- No, next login will kill old anyway~~
-* ~~Strings file in both test and main java resources?~~
-* ~~Strings file access from unit tests and functional tests~~
+* ~~Tech task: Create production war~~
+* ~~Tech task: Return threadid on new thread~~
+* ~~Tech task: Access jpa database in the test.~~
+* ~~Tech task: Refactor functional test to delete the db the jpa way.~~
+* ~~Tech task: Delete the api to delete the database.~~
+* ~~Tech task: Add init method to models to start the entity manager there~~
+* ~~Tech task: Null pointer when deleting the head of a thread~~
+* ~~Tech task: Packaged json objects for use in the frontend.~~
+* ~~Tech task: Update swagger documentation so 'thread' appears as 'threadId'~~
+* ~~Tech task: Move back to eclipselink to test performance with sqlite~~
+* ~~Tech task: Move JPA persistence provider to tomcat lib~~
+* ~~Tech task: Make swagger understand that the 'tags' resource in add post is actually called 'posttags'~~
+* ~~Tech task: Make swaggers requests work - extend .json to request.~~
+* ~~Tech task: Move over to openjpa or fix the strange language problem with eclipselink~~
+* ~~Tech task: Add memory dump line to tomcat config.~~
+* ~~Tech task: Profile speed~~
+* ~~Tech task: Check the memory leak is really fixed in long running tomcat instances~~
+* ~~Tech task: We are not closing the entity managers when we return with bad user input in models~~
+* ~~Tech task: Json auto generated docs~~
+* ~~Tech task: Junit tests in a war using normal classes? Jacksons xc and persistence in the war libs seems to have solved it~~
+* ~~Tech task: Use JPA from java se.~~
+* ~~Tech task: Stop the jpa unknown entity problem~~
+* ~~Tech task: Better way to clear database on functional tests - put tests in war and access the jpa that way?~~
+* ~~Tech task: Better war deploy method than cping the war to the directory.~~
+* ~~Tech task: Login timeout? -- No, next login will kill old anyway~~
+* ~~Tech task: Strings file in both test and main java resources?~~
+* ~~Tech task: Strings file access from unit tests and functional tests~~
 
 ### Icebox 
 
-* Code quality based
- * Refactor list thread model to have subject, thread etc and a list of paginated posts.
- * Change ListPostResources to a thread specific entity. 
 * Site management
  * Superuser
  * Groups
@@ -113,7 +100,6 @@ The start of a REST interface for a forum.
  * Category/tags only available to some users
 * Posts
  * Move posts into existing threads or new threads
- * More sensible threadid?
  * Test / delete when a thread has no children
  * Thread rest list should list latest post as well
  * Show total number of posts in this listing for pagination information
@@ -125,15 +111,24 @@ The start of a REST interface for a forum.
  * View user details
  * View users publicly 
      * Choose what details to display publicly
- * Change user details
-     * Change username
+ * Change username
  * Password reset
      * Email users
  * Delete user
-* Users
-    * User id is number not name
-        * Able to change username
+ * User id is number not name
 * Misc
  * Base64 login / reg or maybe ssl?
  * Limit the thread ids, tags and usernames to certain character
  * Some kind of captcha thing on registeration.
+ * More sensible threadid?
+ * Start using DI
+ * Inject the EntityManager via annotations
+ * Entity bean null / blank problem?
+ * Change error return strings to ints
+ * Update swagger
+ * Update so you do not need two db calls to get thread.
+ * threaded posts: move tags to the thread object and not individual posts?
+ * threaded posts: move subject to thread object?
+ * threaded posts: moved creation date to thread?
+ * Intercept json parsing errors and return 400s: register, login
+ * Return user data with logon call
