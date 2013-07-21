@@ -6,13 +6,14 @@ The start of a REST interface for a forum.
 
 * Gradle task to check for postgres
 * Gradle task to check for tomcat
+* Gradle task to check if deployment failed.
+
+### Backlog
+
 * Backup database
 * New installation and database with newly inserted backup
 * Test performance with multiple connections
 * Map sql via xml, to ease changes of database / provider, database migration
-
-### Backlog
-
 * ##: Cannot pass in single item tags list.
 * #: Refactor list thread model to have subject, thread etc and a list of paginated posts.
 * #: Change ListPostResources to a thread specific entity. 
