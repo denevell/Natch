@@ -6,7 +6,7 @@ The start of a REST interface for a forum.
 
 * ~~Gradle task to check for tomcat deployment~~
 * Gradle task to check for postgres
-* Able to change tomcat port?
+* Sensible production / development war names.
 
 ### Backlog
 
