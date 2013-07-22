@@ -54,13 +54,44 @@ task createRestWar(type: War) {
 	classifier = 'Functional'
 	manifest { attributes "ISPROD": "FALSE" }
 }
-
-task undeployRestWar(type:Exec, dependsOn: createRestWar) {
-        commandLine=['wget', '--http-user=tomcat', '--http-password=tomcat', 'http://localhost:8080/manager/text/undeploy?path=/'+project.name+'-Functional', '-O', '-']
-}
-
-task deployRestWar(type:Exec, dependsOn: undeployRestWar) {
-        commandLine=['wget', '--http-user=tomcat', '--http-password=tomcat', 'http://localhost:8080/manager/text/deploy?&path=/'+project.name+'-Functional&war=file:'+file(".")+'/build/libs/'+project.name+'-Functional.war', '-O', '-']
+task deployRestWar (dependsOn: createRestWar) << {
+	undeployDeployWar(project.name+'-Functional', ''+file('.')+'/build/libs/')
 }
 
 test.dependsOn deployRestWar
+
+
+
+
+
+
+
+
+
+
+// utility function
+
+def undeployDeployWar(warfile, warfilepath) {
+	// Undeploy it
+        def cmdstr = 'wget --http-user=tomcat --http-password=tomcat http://localhost:8080/manager/text/undeploy?&path=/'+warfile+' -O -'
+        def cmd= cmdstr.execute()
+	cmd.waitFor()
+	def cmdres = cmd.text
+	if(cmd.exitValue()) { 
+		throw new GradleException("Couldn't undeploy WAR: " + cmd.err.text)
+	} else {
+		println "Undeploying WAR info: " + cmdres
+	}	
+	// Deploy it
+        cmdstr = 'wget --http-user=tomcat --http-password=tomcat http://localhost:8080/manager/text/deploy?&path=/'+warfile+'&war=file:'+warfilepath+warfile+'.war -O -'
+        cmd = cmdstr.execute()
+	cmd.waitFor()
+	cmdres = cmd.text
+	if(cmd.exitValue()) { 
+		throw new GradleException("Couldn't deploy WAR: " + cmd.err.text)
+	} else if(!cmdres.contains("OK -")) {
+		throw new GradleException("Couldn't deploy WAR: " + cmdres + cmd.err.text )
+	} else {
+		println "Deployed WAR: " + cmdres
+	}	
+}

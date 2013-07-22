@@ -4,9 +4,9 @@ The start of a REST interface for a forum.
 
 ### Current
 
+* ~~Gradle task to check for tomcat deployment~~
 * Gradle task to check for postgres
-* Gradle task to check for tomcat
-* Gradle task to check if deployment failed.
+* Able to change tomcat port?
 
 ### Backlog
 
