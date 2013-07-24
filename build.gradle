@@ -50,15 +50,16 @@ task createProductionRestWar(type: War) {
 // The rest war - used for testing
 // ------------------
 
-task createRestWar(type: War) {
-	classifier = 'Functional'
+war {
+	classifier = 'ForAutomatedTests'
 	manifest { attributes "ISPROD": "FALSE" }
 }
-task deployRestWar (dependsOn: createRestWar) << {
-	undeployDeployWar(project.name+'-Functional', ''+file('.')+'/build/libs/')
+
+task deployWarForAutomatedTests (dependsOn: war) << {
+	undeployDeployWar(project.name+'-ForAutomatedTests', ''+file('.')+'/build/libs/')
 }
 
-test.dependsOn deployRestWar
+test.dependsOn deployWarForAutomatedTests
 
 
 

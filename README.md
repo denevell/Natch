@@ -4,9 +4,6 @@ The start of a REST interface for a forum.
 
 ### Current
 
-* ~~Gradle task to check for tomcat deployment~~
-* Sensible production / development war names.
-
 ### Backlog
 
 * Backup database
@@ -90,6 +87,9 @@ The start of a REST interface for a forum.
 * ~~Tech task: Login timeout? -- No, next login will kill old anyway~~
 * ~~Tech task: Strings file in both test and main java resources?~~
 * ~~Tech task: Strings file access from unit tests and functional tests~~
+* ~~Tech task: Gradle task to check for tomcat deployment~~
+* ~~Tech task: Sensible production / development war names.~~
+
 
 ### Icebox 
 
