@@ -4,17 +4,20 @@ The start of a REST interface for a forum.
 
 ### Current
 
-### Backlog
-
 * Backup database
 * New installation and database with newly inserted backup
-* Test performance with multiple connections
 * Map sql via xml, to ease changes of database / provider, database migration
+
+### Sprint 2 
+* Test performance with multiple connections
+* #: Re-enable db locking 
 * ##: Cannot pass in single item tags list.
+
+### Backlog
+
 * #: Refactor list thread model to have subject, thread etc and a list of paginated posts.
 * #: Change ListPostResources to a thread specific entity. 
 * #: Test for still getting 5 posts if one root, but not the thread, is deleted.
-* #: Re-enable db locking 
 
 ### Dev complete
 
