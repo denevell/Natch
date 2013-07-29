@@ -22,7 +22,7 @@ dependencies {
 	testCompile 'org.mockito:mockito-all:1.9.5'
 
 	providedCompile 'org.eclipse.persistence:eclipselink:2.4.0'
-	providedCompile 'postgresql:postgresql:9.1-901-1.jdbc4'
+	compile 'postgresql:postgresql:9.1-901-1.jdbc4'
 	compile 'org.slf4j:slf4j-simple:1.7.5'
         compile 'org.apache.commons:commons-lang3:3.1'
 	compile 'commons-lang:commons-lang:2.6'

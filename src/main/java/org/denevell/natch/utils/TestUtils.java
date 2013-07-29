@@ -26,7 +26,7 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 public class TestUtils {
 	
-	private static final String NATCH_FUNCTIONAL = "/Natch-REST-Functional/";
+	private static final String NATCH_FUNCTIONAL = "/Natch-REST-ForAutomatedTests/";
 
 	private static String getHost() {
 		return "http://localhost:8080";

@@ -143,7 +143,7 @@ public class ListPostsFunctional {
 		
 		// Assert
 		assertEquals("&lt;hi&gt;", returnData.getPosts().get(0).getSubject());
-		assertEquals("&lt;there&gt;", returnData.getPosts().get(0).getContent());
+		assertEquals("&lt;there>", returnData.getPosts().get(0).getContent());
 	}		
 	
 	@Test
