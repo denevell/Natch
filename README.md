@@ -4,7 +4,7 @@ The start of a REST interface for a forum.
 
 ### Current
 
-* Backup database
+* ~~Backup database~~
 * New installation and database with newly inserted backup
 * Map sql via xml, to ease changes of database / provider, database migration
 
