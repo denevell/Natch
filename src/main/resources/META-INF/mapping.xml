@@ -21,4 +21,15 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	        </basic>       
        </attributes>
     </entity>    
+    <entity class="org.denevell.natch.db.entities.PostEntity">
+       <table name="PostEntity" />
+       <attributes>
+	       <id name="id">
+	          <generated-value strategy="auto" />
+	       </id>
+	       <lob name="content">
+	          <column name="content" nullable="false" />
+	       </lob>
+       </attributes>
+    </entity>    
 </entity-mappings>

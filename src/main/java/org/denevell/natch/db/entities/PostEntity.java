@@ -3,12 +3,7 @@ package org.denevell.natch.db.entities;
 import java.util.List;
 
 import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -25,7 +20,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 	@NamedQuery(name=PostEntity.NAMED_QUERY_FIND_BY_ID,query=
 		"select p from PostEntity p where p.id = :"+PostEntity.NAMED_QUERY_PARAM_ID)
 	})
-@Entity
 public class PostEntity {
 	
 	public static final String NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE = "findByModData";
@@ -35,12 +29,10 @@ public class PostEntity {
 	public static final String NAMED_QUERY_FIND_BY_ID = "findById";
 	public static final String NAMED_QUERY_FIND_THREADS = "findThreads";
 	
-	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	private long created;
 	private long modified;
 	private String subject;
-	@Lob
 	private String content;
 	private String threadId;
 	@XmlElement(required=false)
