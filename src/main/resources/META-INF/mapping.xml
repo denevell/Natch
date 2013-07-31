@@ -14,7 +14,11 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	   </named-query>       
        <attributes>
             <id name="username">
+	           <column name="username" nullable="false" length="50" />
             </id>
+	        <basic name="password">
+	           <column name="password" nullable="false" length="100" />
+	        </basic>       
        </attributes>
     </entity>    
 </entity-mappings>
