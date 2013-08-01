@@ -2,9 +2,6 @@ package org.denevell.natch.db.entities;
 
 import java.util.List;
 
-import javax.persistence.OneToOne;
-import javax.xml.bind.annotation.XmlElement;
-
 import org.apache.commons.lang3.StringEscapeUtils;
 
 public class PostEntity {
@@ -21,9 +18,7 @@ public class PostEntity {
 	private String subject;
 	private String content;
 	private String threadId;
-	@XmlElement(required=false)
 	private List<String> tags;
-	@OneToOne
 	private UserEntity user;
 	
 	public PostEntity() {

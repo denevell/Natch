@@ -4,8 +4,8 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm    
 http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
     version="2.0">
-    <entity class="org.denevell.natch.db.entities.UserEntity">
-       <table name="UserEntity" />
+
+    <entity class="org.denevell.natch.db.entities.UserEntity"> <table name="UserEntity" />
 	   <named-query name="findWithUsernamePassword">
 	       <query>select u from UserEntity u where u.username=:username and u.password=:password</query>
 	   </named-query>       
@@ -21,19 +21,9 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	        </basic>       
        </attributes>
     </entity>    
+    
     <entity class="org.denevell.natch.db.entities.PostEntity">
        <table name="PostEntity" />
-       <attributes>
-	       <id name="id">
-	          <generated-value strategy="auto" />
-	       </id>
-	       <lob name="content">
-	          <column name="content" nullable="false" />
-	       </lob>
-		   <element-collection name="tags" fetch="eager">
-	          <column name="tags" nullable="true" />
-		   </element-collection>
-       </attributes>
 	   <named-query name="findByModData">
 	       <query>select p from PostEntity p order by p.modified desc</query>
 	   </named-query>       
@@ -43,5 +33,35 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	   <named-query name="findById">
 	       <query>select p from PostEntity p where p.id = :id</query>
 	   </named-query>       
+       <attributes>
+	       <id name="id">
+	          <generated-value strategy="auto" />
+	       </id>
+	       <lob name="content">
+	          <column name="content" nullable="false" />
+	       </lob>
+	       <one-to-one name="user">
+	          <column name="user" nullable="false" />
+	       </one-to-one>
+		   <element-collection name="tags" fetch="eager">
+	          <column name="tags" nullable="true" />
+		   </element-collection>
+	       <basic name="subject">
+	          <column name="subject" nullable="false" length="200" />
+	       </basic>    		   
+	       <basic name="content">
+	          <column name="content" nullable="false" />
+	       </basic>    		   
+	       <basic name="threadId">
+	          <column name="threadId" nullable="false" />
+	       </basic>    		   
+	       <basic name="created">
+	          <column name="created" nullable="false" />
+	       </basic>    		   
+	       <basic name="modified">
+	          <column name="modified" nullable="false" />
+	       </basic>    		   
+       </attributes>
     </entity>    
+
 </entity-mappings>
