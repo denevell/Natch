@@ -1,7 +1,5 @@
 package org.denevell.natch.db.entities;
 
-
-
 public class UserEntity {
 	
 	public static final String NAMED_QUERY_FIND_WITH_USERNAME_AND_PASSWORD = "findWithUsernamePassword";
