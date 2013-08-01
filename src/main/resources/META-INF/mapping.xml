@@ -37,20 +37,18 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	       <id name="id">
 	          <generated-value strategy="auto" />
 	       </id>
-	       <lob name="content">
-	          <column name="content" nullable="false" />
-	       </lob>
-	       <one-to-one name="user">
-	          <column name="user" nullable="false" />
+	       <basic name="content">
+	           <column name="content" nullable="false" />
+	           <lob/>
+	       </basic>	       
+	       <one-to-one name="user" optional="false">
+	       	  <join-column name="user_reference" />
 	       </one-to-one>
 		   <element-collection name="tags" fetch="eager">
 	          <column name="tags" nullable="true" />
 		   </element-collection>
 	       <basic name="subject">
 	          <column name="subject" nullable="false" length="200" />
-	       </basic>    		   
-	       <basic name="content">
-	          <column name="content" nullable="false" />
 	       </basic>    		   
 	       <basic name="threadId">
 	          <column name="threadId" nullable="false" />
