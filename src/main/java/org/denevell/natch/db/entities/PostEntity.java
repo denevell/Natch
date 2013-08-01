@@ -2,8 +2,6 @@ package org.denevell.natch.db.entities;
 
 import java.util.List;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -24,7 +22,6 @@ public class PostEntity {
 	private String content;
 	private String threadId;
 	@XmlElement(required=false)
-	@ElementCollection(fetch=FetchType.EAGER)
 	private List<String> tags;
 	@OneToOne
 	private UserEntity user;

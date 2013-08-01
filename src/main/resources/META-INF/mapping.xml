@@ -30,6 +30,9 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	       <lob name="content">
 	          <column name="content" nullable="false" />
 	       </lob>
+		   <element-collection name="tags" fetch="eager">
+	          <column name="tags" nullable="true" />
+		   </element-collection>
        </attributes>
 	   <named-query name="findByModData">
 	       <query>select p from PostEntity p order by p.modified desc</query>
