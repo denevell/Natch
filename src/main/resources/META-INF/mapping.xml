@@ -31,5 +31,14 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	          <column name="content" nullable="false" />
 	       </lob>
        </attributes>
+	   <named-query name="findByModData">
+	       <query>select p from PostEntity p order by p.modified desc</query>
+	   </named-query>       
+	   <named-query name="findByThreadId">
+	       <query>select p from PostEntity p where p.threadId = :threadId order by p.created</query>
+	   </named-query>       
+	   <named-query name="findById">
+	       <query>select p from PostEntity p where p.id = :id</query>
+	   </named-query>       
     </entity>    
 </entity-mappings>

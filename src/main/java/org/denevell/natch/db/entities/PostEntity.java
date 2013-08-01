@@ -4,22 +4,11 @@ import java.util.List;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.FetchType;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-@NamedQueries({
-	@NamedQuery(name=PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE,query=
-		"select p from PostEntity p order by p.modified desc"),
-	@NamedQuery(name=PostEntity.NAMED_QUERY_FIND_BY_THREADID,query=
-		"select p from PostEntity p where p.threadId = :"+PostEntity.NAMED_QUERY_PARAM_THREADID
-	    + " order by p.created"),
-	@NamedQuery(name=PostEntity.NAMED_QUERY_FIND_BY_ID,query=
-		"select p from PostEntity p where p.id = :"+PostEntity.NAMED_QUERY_PARAM_ID)
-	})
 public class PostEntity {
 	
 	public static final String NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE = "findByModData";
@@ -27,7 +16,6 @@ public class PostEntity {
 	public static final String NAMED_QUERY_PARAM_ID= "id";
 	public static final String NAMED_QUERY_PARAM_THREADID = "threadId";
 	public static final String NAMED_QUERY_FIND_BY_ID = "findById";
-	public static final String NAMED_QUERY_FIND_THREADS = "findThreads";
 	
 	private long id;
 	private long created;
