@@ -6,12 +6,12 @@ The start of a REST interface for a forum.
 
 * ~~Tech task: Backup database~~
 * ~~Tech task: New installation and database with newly inserted backup~~
-* Map sql via xml, to ease changes of database / provider, database migration
+* ~~Map sql via xml, to ease changes of database / provider, database migration~~
 
 ### Sprint 2 
-* Test performance with multiple connections
-* #: Re-enable db locking 
 * ##: Cannot pass in single item tags list.
+* Test performance with multiple connections
+* Re-enable db locking 
 
 ### Backlog
 

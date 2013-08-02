@@ -2,13 +2,9 @@ package org.denevell.natch.db.entities;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.OneToMany;
-
 public class ThreadEntity {
 	private String id;
 	private PostEntity latestPost;
-	@OneToMany(cascade=CascadeType.PERSIST) 
 	private List<PostEntity> posts;
 	private PostEntity rootPost;
 	public static final String NAMED_QUERY_LIST_THREADS = "findThreads";
