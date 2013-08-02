@@ -61,5 +61,32 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	       </basic>    		   
        </attributes>
     </entity>    
+    
+    <entity class="org.denevell.natch.db.entities.ThreadEntity">
+       <table name="ThreadEntity" />
+	   <named-query name="findThreads">
+	       <query>select p from ThreadEntity p where p.rootPost is not null order by p.latestPost.created desc</query>
+	   </named-query>       
+	   <named-query name="findThreadByTag">
+	       <query>select p from ThreadEntity p where :tag member of p.rootPost.tags order by p.latestPost.created desc</query>
+	   </named-query>       
+	   <named-query name="findThreadById">
+	       <query>select p from ThreadEntity p where p.id = :id</query>
+	   </named-query>       
+	   <named-query name="findAuthorById">
+	       <query>select p.rootPost.user from ThreadEntity p where p.id = :id</query>
+	   </named-query>       
+       <attributes>
+	       <id name="id">
+	           <column name="id" nullable="false" />
+	       </id>       
+	       <one-to-one name="latestPost" optional="false">
+	       	  <join-column name="latestPost_reference" />
+	       </one-to-one>
+	       <one-to-one name="rootPost" optional="false">
+	       	  <join-column name="rootPost_reference" />
+	       </one-to-one>
+       </attributes>
+    </entity>        
 
 </entity-mappings>
