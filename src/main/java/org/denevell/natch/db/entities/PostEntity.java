@@ -2,8 +2,6 @@ package org.denevell.natch.db.entities;
 
 import java.util.List;
 
-import javax.persistence.ElementCollection;
-
 import org.apache.commons.lang3.StringEscapeUtils;
 
 public class PostEntity {

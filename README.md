@@ -3,13 +3,6 @@
 The start of a REST interface for a forum.
 
 ### Current
-
-* ~~Tech task: Backup database~~
-* ~~Tech task: New installation and database with newly inserted backup~~
-* ~~Map sql via xml, to ease changes of database / provider, database migration~~
-
-### Sprint 2 
-* ##: Cannot pass in single item tags list.
 * Test performance with multiple connections
 * Re-enable db locking 
 
@@ -92,6 +85,11 @@ The start of a REST interface for a forum.
 * ~~Tech task: Strings file access from unit tests and functional tests~~
 * ~~Tech task: Gradle task to check for tomcat deployment~~
 * ~~Tech task: Sensible production / development war names.~~
+* ~~Tech task: Backup database~~
+* ~~Tech task: New installation and database with newly inserted backup~~
+* ~~Tech task: Map sql via xml, to ease changes of database / provider, database migration~~
+* ~~Tech task: Cannot pass in single item tags list.~~
+
 
 
 ### Icebox 
