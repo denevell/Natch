@@ -94,8 +94,8 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	       			<cascade-persist />
 	       		</cascade>
 	            <join-table name="thread_posts">
-	                <join-column name="post_id"/>
-	                <inverse-join-column name="thread_id"/>
+	                <join-column name="thread_id"/>
+	                <inverse-join-column name="post_id"/>
 	            </join-table>	   
 	       </one-to-many>
        </attributes>
