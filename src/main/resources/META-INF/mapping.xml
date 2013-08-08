@@ -68,10 +68,10 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
     <entity class="org.denevell.natch.db.entities.ThreadEntity">
        <table name="ThreadEntity" />
 	   <named-query name="findThreads">
-	       <query>select p from ThreadEntity p where p.rootPost is not null order by p.latestPost.created desc</query>
+	       <query>select p from ThreadEntity p where p.rootPost is not null order by p.latestPost.modified desc</query>
 	   </named-query>       
 	   <named-query name="findThreadByTag">
-	       <query>select p from ThreadEntity p where :tag member of p.rootPost.tags order by p.latestPost.created desc</query>
+	       <query>select p from ThreadEntity p where :tag member of p.rootPost.tags order by p.latestPost.modified desc</query>
 	   </named-query>       
 	   <named-query name="findThreadById">
 	       <query>select p from ThreadEntity p where p.id = :id</query>

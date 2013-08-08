@@ -3,6 +3,7 @@
 The start of a REST interface for a forum.
 
 ### Current
+* Test we are listing threads by modification date not creation date
 * Test performance with multiple connections
 * Re-enable db locking 
 
