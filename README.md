@@ -3,7 +3,6 @@
 The start of a REST interface for a forum.
 
 ### Current
-* Test we are listing threads by modification date not creation date
 * Test performance with multiple connections
 * Re-enable db locking 
 
@@ -47,6 +46,7 @@ The start of a REST interface for a forum.
 * ~~edit post: edit tag~~
 * ~~threaded posts: should list threads by tag (in last modified order)~~
 * ~~threaded posts: should list threads by date of their last entry~~
+* ~~threaded posts: should list threads by thread last modified latest post~~
 * ~~list posts: should escape html content~~
 * ~~list posts: by modification date~~
 * ~~list posts: by thread id, earliest as main post~~

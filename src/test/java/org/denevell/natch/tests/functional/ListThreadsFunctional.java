@@ -3,12 +3,15 @@ package org.denevell.natch.tests.functional;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
+import org.denevell.natch.io.posts.EditPostResource;
+import org.denevell.natch.io.posts.EditPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
@@ -50,21 +53,9 @@ public class ListThreadsFunctional {
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
 		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input1); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input2); 
+		addPost(input); 
+		addPost(input1); 
+		addPost(input2); 
 		
 		// Act
 		ListPostsResource returnData = service
@@ -89,21 +80,9 @@ public class ListThreadsFunctional {
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
 		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input1); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input2); 
+		addPost(input); 
+		addPost(input1); 
+		addPost(input2); 
 		
 		// Act
 		ListPostsResource returnData = service
@@ -129,26 +108,10 @@ public class ListThreadsFunctional {
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
 		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
 		input2.setTags(Arrays.asList(new String[] {"tag", "onetag"}));
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input0); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input1); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input2); 
+		addPost(input0); 
+		addPost(input); 
+		addPost(input1); 
+		addPost(input2); 
 		
 		// Act
 		ListPostsResource returnData = service
@@ -180,26 +143,10 @@ public class ListThreadsFunctional {
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
 		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
 		input2.setTags(Arrays.asList(new String[] {"tag", "onetag"}));
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input0); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input1); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input2); 
+		addPost(input0); 
+		addPost(input); 
+		addPost(input1); 
+		addPost(input2); 
 		
 		// Act
 		ListPostsResource returnData = service
@@ -212,5 +159,91 @@ public class ListThreadsFunctional {
 		assertEquals("x", returnData.getPosts().get(0).getContent());
 		assertEquals("x", returnData.getPosts().get(0).getThreadId());
 		assertEquals("onetag", returnData.getPosts().get(0).getTags().get(0));
+	}
+
+	@Test
+	public void shouldListThreadsWithThreadWithLastModifiedContentFirst() {	
+		// Arrange
+		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
+		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
+		addPost(input1); 
+		addPost(input2); 		
+		// Note: input2 was added last so should be first in the list
+		// Arrange - list them
+		ListPostsResource listedPosts = service
+		.path("rest").path("threads").path("0").path("10")
+		.header("AuthKey", loginResult.getAuthKey())
+    	.get(ListPostsResource.class); 				
+		// Assert - we've got input2 first
+		assertEquals("Listing by last added", "sub2", listedPosts.getPosts().get(0).getSubject());
+		
+		// Act - modify input 1
+		EditPostResource editedInput = new EditPostResource();
+		editedInput.setContent("blar");
+		editedInput.setSubject("blar2");
+		EditPostResourceReturnData editReturnData = service
+		.path("rest").path("post").path("edit")
+		.path(String.valueOf(listedPosts.getPosts().get(1).getId()))
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.post(EditPostResourceReturnData.class, editedInput); 			
+		assertTrue(editReturnData.isSuccessful());
+		
+		// Assert - we've now got input1 first
+		listedPosts = service
+		.path("rest").path("threads").path("0").path("10")
+		.header("AuthKey", loginResult.getAuthKey())
+    	.get(ListPostsResource.class); 				
+		// Assert - we've got input2 first
+		assertEquals("Listing by last added", "blar2", listedPosts.getPosts().get(0).getSubject());
+	}
+	
+	@SuppressWarnings("serial")
+	@Test
+	public void shouldListThreadsByTagWithThreadWithLastModifiedContentFirst() {	
+		// Arrange
+		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
+		input1.setTags(new ArrayList<String>(){{add("a");add("b");}});
+		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
+		input2.setTags(new ArrayList<String>(){{add("a");add("b");}});
+		addPost(input1); 
+		addPost(input2); 		
+		// Note: input2 was added last so should be first in the list
+		// Arrange - list them
+		ListPostsResource listedPosts = service
+		.path("rest").path("threads").path("a").path("0").path("10")
+		.header("AuthKey", loginResult.getAuthKey())
+    	.get(ListPostsResource.class); 				
+		// Assert - we've got input2 first
+		assertEquals("Listing by last added", "sub2", listedPosts.getPosts().get(0).getSubject());
+		
+		// Act - modify input 1
+		EditPostResource editedInput = new EditPostResource();
+		editedInput.setContent("blar");
+		editedInput.setSubject("blar2");
+		editedInput.setTags(new ArrayList<String>(){{add("a");add("b");}});
+		EditPostResourceReturnData editReturnData = service
+		.path("rest").path("post").path("edit")
+		.path(String.valueOf(listedPosts.getPosts().get(1).getId()))
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.post(EditPostResourceReturnData.class, editedInput); 			
+		assertTrue(editReturnData.isSuccessful());
+		
+		// Assert - we've now got input1 first
+		listedPosts = service
+		.path("rest").path("threads").path("a").path("0").path("10")
+		.header("AuthKey", loginResult.getAuthKey())
+    	.get(ListPostsResource.class); 				
+		// Assert - we've got input2 first
+		assertEquals("Listing by last added", "blar2", listedPosts.getPosts().get(0).getSubject());
+	}
+
+	public void addPost(AddPostResourceInput input2) {
+		service
+		.path("rest").path("post").path("add")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input2);
 	}		
 }
