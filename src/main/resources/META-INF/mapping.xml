@@ -90,6 +90,7 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	       	  <join-column name="rootPost_reference" />
 	       </one-to-one>
 	       <one-to-many name="posts" optional="false">
+		        <order-by>modified ASC</order-by>
 	       		<cascade>
 	       			<cascade-persist />
 	       		</cascade>
