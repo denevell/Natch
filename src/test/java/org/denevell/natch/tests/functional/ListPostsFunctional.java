@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -127,9 +128,11 @@ public class ListPostsFunctional {
 	}	
 	
 	@Test
-	public void shouldHtmlEscapeSubjectAndContent() {
+	public void shouldHtmlEscapeSubjectContentTags() {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("<hi>", "<there>");
+		ArrayList<String> tags = new ArrayList<String>(){{ add("<again>"); add("<hmm>"); }};
+		input.setTags(tags);
 		service
 		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
@@ -144,6 +147,7 @@ public class ListPostsFunctional {
 		// Assert
 		assertEquals("&lt;hi&gt;", returnData.getPosts().get(0).getSubject());
 		assertEquals("&lt;there>", returnData.getPosts().get(0).getContent());
+		assertEquals("&lt;again&gt;", returnData.getPosts().get(0).getTags().get(0));
 	}		
 	
 	@Test

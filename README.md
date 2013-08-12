@@ -90,8 +90,7 @@ The start of a REST interface for a forum.
 * ~~Tech task: New installation and database with newly inserted backup~~
 * ~~Tech task: Map sql via xml, to ease changes of database / provider, database migration~~
 * ~~Tech task: Cannot pass in single item tags list.~~
-
-
+* ~~Tech task: Escape text in tags.~~
 
 ### Icebox 
 

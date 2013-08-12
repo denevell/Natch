@@ -1,5 +1,6 @@
 package org.denevell.natch.db.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -92,7 +93,13 @@ public class PostEntity {
 	}
 
 	public List<String> getTags() {
-		return tags;
+		List<String> t = tags;
+		ArrayList<String> escaped = new ArrayList<String>();
+		for (String string : t) {
+			string = StringEscapeUtils.escapeHtml4(string);
+			escaped.add(string);
+		}
+		return escaped;
 	}
 
 	public void setTags(List<String> tags) {
