@@ -131,6 +131,7 @@ public class ListPostsFunctional {
 	public void shouldHtmlEscapeSubjectContentTags() {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("<hi>", "<there>");
+		@SuppressWarnings("serial")
 		ArrayList<String> tags = new ArrayList<String>(){{ add("<again>"); add("<hmm>"); }};
 		input.setTags(tags);
 		service
