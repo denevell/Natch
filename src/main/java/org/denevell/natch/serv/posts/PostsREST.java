@@ -149,7 +149,6 @@ public class PostsREST {
 			PostResource postResource = new PostResource(post.getUser().getUsername(), 
 					post.getCreated(), 
 					post.getModified(), 
-					post.getSubject(), 
 					post.getContent(), 
 					post.getTags());
 			postResource.setId(post.getId());
@@ -215,7 +214,7 @@ public class PostsREST {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
 		} else {
-			ThreadResource adaptedPosts = new ThreadResourceAdapter(threadAuthor.getUsername(), posts);
+			ThreadResource adaptedPosts = new ThreadResourceAdapter(threadAuthor.getUsername(), "TODO", posts);
 			return adaptedPosts;
 		}
 	}

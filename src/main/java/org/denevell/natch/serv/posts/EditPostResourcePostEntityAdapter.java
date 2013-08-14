@@ -13,7 +13,6 @@ public class EditPostResourcePostEntityAdapter implements PostEntityAdapter {
 	public void setPostWithNewData(EditPostResource resource) {
 		mPe = new PostEntity();
 		mPe.setContent(resource.getContent());
-		mPe.setSubject(resource.getSubject());
 		mPe.setTags(resource.getTags());
 	}
 

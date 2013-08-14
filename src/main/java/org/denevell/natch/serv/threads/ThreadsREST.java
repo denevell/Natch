@@ -2,11 +2,14 @@ package org.denevell.natch.serv.threads;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -14,16 +17,20 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
+import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.ThreadEntity;
+import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.ListPostsResource;
+import org.denevell.natch.io.threads.AddThreadResourceInput;
+import org.denevell.natch.io.threads.AddThreadResourceReturnData;
+import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.utils.Log;
+import org.denevell.natch.utils.Strings;
 
-import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
 @Path("threads")
-@Api(value="/post", description="Adds, Deletes, Edits and Lists posts")
 public class ThreadsREST {
 	
 	@Context UriInfo mInfo;
@@ -31,6 +38,7 @@ public class ThreadsREST {
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
 	private ThreadModel mModel;
+	private ResourceBundle rb = Strings.getMainResourceBundle();
 	
 	public ThreadsREST() {
 		mModel = new ThreadModel();
@@ -44,6 +52,40 @@ public class ThreadsREST {
 		mModel = postModel;
 		mRequest = request;
 		mResponse = response;
+	}
+	
+	@PUT
+	@Path("/add") // Explicit for the servlet filter
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public AddThreadResourceReturnData add(
+			AddThreadResourceInput input) {
+		try {
+			mModel.init();
+			AddThreadResourceReturnData regReturnData = new AddThreadResourceReturnData();
+			regReturnData.setSuccessful(false);
+			UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+			String okay = mModel.addThread(userEntity, 
+					input.getSubject(), input.getContent(), 
+					input.getTags());
+			generateAddPostReturnResource(regReturnData, okay);
+			return regReturnData;
+		} finally {
+			mModel.close();
+		}
+	}	
+	
+	private void generateAddPostReturnResource(AddThreadResourceReturnData regReturnData, String okay) {
+		if(okay.equals(PostsModel.BAD_USER_INPUT)) {
+			regReturnData.setSuccessful(false);
+			regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
+		} else if(okay.equals(PostsModel.UNKNOWN_ERROR)){
+			regReturnData.setSuccessful(false);
+			regReturnData.setError(rb.getString(Strings.unknown_error));
+		} else { // Should be okay then
+			regReturnData.setThreadId(Long.valueOf(okay));
+			regReturnData.setSuccessful(true);
+		}
 	}
 	
 	@GET

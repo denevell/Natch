@@ -94,6 +94,13 @@ public class TestUtils {
 		Client client = Client.create(config);
 		return client.resource(baseUrl).path("rest").path("post").path("add");		
 	}
+	
+	public static WebResource getAddThreadClient() {
+		String baseUrl = getHost() + NATCH_FUNCTIONAL;
+		ClientConfig config = new DefaultClientConfig();
+		Client client = Client.create(config);
+		return client.resource(baseUrl).path("rest").path("threads").path("add");		
+	}	
 
 	public static WebResource getDeletePostClient() {
 		String baseUrl = getHost() + NATCH_FUNCTIONAL;

@@ -91,7 +91,7 @@ public class AddPostResourceTests {
 	}
 	
 	@Test
-	public void shouldntRegisterWithNullInputObject() {
+	public void shouldntWithNullInputObject() {
 		// Arrange
 		
 		// Act
@@ -103,7 +103,7 @@ public class AddPostResourceTests {
 	}
 	
 	@Test
-	public void shouldntRegisterWithUnknownError() {
+	public void shouldntAddWithUnknownError() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
 		when(postsModel.addPost(user, addPostAdapter)).thenReturn(PostsModel.UNKNOWN_ERROR);

@@ -44,15 +44,6 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	       <one-to-one name="user" optional="false">
 	       	  <join-column name="user_reference" />
 	       </one-to-one>
-		   <element-collection name="tags" fetch="eager">
-	          <column name="tag_text" nullable="true" />
-	          <collection-table name="post_tags">
-	              <join-column name="post_id"/>
-	          </collection-table>	   
-		   </element-collection>
-	       <basic name="subject">
-	          <column name="subject" nullable="false" length="200" />
-	       </basic>    		   
 	       <basic name="threadId">
 	          <column name="threadId" nullable="false" />
 	       </basic>    		   
@@ -68,27 +59,46 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
     <entity class="org.denevell.natch.db.entities.ThreadEntity">
        <table name="ThreadEntity" />
 	   <named-query name="findThreads">
-	       <query>select p from ThreadEntity p where p.rootPost is not null order by p.latestPost.modified desc</query>
+	       <query>select p from ThreadEntity p order by p.threadModified desc</query>
 	   </named-query>       
 	   <named-query name="findThreadByTag">
-	       <query>select p from ThreadEntity p where :tag member of p.rootPost.tags order by p.latestPost.modified desc</query>
+	       <query>select p from ThreadEntity p where :tag member of p.tags order by p.threadModified desc</query>
 	   </named-query>       
 	   <named-query name="findThreadById">
 	       <query>select p from ThreadEntity p where p.id = :id</query>
 	   </named-query>       
 	   <named-query name="findAuthorById">
-	       <query>select p.rootPost.user from ThreadEntity p where p.id = :id</query>
+	       <query>select p.user from ThreadEntity p where p.id = :id</query>
 	   </named-query>       
        <attributes>
 	       <id name="id">
-	           <column name="id" nullable="false" />
-	       </id>       
+	          <generated-value strategy="auto" />
+	       </id>
 	       <one-to-one name="latestPost" optional="false">
 	       	  <join-column name="latestPost_reference" />
 	       </one-to-one>
-	       <one-to-one name="rootPost" optional="false">
-	       	  <join-column name="rootPost_reference" />
-	       </one-to-one>
+	       <basic name="subject">
+	          <column name="subject" nullable="false" length="200" />
+	       </basic>    		   
+	       <basic name="content">
+	           <column name="content" nullable="false" />
+	           <lob/>
+	       </basic>       
+	       <basic name="threadModified">
+	          <column name="threadId" nullable="false" />
+	       </basic>    		   
+	       <basic name="created">
+	          <column name="created" nullable="false" />
+	       </basic>    		   
+	       <basic name="modified">
+	          <column name="modified" nullable="false" />
+	       </basic>   	       
+		   <element-collection name="tags" fetch="eager">
+	          <column name="tag_text" nullable="true" />
+	          <collection-table name="post_tags">
+	              <join-column name="post_id"/>
+	          </collection-table>	   
+		   </element-collection>	       
 	       <one-to-many name="posts" optional="false">
 	       		<cascade>
 	       			<cascade-persist />

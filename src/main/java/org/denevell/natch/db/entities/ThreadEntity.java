@@ -1,12 +1,21 @@
 package org.denevell.natch.db.entities;
 
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 public class ThreadEntity {
-	private String id;
+	private long id;
 	private PostEntity latestPost;
 	private List<PostEntity> posts;
-	private PostEntity rootPost;
+	private List<String> tags;
+	private String subject;
+	private String content;
+	private UserEntity user;
+	private long created;
+	private long modified;	
+	private long threadModified;
 	public static final String NAMED_QUERY_LIST_THREADS = "findThreads";
 	public static final String NAMED_QUERY_LIST_THREADS_BY_TAG = "findThreadByTag";
 	public static final String NAMED_QUERY_FIND_THREAD_BY_ID = "findThreadById";
@@ -17,17 +26,31 @@ public class ThreadEntity {
 	public ThreadEntity() {
 	}
 	
-	public ThreadEntity(PostEntity initialPost, List<PostEntity> posts) {
-		this.latestPost = initialPost;
-		this.setRootPost(initialPost);
-		this.posts = posts;
+	public ThreadEntity(String subject, String content, List<String> tags, UserEntity user) {
+		this.subject = subject;
+		this.content = content;
+		this.tags = tags;
+		this.user = user;
+		long time = new Date().getTime();
+		this.created = time;
+		this.modified = time;
+		this.threadModified = time;
 	}
 	
-	public String getId() {
+	public String getSubject() {
+		String escaped = StringEscapeUtils.escapeHtml4(subject);
+		return escaped;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+	
+	public long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -47,11 +70,52 @@ public class ThreadEntity {
 		this.posts = posts;
 	}
 
-	public PostEntity getRootPost() {
-		return rootPost;
+	public List<String> getTags() {
+		return tags;
 	}
 
-	public void setRootPost(PostEntity rootPost) {
-		this.rootPost = rootPost;
+	public void setTags(List<String> tags) {
+		this.tags = tags;
 	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public UserEntity getUser() {
+		return user;
+	}
+
+	public void setUser(UserEntity user) {
+		this.user = user;
+	}
+
+	public long getCreated() {
+		return created;
+	}
+
+	public void setCreated(long created) {
+		this.created = created;
+	}
+
+	public long getModified() {
+		return modified;
+	}
+
+	public void setModified(long modified) {
+		this.modified = modified;
+	}
+
+	public long getThreadModified() {
+		return threadModified;
+	}
+
+	public void setThreadModified(long threadModified) {
+		this.threadModified = threadModified;
+	}
+
 }

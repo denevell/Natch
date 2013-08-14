@@ -15,20 +15,18 @@ public class PostEntity {
 	private long id;
 	private long created;
 	private long modified;
-	private String subject;
 	private String content;
-	private String threadId;
+	private long threadId;
 	private List<String> tags;
 	private UserEntity user;
 	
 	public PostEntity() {
 	}
 	
-	public PostEntity(UserEntity user, long created, long modified, String subject, String content, String threadId) {
+	public PostEntity(UserEntity user, long created, long modified, String content, long threadId) {
 		this.user = user;
 		this.created = created;
 		this.modified = modified;
-		this.subject = subject;
 		this.content = content;
 		this.threadId = threadId;
 	}
@@ -49,15 +47,6 @@ public class PostEntity {
 		this.modified = modified;
 	}
 
-	public String getSubject() {
-		String escaped = StringEscapeUtils.escapeHtml4(subject);
-		return escaped;
-	}
-
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
-
 	public String getContent() {
 		String escaped = StringEscapeUtils.escapeHtml4(content);
 		return escaped;
@@ -67,11 +56,11 @@ public class PostEntity {
 		this.content = content;
 	}
 
-	public String getThreadId() {
+	public long getThreadId() {
 		return threadId;
 	}
 
-	public void setThreadId(String threadId) {
+	public void setThreadId(long threadId) {
 		this.threadId = threadId;
 	}
 
