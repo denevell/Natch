@@ -95,13 +95,9 @@ The start of a REST interface for a forum.
 ### Icebox 
 
 * Site management
- * Superuser
- * Groups
- * Permissions for actions
- * Category/tags only available to some users
+ * ### Superuser
+ * ## Move posts into existing threads or new threads
 * Posts
- * Move posts into existing threads or new threads
- * Test / delete when a thread has no children
  * Thread rest list should list latest post as well
  * Show total number of posts in this listing for pagination information
  * Soft delete post
@@ -119,17 +115,12 @@ The start of a REST interface for a forum.
  * User id is number not name
 * Misc
  * Base64 login / reg or maybe ssl?
- * Limit the thread ids, tags and usernames to certain character
  * Some kind of captcha thing on registeration.
- * More sensible threadid?
  * Start using DI
  * Inject the EntityManager via annotations
  * Entity bean null / blank problem?
  * Change error return strings to ints
  * Update swagger
  * Update so you do not need two db calls to get thread.
- * threaded posts: move tags to the thread object and not individual posts?
- * threaded posts: move subject to thread object?
- * threaded posts: moved creation date to thread?
  * Intercept json parsing errors and return 400s: register, login
  * Return user data with logon call
