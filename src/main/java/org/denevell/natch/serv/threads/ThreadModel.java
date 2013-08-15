@@ -50,9 +50,9 @@ public class ThreadModel {
 	public String addThread(UserEntity user, String subject, String content, List<String> tags) {
 		EntityTransaction trans = null;
 		try {
-			if(user==null || user.getUsername()==null || user.getUsername().isEmpty() ||
+			if(user==null || user.getUsername()==null || user.getUsername().trim().isEmpty() ||
 			   subject==null || content==null || 
-			   subject.isEmpty() || content.isEmpty()) {
+			   subject.trim().isEmpty() || content.trim().isEmpty()) {
 				Log.info(this.getClass(), "Bad user input");
 				return BAD_USER_INPUT;
 			}
