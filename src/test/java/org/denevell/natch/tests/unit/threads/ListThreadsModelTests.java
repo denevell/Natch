@@ -38,8 +38,6 @@ public class ListThreadsModelTests {
 		model = new ThreadModel(factory, entityManager, threadModel);
 	}
 	
-	// TODO: Pagination container for threads
-	
 	@Test
 	public void shouldReturnListOfThreads() {
 		// Arrange
@@ -96,5 +94,7 @@ public class ListThreadsModelTests {
 		
 		// Assert
 		assertEquals(0, result.size());
-	}		
+	}
+	
+	// TODO: Get number of threads 
 }

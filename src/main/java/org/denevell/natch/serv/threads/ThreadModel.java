@@ -7,6 +7,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
@@ -80,6 +82,14 @@ public class ThreadModel {
 		if(resultList==null) return new ArrayList<ThreadEntity>();
 		else return resultList;
 	}	
+	
+	public long getTotalNumberOfThreads() {
+		CriteriaBuilder qb = mEntityManager.getCriteriaBuilder();
+		CriteriaQuery<Long> cq = qb.createQuery(Long.class);
+		cq.select(qb.count(cq.from(ThreadEntity.class)));
+		Long count = mEntityManager.createQuery(cq).getSingleResult();		
+		return count;
+	}
 	
 	public List<ThreadEntity> listThreadsByTag(String tag, int startPos, int limit) {
 		TypedQuery<ThreadEntity> q = mEntityManager.
