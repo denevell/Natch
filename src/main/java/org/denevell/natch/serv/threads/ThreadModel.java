@@ -10,6 +10,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
+import org.apache.log4j.Logger;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.ThreadFactory;
@@ -84,11 +85,16 @@ public class ThreadModel {
 	}	
 	
 	public long getTotalNumberOfThreads() {
-		CriteriaBuilder qb = mEntityManager.getCriteriaBuilder();
-		CriteriaQuery<Long> cq = qb.createQuery(Long.class);
-		cq.select(qb.count(cq.from(ThreadEntity.class)));
-		Long count = mEntityManager.createQuery(cq).getSingleResult();		
-		return count;
+		try {
+			CriteriaBuilder qb = mEntityManager.getCriteriaBuilder();
+			CriteriaQuery<Long> cq = qb.createQuery(Long.class);
+			cq.select(qb.count(cq.from(ThreadEntity.class)));
+			Long count = mEntityManager.createQuery(cq).getSingleResult();		
+			return count;
+		} catch (Exception e) {
+			Logger.getLogger(getClass()).error("Couldn't get total number of post", e);
+			return -1;
+		}
 	}
 	
 	public List<ThreadEntity> listThreadsByTag(String tag, int startPos, int limit) {
