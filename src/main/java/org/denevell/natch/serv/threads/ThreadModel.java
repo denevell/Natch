@@ -117,5 +117,61 @@ public class ThreadModel {
 		if(resultList==null) return new ArrayList<ThreadEntity>();
 		else return resultList;
 	}	
+	
+	public ThreadEntity findThreadById(long id) {
+		try {
+			TypedQuery<ThreadEntity> q = mEntityManager
+					.createNamedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID, ThreadEntity.class);
+			q.setParameter(ThreadEntity.NAMED_QUERY_PARAM_ID, id);
+			ThreadEntity result = q.getSingleResult();		
+			return result;
+		} catch(Exception e) {
+			Log.info(getClass(), "Error finding thread by id: " + e.toString());
+			return null;
+		} 
+	}	
+
+	public String edit(UserEntity userEntity, long threadId, ThreadEntity entity) {
+		EntityTransaction trans = mEntityManager.getTransaction();
+		try {
+			if(checkInputParams(userEntity, entity) || threadId<1) {
+				Log.info(this.getClass(), "Edit user: Bad user input");
+				return BAD_USER_INPUT;
+			}
+			ThreadEntity pe = findThreadById(threadId);
+			if(pe==null) {
+				return DOESNT_EXIST;
+			} else if(!pe.getUser().getUsername().equals(userEntity.getUsername())) {
+				return NOT_YOURS_TO_DELETE;
+			}
+			entity.setId(threadId);
+			trans.begin();
+			mEntityManager.merge(entity);
+			trans.commit();
+			return EDITED;
+		} catch(Exception e) {
+			Log.info(getClass(), "Error editing: " + e.toString());
+			e.printStackTrace();
+			try {
+				trans.rollback();
+			} catch(Exception e1) {
+				Log.info(getClass(), "Error rolling back: " + e.toString());
+				e1.printStackTrace();
+			}
+			return UNKNOWN_ERROR;
+		} 
+	}	
+	
+	private boolean checkInputParams(UserEntity user, ThreadEntity pe) {
+		return  user==null || 
+				user.getUsername()==null || 
+				user.getUsername().trim().length()==0 ||
+				pe==null ||
+				pe.getSubject()==null ||
+				pe.getContent()==null ||
+				pe.getSubject().trim().length()==0 ||
+				pe.getContent().trim().length()==0;
+	}	
+	
 }
 	

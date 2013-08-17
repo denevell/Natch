@@ -5,7 +5,7 @@ The start of a REST interface for a forum.
 ### Current
 * #: Refactor list thread model to have subject, thread etc and a list of paginated posts.
 * ~~Tech task: Functional tests for listing threads~~
-* Tech task: Model unit tests for editing a thread
+* ~~Tech task: Model unit tests for editing a thread~~
 * Tech task: Resource unit tests for editing a thread
 * Tech task: Functional tests for editing a thread
 * Tech task: Functional tests for listing threads when edited
