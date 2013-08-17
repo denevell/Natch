@@ -74,36 +74,38 @@ public class ListThreadsFunctional {
 		assertEquals("aaron", returnData.getThreads().get(1).getAuthor());
 	}	
 	
-	/*@Test
+	@SuppressWarnings("serial")
+	@Test
 	public void shouldListThreadsByTagWithLimit() {
 		// Arrange 
-		AddPostResourceInput input0 = new AddPostResourceInput("x", "x", "x");
-		input0.setTags(Arrays.asList(new String[] {"onetag", "f"})); 
-		// We need two in the list, since our deserialisation doesn't like single item lists.
-		// Works fine on the command line though: curl url ... -d '{"content":"xxx", "posttags": ["t"], "subject":"xxx", "thread":"NEW"}'
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
-		input.setTags(Arrays.asList(new String[] {"tag", "onetag"}));
-		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
-		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
-		input2.setTags(Arrays.asList(new String[] {"tag", "onetag"}));
-		addPost(input0); 
-		addPost(input); 
-		addPost(input1); 
-		addPost(input2); 
+		AddThreadResourceInput input = new AddThreadResourceInput("sub", "cont");
+		input.setTags(new ArrayList<String>() {{add("a"); add("ignore");}});
+		AddThreadResourceInput input1 = new AddThreadResourceInput("sub1", "cont1");
+		AddThreadResourceInput input2 = new AddThreadResourceInput("sub2", "cont2");
+		AddThreadResourceInput input3 = new AddThreadResourceInput("sub3", "cont3");
+		input3.setTags(new ArrayList<String>() {{add("a");add("ignore");}});
+		AddThreadFunctional.addThread(input, service, loginResult.getAuthKey()); // page 2
+		AddThreadFunctional.addThread(input1, service, loginResult.getAuthKey());  // page 2
+		AddThreadFunctional.addThread(input2, service, loginResult.getAuthKey()); 
+		AddThreadFunctional.addThread(input3, service, loginResult.getAuthKey()); 
 		
 		// Act
 		ThreadsResource returnData = service
-		.path("rest").path("threads").path("onetag").path("1").path("1")
+		.path("rest").path("threads").path("a").path("0").path("2")
     	.get(ThreadsResource.class); 
 		
 		// Assert
-		assertEquals(1, returnData.getThreads().size());
-		assertEquals("x", returnData.getThreads().get(0).getSubject());
-		assertEquals("x", returnData.getThreads().get(0).getContent());
-		assertEquals("x", returnData.getThreads().get(0).getId());
-		assertEquals("onetag", returnData.getThreads().get(0).getTags().get(0));
+		assertEquals(2, returnData.getThreads().size());
+		assertEquals(1, returnData.getPage());
+		assertEquals(1, returnData.getTotalPages());
+		assertEquals("sub3", returnData.getThreads().get(0).getSubject());
+		assertEquals("cont3", returnData.getThreads().get(0).getContent());
+		assertEquals("a", returnData.getThreads().get(0).getTags().get(0));
+		assertEquals("aaron", returnData.getThreads().get(0).getAuthor());
+		assertEquals("sub", returnData.getThreads().get(1).getSubject());
+		assertEquals("cont", returnData.getThreads().get(1).getContent());
+		assertEquals("a", returnData.getThreads().get(1).getTags().get(0));
 	}
-*/
 //	@Test
 //	public void shouldListThreadsWithLastModifiedContentFirst() {	
 //		// Arrange

@@ -130,7 +130,7 @@ public class ThreadsREST {
 		} finally {
 			mModel.close();
 		}
-		return returnListThreads(start, threads, totalPages);
+		return returnListThreads(start, threads, totalPages, limit);
 	}
 
 	public long getNumberOfThreads(int limit) throws Exception {
@@ -155,18 +155,28 @@ public class ThreadsREST {
 		return ts;
 	}	
 
-	public ThreadsResource returnListThreads(int start,
-			List<ThreadEntity> threads, long totalThreads) throws IOException {
+	public ThreadsResource returnListThreads(
+			int start,
+			List<ThreadEntity> threads, 
+			long totalPages, 
+			int limit) throws IOException {
 		if(threads==null) {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
 		} else {
 			List<ThreadResource> ts = threadEntitiesToThreadOverview(threads);
 			ThreadsResource t = new ThreadsResource(ts, 0, 0);
-			t.setPage(start);
-			t.setTotalPages(totalThreads); 
+			long currentPage = getCurrentPage(start, limit);
+			t.setPage(currentPage);
+			t.setTotalPages(totalPages); 
 			return t;
 		}
+	}
+
+	public long getCurrentPage(int start, int limit) {
+		double page = ((double)(start+1) / (double)limit); 
+		long currentPage = (long) Math.ceil(page);
+		return currentPage;
 	}
 
 }
