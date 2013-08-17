@@ -174,4 +174,16 @@ public class AddThreadFunctional {
 		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
 		assertFalse(returnData.isSuccessful());
 	}
+	
+
+	public static AddThreadResourceReturnData addThread(
+			AddThreadResourceInput input, 
+			WebResource service, 
+			String authKey) {
+		return service
+			.path("rest").path("threads").path("add")
+		    .type(MediaType.APPLICATION_JSON)
+			.header("AuthKey", authKey)
+	    	.put(AddThreadResourceReturnData.class, input);
+	}			
 }

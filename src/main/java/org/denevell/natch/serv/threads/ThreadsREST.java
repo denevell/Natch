@@ -145,7 +145,8 @@ public class ThreadsREST {
 	private List<ThreadResource> threadEntitiesToThreadOverview(List<ThreadEntity> threads) {
 		List<ThreadResource> ts = new ArrayList<ThreadResource>();
 		for (ThreadEntity t: threads) {
-			ts.add(new ThreadResource(t.getSubject(), t.getUser().getUsername(), 
+			ts.add(new ThreadResource(t.getSubject(), t.getContent(),
+					t.getUser().getUsername(), 
 					t.getId(),
 					t.getCreated(), t.getModified(), 
 					null, 

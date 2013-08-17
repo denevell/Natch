@@ -65,6 +65,7 @@ public class ListThreadsResourceTests {
 		assertEquals("t", result.getThreads().get(0).getTags().get(0));
 		assertEquals("u", result.getThreads().get(0).getAuthor());
 		assertEquals("s", result.getThreads().get(0).getSubject());
+		assertEquals("c", result.getThreads().get(0).getContent());
 		assertEquals("s1", result.getThreads().get(1).getSubject());
 	}	
 	
@@ -118,6 +119,7 @@ public class ListThreadsResourceTests {
 		assertEquals(1, result.getThreads().get(0).getModification());
 		assertEquals("u", result.getThreads().get(0).getAuthor());
 		assertEquals("s", result.getThreads().get(0).getSubject());
+		assertEquals("c", result.getThreads().get(0).getContent());
 		assertEquals("s1", result.getThreads().get(1).getSubject());
 	}		
 	
