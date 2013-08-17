@@ -11,8 +11,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.serv.posts.ThreadFactory;
@@ -102,17 +100,12 @@ public class ListThreadsModelTests {
 	@Test
 	public void shouldGetNumOfPost() {
 		// Arrange
-
-		CriteriaBuilder qb = mock(CriteriaBuilder.class);
-		CriteriaQuery<Long> cql = mock(CriteriaQuery.class);
-		TypedQuery<Long> tq = mock(TypedQuery.class);
-		when(entityManager.getCriteriaBuilder()).thenReturn(qb);
-		when(qb.createQuery(Long.class)).thenReturn(cql);
-		when(entityManager.createQuery(cql)).thenReturn(tq);
-		when(tq.getSingleResult()).thenReturn(new Long(1));
+		TypedQuery<Long> q = mock(TypedQuery.class);
+		when(q.getSingleResult()).thenReturn(1l);
+		when(entityManager.createNamedQuery(ThreadEntity.NAMED_QUERY_FIND_NUMBER_OF_THREADS, Long.class)).thenReturn(q);
 		
 		// Act
-		long result = model.getTotalNumberOfThreads();
+		long result = model.getTotalNumberOfThreads(null);
 		
 		// Assert
 		assertEquals(1, result);
@@ -121,10 +114,11 @@ public class ListThreadsModelTests {
 	@Test
 	public void shouldntGetNumOfPost() {
 		// Arrange
-		when(entityManager.getCriteriaBuilder()).thenThrow(new RuntimeException());
+		when(entityManager.createNamedQuery(ThreadEntity.NAMED_QUERY_FIND_NUMBER_OF_THREADS, Long.class))
+		.thenThrow(new RuntimeException());
 		
 		// Act
-		long result = model.getTotalNumberOfThreads();
+		long result = model.getTotalNumberOfThreads(null);
 		
 		// Assert
 		assertEquals(-1, result);

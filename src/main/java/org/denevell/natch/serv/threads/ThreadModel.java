@@ -7,8 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 
 import org.apache.log4j.Logger;
 import org.denevell.natch.db.entities.ThreadEntity;
@@ -84,12 +82,23 @@ public class ThreadModel {
 		else return resultList;
 	}	
 	
-	public long getTotalNumberOfThreads() {
+	/**
+	 * 
+	 * @param tag Can be null to select all threads
+	 * @return
+	 */
+	public long getTotalNumberOfThreads(String tag) {
 		try {
-			CriteriaBuilder qb = mEntityManager.getCriteriaBuilder();
-			CriteriaQuery<Long> cq = qb.createQuery(Long.class);
-			cq.select(qb.count(cq.from(ThreadEntity.class)));
-			Long count = mEntityManager.createQuery(cq).getSingleResult();		
+			TypedQuery<Long> q = null;
+			if(tag==null) {
+				q = mEntityManager.createNamedQuery(
+						ThreadEntity.NAMED_QUERY_FIND_NUMBER_OF_THREADS, Long.class);		
+			} else {
+				q = mEntityManager.createNamedQuery(
+						ThreadEntity.NAMED_QUERY_FIND_NUMBER_OF_THREADS_BY_TAG, Long.class);		
+				q.setParameter(ThreadEntity.NAMED_QUERY_PARAM_TAG, tag);
+			}
+			Long count = q.getSingleResult();
 			return count;
 		} catch (Exception e) {
 			Logger.getLogger(getClass()).error("Couldn't get total number of post", e);

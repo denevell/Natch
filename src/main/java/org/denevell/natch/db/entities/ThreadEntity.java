@@ -22,6 +22,8 @@ public class ThreadEntity {
 	public static final String NAMED_QUERY_FIND_AUTHOR = "findAuthorById";
 	public static final String NAMED_QUERY_PARAM_ID = "id";
 	public static final String NAMED_QUERY_PARAM_TAG = "tag";
+	public static final String NAMED_QUERY_FIND_NUMBER_OF_THREADS = "findNumberOfThreads";
+	public static final String NAMED_QUERY_FIND_NUMBER_OF_THREADS_BY_TAG = "findNumberOfThreadsByTag";
 	
 	public ThreadEntity() {
 	}

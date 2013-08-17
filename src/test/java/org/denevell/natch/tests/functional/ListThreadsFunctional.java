@@ -76,7 +76,7 @@ public class ListThreadsFunctional {
 	
 	@SuppressWarnings("serial")
 	@Test
-	public void shouldListThreadsByTagWithLimit() {
+	public void shouldListThreadsWithTagByPostLastEnteredWithLimit() {
 		// Arrange 
 		AddThreadResourceInput input = new AddThreadResourceInput("sub", "cont");
 		input.setTags(new ArrayList<String>() {{add("a"); add("ignore");}});

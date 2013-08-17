@@ -122,7 +122,7 @@ public class ThreadsREST {
 			} else {
 				threads = mModel.listThreadsByTag(tag, start, limit);
 			}
-			totalPages = getNumberOfThreads(limit);
+			totalPages = getNumberOfThreadPages(limit, tag);
 		} catch(Exception e) {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
@@ -133,13 +133,12 @@ public class ThreadsREST {
 		return returnListThreads(start, threads, totalPages, limit);
 	}
 
-	public long getNumberOfThreads(int limit) throws Exception {
-		long totalPages;
-		totalPages = mModel.getTotalNumberOfThreads();
-		if(totalPages==-1) throw new Exception("Couldn't get number of threads");
-		double t = (double) totalPages / (double) limit;
-		totalPages = (long) Math.ceil(t);
-		return totalPages;
+	public long getNumberOfThreadPages(int limit, String tag) throws Exception {
+		long totalThreads = mModel.getTotalNumberOfThreads(tag);
+		if(totalThreads==-1) throw new Exception("Couldn't get number of threads");
+		double t = (double) totalThreads / (double) limit;
+		totalThreads = (long) Math.ceil(t);
+		return totalThreads;
 	}
 
 	private List<ThreadResource> threadEntitiesToThreadOverview(List<ThreadEntity> threads) {

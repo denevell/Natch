@@ -50,7 +50,7 @@ public class ListThreadsResourceTests {
 		threads.add(threadEntity);
 		threads.add(new ThreadEntity("s1", "c1", null, user));
 		when(threadModel.listThreads(1, 2)).thenReturn(threads);
-		when(threadModel.getTotalNumberOfThreads()).thenReturn(3l);
+		when(threadModel.getTotalNumberOfThreads(null)).thenReturn(3l);
 		
 		// Act
 		ThreadsResource result = resource.listThreads(1, 2);
@@ -82,7 +82,7 @@ public class ListThreadsResourceTests {
 		threads.add(threadEntity);
 		threads.add(new ThreadEntity("s1", "c1", null, user));
 		when(threadModel.listThreads(1, 2)).thenReturn(threads);
-		when(threadModel.getTotalNumberOfThreads()).thenReturn(4l);
+		when(threadModel.getTotalNumberOfThreads(null)).thenReturn(4l);
 		
 		// Act
 		ThreadsResource result = resource.listThreads(1, 2);
@@ -105,7 +105,7 @@ public class ListThreadsResourceTests {
 		threads.add(threadEntity);
 		threads.add(new ThreadEntity("s1", "c1", null, user));
 		when(threadModel.listThreadsByTag("tagy", 1, 2)).thenReturn(threads);
-		when(threadModel.getTotalNumberOfThreads()).thenReturn(4l);
+		when(threadModel.getTotalNumberOfThreads("tagy")).thenReturn(4l);
 		
 		// Act
 		ThreadsResource result = resource.listThreadsByTag("tagy", 1, 2);
