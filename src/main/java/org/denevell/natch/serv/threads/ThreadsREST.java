@@ -96,12 +96,33 @@ public class ThreadsREST {
 	@ApiOperation(value = "Lists threads, mostly recently created first", responseClass="org.denevell.natch.serv.posts.resources.ListPostsResource")
 	public ThreadsResource listThreads(
 		@ApiParam(name="start") @PathParam("start") int start, 	
-		@ApiParam(name="limit") @PathParam("limit") int limit 	
+		@ApiParam(name="limit") @PathParam("limit") int limit) throws IOException {
+		return listThreadWithOrWithoutTag(start, limit, null);
+	}
+
+	@GET
+	@Path("/{tag}/{start}/{limit}")
+	@Produces(MediaType.APPLICATION_JSON)	
+	@ApiOperation(value = "Lists threads by tag, mostly recently created first", responseClass="org.denevell.natch.serv.posts.resources.ListPostsResource")
+	public ThreadsResource listThreadsByTag(
+			@ApiParam(name="tag") @PathParam("tag")  String tag,
+			@ApiParam(name="start") @PathParam("start") int start, 	
+			@ApiParam(name="limit") @PathParam("limit") int limit 	
 			) throws IOException {
+		return listThreadWithOrWithoutTag(start, limit, tag);
+	}	
+
+	private ThreadsResource listThreadWithOrWithoutTag(int start, int limit, String tag) throws IOException {
 		List<ThreadEntity> threads = null;
+		long totalPages = -1;
 		try {
 			mModel.init();
-			threads = mModel.listThreads(start, limit);
+			if(tag==null) {
+				threads = mModel.listThreads(start, limit);
+			} else {
+				threads = mModel.listThreadsByTag(tag, start, limit);
+			}
+			totalPages = getNumberOfThreads(limit);
 		} catch(Exception e) {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
@@ -109,14 +130,16 @@ public class ThreadsREST {
 		} finally {
 			mModel.close();
 		}
-		if(threads==null) {
-			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
-			return null;
-		} else {
-			List<ThreadResource> ts = threadEntitiesToThreadOverview(threads);
-			ThreadsResource t = new ThreadsResource(ts, 0, 0);
-			return t;
-		}
+		return returnListThreads(start, threads, totalPages);
+	}
+
+	public long getNumberOfThreads(int limit) throws Exception {
+		long totalPages;
+		totalPages = mModel.getTotalNumberOfThreads();
+		if(totalPages==-1) throw new Exception("Couldn't get number of threads");
+		double t = (double) totalPages / (double) limit;
+		totalPages = (long) Math.ceil(t);
+		return totalPages;
 	}
 
 	private List<ThreadResource> threadEntitiesToThreadOverview(List<ThreadEntity> threads) {
@@ -125,39 +148,24 @@ public class ThreadsREST {
 			ts.add(new ThreadResource(t.getSubject(), t.getUser().getUsername(), 
 					t.getId(),
 					t.getCreated(), t.getModified(), 
-					0l, null));
+					null, 
+					t.getTags()));
 		}
 		return ts;
 	}	
-	
-	@GET
-	@Path("/{tag}/{start}/{limit}")
-	@Produces(MediaType.APPLICATION_JSON)	
-	@ApiOperation(value = "Lists threads by tag, mostly recently created first", responseClass="org.denevell.natch.serv.posts.resources.ListPostsResource")
-	public ThreadsResource listThreadsByTag(
-			@ApiParam(name="tag") @PathParam("tag")  String tag,
-		@ApiParam(name="start") @PathParam("start") int start, 	
-		@ApiParam(name="limit") @PathParam("limit") int limit 	
-			) throws IOException {
-		List<ThreadEntity> threads = null;
-		try {
-			mModel.init();
-			threads = mModel.listThreadsByTag(tag, start, limit);
-		} catch(Exception e) {
-			Log.info(getClass(), "Couldn't list posts: " + e.toString());
-			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
-			return null;
-		} finally {
-			mModel.close();
-		}
+
+	public ThreadsResource returnListThreads(int start,
+			List<ThreadEntity> threads, long totalThreads) throws IOException {
 		if(threads==null) {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
 		} else {
 			List<ThreadResource> ts = threadEntitiesToThreadOverview(threads);
 			ThreadsResource t = new ThreadsResource(ts, 0, 0);
+			t.setPage(start);
+			t.setTotalPages(totalThreads); 
 			return t;
-		}		
-	}	
+		}
+	}
 
 }
