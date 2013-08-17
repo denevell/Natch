@@ -12,17 +12,13 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
-import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.io.posts.ListPostsResource;
+import org.denevell.natch.io.threads.ThreadsResource;
 import org.denevell.natch.serv.threads.ThreadModel;
 import org.denevell.natch.serv.threads.ThreadsREST;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
-
-import scala.actors.threadpool.Arrays;
 
 public class ListThreadsResourceTests {
 	
@@ -40,7 +36,6 @@ public class ListThreadsResourceTests {
 		resource = new ThreadsREST(threadModel, request, response);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldListThreads() throws IOException {
 		// Arrange
@@ -50,21 +45,20 @@ public class ListThreadsResourceTests {
 		when(threadModel.listThreads(0, 10)).thenReturn(threads);
 		
 		// Act
-		ListPostsResource result = resource.listThreads(0, 10);
+		ThreadsResource result = resource.listThreads(0, 10);
 		
 		// Assert
-		assertEquals(2, result.getPosts().size());
-		assertEquals(400, result.getPosts().get(0).getId());
-		assertEquals(1, result.getPosts().get(0).getCreation());
-		assertEquals(1, result.getPosts().get(0).getModification());
-		assertEquals("u1", result.getPosts().get(0).getUsername());
-		assertEquals("s1", result.getPosts().get(0).getSubject());
-		assertEquals("c1", result.getPosts().get(0).getContent());
-		assertEquals(2, result.getPosts().get(1).getCreation());
-		assertEquals(2, result.getPosts().get(1).getModification());
-		assertEquals("u2", result.getPosts().get(1).getUsername());
-		assertEquals("s2", result.getPosts().get(1).getSubject());
-		assertEquals("c2", result.getPosts().get(1).getContent());
+		assertEquals(2, result.getThreads().size());
+		assertEquals(400, result.getThreads().get(0).getId());
+		assertEquals(1, result.getThreads().get(0).getCreation());
+		assertEquals(1, result.getThreads().get(0).getModification());
+		assertEquals(40, result.getThreads().get(0).getNumberOfPosts());
+		assertEquals("u1", result.getThreads().get(0).getAuthor());
+		assertEquals("s1", result.getThreads().get(0).getSubject());
+		assertEquals(2, result.getThreads().get(1).getCreation());
+		assertEquals(2, result.getThreads().get(1).getModification());
+		assertEquals("u2", result.getThreads().get(1).getAuthor());
+		assertEquals("s2", result.getThreads().get(1).getSubject());
 	}	
 //	
 //	@SuppressWarnings("unchecked")

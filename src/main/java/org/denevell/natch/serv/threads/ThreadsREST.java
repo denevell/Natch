@@ -1,6 +1,7 @@
 package org.denevell.natch.serv.threads;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -20,9 +21,10 @@ import javax.ws.rs.core.UriInfo;
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.threads.AddThreadResourceInput;
 import org.denevell.natch.io.threads.AddThreadResourceReturnData;
+import org.denevell.natch.io.threads.ThreadResource;
+import org.denevell.natch.io.threads.ThreadsResource;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
@@ -92,7 +94,7 @@ public class ThreadsREST {
 	@Path("/{start}/{limit}")
 	@Produces(MediaType.APPLICATION_JSON)	
 	@ApiOperation(value = "Lists threads, mostly recently created first", responseClass="org.denevell.natch.serv.posts.resources.ListPostsResource")
-	public ListPostsResource listThreads(
+	public ThreadsResource listThreads(
 		@ApiParam(name="start") @PathParam("start") int start, 	
 		@ApiParam(name="limit") @PathParam("limit") int limit 	
 			) throws IOException {
@@ -111,16 +113,28 @@ public class ThreadsREST {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
 		} else {
-			ListPostsResource adaptedPosts = new ListThreadsResourceAdapter(threads);
-			return adaptedPosts;
+			List<ThreadResource> ts = threadEntitiesToThreadOverview(threads);
+			ThreadsResource t = new ThreadsResource(ts, 0, 0);
+			return t;
 		}
+	}
+
+	private List<ThreadResource> threadEntitiesToThreadOverview(List<ThreadEntity> threads) {
+		List<ThreadResource> ts = new ArrayList<ThreadResource>();
+		for (ThreadEntity t: threads) {
+			ts.add(new ThreadResource(t.getSubject(), t.getUser().getUsername(), 
+					t.getId(),
+					t.getCreated(), t.getModified(), 
+					0l, null));
+		}
+		return ts;
 	}	
 	
 	@GET
 	@Path("/{tag}/{start}/{limit}")
 	@Produces(MediaType.APPLICATION_JSON)	
 	@ApiOperation(value = "Lists threads by tag, mostly recently created first", responseClass="org.denevell.natch.serv.posts.resources.ListPostsResource")
-	public ListPostsResource listThreadsByTag(
+	public ThreadsResource listThreadsByTag(
 			@ApiParam(name="tag") @PathParam("tag")  String tag,
 		@ApiParam(name="start") @PathParam("start") int start, 	
 		@ApiParam(name="limit") @PathParam("limit") int limit 	
@@ -140,8 +154,9 @@ public class ThreadsREST {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
 		} else {
-			ListPostsResource adaptedPosts = new ListThreadsResourceAdapter(threads);
-			return adaptedPosts;
+			List<ThreadResource> ts = threadEntitiesToThreadOverview(threads);
+			ThreadsResource t = new ThreadsResource(ts, 0, 0);
+			return t;
 		}		
 	}	
 
