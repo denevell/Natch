@@ -134,7 +134,7 @@ public class ThreadModel {
 	public String edit(UserEntity userEntity, long threadId, ThreadEntity entity) {
 		EntityTransaction trans = mEntityManager.getTransaction();
 		try {
-			if(checkInputParams(userEntity, entity) || threadId<1) {
+			if(checkInputParams(entity) || threadId<1) {
 				Log.info(this.getClass(), "Edit user: Bad user input");
 				return BAD_USER_INPUT;
 			}
@@ -162,11 +162,8 @@ public class ThreadModel {
 		} 
 	}	
 	
-	private boolean checkInputParams(UserEntity user, ThreadEntity pe) {
-		return  user==null || 
-				user.getUsername()==null || 
-				user.getUsername().trim().length()==0 ||
-				pe==null ||
+	private boolean checkInputParams(ThreadEntity pe) {
+		return  pe==null ||
 				pe.getSubject()==null ||
 				pe.getContent()==null ||
 				pe.getSubject().trim().length()==0 ||

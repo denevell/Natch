@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -18,17 +19,22 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.log4j.Logger;
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.threads.AddThreadResourceInput;
 import org.denevell.natch.io.threads.AddThreadResourceReturnData;
+import org.denevell.natch.io.threads.EditThreadResourceInput;
+import org.denevell.natch.io.threads.EditThreadResourceReturnData;
 import org.denevell.natch.io.threads.ThreadResource;
 import org.denevell.natch.io.threads.ThreadsResource;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
+import com.wordnik.swagger.annotations.ApiError;
+import com.wordnik.swagger.annotations.ApiErrors;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
@@ -177,5 +183,48 @@ public class ThreadsREST {
 		long currentPage = (long) Math.ceil(page);
 		return currentPage;
 	}
+	
+	@POST
+	@Path("/edit/{id}") // Explicit for the servlet filter
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Edit a thread", notes="Must contain the AuthKey header.",
+		responseClass="org.denevell.natch.serv.posts.resources.EditPostResourceReturnData")
+	@ApiErrors({
+		@ApiError(code=401, reason="Incorrect AuthKey header.")
+	})	
+	public EditThreadResourceReturnData edit(
+			@ApiParam(name="id") @PathParam(value="id") long postId, 
+			@ApiParam(name="editParam") EditThreadResourceInput editPostResource) {
+		EditThreadResourceReturnData ret = new EditThreadResourceReturnData();
+		try {
+			mModel.init();
+			ret.setSuccessful(false);
+			UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+			String result = mModel.edit(userEntity, postId, null); 
+			generateEditReturnResource(ret, result);
+			return ret;
+		} catch(Exception e) {
+			Logger.getLogger(getClass()).error("Couldn't edit thread: ",  e);
+			ret.setError(rb.getString(Strings.unknown_error));
+			return ret;
+		} finally {
+			mModel.close();
+		} 		
+	}
+
+	private void generateEditReturnResource(EditThreadResourceReturnData ret,
+			String result) {
+		if(result.equals(PostsModel.EDITED)) {
+			ret.setSuccessful(true);
+		} else if(result.equals(PostsModel.DOESNT_EXIST)) {
+			ret.setError(rb.getString(Strings.post_doesnt_exist));
+		} else if(result.equals(PostsModel.NOT_YOURS_TO_DELETE)) {
+			ret.setError(rb.getString(Strings.post_not_yours));
+		} else if(result.equals(PostsModel.UNKNOWN_ERROR)) {
+			ret.setError(rb.getString(Strings.unknown_error));
+		} else if(result.equals(PostsModel.BAD_USER_INPUT)) {
+			ret.setError(rb.getString(Strings.post_fields_cannot_be_blank));
+		}
+	}	
 
 }
