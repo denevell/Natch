@@ -3,14 +3,22 @@
 The start of a REST interface for a forum.
 
 ### Current
-* Test performance with multiple connections
-* Re-enable db locking 
+* #: Refactor list thread model to have subject, thread etc and a list of paginated posts.
+* Tech task: Functional tests for listing threads
+* Tech task: Model unit tests for editing a thread
+* Tech task: Resource unit tests for editing a thread
+* Tech task: Functional tests for editing a thread
+* Tech task: Functional tests for listing threads when edited
+* Tech task: Model unit tests for deleting a thread
+* Tech task: Resource unit tests for deleting a thread
+* Tech task: Functional tests for deleting a thread
 
 ### Backlog
 
-* #: Refactor list thread model to have subject, thread etc and a list of paginated posts.
-* #: Change ListPostResources to a thread specific entity. 
-* #: Test for still getting 5 posts if one root, but not the thread, is deleted.
+* Get number of posts from the list threads call
+* Fuctional test for listing threads when last post in thread was deleted
+* Test performance with multiple connections
+* Re-enable db locking 
 
 ### Dev complete
 
@@ -91,6 +99,7 @@ The start of a REST interface for a forum.
 * ~~Tech task: Map sql via xml, to ease changes of database / provider, database migration~~
 * ~~Tech task: Cannot pass in single item tags list.~~
 * ~~Tech task: Escape text in tags.~~
+* ~~Tech task: Change ListPostResources to a thread specific entity.~~ 
 
 ### Icebox 
 
