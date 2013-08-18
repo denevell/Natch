@@ -166,8 +166,7 @@ public class ThreadModel {
 		} 
 	}
 
-	public void updateThread(String subject, String content, List<String> tags,
-			ThreadEntity pe) {
+	private void updateThread(String subject, String content, List<String> tags, ThreadEntity pe) {
 		pe.setSubject(subject);
 		pe.setContent(content);
 		pe.setTags(tags);
@@ -175,11 +174,40 @@ public class ThreadModel {
 	}	
 	
 	private boolean checkInputParams(String subject, String content) {
-		return  
-				content==null ||
+		return  content==null ||
 				subject==null ||
 				subject.trim().length()==0 ||
 				content.trim().length()==0;
+	}	
+	
+	public String delete(UserEntity userEntity, long postEntityId) {
+		EntityTransaction trans = mEntityManager.getTransaction();
+		try {
+			if(userEntity==null) {
+				Log.info(getClass(), "No user passed to delete method.");
+				return UNKNOWN_ERROR;
+			}
+			ThreadEntity pe = findThreadById(postEntityId);
+			if(pe==null) {
+				return DOESNT_EXIST;
+			} else if(!pe.getUser().getUsername().equals(userEntity.getUsername())) {
+				return NOT_YOURS_TO_DELETE;
+			}
+			trans.begin();
+			mEntityManager.remove(pe);
+			trans.commit();
+			return DELETED;
+		} catch(Exception e) {
+			Log.info(getClass(), "Error deleting: " + e.toString());
+			e.printStackTrace();
+			try {
+				trans.rollback();
+			} catch(Exception e1) {
+				Log.info(getClass(), "Error rolling back: " + e.toString());
+				e1.printStackTrace();
+			}
+			return UNKNOWN_ERROR;
+		} 
 	}	
 	
 }
