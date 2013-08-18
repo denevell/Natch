@@ -91,37 +91,4 @@ public class DeletePostModelTests {
 		assertEquals(PostsModel.DOESNT_EXIST, result);
 	}
 	
-	@Test
-	public void shouldReturnUnknownErrorOnException() {
-		// Arrange
-		long num = 1;
-		PostEntity post = new PostEntity();
-		post.setUser(new UserEntity("this_person", null));
-		doThrow(new RuntimeException()).when(model).findPostById(num);
-		UserEntity userEntity = new UserEntity();
-		userEntity.setUsername("this_person");
-		
-		// Act
-		String result = model.delete(userEntity, num);
-		
-		// Verify
-		assertEquals(PostsModel.UNKNOWN_ERROR, result);
-	}
-	
-	@Test
-	public void shouldReturnUnknownErorrOnNullUser() {
-		// Arrange
-		long num = 1;
-		PostEntity post = new PostEntity();
-		post.setUser(new UserEntity("this_person", null));
-		doThrow(new RuntimeException()).when(model).findPostById(num);
-		UserEntity userEntity = new UserEntity();
-		userEntity.setUsername("this_person");
-		
-		// Act
-		String result = model.delete(null, num);
-		
-		// Verify
-		assertEquals(PostsModel.UNKNOWN_ERROR, result);
-	}
 }

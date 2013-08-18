@@ -74,18 +74,6 @@ public class ListPostByIdModelTests {
 	}
 	
 	@Test
-	public void shouldntFindPostOnException() {
-		// Arrange
-		when(entityManager.createNamedQuery(PostEntity.NAMED_QUERY_FIND_BY_ID, PostEntity.class)).thenThrow(new RuntimeException());
-		
-		// Act
-		PostEntity result = model.findPostById(1l);
-		
-		// Verify
-		assertNull(result);
-	}
-	
-	@Test
 	public void shouldntFindPostOnEmptyList() {
 		// Arrange
 		List<PostEntity> list = new ArrayList<PostEntity>();

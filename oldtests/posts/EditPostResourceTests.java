@@ -90,19 +90,5 @@ public class EditPostResourceTests {
 		assertEquals("Error json", rb.getString(Strings.post_doesnt_exist), result.getError());
 	}
 	
-	@Test
-	public void shouldShowUnknownErrorOnException() {
-		// Arrange
-		EditPostResource editPostResource = null;
-		long postEntityId = 1l;
-		when(postsModel.edit(user, postEntityId, postEntityAdapter)).thenThrow(new RuntimeException());
-		
-		// Act
-		EditPostResourceReturnData result = resource.edit(postEntityId, editPostResource);
-		
-		// Assert
-		assertFalse(result.isSuccessful());
-		assertEquals("Error json", rb.getString(Strings.unknown_error), result.getError());
-	}
 		
 }

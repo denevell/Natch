@@ -72,7 +72,7 @@ public class DeletePostResourceTests {
 	}
 	
 	@Test
-	public void shouldShowUnknownPostError() {
+	public void shouldShowDoesntExistPostError() {
 		// Arrange
 		long postEntityId = 1l;
 		when(postsModel.delete(user, postEntityId)).thenReturn(PostsModel.DOESNT_EXIST);
@@ -85,18 +85,4 @@ public class DeletePostResourceTests {
 		assertEquals("Error json", rb.getString(Strings.post_doesnt_exist), result.getError());
 	}
 	
-	@Test
-	public void shouldShowUnknownErrorOnException() {
-		// Arrange
-		long postEntityId = 1l;
-		when(postsModel.delete(user, postEntityId)).thenThrow(new RuntimeException());
-		
-		// Act
-		DeletePostResourceReturnData result = resource.delete(postEntityId);
-		
-		// Assert
-		assertFalse(result.isSuccessful());
-		assertEquals("Error json", rb.getString(Strings.unknown_error), result.getError());
-	}
-		
 }
