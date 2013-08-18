@@ -18,7 +18,7 @@
 	  <url-pattern>/rest/post/edit/*</url-pattern>
 	  <url-pattern>/rest/post/del/*</url-pattern>
 	  <url-pattern>/rest/threads/add</url-pattern>
-	  <url-pattern>/rest/threads/edit</url-pattern>
+	  <url-pattern>/rest/threads/edit/*</url-pattern>
 	</filter-mapping>	
 	
 	<listener>

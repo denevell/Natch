@@ -106,6 +106,12 @@ public class ListThreadsFunctional {
 		assertEquals("cont", returnData.getThreads().get(1).getContent());
 		assertEquals("a", returnData.getThreads().get(1).getTags().get(0));
 	}
+	
+	public static ThreadsResource listTenThreads(WebResource service) {
+		return service
+		.path("rest").path("threads").path("0").path("10")
+    	.get(ThreadsResource.class); 
+	}
 //	@Test
 //	public void shouldListThreadsWithLastModifiedContentFirst() {	
 //		// Arrange
