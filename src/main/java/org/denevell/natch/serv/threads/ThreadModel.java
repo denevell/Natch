@@ -118,19 +118,6 @@ public class ThreadModel {
 		if(resultList==null) return new ArrayList<ThreadEntity>();
 		else return resultList;
 	}	
-	
-	public ThreadEntity findThreadById(long id) {
-		try {
-			TypedQuery<ThreadEntity> q = mEntityManager
-					.createNamedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID, ThreadEntity.class);
-			q.setParameter(ThreadEntity.NAMED_QUERY_PARAM_ID, id);
-			ThreadEntity result = q.getSingleResult();		
-			return result;
-		} catch(Exception e) {
-			Log.info(getClass(), "Error finding thread by id: " + e.toString());
-			return null;
-		} 
-	}	
 
 	public String edit(UserEntity userEntity, long threadId, 
 			String subject, 
@@ -166,20 +153,6 @@ public class ThreadModel {
 		} 
 	}
 
-	private void updateThread(String subject, String content, List<String> tags, ThreadEntity pe) {
-		pe.setSubject(subject);
-		pe.setContent(content);
-		pe.setTags(tags);
-		pe.setModified(new Date().getTime());
-	}	
-	
-	private boolean checkInputParams(String subject, String content) {
-		return  content==null ||
-				subject==null ||
-				subject.trim().length()==0 ||
-				content.trim().length()==0;
-	}	
-	
 	public String delete(UserEntity userEntity, long postEntityId) {
 		EntityTransaction trans = mEntityManager.getTransaction();
 		try {
@@ -209,6 +182,34 @@ public class ThreadModel {
 			return UNKNOWN_ERROR;
 		} 
 	}	
+	
+	private void updateThread(String subject, String content, List<String> tags, ThreadEntity pe) {
+		pe.setSubject(subject);
+		pe.setContent(content);
+		pe.setTags(tags);
+		pe.setModified(new Date().getTime());
+	}	
+	
+	private boolean checkInputParams(String subject, String content) {
+		return  content==null ||
+				subject==null ||
+				subject.trim().length()==0 ||
+				content.trim().length()==0;
+	}	
+
+	private ThreadEntity findThreadById(long id) {
+		try {
+			TypedQuery<ThreadEntity> q = mEntityManager
+					.createNamedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID, ThreadEntity.class);
+			q.setParameter(ThreadEntity.NAMED_QUERY_PARAM_ID, id);
+			ThreadEntity result = q.getSingleResult();		
+			return result;
+		} catch(Exception e) {
+			Log.info(getClass(), "Error finding thread by id: " + e.toString());
+			return null;
+		} 
+	}	
+	
 	
 }
 	

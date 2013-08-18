@@ -2,7 +2,6 @@ package org.denevell.natch.tests.unit.threads;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -12,6 +11,7 @@ import java.util.ArrayList;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
 
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
@@ -44,7 +44,10 @@ public class EditThreadModelTests {
 		// Arrange
 		UserEntity userEntity = new UserEntity("this_person", null);
 		ThreadEntity thread = new ThreadEntity("s", "c", null, userEntity);
-		doReturn(thread).when(model).findThreadById(1);
+		@SuppressWarnings("unchecked")
+		TypedQuery<ThreadEntity> q = mock(TypedQuery.class);
+		when(entityManager.createNamedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID, ThreadEntity.class)).thenReturn(q);
+		when(q.getSingleResult()).thenReturn(thread);					
 		@SuppressWarnings("serial")
 		ArrayList<String> tags = new ArrayList<String>() {{ add("t"); }};
 		long lastModified = thread.getModified();
@@ -66,7 +69,10 @@ public class EditThreadModelTests {
 		UserEntity userEntity = new UserEntity("this_person", null);
 		UserEntity otherUserEntity = new UserEntity("that_person", null);
 		ThreadEntity thread = new ThreadEntity("s", "c", null, userEntity);
-		doReturn(thread).when(model).findThreadById(1);
+		@SuppressWarnings("unchecked")
+		TypedQuery<ThreadEntity> q = mock(TypedQuery.class);
+		when(entityManager.createNamedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID, ThreadEntity.class)).thenReturn(q);
+		when(q.getSingleResult()).thenReturn(thread);					
 		
 		// Act
 		String result = model.edit(otherUserEntity, 1, "x", "x", null);
@@ -79,7 +85,10 @@ public class EditThreadModelTests {
 	public void shouldReturnNotFound() {
 		// Arrange
 		UserEntity otherUserEntity = new UserEntity("that_person", null);
-		doReturn(null).when(model).findThreadById(1);
+		@SuppressWarnings("unchecked")
+		TypedQuery<ThreadEntity> q = mock(TypedQuery.class);
+		when(entityManager.createNamedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID, ThreadEntity.class)).thenReturn(q);
+		when(q.getSingleResult()).thenReturn(null);					
 		
 		// Act
 		String result = model.edit(otherUserEntity, 1, "x", "x", null);
@@ -93,7 +102,10 @@ public class EditThreadModelTests {
 		// Arrange
 		UserEntity userEntity = new UserEntity("this_person", null);
 		ThreadEntity thread = new ThreadEntity("s", "c", null, userEntity);
-		doReturn(thread).when(model).findThreadById(1);
+		@SuppressWarnings("unchecked")
+		TypedQuery<ThreadEntity> q = mock(TypedQuery.class);
+		when(entityManager.createNamedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID, ThreadEntity.class)).thenReturn(q);
+		when(q.getSingleResult()).thenReturn(thread);			
 		
 		// Act
 		String result = model.edit(userEntity, 1, " ", " ", null);
@@ -107,7 +119,10 @@ public class EditThreadModelTests {
 		// Arrange
 		UserEntity userEntity = new UserEntity("this_person", null);
 		ThreadEntity thread = new ThreadEntity("s", "c", null, userEntity);
-		doReturn(thread).when(model).findThreadById(1);
+		@SuppressWarnings("unchecked")
+		TypedQuery<ThreadEntity> q = mock(TypedQuery.class);
+		when(entityManager.createNamedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID, ThreadEntity.class)).thenReturn(q);
+		when(q.getSingleResult()).thenReturn(thread);					
 		
 		// Act
 		String result = model.edit(userEntity, 1, null, null, null);
