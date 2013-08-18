@@ -12,10 +12,11 @@ The start of a REST interface for a forum.
 * ~~Tech task: Resource unit tests for deleting a thread~~
 * ~~Tech task: Functional tests for deleting a thread~~
 * ~~Tech task: Functional tests for listing threads when edited~~
-* Tech task: Method to list all the posts in a thread
+* ~~Tech task: What about a thread text is updated but the latest post has not?~~ 
 * Tech task: Unit tests for add post
 * Tech task: Resource tests for add post
 * Tech task: Functional tests for add post
+* Tech task: Method to list all the posts in a thread
 * Tech task: Unit tests for edit post
 * Tech task: Resource tests for edit post
 * Tech task: Functional tests for edit post
@@ -25,7 +26,6 @@ The start of a REST interface for a forum.
 * Tech task: Functional tests for listing threads when added a new post 
 * Tech task: Functional tests for listing threads when edited a latest post
 * Tech task: Functional tests for listing threads when deleted a latest post
-* What about a thread text is updated but the latest post has not? 
 
 ### Backlog
 

@@ -1,6 +1,7 @@
 package org.denevell.natch.tests.functional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
@@ -114,7 +115,6 @@ public class ListThreadsFunctional {
     	.get(ThreadsResource.class); 
 	}
 	
-	@SuppressWarnings("serial")
 	@Test
 	public void shouldListThreadsWithLastModifiedFist() {
 		// Arrange 

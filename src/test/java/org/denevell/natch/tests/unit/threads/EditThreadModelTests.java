@@ -1,12 +1,14 @@
 package org.denevell.natch.tests.unit.threads;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -40,7 +42,32 @@ public class EditThreadModelTests {
 	}
 	
 	@Test
-	public void shouldEditPost() {
+	public void shouldntUpdatedThreadModifiedIfTheThreadHasOtherPosts() {
+		// Arrange
+		UserEntity userEntity = new UserEntity("this_person", null);
+		ThreadEntity thread = new ThreadEntity("s", "c", null, userEntity);
+		thread.setThreadModified(new Date().getTime()+1000); // So it looks like we're got new posts
+		@SuppressWarnings("unchecked")
+		TypedQuery<ThreadEntity> q = mock(TypedQuery.class);
+		when(entityManager.createNamedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID, ThreadEntity.class)).thenReturn(q);
+		when(q.getSingleResult()).thenReturn(thread);					
+		@SuppressWarnings("serial")
+		ArrayList<String> tags = new ArrayList<String>() {{ add("t"); }};
+		long lastModified = thread.getModified();
+		long lastThreadModified = thread.getThreadModified();
+		assertNotEquals(lastModified, lastThreadModified); // So we 'know' there are other posts in this thread
+		
+		// Act
+		String result = model.edit(userEntity, 1, "x", "xx", tags);
+		
+		// Assert 
+		assertEquals(ThreadsModel.EDITED, result);
+		assertTrue("Have updated modified date stamp", thread.getModified()>lastModified);
+		assertTrue("Have updated modified date stamp", thread.getThreadModified()==lastThreadModified);
+	}
+	
+	@Test
+	public void shouldEditThread() {
 		// Arrange
 		UserEntity userEntity = new UserEntity("this_person", null);
 		ThreadEntity thread = new ThreadEntity("s", "c", null, userEntity);
@@ -63,7 +90,7 @@ public class EditThreadModelTests {
 		assertEquals("x", thread.getSubject());
 		assertEquals("xx", thread.getContent());
 		assertEquals(tags, thread.getTags());
-	}
+	}	
 	
 	@Test
 	public void shouldReturnUnAuthorised() {

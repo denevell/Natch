@@ -17,6 +17,8 @@ import org.denevell.natch.utils.EntityUtils;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Log;
 
+import sun.print.PeekGraphics;
+
 public class ThreadModel {
 
 	public final static String EDITED = "edited";
@@ -188,7 +190,15 @@ public class ThreadModel {
 		pe.setContent(content);
 		pe.setTags(tags);
 		long time = new Date().getTime();
-		pe.setThreadModified(time);
+		// Only say the thread's been updated if we only have
+		// this in the thread so far.
+		// (If we indeed do only have the thread text, the 
+		// thread modified and modified time should be the same)
+		// This saves us from seeing an 'updated' them when all that's
+		// happened is the thread author has changed the initial text
+		if(pe.getModified()==pe.getThreadModified()) {
+			pe.setThreadModified(time);
+		}
 		pe.setModified(time);
 	}	
 	
