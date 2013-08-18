@@ -9,7 +9,7 @@ The start of a REST interface for a forum.
 * ~~Tech task: Resource unit tests for editing a thread~~
 * ~~Tech task: Functional tests for editing a thread~~
 * ~~Tech task: Model unit tests for deleting a thread~~
-* Tech task: Resource unit tests for deleting a thread
+* ~~Tech task: Resource unit tests for deleting a thread~~
 * Tech task: Functional tests for deleting a thread
 * Tech task: Functional tests for listing threads when edited
 

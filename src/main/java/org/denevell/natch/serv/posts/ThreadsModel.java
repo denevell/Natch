@@ -15,7 +15,7 @@ import org.denevell.natch.utils.EntityUtils;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Log;
 
-public class PostsModel {
+public class ThreadsModel {
 
 	public final static String EDITED = "edited";
 	public final static String DELETED = "deleted";
@@ -27,7 +27,7 @@ public class PostsModel {
 	private EntityManager mEntityManager;
 	private ThreadFactory mThreadFactory;
 	
-	public PostsModel() {
+	public ThreadsModel() {
 		mThreadFactory = new ThreadFactory();
 	}
 	
@@ -43,7 +43,7 @@ public class PostsModel {
 	/**
 	 * For testing / di
 	 */
-	public PostsModel(EntityManagerFactory factory, EntityManager entityManager, ThreadFactory threadFactory) {
+	public ThreadsModel(EntityManagerFactory factory, EntityManager entityManager, ThreadFactory threadFactory) {
 		mEntityManager = entityManager;
 		mThreadFactory = threadFactory;
 	}

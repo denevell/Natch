@@ -15,7 +15,7 @@ import javax.persistence.TypedQuery;
 
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.serv.posts.PostsModel;
+import org.denevell.natch.serv.posts.ThreadsModel;
 import org.denevell.natch.serv.posts.ThreadFactory;
 import org.denevell.natch.serv.threads.ThreadModel;
 import org.junit.Before;
@@ -56,7 +56,7 @@ public class EditThreadModelTests {
 		String result = model.edit(userEntity, 1, "x", "xx", tags);
 		
 		// Assert 
-		assertEquals(PostsModel.EDITED, result);
+		assertEquals(ThreadsModel.EDITED, result);
 		assertTrue("Have updated modified date stamp", thread.getModified()>lastModified);
 		assertEquals("x", thread.getSubject());
 		assertEquals("xx", thread.getContent());
@@ -78,7 +78,7 @@ public class EditThreadModelTests {
 		String result = model.edit(otherUserEntity, 1, "x", "x", null);
 		
 		// Assert 
-		assertEquals(PostsModel.NOT_YOURS_TO_DELETE, result);
+		assertEquals(ThreadsModel.NOT_YOURS_TO_DELETE, result);
 	}
 
 	@Test
@@ -94,7 +94,7 @@ public class EditThreadModelTests {
 		String result = model.edit(otherUserEntity, 1, "x", "x", null);
 		
 		// Assert 
-		assertEquals(PostsModel.DOESNT_EXIST, result);
+		assertEquals(ThreadsModel.DOESNT_EXIST, result);
 	}
 
 	@Test
@@ -111,7 +111,7 @@ public class EditThreadModelTests {
 		String result = model.edit(userEntity, 1, " ", " ", null);
 		
 		// Assert 
-		assertEquals(PostsModel.BAD_USER_INPUT, result);
+		assertEquals(ThreadsModel.BAD_USER_INPUT, result);
 	}
 	
 	@Test
@@ -128,7 +128,7 @@ public class EditThreadModelTests {
 		String result = model.edit(userEntity, 1, null, null, null);
 		
 		// Assert 
-		assertEquals(PostsModel.BAD_USER_INPUT, result);
+		assertEquals(ThreadsModel.BAD_USER_INPUT, result);
 	}
 
 }

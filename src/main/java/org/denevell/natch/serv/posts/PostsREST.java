@@ -48,12 +48,12 @@ public class PostsREST {
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
-	private PostsModel mModel;
+	private ThreadsModel mModel;
 	private EditPostResourcePostEntityAdapter mEditPostAdapter;
 	private AddPostResourcePostEntityAdapter mAddPostAdapter;
 	
 	public PostsREST() {
-		mModel = new PostsModel();
+		mModel = new ThreadsModel();
 		mEditPostAdapter = new EditPostResourcePostEntityAdapter();
 		mAddPostAdapter = new AddPostResourcePostEntityAdapter();
 	}
@@ -62,7 +62,7 @@ public class PostsREST {
 	 * For DI testing.
 	 * @param editPostAdapter 
 	 */
-	public PostsREST(PostsModel postModel, HttpServletRequest request, HttpServletResponse response, EditPostResourcePostEntityAdapter editPostAdapter, AddPostResourcePostEntityAdapter addPostAdapter) {
+	public PostsREST(ThreadsModel postModel, HttpServletRequest request, HttpServletResponse response, EditPostResourcePostEntityAdapter editPostAdapter, AddPostResourcePostEntityAdapter addPostAdapter) {
 		mModel = postModel;
 		mRequest = request;
 		mResponse = response;
@@ -105,17 +105,17 @@ public class PostsREST {
 	}
 
 	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, String okay, AddPostResourcePostEntityAdapter adapterThatCreatePost) {
-		if(okay.equals(PostsModel.ADDED)) {
+		if(okay.equals(ThreadsModel.ADDED)) {
 			if(adapterThatCreatePost!=null && adapterThatCreatePost.getCreatedPost()!=null) {
 				regReturnData.setThreadId(adapterThatCreatePost.getCreatedPost().getThreadId());
 			} else {
 				Log.info(getClass(), "Added a post but the thread id was null when sending the json response...");
 			}
 			regReturnData.setSuccessful(true);
-		} else if(okay.equals(PostsModel.BAD_USER_INPUT)) {
+		} else if(okay.equals(ThreadsModel.BAD_USER_INPUT)) {
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
-		} else if(okay.equals(PostsModel.UNKNOWN_ERROR)){
+		} else if(okay.equals(ThreadsModel.UNKNOWN_ERROR)){
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.unknown_error));
 		} else {
@@ -251,13 +251,13 @@ public class PostsREST {
 	}
 
 	private void generateDeleteReturnResource(String result, DeletePostResourceReturnData ret, UserEntity userEntity) {
-		if(result.equals(PostsModel.DELETED)) {
+		if(result.equals(ThreadsModel.DELETED)) {
 			ret.setSuccessful(true);
-		} else if(result.equals(PostsModel.DOESNT_EXIST)) {
+		} else if(result.equals(ThreadsModel.DOESNT_EXIST)) {
 			ret.setError(rb.getString(Strings.post_doesnt_exist));
-		} else if(result.equals(PostsModel.NOT_YOURS_TO_DELETE)) {
+		} else if(result.equals(ThreadsModel.NOT_YOURS_TO_DELETE)) {
 			ret.setError(rb.getString(Strings.post_not_yours));
-		} else if(result.equals(PostsModel.UNKNOWN_ERROR)) {
+		} else if(result.equals(ThreadsModel.UNKNOWN_ERROR)) {
 			ret.setError(rb.getString(Strings.unknown_error));
 		}
 	}
@@ -297,15 +297,15 @@ public class PostsREST {
 
 	private void generateEditReturnResource(EditPostResourceReturnData ret,
 			String result) {
-		if(result.equals(PostsModel.EDITED)) {
+		if(result.equals(ThreadsModel.EDITED)) {
 			ret.setSuccessful(true);
-		} else if(result.equals(PostsModel.DOESNT_EXIST)) {
+		} else if(result.equals(ThreadsModel.DOESNT_EXIST)) {
 			ret.setError(rb.getString(Strings.post_doesnt_exist));
-		} else if(result.equals(PostsModel.NOT_YOURS_TO_DELETE)) {
+		} else if(result.equals(ThreadsModel.NOT_YOURS_TO_DELETE)) {
 			ret.setError(rb.getString(Strings.post_not_yours));
-		} else if(result.equals(PostsModel.UNKNOWN_ERROR)) {
+		} else if(result.equals(ThreadsModel.UNKNOWN_ERROR)) {
 			ret.setError(rb.getString(Strings.unknown_error));
-		} else if(result.equals(PostsModel.BAD_USER_INPUT)) {
+		} else if(result.equals(ThreadsModel.BAD_USER_INPUT)) {
 			ret.setError(rb.getString(Strings.post_fields_cannot_be_blank));
 		}
 	}

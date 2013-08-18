@@ -1,10 +1,10 @@
 package org.denevell.natch.tests.unit.threads;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import javax.persistence.EntityManager;
@@ -12,10 +12,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
-import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.serv.posts.PostsModel;
+import org.denevell.natch.serv.posts.ThreadsModel;
 import org.denevell.natch.serv.posts.ThreadFactory;
 import org.denevell.natch.serv.threads.ThreadModel;
 import org.junit.Before;
@@ -28,7 +27,6 @@ public class DeleteThreadModelTests {
 	private EntityManagerFactory factory;
 	private EntityManager entityManager;
 	private ThreadFactory threadFactory;
-	private ThreadEntity threadEntity;
 
 	@Before
 	public void setup() {
@@ -38,7 +36,6 @@ public class DeleteThreadModelTests {
 		when(entityManager.getTransaction()).thenReturn(trans);
 		threadFactory = mock(ThreadFactory.class);
 		model = spy(new ThreadModel(factory, entityManager, threadFactory));
-		threadEntity = mock(ThreadEntity.class);
 	}
 	
 	@Test
@@ -55,7 +52,8 @@ public class DeleteThreadModelTests {
 		String result = model.delete(userEntity, num);
 		
 		// Verify
-		assertEquals(PostsModel.DELETED, result);
+		assertEquals(ThreadsModel.DELETED, result);
+		verify(entityManager).remove(thread);
 	}
 
 	public void returnThreadFromEntityManager(ThreadEntity thread) {
@@ -79,7 +77,8 @@ public class DeleteThreadModelTests {
 		String result = model.delete(userEntity, num);
 		
 		// Verify
-		assertEquals(PostsModel.NOT_YOURS_TO_DELETE, result);
+		assertEquals(ThreadsModel.NOT_YOURS_TO_DELETE, result);
+		verify(entityManager, never()).remove(post);
 	}
 	
 	@Test
@@ -94,7 +93,7 @@ public class DeleteThreadModelTests {
 		String result = model.delete(userEntity, num);
 		
 		// Verify
-		assertEquals(PostsModel.DOESNT_EXIST, result);
+		assertEquals(ThreadsModel.DOESNT_EXIST, result);
 	}
 	
 }
