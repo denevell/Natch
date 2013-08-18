@@ -51,6 +51,7 @@ public class EditThreadModelTests {
 		@SuppressWarnings("serial")
 		ArrayList<String> tags = new ArrayList<String>() {{ add("t"); }};
 		long lastModified = thread.getModified();
+		long lastThreadModified = thread.getThreadModified();
 		
 		// Act
 		String result = model.edit(userEntity, 1, "x", "xx", tags);
@@ -58,6 +59,7 @@ public class EditThreadModelTests {
 		// Assert 
 		assertEquals(ThreadsModel.EDITED, result);
 		assertTrue("Have updated modified date stamp", thread.getModified()>lastModified);
+		assertTrue("Have updated modified date stamp", thread.getThreadModified()>lastThreadModified);
 		assertEquals("x", thread.getSubject());
 		assertEquals("xx", thread.getContent());
 		assertEquals(tags, thread.getTags());

@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.io.posts.EditPostResource;
 import org.denevell.natch.io.threads.AddThreadResourceInput;
+import org.denevell.natch.io.threads.EditThreadResourceInput;
 import org.denevell.natch.io.threads.EditThreadResourceReturnData;
 import org.denevell.natch.io.threads.ThreadResource;
 import org.denevell.natch.io.threads.ThreadsResource;
@@ -26,7 +27,7 @@ import com.sun.jersey.api.client.WebResource;
 
 public class EditThreadFunctional {
 	
-	private WebResource service;
+	private static WebResource service;
 	private LoginResourceReturnData loginResult;
 	private AddThreadResourceInput initalInput;
 	private ThreadResource initialThread;
@@ -186,5 +187,17 @@ public class EditThreadFunctional {
 		assertFalse(editReturnData.isSuccessful());		
 		assertEquals(initalInput.getContent(), newListedPosts.getThreads().get(0).getContent());
 		assertEquals(initalInput.getSubject(), newListedPosts.getThreads().get(0).getSubject());
+	}
+	
+	public static EditThreadResourceReturnData edit(
+			WebResource service, String id, String authKey, EditThreadResourceInput editedInput) {
+		EditThreadResourceReturnData r = service
+		.path("rest").path("threads").path("edit")
+		.path(String.valueOf(id))
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", authKey)
+    	.post(EditThreadResourceReturnData.class, editedInput); 		
+		assertTrue("Edit was a success", r.isSuccessful());
+		return r;
 	}
 }

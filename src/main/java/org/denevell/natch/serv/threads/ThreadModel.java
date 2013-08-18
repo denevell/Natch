@@ -187,7 +187,9 @@ public class ThreadModel {
 		pe.setSubject(subject);
 		pe.setContent(content);
 		pe.setTags(tags);
-		pe.setModified(new Date().getTime());
+		long time = new Date().getTime();
+		pe.setThreadModified(time);
+		pe.setModified(time);
 	}	
 	
 	private boolean checkInputParams(String subject, String content) {

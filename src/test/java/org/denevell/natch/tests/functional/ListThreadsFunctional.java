@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.io.threads.AddThreadResourceInput;
+import org.denevell.natch.io.threads.EditThreadResourceInput;
 import org.denevell.natch.io.threads.ThreadsResource;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
@@ -112,6 +113,36 @@ public class ListThreadsFunctional {
 		.path("rest").path("threads").path("0").path("10")
     	.get(ThreadsResource.class); 
 	}
+	
+	@SuppressWarnings("serial")
+	@Test
+	public void shouldListThreadsWithLastModifiedFist() {
+		// Arrange 
+		AddThreadResourceInput input = new AddThreadResourceInput("sub", "cont");
+		AddThreadResourceInput input1 = new AddThreadResourceInput("sub1", "cont1");
+		AddThreadResourceInput input2 = new AddThreadResourceInput("sub2", "cont2");
+		AddThreadResourceInput input3 = new AddThreadResourceInput("sub3", "cont3");
+		AddThreadFunctional.addThread(input, service, loginResult.getAuthKey()); // Last
+		AddThreadFunctional.addThread(input1, service, loginResult.getAuthKey());  // Last
+		AddThreadFunctional.addThread(input2, service, loginResult.getAuthKey()); 
+		AddThreadFunctional.addThread(input3, service, loginResult.getAuthKey()); 
+		ThreadsResource oldThreads = ListThreadsFunctional.listTenThreads(service);
+		EditThreadResourceInput editInput = new EditThreadResourceInput("x", "x", null);
+		EditThreadFunctional.edit(service, 
+				String.valueOf(oldThreads.getThreads().get(3).getId()), 
+				loginResult.getAuthKey(), editInput);
+
+		// Act
+		ThreadsResource newThreadList = listTenThreads(service); 
+		
+		// Assert
+		assertEquals("sub3", oldThreads.getThreads().get(0).getSubject());
+		assertEquals("x", newThreadList.getThreads().get(0).getSubject());
+		assertEquals("sub3", newThreadList.getThreads().get(1).getSubject());
+		assertEquals(4, oldThreads.getThreads().size());
+		assertEquals(4, newThreadList.getThreads().size());
+	}		
+
 //	@Test
 //	public void shouldListThreadsWithLastModifiedContentFirst() {	
 //		// Arrange
