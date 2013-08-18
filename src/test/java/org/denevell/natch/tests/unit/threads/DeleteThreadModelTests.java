@@ -14,7 +14,7 @@ import javax.persistence.TypedQuery;
 
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.serv.posts.ThreadsModel;
+import org.denevell.natch.serv.posts.PostModel;
 import org.denevell.natch.serv.posts.ThreadFactory;
 import org.denevell.natch.serv.threads.ThreadModel;
 import org.junit.Before;
@@ -52,7 +52,7 @@ public class DeleteThreadModelTests {
 		String result = model.delete(userEntity, num);
 		
 		// Verify
-		assertEquals(ThreadsModel.DELETED, result);
+		assertEquals(PostModel.DELETED, result);
 		verify(entityManager).remove(thread);
 	}
 
@@ -77,7 +77,7 @@ public class DeleteThreadModelTests {
 		String result = model.delete(userEntity, num);
 		
 		// Verify
-		assertEquals(ThreadsModel.NOT_YOURS_TO_DELETE, result);
+		assertEquals(PostModel.NOT_YOURS_TO_DELETE, result);
 		verify(entityManager, never()).remove(post);
 	}
 	
@@ -93,7 +93,7 @@ public class DeleteThreadModelTests {
 		String result = model.delete(userEntity, num);
 		
 		// Verify
-		assertEquals(ThreadsModel.DOESNT_EXIST, result);
+		assertEquals(PostModel.DOESNT_EXIST, result);
 	}
 	
 }

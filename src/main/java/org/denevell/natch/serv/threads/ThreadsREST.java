@@ -30,7 +30,7 @@ import org.denevell.natch.io.threads.EditThreadResourceInput;
 import org.denevell.natch.io.threads.EditThreadResourceReturnData;
 import org.denevell.natch.io.threads.ThreadResource;
 import org.denevell.natch.io.threads.ThreadsResource;
-import org.denevell.natch.serv.posts.ThreadsModel;
+import org.denevell.natch.serv.posts.PostModel;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
@@ -85,10 +85,10 @@ public class ThreadsREST {
 	}	
 	
 	private void generateAddPostReturnResource(AddThreadResourceReturnData regReturnData, String okay) {
-		if(okay.equals(ThreadsModel.BAD_USER_INPUT)) {
+		if(okay.equals(PostModel.BAD_USER_INPUT)) {
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
-		} else if(okay.equals(ThreadsModel.UNKNOWN_ERROR)){
+		} else if(okay.equals(PostModel.UNKNOWN_ERROR)){
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.unknown_error));
 		} else { // Should be okay then
@@ -214,15 +214,15 @@ public class ThreadsREST {
 
 	private void generateEditReturnResource(EditThreadResourceReturnData ret,
 			String result) {
-		if(result.equals(ThreadsModel.EDITED)) {
+		if(result.equals(PostModel.EDITED)) {
 			ret.setSuccessful(true);
-		} else if(result.equals(ThreadsModel.DOESNT_EXIST)) {
+		} else if(result.equals(PostModel.DOESNT_EXIST)) {
 			ret.setError(rb.getString(Strings.post_doesnt_exist));
-		} else if(result.equals(ThreadsModel.NOT_YOURS_TO_DELETE)) {
+		} else if(result.equals(PostModel.NOT_YOURS_TO_DELETE)) {
 			ret.setError(rb.getString(Strings.post_not_yours));
-		} else if(result.equals(ThreadsModel.UNKNOWN_ERROR)) {
+		} else if(result.equals(PostModel.UNKNOWN_ERROR)) {
 			ret.setError(rb.getString(Strings.unknown_error));
-		} else if(result.equals(ThreadsModel.BAD_USER_INPUT)) {
+		} else if(result.equals(PostModel.BAD_USER_INPUT)) {
 			ret.setError(rb.getString(Strings.post_fields_cannot_be_blank));
 		}
 	}	
@@ -251,13 +251,13 @@ public class ThreadsREST {
 	}
 
 	private void generateDeleteReturnResource(String result, DeleteThreadResourceReturnData ret, UserEntity userEntity) {
-		if(result.equals(ThreadsModel.DELETED)) {
+		if(result.equals(PostModel.DELETED)) {
 			ret.setSuccessful(true);
-		} else if(result.equals(ThreadsModel.DOESNT_EXIST)) {
+		} else if(result.equals(PostModel.DOESNT_EXIST)) {
 			ret.setError(rb.getString(Strings.post_doesnt_exist));
-		} else if(result.equals(ThreadsModel.NOT_YOURS_TO_DELETE)) {
+		} else if(result.equals(PostModel.NOT_YOURS_TO_DELETE)) {
 			ret.setError(rb.getString(Strings.post_not_yours));
-		} else if(result.equals(ThreadsModel.UNKNOWN_ERROR)) {
+		} else if(result.equals(PostModel.UNKNOWN_ERROR)) {
 			ret.setError(rb.getString(Strings.unknown_error));
 		}
 	}	

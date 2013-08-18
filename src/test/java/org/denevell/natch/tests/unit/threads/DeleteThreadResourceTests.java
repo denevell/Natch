@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.threads.DeleteThreadResourceReturnData;
-import org.denevell.natch.serv.posts.ThreadsModel;
+import org.denevell.natch.serv.posts.PostModel;
 import org.denevell.natch.serv.threads.ThreadModel;
 import org.denevell.natch.serv.threads.ThreadsREST;
 import org.denevell.natch.utils.Strings;
@@ -43,7 +43,7 @@ public class DeleteThreadResourceTests {
 	public void shouldDeletePost() {
 		// Arrange
 		long postEntityId = 1l;
-		when(threadsModel.delete(user, postEntityId)).thenReturn(ThreadsModel.DELETED);
+		when(threadsModel.delete(user, postEntityId)).thenReturn(PostModel.DELETED);
 		
 		// Act
 		DeleteThreadResourceReturnData result = resource.delete(postEntityId);
@@ -57,7 +57,7 @@ public class DeleteThreadResourceTests {
 	public void shouldShowNotYoursError() {
 		// Arrange
 		long postEntityId = 1l;
-		when(threadsModel.delete(user, postEntityId)).thenReturn(ThreadsModel.NOT_YOURS_TO_DELETE);
+		when(threadsModel.delete(user, postEntityId)).thenReturn(PostModel.NOT_YOURS_TO_DELETE);
 		
 		// Act
 		DeleteThreadResourceReturnData result = resource.delete(postEntityId);
@@ -71,7 +71,7 @@ public class DeleteThreadResourceTests {
 	public void shouldShowDoesntExistPostError() {
 		// Arrange
 		long postEntityId = 1l;
-		when(threadsModel.delete(user, postEntityId)).thenReturn(ThreadsModel.DOESNT_EXIST);
+		when(threadsModel.delete(user, postEntityId)).thenReturn(PostModel.DOESNT_EXIST);
 		
 		// Act
 		DeleteThreadResourceReturnData result = resource.delete(postEntityId);

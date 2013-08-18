@@ -17,7 +17,7 @@ import javax.persistence.TypedQuery;
 
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.serv.posts.ThreadsModel;
+import org.denevell.natch.serv.posts.PostModel;
 import org.denevell.natch.serv.posts.ThreadFactory;
 import org.denevell.natch.serv.threads.ThreadModel;
 import org.junit.Before;
@@ -61,7 +61,7 @@ public class EditThreadModelTests {
 		String result = model.edit(userEntity, 1, "x", "xx", tags);
 		
 		// Assert 
-		assertEquals(ThreadsModel.EDITED, result);
+		assertEquals(PostModel.EDITED, result);
 		assertTrue("Have updated modified date stamp", thread.getModified()>lastModified);
 		assertTrue("Have updated modified date stamp", thread.getThreadModified()==lastThreadModified);
 	}
@@ -84,7 +84,7 @@ public class EditThreadModelTests {
 		String result = model.edit(userEntity, 1, "x", "xx", tags);
 		
 		// Assert 
-		assertEquals(ThreadsModel.EDITED, result);
+		assertEquals(PostModel.EDITED, result);
 		assertTrue("Have updated modified date stamp", thread.getModified()>lastModified);
 		assertTrue("Have updated modified date stamp", thread.getThreadModified()>lastThreadModified);
 		assertEquals("x", thread.getSubject());
@@ -107,7 +107,7 @@ public class EditThreadModelTests {
 		String result = model.edit(otherUserEntity, 1, "x", "x", null);
 		
 		// Assert 
-		assertEquals(ThreadsModel.NOT_YOURS_TO_DELETE, result);
+		assertEquals(PostModel.NOT_YOURS_TO_DELETE, result);
 	}
 
 	@Test
@@ -123,7 +123,7 @@ public class EditThreadModelTests {
 		String result = model.edit(otherUserEntity, 1, "x", "x", null);
 		
 		// Assert 
-		assertEquals(ThreadsModel.DOESNT_EXIST, result);
+		assertEquals(PostModel.DOESNT_EXIST, result);
 	}
 
 	@Test
@@ -140,7 +140,7 @@ public class EditThreadModelTests {
 		String result = model.edit(userEntity, 1, " ", " ", null);
 		
 		// Assert 
-		assertEquals(ThreadsModel.BAD_USER_INPUT, result);
+		assertEquals(PostModel.BAD_USER_INPUT, result);
 	}
 	
 	@Test
@@ -157,7 +157,7 @@ public class EditThreadModelTests {
 		String result = model.edit(userEntity, 1, null, null, null);
 		
 		// Assert 
-		assertEquals(ThreadsModel.BAD_USER_INPUT, result);
+		assertEquals(PostModel.BAD_USER_INPUT, result);
 	}
 
 }
