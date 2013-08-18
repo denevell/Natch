@@ -12,6 +12,16 @@ The start of a REST interface for a forum.
 * ~~Tech task: Resource unit tests for deleting a thread~~
 * ~~Tech task: Functional tests for deleting a thread~~
 * Tech task: Functional tests for listing threads when edited
+* Tech task: Method to list all the posts in a thread
+* Tech task: Unit tests for add post
+* Tech task: Resource tests for add post
+* Tech task: Functional tests for add post
+* Tech task: Unit tests for edit post
+* Tech task: Resource tests for edit post
+* Tech task: Functional tests for edit post
+* Tech task: Unit tests for del post
+* Tech task: Resource tests for del post
+* Tech task: Functional tests for del post
 
 ### Backlog
 

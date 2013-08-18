@@ -20,11 +20,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.log4j.Logger;
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.io.posts.DeletePostResourceReturnData;
 import org.denevell.natch.io.threads.AddThreadResourceInput;
 import org.denevell.natch.io.threads.AddThreadResourceReturnData;
 import org.denevell.natch.io.threads.DeleteThreadResourceReturnData;
