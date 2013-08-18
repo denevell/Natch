@@ -310,4 +310,12 @@ public class LoginFunctional {
 		assertTrue("Wanted to see a 401", false);		
 	}	
 	
+
+	public static LoginResourceReturnData login(LoginResourceInput loginInput, WebResource service) {
+		return service
+	    		.path("rest").path("user").path("login")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.post(LoginResourceReturnData.class, loginInput);
+	}	
+	
 }

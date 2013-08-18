@@ -160,5 +160,12 @@ public class RegisterFunctional {
 	public void shouldSaltPassword() {
 		// Completed non functional requirement
 	}
+
+	public static RegisterResourceReturnData register(RegisterResourceInput registerInput, WebResource service) {
+		return service
+	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
+	    	.put(RegisterResourceReturnData.class, registerInput);
+	}
+
 	
 }
