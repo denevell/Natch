@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.io.users.RegisterResourceInput;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
+import org.denevell.natch.io.users.UsernameAndPassword;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
@@ -161,7 +162,7 @@ public class RegisterFunctional {
 		// Completed non functional requirement
 	}
 
-	public static RegisterResourceReturnData register(RegisterResourceInput registerInput, WebResource service) {
+	public static RegisterResourceReturnData register(UsernameAndPassword registerInput, WebResource service) {
 		return service
 	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
 	    	.put(RegisterResourceReturnData.class, registerInput);
