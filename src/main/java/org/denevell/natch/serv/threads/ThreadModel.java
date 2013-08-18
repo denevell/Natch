@@ -1,6 +1,7 @@
 package org.denevell.natch.serv.threads;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -147,9 +148,7 @@ public class ThreadModel {
 			} else if(!pe.getUser().getUsername().equals(userEntity.getUsername())) {
 				return NOT_YOURS_TO_DELETE;
 			}
-			pe.setSubject(subject);
-			pe.setContent(content);
-			pe.setTags(tags);
+			updateThread(subject, content, tags, pe);
 			trans.begin();
 			mEntityManager.merge(pe);
 			trans.commit();
@@ -165,6 +164,14 @@ public class ThreadModel {
 			}
 			return UNKNOWN_ERROR;
 		} 
+	}
+
+	public void updateThread(String subject, String content, List<String> tags,
+			ThreadEntity pe) {
+		pe.setSubject(subject);
+		pe.setContent(content);
+		pe.setTags(tags);
+		pe.setModified(new Date().getTime());
 	}	
 	
 	private boolean checkInputParams(String subject, String content) {

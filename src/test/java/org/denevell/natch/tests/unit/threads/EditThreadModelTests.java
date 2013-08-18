@@ -1,10 +1,14 @@
 package org.denevell.natch.tests.unit.threads;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -42,12 +46,19 @@ public class EditThreadModelTests {
 		UserEntity userEntity = new UserEntity("this_person", null);
 		ThreadEntity thread = new ThreadEntity("s", "c", null, userEntity);
 		doReturn(thread).when(model).findThreadById(1);
+		@SuppressWarnings("serial")
+		ArrayList<String> tags = new ArrayList<String>() {{ add("t"); }};
+		long lastModified = thread.getModified();
 		
 		// Act
-		String result = model.edit(userEntity, 1, "x", "x", null);
+		String result = model.edit(userEntity, 1, "x", "xx", tags);
 		
 		// Assert 
 		assertEquals(PostsModel.EDITED, result);
+		assertTrue("Have updated modified date stamp", thread.getModified()>lastModified);
+		assertEquals("x", thread.getSubject());
+		assertEquals("xx", thread.getContent());
+		assertEquals(tags, thread.getTags());
 	}
 	
 	@Test
