@@ -42,10 +42,9 @@ public class EditThreadModelTests {
 		UserEntity userEntity = new UserEntity("this_person", null);
 		ThreadEntity thread = new ThreadEntity("s", "c", null, userEntity);
 		doReturn(thread).when(model).findThreadById(1);
-		ThreadEntity threadToBeEdited = new ThreadEntity("xxx", "xxx", null, null);
 		
 		// Act
-		String result = model.edit(userEntity, 1, threadToBeEdited);
+		String result = model.edit(userEntity, 1, "x", "x", null);
 		
 		// Assert 
 		assertEquals(PostsModel.EDITED, result);
@@ -58,10 +57,9 @@ public class EditThreadModelTests {
 		UserEntity otherUserEntity = new UserEntity("that_person", null);
 		ThreadEntity thread = new ThreadEntity("s", "c", null, userEntity);
 		doReturn(thread).when(model).findThreadById(1);
-		ThreadEntity threadToBeEdited = new ThreadEntity("xxx", "xxx", null, null);
 		
 		// Act
-		String result = model.edit(otherUserEntity, 1, threadToBeEdited);
+		String result = model.edit(otherUserEntity, 1, "x", "x", null);
 		
 		// Assert 
 		assertEquals(PostsModel.NOT_YOURS_TO_DELETE, result);
@@ -72,10 +70,9 @@ public class EditThreadModelTests {
 		// Arrange
 		UserEntity otherUserEntity = new UserEntity("that_person", null);
 		doReturn(null).when(model).findThreadById(1);
-		ThreadEntity threadToBeEdited = new ThreadEntity("xxx", "xxx", null, null);
 		
 		// Act
-		String result = model.edit(otherUserEntity, 1, threadToBeEdited);
+		String result = model.edit(otherUserEntity, 1, "x", "x", null);
 		
 		// Assert 
 		assertEquals(PostsModel.DOESNT_EXIST, result);
@@ -87,10 +84,9 @@ public class EditThreadModelTests {
 		UserEntity userEntity = new UserEntity("this_person", null);
 		ThreadEntity thread = new ThreadEntity("s", "c", null, userEntity);
 		doReturn(thread).when(model).findThreadById(1);
-		ThreadEntity threadToBeEdited = new ThreadEntity(" ", " ", null, null);
 		
 		// Act
-		String result = model.edit(userEntity, 1, threadToBeEdited);
+		String result = model.edit(userEntity, 1, " ", " ", null);
 		
 		// Assert 
 		assertEquals(PostsModel.BAD_USER_INPUT, result);
@@ -102,10 +98,9 @@ public class EditThreadModelTests {
 		UserEntity userEntity = new UserEntity("this_person", null);
 		ThreadEntity thread = new ThreadEntity("s", "c", null, userEntity);
 		doReturn(thread).when(model).findThreadById(1);
-		ThreadEntity threadToBeEdited = new ThreadEntity(null, null, null, null);
 		
 		// Act
-		String result = model.edit(userEntity, 1, threadToBeEdited);
+		String result = model.edit(userEntity, 1, null, null, null);
 		
 		// Assert 
 		assertEquals(PostsModel.BAD_USER_INPUT, result);

@@ -200,7 +200,10 @@ public class ThreadsREST {
 			mModel.init();
 			ret.setSuccessful(false);
 			UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-			String result = mModel.edit(userEntity, postId, null); 
+			String result = mModel.edit(userEntity, postId, 
+					editPostResource.getSubject(), 
+					editPostResource.getContent(), 
+					editPostResource.getTags()); 
 			generateEditReturnResource(ret, result);
 			return ret;
 		} catch(Exception e) {

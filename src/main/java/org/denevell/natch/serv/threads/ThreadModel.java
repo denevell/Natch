@@ -131,10 +131,13 @@ public class ThreadModel {
 		} 
 	}	
 
-	public String edit(UserEntity userEntity, long threadId, ThreadEntity entity) {
+	public String edit(UserEntity userEntity, long threadId, 
+			String subject, 
+			String content, 
+			List<String> tags) {
 		EntityTransaction trans = mEntityManager.getTransaction();
 		try {
-			if(checkInputParams(entity) || threadId<1) {
+			if(checkInputParams(subject, content) || threadId<1) {
 				Log.info(this.getClass(), "Edit user: Bad user input");
 				return BAD_USER_INPUT;
 			}
@@ -144,9 +147,11 @@ public class ThreadModel {
 			} else if(!pe.getUser().getUsername().equals(userEntity.getUsername())) {
 				return NOT_YOURS_TO_DELETE;
 			}
-			entity.setId(threadId);
+			pe.setSubject(subject);
+			pe.setContent(content);
+			pe.setTags(tags);
 			trans.begin();
-			mEntityManager.merge(entity);
+			mEntityManager.merge(pe);
 			trans.commit();
 			return EDITED;
 		} catch(Exception e) {
@@ -162,12 +167,12 @@ public class ThreadModel {
 		} 
 	}	
 	
-	private boolean checkInputParams(ThreadEntity pe) {
-		return  pe==null ||
-				pe.getSubject()==null ||
-				pe.getContent()==null ||
-				pe.getSubject().trim().length()==0 ||
-				pe.getContent().trim().length()==0;
+	private boolean checkInputParams(String subject, String content) {
+		return  
+				content==null ||
+				subject==null ||
+				subject.trim().length()==0 ||
+				content.trim().length()==0;
 	}	
 	
 }

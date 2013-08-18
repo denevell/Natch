@@ -42,8 +42,8 @@ public class EditThreadResourceTests {
 	@Test
 	public void shouldEditPost() {
 		// Arrange
-		EditThreadResourceInput editPostResource = null;
-		when(threadsModel.edit(user, 1l, null)).thenReturn(ThreadModel.EDITED);
+		EditThreadResourceInput editPostResource = new EditThreadResourceInput();
+		when(threadsModel.edit(user, 1l, null, null, null)).thenReturn(ThreadModel.EDITED);
 		
 		// Act
 		EditThreadResourceReturnData result = resource.edit(1l, editPostResource);
@@ -56,8 +56,8 @@ public class EditThreadResourceTests {
 	@Test
 	public void shouldShowNotYoursError() {
 		// Arrange
-		EditThreadResourceInput editPostResource = null;
-		when(threadsModel.edit(user, 1l, null)).thenReturn(ThreadModel.NOT_YOURS_TO_DELETE);
+		EditThreadResourceInput editPostResource = new EditThreadResourceInput();
+		when(threadsModel.edit(user, 1l, null, null, null)).thenReturn(ThreadModel.NOT_YOURS_TO_DELETE);
 		
 		// Act
 		EditThreadResourceReturnData result = resource.edit(1l, editPostResource);		
@@ -70,8 +70,8 @@ public class EditThreadResourceTests {
 	@Test
 	public void shouldShowUnknownPostError() {
 		// Arrange
-		EditThreadResourceInput editPostResource = null;
-		when(threadsModel.edit(user, 1l, null)).thenReturn(ThreadModel.DOESNT_EXIST);
+		EditThreadResourceInput editPostResource = new EditThreadResourceInput();
+		when(threadsModel.edit(user, 1l, null, null, null)).thenReturn(ThreadModel.DOESNT_EXIST);
 		
 		// Act
 		EditThreadResourceReturnData result = resource.edit(1l, editPostResource);		
