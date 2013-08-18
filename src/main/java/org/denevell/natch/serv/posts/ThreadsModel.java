@@ -53,10 +53,10 @@ public class ThreadsModel {
 				content==null || content.trim().length()==0;
 	}
 	
-	public String addPost(UserEntity user, PostEntityAdapter adapter) {
+	public String addPost(UserEntity user) {
 		EntityTransaction trans = null;
 		try {
-			PostEntity p = adapter.createPost(null, user);
+			PostEntity p = null;
 			if(p==null || checkInputParams(user, p.getContent())) {
 				Log.info(this.getClass(), "Bad user input");
 				return BAD_USER_INPUT;
@@ -162,21 +162,16 @@ public class ThreadsModel {
 		} 
 	}
 
-	public String edit(UserEntity userEntity, long postEntityId, PostEntityAdapter postAdapter) {
+	public String edit(UserEntity userEntity, long postEntityId) {
 		EntityTransaction trans = mEntityManager.getTransaction();
 		try {
-			PostEntity post;
-			if(userEntity==null || postAdapter==null) {
-				Log.info(getClass(), "No user or postadapter passed to edit method");
-				return UNKNOWN_ERROR;
-			}
+			PostEntity post = null;
 			PostEntity pe = findPostById(postEntityId);
 			if(pe==null) {
 				return DOESNT_EXIST;
 			} else if(!pe.getUser().getUsername().equals(userEntity.getUsername())) {
 				return NOT_YOURS_TO_DELETE;
 			}
-			post = postAdapter.createPost(pe, userEntity);
 			if(post==null) {
 				Log.info(getClass(), "Edit post: PostAdapter returned null");
 				return UNKNOWN_ERROR;

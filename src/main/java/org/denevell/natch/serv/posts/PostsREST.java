@@ -49,25 +49,19 @@ public class PostsREST {
 	@Context HttpServletResponse mResponse;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
 	private ThreadsModel mModel;
-	private EditPostResourcePostEntityAdapter mEditPostAdapter;
-	private AddPostResourcePostEntityAdapter mAddPostAdapter;
 	
 	public PostsREST() {
 		mModel = new ThreadsModel();
-		mEditPostAdapter = new EditPostResourcePostEntityAdapter();
-		mAddPostAdapter = new AddPostResourcePostEntityAdapter();
 	}
 	
 	/**
 	 * For DI testing.
 	 * @param editPostAdapter 
 	 */
-	public PostsREST(ThreadsModel postModel, HttpServletRequest request, HttpServletResponse response, EditPostResourcePostEntityAdapter editPostAdapter, AddPostResourcePostEntityAdapter addPostAdapter) {
+	public PostsREST(ThreadsModel postModel, HttpServletRequest request, HttpServletResponse response) {
 		mModel = postModel;
 		mRequest = request;
 		mResponse = response;
-		mEditPostAdapter = editPostAdapter;
-		mAddPostAdapter = addPostAdapter;
 	}
 	
 	@PUT
@@ -95,22 +89,17 @@ public class PostsREST {
 				regReturnData.setError(rb.getString(Strings.unknown_error)); // Unknown as this shouldn't happen
 				return regReturnData;
 			}
-			mAddPostAdapter.create(input);
-			String okay = mModel.addPost(userEntity, mAddPostAdapter);
-			generateAddPostReturnResource(regReturnData, okay, mAddPostAdapter);
+			String okay = mModel.addPost(userEntity);
+			generateAddPostReturnResource(regReturnData, okay);
 			return regReturnData;
 		} finally {
 			mModel.close();
 		}
 	}
 
-	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, String okay, AddPostResourcePostEntityAdapter adapterThatCreatePost) {
+	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, String okay) {
 		if(okay.equals(ThreadsModel.ADDED)) {
-			if(adapterThatCreatePost!=null && adapterThatCreatePost.getCreatedPost()!=null) {
-				regReturnData.setThreadId(adapterThatCreatePost.getCreatedPost().getThreadId());
-			} else {
-				Log.info(getClass(), "Added a post but the thread id was null when sending the json response...");
-			}
+			regReturnData.setThreadId(0l); // TODO
 			regReturnData.setSuccessful(true);
 		} else if(okay.equals(ThreadsModel.BAD_USER_INPUT)) {
 			regReturnData.setSuccessful(false);
@@ -185,40 +174,6 @@ public class PostsREST {
 		}
 	}
 	
-	@GET
-	@Path("/{threadId}/{start}/{limit}")
-	@Produces(MediaType.APPLICATION_JSON)	
-	@ApiOperation(value = "Lists posts within the thread specified", responseClass="org.denevell.natch.serv.posts.resources.ThreadResource")
-	public ThreadResource listByThreadId(
-			@ApiParam(name="threadId") @PathParam("threadId") String threadId,
-			@ApiParam(name="start") @PathParam("start") int start, 	
-			@ApiParam(name="limit") @PathParam("limit") int limit 	
-			) throws IOException {
-		List<PostEntity> posts = null;
-		UserEntity threadAuthor = null;
-		try {
-			mModel.init();
-			posts = mModel.listByThreadId(threadId, start, limit);
-			threadAuthor = mModel.findThreadAuthor(threadId);
-		} catch(Exception e) {
-			Log.info(getClass(), "Couldn't list posts: " + e.toString());
-			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
-			return null;
-		} finally {
-			mModel.close();
-		}
-		if(posts!=null && posts.size()==0) {
-			mResponse.sendError(HttpServletResponse.SC_NOT_FOUND, "Unexcepted error");
-			return null;
-		} else if(posts==null || threadAuthor==null || threadAuthor.getUsername()==null) {
-			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
-			return null;
-		} else {
-			ThreadResource adaptedPosts = new ThreadResourceAdapter(threadAuthor.getUsername(), "TODO", posts);
-			return adaptedPosts;
-		}
-	}
-
 	@DELETE
 	@Path("/del/{postId}") // Explicit for the servlet filter
 	@Produces(MediaType.APPLICATION_JSON)
@@ -282,8 +237,7 @@ public class PostsREST {
 				ret.setError(rb.getString(Strings.unknown_error)); // Unknown as this shouldn't happen
 				return ret;
 			}	
-			mEditPostAdapter.setPostWithNewData(editPostResource);
-			String result = mModel.edit(userEntity, postId, mEditPostAdapter); 
+			String result = mModel.edit(userEntity, postId); 
 			generateEditReturnResource(ret, result);
 			return ret;
 		} catch(Exception e) {
