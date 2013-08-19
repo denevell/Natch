@@ -23,7 +23,7 @@ public class PostEntity {
 	public PostEntity() {
 	}
 	
-	public PostEntity(UserEntity user, long created, long modified, String content, long threadId) {
+	public PostEntity(UserEntity user, long created, long modified, String content) {
 		this.user = user;
 		this.created = created;
 		this.modified = modified;

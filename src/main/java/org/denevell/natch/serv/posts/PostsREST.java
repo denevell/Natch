@@ -79,17 +79,8 @@ public class PostsREST {
 			mModel.init();
 			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 			regReturnData.setSuccessful(false);
-			if(input==null || input.getContent()==null || input.getSubject()==null) {
-				regReturnData.setSuccessful(false);
-				regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
-				return regReturnData;
-			}
 			UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-			if(userEntity==null) {
-				regReturnData.setError(rb.getString(Strings.unknown_error)); // Unknown as this shouldn't happen
-				return regReturnData;
-			}
-			String okay = mModel.addPost(userEntity);
+			String okay = mModel.addPost(userEntity, input.getContent());
 			generateAddPostReturnResource(regReturnData, okay);
 			return regReturnData;
 		} finally {

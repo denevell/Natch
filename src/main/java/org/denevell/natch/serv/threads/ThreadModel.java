@@ -12,7 +12,6 @@ import javax.persistence.TypedQuery;
 import org.apache.log4j.Logger;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.serv.posts.ThreadFactory;
 import org.denevell.natch.utils.EntityUtils;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Log;

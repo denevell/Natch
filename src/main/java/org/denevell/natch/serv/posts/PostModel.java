@@ -25,10 +25,10 @@ public class PostModel {
 	public final static String BAD_USER_INPUT = "baduserinput";
 	public final static String NOT_YOURS_TO_DELETE = "notyourtodelete";
 	private EntityManager mEntityManager;
-	private ThreadFactory mThreadFactory;
+	private PostFactory mPostFactory;
 	
 	public PostModel() {
-		mThreadFactory = new ThreadFactory();
+		mPostFactory = new PostFactory();
 	}
 	
 	public void init() {
@@ -43,9 +43,9 @@ public class PostModel {
 	/**
 	 * For testing / di
 	 */
-	public PostModel(EntityManagerFactory factory, EntityManager entityManager, ThreadFactory threadFactory) {
+	public PostModel(EntityManagerFactory factory, EntityManager entityManager, PostFactory postFactory) {
+		mPostFactory = postFactory;
 		mEntityManager = entityManager;
-		mThreadFactory = threadFactory;
 	}
 	
 	private boolean checkInputParams(UserEntity user, String content) {
@@ -53,18 +53,18 @@ public class PostModel {
 				content==null || content.trim().length()==0;
 	}
 	
-	public String addPost(UserEntity user) {
+	public String addPost(UserEntity user, String content) {
 		EntityTransaction trans = null;
 		try {
-			PostEntity p = null;
-			if(p==null || checkInputParams(user, p.getContent())) {
+			PostEntity p = mPostFactory.makePost(content, user);
+			if(checkInputParams(user, p.getContent())) {
 				Log.info(this.getClass(), "Bad user input");
 				return BAD_USER_INPUT;
 			}
-			ThreadEntity thread = findThreadById(p.getThreadId());
+			//ThreadEntity thread = findThreadById(p.getThreadId());
 			trans = mEntityManager.getTransaction();
 			trans.begin();
-			mEntityManager.persist(thread);
+			mEntityManager.persist(p);
 			trans.commit();
 			return ADDED;
 		} catch(Exception e) {
@@ -138,7 +138,7 @@ public class PostModel {
 				return NOT_YOURS_TO_DELETE;
 			}
 			ThreadEntity th = findThreadById(pe.getThreadId());
-			th = mThreadFactory.updateThreadToRemovePost(th, pe);
+			//th = mThreadFactory.updateThreadToRemovePost(th, pe);
 			trans.begin();
 			// Remote thread if needs be
 			if(th.getPosts()==null || th.getPosts().size()==0) {

@@ -15,7 +15,7 @@ import javax.persistence.TypedQuery;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.PostModel;
-import org.denevell.natch.serv.posts.ThreadFactory;
+import org.denevell.natch.serv.threads.ThreadFactory;
 import org.denevell.natch.serv.threads.ThreadModel;
 import org.junit.Before;
 import org.junit.Test;
