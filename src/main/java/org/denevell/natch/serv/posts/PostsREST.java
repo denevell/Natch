@@ -30,6 +30,7 @@ import org.denevell.natch.io.posts.EditPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.io.threads.ThreadResource;
+import org.denevell.natch.serv.posts.PostModel.Result;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
@@ -80,7 +81,7 @@ public class PostsREST {
 			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 			regReturnData.setSuccessful(false);
 			UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-			String okay = mModel.addPost(userEntity, input.getContent(), input.getThreadId());
+			Result okay = mModel.addPost(userEntity, input.getContent(), input.getThreadId());
 			generateAddPostReturnResource(regReturnData, okay);
 			return regReturnData;
 		} finally {
@@ -88,18 +89,16 @@ public class PostsREST {
 		}
 	}
 
-	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, String okay) {
-		if(okay.equals(PostModel.ADDED)) {
-			regReturnData.setThreadId(0l); // TODO
+	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, Result okay) {
+		regReturnData.setSuccessful(false);
+		if(okay.result.equals(PostModel.ADDED)) {
+			regReturnData.setThreadId(okay.id); 
 			regReturnData.setSuccessful(true);
-		} else if(okay.equals(PostModel.BAD_USER_INPUT)) {
-			regReturnData.setSuccessful(false);
+		} else if(okay.result.equals(PostModel.BAD_USER_INPUT)) {
 			regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
-		} else if(okay.equals(PostModel.UNKNOWN_ERROR)){
-			regReturnData.setSuccessful(false);
+		} else if(okay.result.equals(PostModel.UNKNOWN_ERROR)){
 			regReturnData.setError(rb.getString(Strings.unknown_error));
 		} else {
-			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.unknown_error));
 		}
 	}

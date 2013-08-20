@@ -1,5 +1,7 @@
 package org.denevell.natch.tests.unit.posts;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -10,10 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.UserEntity;
+import org.denevell.natch.io.posts.AddPostResourceInput;
+import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.serv.posts.PostModel;
+import org.denevell.natch.serv.posts.PostModel.Result;
 import org.denevell.natch.serv.posts.PostsREST;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
+import org.junit.Test;
 
 public class AddPostResourceTests {
 	
@@ -32,22 +38,22 @@ public class AddPostResourceTests {
 		HttpServletResponse response = mock(HttpServletResponse.class);
 		resource = new PostsREST(postsModel, request, response);
 	}
-//	
-//	@Test
-//	public void shouldAddPost() {
-//		// Arrange
-//		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-//		when(addPostAdapter.getCreatedPost()).thenReturn(new PostEntity(null, 123, 123, "a", "dsf", "thready"));
-//		when(postsModel.addPost(user, addPostAdapter)).thenReturn(PostsModel.ADDED);
-//		
-//		// Act
-//		AddPostResourceReturnData result = resource.add(input);
-//		
-//		// Assert
-//		assertTrue(result.isSuccessful());
-//		assertEquals("Error json", "", result.getError());
-//		assertEquals("ThreadId", "thready", result.getThreadId());
-//	}
+	
+	@Test
+	public void shouldAddPost() {
+		// Arrange
+		AddPostResourceInput input = new AddPostResourceInput("cont", 1l);
+		Result r= new Result(PostModel.ADDED, 5l);
+		when(postsModel.addPost(user, "cont", 1l)).thenReturn(r);
+		
+		// Act
+		AddPostResourceReturnData result = resource.add(input);
+		
+		// Assert
+		assertTrue(result.isSuccessful());
+		assertEquals("Error json", "", result.getError());
+		assertEquals("ThreadId", 5l, result.getThreadId());
+	}
 //	
 //	@Test
 //	public void shouldntRegisterWhenModelSaysBadInput() {

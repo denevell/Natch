@@ -58,28 +58,36 @@ public class PostModel {
 				content==null || content.trim().length()==0;
 	}
 	
-	public String addPost(UserEntity user, String content, long threadId) {
+	public static class Result {
+		public String result;
+		public long id;
+		public Result(String result, long id) {
+			this.result = result;
+			this.id = id;
+		}
+	}
+	public Result addPost(UserEntity user, String content, long threadId) {
 		EntityTransaction trans = null;
 		try {
 			PostEntity p = mPostFactory.makePost(content, user);
 			if(content==null || checkInputParams(user, p.getContent())) {
-				return BAD_USER_INPUT;
+				return new Result(BAD_USER_INPUT, -1);
 			}
 			ThreadEntity thread = mThreadModel.findThreadById(threadId);
 			if(thread==null) {
-				return DOESNT_EXIST;
+				return new Result(DOESNT_EXIST, -1);
 			}
 			mPostFactory.addPostToThread(p, thread);
 			trans = mEntityManager.getTransaction();
 			trans.begin();
 			mEntityManager.merge(thread);
 			trans.commit();
-			return ADDED;
+			return new Result(ADDED, p.getId());
 		} catch(Exception e) {
 			Log.info(this.getClass(), e.toString());
 			e.printStackTrace();
 			if(trans!=null && trans.isActive()) trans.rollback();
-			return UNKNOWN_ERROR;
+			return new Result(UNKNOWN_ERROR, -1);
 		} 
 	}
 

@@ -15,6 +15,7 @@ import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.posts.PostFactory;
 import org.denevell.natch.serv.posts.PostModel;
+import org.denevell.natch.serv.posts.PostModel.Result;
 import org.denevell.natch.serv.threads.ThreadModel;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,14 +51,16 @@ public class AddPostModelTests {
 		// Arrange
 		String content = "Some content";
 		genericPost.setContent(content);
+		genericPost.setId(8l);
 		when(postFactory.makePost(content, userEntity)).thenReturn(genericPost);
 		when(threadModel.findThreadById(1l)).thenReturn(genericThread);
 		
 		// Act
-		String result = model.addPost(userEntity, content, 1l);
+		Result result = model.addPost(userEntity, content, 1l);
 		
 		// Assert
-		assertEquals(PostModel.ADDED, result);
+		assertEquals(PostModel.ADDED, result.result);
+		assertEquals(8l, result.id);
 		verify(entityManager).merge(genericThread);
 		verify(postFactory).addPostToThread(genericPost, genericThread);
 	}
@@ -71,10 +74,10 @@ public class AddPostModelTests {
 		when(threadModel.findThreadById(1l)).thenReturn(null);
 		
 		// Act
-		String result = model.addPost(userEntity, content, 1l);
+		Result result = model.addPost(userEntity, content, 1l);
 		
 		// Assert
-		assertEquals(PostModel.DOESNT_EXIST, result);
+		assertEquals(PostModel.DOESNT_EXIST, result.result);
 		verify(entityManager, never()).merge(genericThread);
 	}
 		
@@ -87,10 +90,10 @@ public class AddPostModelTests {
 		when(threadModel.findThreadById(1l)).thenReturn(genericThread);
 		
 		// Act
-		String result = model.addPost(userEntity, content, 1l);
+		Result result = model.addPost(userEntity, content, 1l);
 		
 		// Assert
-		assertEquals(PostModel.BAD_USER_INPUT, result);
+		assertEquals(PostModel.BAD_USER_INPUT, result.result);
 		verify(entityManager, never()).merge(genericThread);
 	}
 	
@@ -103,10 +106,10 @@ public class AddPostModelTests {
 		when(threadModel.findThreadById(1l)).thenReturn(genericThread);
 		
 		// Act
-		String result = model.addPost(userEntity, content, 1l);
+		Result result = model.addPost(userEntity, content, 1l);
 		
 		// Assert
-		assertEquals(PostModel.BAD_USER_INPUT, result);
+		assertEquals(PostModel.BAD_USER_INPUT, result.result);
 		verify(entityManager, never()).merge(genericThread);
 	}
 		

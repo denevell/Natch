@@ -13,6 +13,7 @@ import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
+import org.denevell.natch.io.threads.AddThreadResourceInput;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.RegisterResourceInput;
@@ -151,8 +152,7 @@ public class TestUtils {
 	}
 
 	public static long addThread(String authKey, String sub, String cont, String singleTag, long threadId) {
-		AddPostResourceInput addInput = new AddPostResourceInput(sub, cont, Lists.newArrayList(singleTag, "other"));
-		addInput.setThreadId(threadId);
+		AddThreadResourceInput addInput = new AddThreadResourceInput(sub, cont, Lists.newArrayList(singleTag, "other"));
 		AddPostResourceInput ret = TestUtils.getAddPostClient()
 		.type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", authKey)

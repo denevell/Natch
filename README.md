@@ -14,7 +14,7 @@ The start of a REST interface for a forum.
 * ~~Tech task: Functional tests for listing threads when edited~~
 * ~~Tech task: What about a thread text is updated but the latest post has not?~~ 
 * ~~Tech task: Unit tests for add post~~
-* Tech task: Resource tests for add post
+* ~~Tech task: Resource tests for add post~~
 * Tech task: Functional tests for add post
 * Tech task: Method to list all the posts in a thread
 * Tech task: Unit tests for edit post
