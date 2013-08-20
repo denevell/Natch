@@ -80,7 +80,7 @@ public class PostsREST {
 			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 			regReturnData.setSuccessful(false);
 			UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-			String okay = mModel.addPost(userEntity, input.getContent());
+			String okay = mModel.addPost(userEntity, input.getContent(), input.getThreadId());
 			generateAddPostReturnResource(regReturnData, okay);
 			return regReturnData;
 		} finally {

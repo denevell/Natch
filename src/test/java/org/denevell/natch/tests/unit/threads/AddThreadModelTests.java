@@ -7,7 +7,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
 import org.denevell.natch.db.entities.ThreadEntity;
@@ -21,7 +20,6 @@ public class AddThreadModelTests {
 	
 	private ThreadModel model;
 	private EntityTransaction trans;
-	private EntityManagerFactory factory;
 	private EntityManager entityManager;
 	private UserEntity userEntity;
 	private ThreadEntity genericThread;
@@ -30,14 +28,13 @@ public class AddThreadModelTests {
 	@Before
 	public void setup() {
 		entityManager = mock(EntityManager.class);
-		factory = mock(EntityManagerFactory.class);
 		trans = mock(EntityTransaction.class);
 		userEntity = new UserEntity("user", "pass");
 		genericThread = mock(ThreadEntity.class);
 		when(genericThread.getId()).thenReturn(123l);
 		when(entityManager.getTransaction()).thenReturn(trans);
 		threadFactory = mock(ThreadFactory.class);
-		model = new ThreadModel(factory, entityManager, threadFactory);
+		model = new ThreadModel(entityManager, threadFactory);
 	}
 	
 	@Test

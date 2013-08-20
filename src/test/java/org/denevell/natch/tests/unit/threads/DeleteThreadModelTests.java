@@ -8,7 +8,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
@@ -24,18 +23,16 @@ public class DeleteThreadModelTests {
 	
 	private ThreadModel model;
 	private EntityTransaction trans;
-	private EntityManagerFactory factory;
 	private EntityManager entityManager;
 	private ThreadFactory threadFactory;
 
 	@Before
 	public void setup() {
 		entityManager = mock(EntityManager.class);
-		factory = mock(EntityManagerFactory.class);
 		trans = mock(EntityTransaction.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
 		threadFactory = mock(ThreadFactory.class);
-		model = spy(new ThreadModel(factory, entityManager, threadFactory));
+		model = spy(new ThreadModel(entityManager, threadFactory));
 	}
 	
 	@Test

@@ -145,18 +145,14 @@ public class TestUtils {
 		return ret.getAuthKey();
 	}
 	
-	public static String addThread(String authKey, String sub, String cont, String singleTag) {
-		return addThread(authKey, sub, cont, singleTag, null);
-	}
-	
-	public static String addPost(String threadId, String authKey, String sub, String cont, String singleTag) {
+	public static long addPost(long threadId, String authKey, String sub, String cont, String singleTag) {
 		// Same call as add thread, but with threadid
 		return addThread(authKey, sub, cont, singleTag, threadId);
 	}
 
-	public static String addThread(String authKey, String sub, String cont, String singleTag, String threadId) {
+	public static long addThread(String authKey, String sub, String cont, String singleTag, long threadId) {
 		AddPostResourceInput addInput = new AddPostResourceInput(sub, cont, Lists.newArrayList(singleTag, "other"));
-		if(threadId!=null) addInput.setThreadId(threadId);
+		addInput.setThreadId(threadId);
 		AddPostResourceInput ret = TestUtils.getAddPostClient()
 		.type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", authKey)

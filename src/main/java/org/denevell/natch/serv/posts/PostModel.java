@@ -11,6 +11,8 @@ import javax.persistence.TypedQuery;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
+import org.denevell.natch.serv.threads.ThreadFactory;
+import org.denevell.natch.serv.threads.ThreadModel;
 import org.denevell.natch.utils.EntityUtils;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Log;
@@ -26,6 +28,7 @@ public class PostModel {
 	public final static String NOT_YOURS_TO_DELETE = "notyourtodelete";
 	private EntityManager mEntityManager;
 	private PostFactory mPostFactory;
+	private ThreadModel mThreadModel;
 	
 	public PostModel() {
 		mPostFactory = new PostFactory();
@@ -34,6 +37,7 @@ public class PostModel {
 	public void init() {
 		EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
 		mEntityManager = factory.createEntityManager(); 
+		mThreadModel = new ThreadModel(mEntityManager, new ThreadFactory());
 	}
 	
 	public void close() {
@@ -43,9 +47,10 @@ public class PostModel {
 	/**
 	 * For testing / di
 	 */
-	public PostModel(EntityManagerFactory factory, EntityManager entityManager, PostFactory postFactory) {
+	public PostModel(EntityManagerFactory factory, EntityManager entityManager, PostFactory postFactory, ThreadModel threadModel) {
 		mPostFactory = postFactory;
 		mEntityManager = entityManager;
+		mThreadModel = threadModel;
 	}
 	
 	private boolean checkInputParams(UserEntity user, String content) {
@@ -53,18 +58,21 @@ public class PostModel {
 				content==null || content.trim().length()==0;
 	}
 	
-	public String addPost(UserEntity user, String content) {
+	public String addPost(UserEntity user, String content, long threadId) {
 		EntityTransaction trans = null;
 		try {
 			PostEntity p = mPostFactory.makePost(content, user);
-			if(checkInputParams(user, p.getContent())) {
-				Log.info(this.getClass(), "Bad user input");
+			if(content==null || checkInputParams(user, p.getContent())) {
 				return BAD_USER_INPUT;
 			}
-			//ThreadEntity thread = findThreadById(p.getThreadId());
+			ThreadEntity thread = mThreadModel.findThreadById(threadId);
+			if(thread==null) {
+				return DOESNT_EXIST;
+			}
+			mPostFactory.addPostToThread(p, thread);
 			trans = mEntityManager.getTransaction();
 			trans.begin();
-			mEntityManager.persist(p);
+			mEntityManager.merge(thread);
 			trans.commit();
 			return ADDED;
 		} catch(Exception e) {

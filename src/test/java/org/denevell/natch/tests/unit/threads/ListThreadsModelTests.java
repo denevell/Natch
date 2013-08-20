@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
@@ -22,7 +21,6 @@ public class ListThreadsModelTests {
 	
 	private ThreadModel model;
 	private EntityTransaction trans;
-	private EntityManagerFactory factory;
 	private EntityManager entityManager;
 	private TypedQuery<ThreadEntity> threadQueryResults;
 
@@ -30,12 +28,11 @@ public class ListThreadsModelTests {
 	@Before
 	public void setup() {
 		entityManager = mock(EntityManager.class);
-		factory = mock(EntityManagerFactory.class);
 		trans = mock(EntityTransaction.class);
 		threadQueryResults = mock(TypedQuery.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
 		ThreadFactory threadModel = mock(ThreadFactory.class);
-		model = new ThreadModel(factory, entityManager, threadModel);
+		model = new ThreadModel(entityManager, threadModel);
 	}
 	
 	@Test

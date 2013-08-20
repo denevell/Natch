@@ -16,8 +16,6 @@ import org.denevell.natch.utils.EntityUtils;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Log;
 
-import sun.print.PeekGraphics;
-
 public class ThreadModel {
 
 	public final static String EDITED = "edited";
@@ -45,7 +43,7 @@ public class ThreadModel {
 	/**
 	 * For testing / di
 	 */
-	public ThreadModel(EntityManagerFactory factory, EntityManager entityManager, ThreadFactory threadFactory) {
+	public ThreadModel(EntityManager entityManager, ThreadFactory threadFactory) {
 		mEntityManager = entityManager;
 		mThreadFactory = threadFactory;
 	}
@@ -208,7 +206,7 @@ public class ThreadModel {
 				content.trim().length()==0;
 	}	
 
-	private ThreadEntity findThreadById(long id) {
+	public ThreadEntity findThreadById(long id) {
 		try {
 			TypedQuery<ThreadEntity> q = mEntityManager
 					.createNamedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID, ThreadEntity.class);
