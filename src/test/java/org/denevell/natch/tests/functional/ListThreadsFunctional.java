@@ -45,7 +45,7 @@ public class ListThreadsFunctional {
 	
 	@SuppressWarnings("serial")
 	@Test
-	public void shouldListThreadsByPostLastEnteredWithLimit() {
+	public void shouldListThreadsByThreadLastEnteredWithLimit() {
 		// Arrange 
 		AddThreadResourceInput input = new AddThreadResourceInput("sub", "cont");
 		input.setTags(new ArrayList<String>() {{add("a"); add("b");}});
@@ -78,7 +78,7 @@ public class ListThreadsFunctional {
 	
 	@SuppressWarnings("serial")
 	@Test
-	public void shouldListThreadsWithTagByPostLastEnteredWithLimit() {
+	public void shouldListThreadsWithTagByThreadLastEnteredWithLimit() {
 		// Arrange 
 		AddThreadResourceInput input = new AddThreadResourceInput("sub", "cont");
 		input.setTags(new ArrayList<String>() {{add("a"); add("ignore");}});
@@ -116,7 +116,7 @@ public class ListThreadsFunctional {
 	}
 	
 	@Test
-	public void shouldListThreadsWithLastModifiedFist() {
+	public void shouldListThreadsWithLastModifiedFirst() {
 		// Arrange 
 		AddThreadResourceInput input = new AddThreadResourceInput("sub", "cont");
 		AddThreadResourceInput input1 = new AddThreadResourceInput("sub1", "cont1");
@@ -142,6 +142,11 @@ public class ListThreadsFunctional {
 		assertEquals(4, oldThreads.getThreads().size());
 		assertEquals(4, newThreadList.getThreads().size());
 	}		
+	
+	@Test
+	public void shouldListThreadWithPostsAdded() {
+		
+	}
 
 //	@Test
 //	public void shouldListThreadsWithLastModifiedContentFirst() {	
