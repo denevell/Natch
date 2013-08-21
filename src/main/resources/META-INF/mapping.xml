@@ -27,9 +27,6 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	   <named-query name="findByModData">
 	       <query>select p from PostEntity p order by p.modified desc</query>
 	   </named-query>       
-	   <named-query name="findByThreadId">
-	       <query>select p from PostEntity p where p.threadId = :threadId order by p.created</query>
-	   </named-query>       
 	   <named-query name="findById">
 	       <query>select p from PostEntity p where p.id = :id</query>
 	   </named-query>       
@@ -44,9 +41,6 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	       <one-to-one name="user" optional="false">
 	       	  <join-column name="user_reference" />
 	       </one-to-one>
-	       <basic name="threadId">
-	          <column name="threadId" nullable="false" />
-	       </basic>    		   
 	       <basic name="created">
 	          <column name="created" nullable="false" />
 	       </basic>    		   

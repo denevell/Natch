@@ -29,7 +29,6 @@ import org.denevell.natch.io.posts.EditPostResource;
 import org.denevell.natch.io.posts.EditPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.posts.PostResource;
-import org.denevell.natch.io.threads.ThreadResource;
 import org.denevell.natch.serv.posts.PostModel.Result;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
@@ -92,7 +91,6 @@ public class PostsREST {
 	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, Result okay) {
 		regReturnData.setSuccessful(false);
 		if(okay.result.equals(PostModel.ADDED)) {
-			regReturnData.setThreadId(okay.id); 
 			regReturnData.setSuccessful(true);
 		} else if(okay.result.equals(PostModel.BAD_USER_INPUT)) {
 			regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
@@ -128,10 +126,8 @@ public class PostsREST {
 			PostResource postResource = new PostResource(post.getUser().getUsername(), 
 					post.getCreated(), 
 					post.getModified(), 
-					post.getContent(), 
-					post.getTags());
+					post.getContent());
 			postResource.setId(post.getId());
-			postResource.setThreadId(post.getThreadId());
 			return postResource;
 		}
 	}	

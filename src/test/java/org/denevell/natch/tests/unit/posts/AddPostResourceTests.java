@@ -52,7 +52,7 @@ public class AddPostResourceTests {
 		// Assert
 		assertTrue(result.isSuccessful());
 		assertEquals("Error json", "", result.getError());
-		assertEquals("ThreadId", 5l, result.getThreadId());
+		assertEquals("ThreadId", -1l, result.getId());
 	}
 //	
 //	@Test

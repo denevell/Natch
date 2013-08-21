@@ -66,6 +66,13 @@ public class PostModel {
 			this.id = id;
 		}
 	}
+	/**
+	 * 
+	 * @param user
+	 * @param content
+	 * @param threadId
+	 * @return The id of the Result is -1. We shouldn't need the id of the post server side and it /may/ mean more db calls to get it.
+	 */
 	public Result addPost(UserEntity user, String content, long threadId) {
 		EntityTransaction trans = null;
 		try {
@@ -82,7 +89,7 @@ public class PostModel {
 			trans.begin();
 			mEntityManager.merge(thread);
 			trans.commit();
-			return new Result(ADDED, p.getId());
+			return new Result(ADDED, -1);
 		} catch(Exception e) {
 			Log.info(this.getClass(), e.toString());
 			e.printStackTrace();
@@ -99,16 +106,6 @@ public class PostModel {
 		List<PostEntity> resultList = q.getResultList();		
 		if(resultList==null) return new ArrayList<PostEntity>();
 		if(limit < resultList.size() && resultList.size()>0) resultList.remove(resultList.size()-1); // For some reason we're returning two records on 1 as max results.
-		return resultList;
-	}
-	
-	public List<PostEntity> listByThreadId(String threadId, int startPos, int limit) {
-		TypedQuery<PostEntity> q = mEntityManager.createNamedQuery(PostEntity.NAMED_QUERY_FIND_BY_THREADID, PostEntity.class);
-		if(startPos<0) startPos=0; if(limit<0) limit=0;
-		q.setFirstResult(startPos);
-		q.setMaxResults(limit);
-		q.setParameter(PostEntity.NAMED_QUERY_PARAM_THREADID, threadId);
-		List<PostEntity> resultList = q.getResultList();		
 		return resultList;
 	}
 	
@@ -153,7 +150,7 @@ public class PostModel {
 			} else if(!pe.getUser().getUsername().equals(userEntity.getUsername())) {
 				return NOT_YOURS_TO_DELETE;
 			}
-			ThreadEntity th = findThreadById(pe.getThreadId());
+			ThreadEntity th = findThreadById(postEntityId);
 			//th = mThreadFactory.updateThreadToRemovePost(th, pe);
 			trans.begin();
 			// Remote thread if needs be

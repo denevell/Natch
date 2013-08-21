@@ -1,23 +1,17 @@
 package org.denevell.natch.db.entities;
 
-import java.util.List;
-
 import org.apache.commons.lang3.StringEscapeUtils;
 
 public class PostEntity {
 	
 	public static final String NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE = "findByModData";
-	public static final String NAMED_QUERY_FIND_BY_THREADID = "findByThreadId";
 	public static final String NAMED_QUERY_PARAM_ID= "id";
-	public static final String NAMED_QUERY_PARAM_THREADID = "threadId";
 	public static final String NAMED_QUERY_FIND_BY_ID = "findById";
 	
 	private long id;
 	private long created;
 	private long modified;
 	private String content;
-	private long threadId;
-	private List<String> tags;
 	private UserEntity user;
 	
 	public PostEntity() {
@@ -28,7 +22,6 @@ public class PostEntity {
 		this.created = created;
 		this.modified = modified;
 		this.content = content;
-		this.threadId = threadId;
 	}
 	
 	public long getCreated() {
@@ -56,14 +49,6 @@ public class PostEntity {
 		this.content = content;
 	}
 
-	public long getThreadId() {
-		return threadId;
-	}
-
-	public void setThreadId(long threadId) {
-		this.threadId = threadId;
-	}
-
 	public long getId() {
 		return id;
 	}
@@ -80,16 +65,4 @@ public class PostEntity {
 		this.user = user;
 	}
 
-	public List<String> getTags() {
-		if(tags==null) return null;
-		for (int i = 0; i < tags.size(); i++) {
-			String string = StringEscapeUtils.escapeHtml4(tags.get(i));
-			tags.set(i, string);
-		}
-		return tags;
-	}
-
-	public void setTags(List<String> tags) {
-		this.tags = tags;
-	}
 }

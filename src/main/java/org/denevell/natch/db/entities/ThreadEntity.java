@@ -73,7 +73,12 @@ public class ThreadEntity {
 	}
 
 	public List<String> getTags() {
-		return tags;
+		if(tags==null) return null;
+		for (int i = 0; i < tags.size(); i++) {
+			String string = StringEscapeUtils.escapeHtml4(tags.get(i));
+			tags.set(i, string);
+		}
+		return tags;		
 	}
 
 	public void setTags(List<String> tags) {

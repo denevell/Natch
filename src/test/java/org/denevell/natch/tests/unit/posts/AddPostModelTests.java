@@ -60,7 +60,7 @@ public class AddPostModelTests {
 		
 		// Assert
 		assertEquals(PostModel.ADDED, result.result);
-		assertEquals(8l, result.id);
+		assertEquals(-1l, result.id);
 		verify(entityManager).merge(genericThread);
 		verify(postFactory).addPostToThread(genericPost, genericThread);
 	}
