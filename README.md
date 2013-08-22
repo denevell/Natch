@@ -18,7 +18,7 @@ The start of a REST interface for a forum.
 * ~~Tech task: Functional tests for add post~~
 * ~~Tech task: Functional tests for listing threads when added a new post~~
 * ~~Tech task: Unit tests for edit post~~
-* Tech task: Resource tests for edit post
+* ~~Tech task: Resource tests for edit post~~
 * Tech task: Functional tests for edit post
 * Tech task: Unit tests for del post
 * Tech task: Resource tests for del post
