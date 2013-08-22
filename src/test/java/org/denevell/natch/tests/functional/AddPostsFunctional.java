@@ -57,16 +57,24 @@ public class AddPostsFunctional {
 				thread.getThreadId());
 		
 		// Act
-		AddPostResourceReturnData returnData = 
-			addPostService
-			.header("AuthKey", loginResult.getAuthKey())
-			.type(MediaType.APPLICATION_JSON)
-			.put(AddPostResourceReturnData.class, input); 
+		AddPostResourceReturnData returnData = addPost(input, 
+				TestUtils.getRESTClient(), 
+				loginResult.getAuthKey()); 
 		
 		// Assert
 		assertEquals("", returnData.getError());
 		assertTrue(returnData.isSuccessful());
 		assertEquals("Post id should be -1 every time", -1, returnData.getId());
+	}
+
+	public static AddPostResourceReturnData addPost(AddPostResourceInput input, WebResource service, Object authKey) {
+		AddPostResourceReturnData returnData = 
+			service
+			.path("rest").path("post").path("add")			
+			.header("AuthKey", authKey)
+			.type(MediaType.APPLICATION_JSON)
+			.put(AddPostResourceReturnData.class, input);
+		return returnData;
 	}
 	
 	@Test
@@ -90,12 +98,10 @@ public class AddPostsFunctional {
 				"sunt in culpa qui officia deserunt mollit anim id est laborum.", thread.getThreadId());
 		
 		// Act
-		AddPostResourceReturnData returnData = 
-			addPostService
-			.header("AuthKey", loginResult.getAuthKey())
-			.type(MediaType.APPLICATION_JSON)
-			.put(AddPostResourceReturnData.class, input); 
-		
+		AddPostResourceReturnData returnData = addPost(input, 
+				TestUtils.getRESTClient(), 
+				loginResult.getAuthKey());		
+
 		// Assert
 		assertEquals("", returnData.getError());
 		assertTrue(returnData.isSuccessful());
@@ -128,12 +134,10 @@ public class AddPostsFunctional {
 				thread.getThreadId());
 		
 		// Act
-		AddPostResourceReturnData returnData = 
-			addPostService
-			.header("AuthKey", loginResult.getAuthKey())
-			.type(MediaType.APPLICATION_JSON)
-			.put(AddPostResourceReturnData.class, input); 
-		
+		AddPostResourceReturnData returnData = addPost(input, 
+				TestUtils.getRESTClient(), 
+				loginResult.getAuthKey());				
+
 		// Assert
 		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
 		assertFalse(returnData.isSuccessful());
@@ -146,11 +150,9 @@ public class AddPostsFunctional {
 				thread.getThreadId());
 		
 		// Act
-		AddPostResourceReturnData returnData = 
-			addPostService
-			.header("AuthKey", loginResult.getAuthKey())
-			.type(MediaType.APPLICATION_JSON)
-			.put(AddPostResourceReturnData.class, input); 
+		AddPostResourceReturnData returnData = addPost(input, 
+				TestUtils.getRESTClient(), 
+				loginResult.getAuthKey());	
 		
 		// Assert
 		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());

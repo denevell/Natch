@@ -19,5 +19,7 @@ public class PostFactory {
 			thread.setPosts(new ArrayList<PostEntity>());
 		}
 		thread.getPosts().add(p);
+		long time = new Date().getTime();
+		thread.setThreadModified(time);
 	}
 }

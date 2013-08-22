@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.ws.rs.core.MediaType;
 
+import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.threads.AddThreadResourceInput;
 import org.denevell.natch.io.threads.EditThreadResourceInput;
 import org.denevell.natch.io.threads.ThreadsResource;
@@ -144,7 +145,30 @@ public class ListThreadsFunctional {
 	}		
 	
 	@Test
-	public void shouldListThreadWithPostsAdded() {
+	public void shouldListThreadWithLastPostAddedFirst() {
+		// Arrange 
+		AddThreadResourceInput input = new AddThreadResourceInput("sub", "cont");
+		AddThreadResourceInput input1 = new AddThreadResourceInput("sub1", "cont1");
+		AddThreadResourceInput input2 = new AddThreadResourceInput("sub2", "cont2");
+		AddThreadResourceInput input3 = new AddThreadResourceInput("sub3", "cont3");
+		AddThreadFunctional.addThread(input, service, loginResult.getAuthKey()); // Last
+		AddThreadFunctional.addThread(input1, service, loginResult.getAuthKey());  // Last
+		AddThreadFunctional.addThread(input2, service, loginResult.getAuthKey()); 
+		AddThreadFunctional.addThread(input3, service, loginResult.getAuthKey()); 
+		ThreadsResource oldThreads = ListThreadsFunctional.listTenThreads(service);
+		AddPostResourceInput postInput = new AddPostResourceInput("cc", 
+				oldThreads.getThreads().get(3).getId());
+		AddPostsFunctional.addPost(postInput, service, loginResult.getAuthKey());
+
+		// Act
+		ThreadsResource newThreadList = listTenThreads(service); 
+		
+		// Assert
+		assertEquals("sub3", oldThreads.getThreads().get(0).getSubject());
+		assertEquals("sub", newThreadList.getThreads().get(0).getSubject());
+		assertEquals("sub3", newThreadList.getThreads().get(1).getSubject());
+		assertEquals(4, oldThreads.getThreads().size());
+		assertEquals(4, newThreadList.getThreads().size());		
 		
 	}
 
