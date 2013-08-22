@@ -57,7 +57,7 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	   </named-query>       
 	   <named-query name="findNumberOfThreads">
 	       <query>select count(p) from ThreadEntity p</query>
-	   </named-query>       
+	   </named-query> 
 	   <named-query name="findNumberOfThreadsByTag">
 	       <query>select count(p) from ThreadEntity p where :tag member of p.tags</query>
 	   </named-query>       

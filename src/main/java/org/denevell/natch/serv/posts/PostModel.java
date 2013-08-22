@@ -47,7 +47,7 @@ public class PostModel {
 	/**
 	 * For testing / di
 	 */
-	public PostModel(EntityManagerFactory factory, EntityManager entityManager, PostFactory postFactory, ThreadModel threadModel) {
+	public PostModel(EntityManager entityManager, PostFactory postFactory, ThreadModel threadModel) {
 		mPostFactory = postFactory;
 		mEntityManager = entityManager;
 		mThreadModel = threadModel;
@@ -123,20 +123,6 @@ public class PostModel {
 		}
 	}
 	
-	public ThreadEntity findThreadById(long id) {
-		try {
-			TypedQuery<ThreadEntity> q = mEntityManager
-					.createNamedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID, ThreadEntity.class);
-			q.setParameter(ThreadEntity.NAMED_QUERY_PARAM_ID, id);
-			List<ThreadEntity> resultList = q.getResultList();		
-			if(resultList==null || resultList.size()==0) return null;
-			else return resultList.get(0);
-		} catch(Exception e) {
-			Log.info(getClass(), "Error finding thread by id: " + e.toString());
-			return null;
-		} 
-	}	
-	
 	public String delete(UserEntity userEntity, long postEntityId) {
 		EntityTransaction trans = mEntityManager.getTransaction();
 		try {
@@ -150,7 +136,7 @@ public class PostModel {
 			} else if(!pe.getUser().getUsername().equals(userEntity.getUsername())) {
 				return NOT_YOURS_TO_DELETE;
 			}
-			ThreadEntity th = findThreadById(postEntityId);
+			ThreadEntity th = mThreadModel.findThreadById(postEntityId);
 			//th = mThreadFactory.updateThreadToRemovePost(th, pe);
 			trans.begin();
 			// Remote thread if needs be
@@ -175,26 +161,29 @@ public class PostModel {
 		} 
 	}
 
-	public String edit(UserEntity userEntity, long postEntityId) {
+	public String edit(UserEntity userEntity, long postEntityId, String content) {
 		EntityTransaction trans = mEntityManager.getTransaction();
 		try {
-			PostEntity post = null;
 			PostEntity pe = findPostById(postEntityId);
 			if(pe==null) {
 				return DOESNT_EXIST;
 			} else if(!pe.getUser().getUsername().equals(userEntity.getUsername())) {
 				return NOT_YOURS_TO_DELETE;
 			}
-			if(post==null) {
-				Log.info(getClass(), "Edit post: PostAdapter returned null");
-				return UNKNOWN_ERROR;
-			}
-			if(checkInputParams(userEntity, post.getContent())) {
+			if(checkInputParams(userEntity, content)) {
 				Log.info(this.getClass(), "Edit user: Bad user input");
 				return BAD_USER_INPUT;
 			}
+			// Update post
+			ThreadEntity th = mThreadModel.findThreadById(postEntityId);
+			if(th==null) {
+				return DOESNT_EXIST;
+			}
+			mPostFactory.setThreadAsUpdatedIfPostIsLatest(th, pe);
+			mPostFactory.updatePost(pe, content);
 			trans.begin();
-			mEntityManager.merge(post);
+			mEntityManager.merge(pe);
+			mEntityManager.merge(th);
 			trans.commit();
 			return EDITED;
 		} catch(Exception e) {

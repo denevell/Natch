@@ -7,7 +7,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
 import org.denevell.natch.db.entities.PostEntity;
@@ -24,7 +23,6 @@ public class AddPostModelTests {
 	
 	private PostModel model;
 	private EntityTransaction trans;
-	private EntityManagerFactory factory;
 	private EntityManager entityManager;
 	private PostEntity genericPost;
 	private UserEntity userEntity;
@@ -35,7 +33,6 @@ public class AddPostModelTests {
 	@Before
 	public void setup() {
 		entityManager = mock(EntityManager.class);
-		factory = mock(EntityManagerFactory.class);
 		trans = mock(EntityTransaction.class);
 		userEntity = new UserEntity("user", "pass");
 		genericThread = new ThreadEntity("" ,"", null, userEntity);
@@ -43,7 +40,7 @@ public class AddPostModelTests {
 		when(entityManager.getTransaction()).thenReturn(trans);
 		postFactory = mock(PostFactory.class);
 		threadModel = mock(ThreadModel.class);
-		model = new PostModel(factory, entityManager, postFactory, threadModel);
+		model = new PostModel(entityManager, postFactory, threadModel);
 	}
 	
 	@Test

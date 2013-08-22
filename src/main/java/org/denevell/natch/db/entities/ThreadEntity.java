@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 public class ThreadEntity {
 	private long id;
-	private PostEntity latestPost;
 	private List<PostEntity> posts;
 	private List<String> tags;
 	private String subject;
@@ -54,14 +53,6 @@ public class ThreadEntity {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public PostEntity getLatestPost() {
-		return latestPost;
-	}
-
-	public void setLatestPost(PostEntity latestPost) {
-		this.latestPost = latestPost;
 	}
 
 	public List<PostEntity> getPosts() {

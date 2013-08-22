@@ -223,7 +223,7 @@ public class PostsREST {
 				ret.setError(rb.getString(Strings.unknown_error)); // Unknown as this shouldn't happen
 				return ret;
 			}	
-			String result = mModel.edit(userEntity, postId); 
+			String result = mModel.edit(userEntity, postId, editPostResource.getContent()); 
 			generateEditReturnResource(ret, result);
 			return ret;
 		} catch(Exception e) {
