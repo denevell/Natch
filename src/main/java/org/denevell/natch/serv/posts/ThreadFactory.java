@@ -44,6 +44,7 @@ public class ThreadFactory {
 		if(th.getLatestPost()!=null && th.getLatestPost().getId()==pe.getId() && th.getPosts()!=null && th.getPosts().size()>=1) {
 			th.setLatestPost(th.getPosts().get(th.getPosts().size()-1));
 		}
+		th.setNumPosts(th.getNumPosts()-1);
 		return th;
 	}
 }
