@@ -80,6 +80,9 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	       <query>select p.rootPost.user from ThreadEntity p where p.id = :id</query>
 	   </named-query>       
        <attributes>
+	       <id name="numPosts">
+	           <column name="numPosts" nullable="false" />
+	       </id>       
 	       <id name="id">
 	           <column name="id" nullable="false" />
 	       </id>       

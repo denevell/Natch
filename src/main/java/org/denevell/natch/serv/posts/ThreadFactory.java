@@ -15,6 +15,7 @@ public class ThreadFactory {
 	public ThreadEntity makeThread(PostEntity p) {
 		ThreadEntity threadEntity = new ThreadEntity(p, Arrays.asList(p));
 		threadEntity.setId(p.getThreadId());
+		threadEntity.setNumPosts(threadEntity.getNumPosts()+1);
 		return threadEntity;
 	}
 
@@ -31,6 +32,7 @@ public class ThreadFactory {
 			posts = Arrays.asList(p);
 		}
 		thread.setPosts(posts);
+		thread.setNumPosts(thread.getNumPosts()+1);
 		return thread;
 	}
 

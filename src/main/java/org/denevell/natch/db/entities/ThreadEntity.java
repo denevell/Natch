@@ -4,6 +4,7 @@ import java.util.List;
 
 public class ThreadEntity {
 	private String id;
+	private long numPosts;
 	private PostEntity latestPost;
 	private List<PostEntity> posts;
 	private PostEntity rootPost;
@@ -53,5 +54,13 @@ public class ThreadEntity {
 
 	public void setRootPost(PostEntity rootPost) {
 		this.rootPost = rootPost;
+	}
+
+	public long getNumPosts() {
+		return numPosts;
+	}
+
+	public void setNumPosts(long numPosts) {
+		this.numPosts = numPosts;
 	}
 }

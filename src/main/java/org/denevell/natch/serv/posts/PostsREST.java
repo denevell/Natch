@@ -21,6 +21,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.PostEntity;
+import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
@@ -196,11 +197,13 @@ public class PostsREST {
 			@ApiParam(name="limit") @PathParam("limit") int limit 	
 			) throws IOException {
 		List<PostEntity> posts = null;
-		UserEntity threadAuthor = null;
+		ThreadEntity thread= null;
+		String username = null;
 		try {
 			mModel.init();
 			posts = mModel.listByThreadId(threadId, start, limit);
-			threadAuthor = mModel.findThreadAuthor(threadId);
+			if(posts!=null) thread = mModel.findThreadById(threadId);
+			if(posts!=null) username = thread.getRootPost().getUser().getUsername();
 		} catch(Exception e) {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
@@ -209,13 +212,11 @@ public class PostsREST {
 			mModel.close();
 		}
 		if(posts!=null && posts.size()==0) {
-			mResponse.sendError(HttpServletResponse.SC_NOT_FOUND, "Unexcepted error");
-			return null;
-		} else if(posts==null || threadAuthor==null || threadAuthor.getUsername()==null) {
-			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
+			mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return null;
 		} else {
-			ThreadResource adaptedPosts = new ThreadResourceAdapter(threadAuthor.getUsername(), posts);
+			ThreadResource adaptedPosts = new ThreadResourceAdapter(
+					username, posts, thread.getNumPosts());
 			return adaptedPosts;
 		}
 	}
