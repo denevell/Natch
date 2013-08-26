@@ -27,7 +27,7 @@ public class ThreadResourceAdapter extends ThreadResource {
 			setAuthor(threadAuthor);
 		}
 		setPosts(postsResources);
-		setMaxPages((int) numPosts);
+		setNumPosts((int) numPosts);
 	}
 
 }

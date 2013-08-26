@@ -3,6 +3,7 @@
 The start of a REST interface for a forum.
 
 ### Current
+* Add max num of posts to thread object
 * Test performance with multiple connections
 * Re-enable db locking 
 
