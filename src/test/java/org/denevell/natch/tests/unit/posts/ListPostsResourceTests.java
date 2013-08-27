@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.db.entities.PostEntity;
+import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.posts.PostResource;
@@ -164,14 +165,17 @@ public class ListPostsResourceTests {
 		postEntity.setId(400);
 		posts.add(postEntity);
 		posts.add(new PostEntity(new UserEntity("u2", ""), 2, 2, "s2", "c2", "t"));
+		ThreadEntity thread = new ThreadEntity(postEntity, posts);
+		thread.setNumPosts(5);
 		when(postsModel.listByThreadId("t", 0, 10)).thenReturn(posts);
-		when(postsModel.findThreadAuthor("t")).thenReturn(ue);
+		when(postsModel.findThreadById("t")).thenReturn(thread);
 		
 		// Act
 		ThreadResource result = resource.listByThreadId("t", 0, 10);
 		
 		// Assert
 		assertEquals(2, result.getPosts().size());
+		assertEquals(5, result.getNumPosts());
 		assertEquals(400, result.getPosts().get(0).getId());
 		assertEquals(1, result.getPosts().get(0).getCreation());
 		assertEquals(1, result.getPosts().get(0).getModification());

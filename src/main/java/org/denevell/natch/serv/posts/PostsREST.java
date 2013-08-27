@@ -203,11 +203,11 @@ public class PostsREST {
 			mModel.init();
 			posts = mModel.listByThreadId(threadId, start, limit);
 			if(posts!=null) thread = mModel.findThreadById(threadId);
-			if(posts!=null) username = thread.getRootPost().getUser().getUsername();
-		} catch(Exception e) {
-			Log.info(getClass(), "Couldn't list posts: " + e.toString());
-			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
-			return null;
+			if(thread!=null) username = thread.getRootPost().getUser().getUsername();
+			if(thread==null) {
+				mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
+				return null;
+			}
 		} finally {
 			mModel.close();
 		}

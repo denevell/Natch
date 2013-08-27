@@ -284,6 +284,7 @@ public class ListPostsFunctional {
 		
 		// Assert
 		assertEquals(1, returnData.getPosts().size());
+		assertEquals(2, returnData.getNumPosts());
 		assertEquals("sub", returnData.getSubject());
 		assertEquals("aaron@aaron.com", returnData.getAuthor());
 		assertEquals("cont2", returnData.getPosts().get(0).getContent());

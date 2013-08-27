@@ -3,13 +3,13 @@
 The start of a REST interface for a forum.
 
 ### Current
-* Add max num of posts to thread object
+* ~~threads: Add max num of posts to thread object~~
+* posts: Order of posts if one deleted
 * Test performance with multiple connections
 * Re-enable db locking 
 
 ### Backlog
 
-* #: Refactor list thread model to have subject, thread etc and a list of paginated posts.
 * #: Change ListPostResources to a thread specific entity. 
 * #: Test for still getting 5 posts if one root, but not the thread, is deleted.
 
