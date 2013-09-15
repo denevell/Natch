@@ -192,6 +192,7 @@ public class PostsModel {
 				Log.info(getClass(), "Edit post: PostAdapter returned null");
 				return UNKNOWN_ERROR;
 			}
+			if(!isEditingThread)  post.setSubject("-");
 			if(checkInputParams(userEntity, post.getSubject(), post.getContent(), isEditingThread)) {
 				Log.info(this.getClass(), "Edit user: Bad user input");
 				return BAD_USER_INPUT;

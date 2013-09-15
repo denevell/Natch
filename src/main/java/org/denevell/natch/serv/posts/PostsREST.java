@@ -265,7 +265,7 @@ public class PostsREST {
 	}
 
 	@POST
-	@Path("/edit/{postId}") // Explicit for the servlet filter
+	@Path("/editpost/{postId}") // Explicit for the servlet filter
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiOperation(value = "Edit a post", notes="Must contain the AuthKey header.",
 		responseClass="org.denevell.natch.serv.posts.resources.EditPostResourceReturnData")
