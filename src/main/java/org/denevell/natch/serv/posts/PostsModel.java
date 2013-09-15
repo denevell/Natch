@@ -48,16 +48,19 @@ public class PostsModel {
 		mThreadFactory = threadFactory;
 	}
 	
-	private boolean checkInputParams(UserEntity user, String subject, String content) {
+	private boolean checkInputParams(UserEntity user, String subject, String content, boolean isEditingThread) {
 		return  user==null || user.getUsername()==null || user.getUsername().trim().length()==0 ||
-				subject==null || content==null || subject.trim().length()==0 || content.trim().length()==0;
+				(isEditingThread && subject==null) || 
+				(isEditingThread && subject.trim().length()==0) || 
+				content==null || 
+				content.trim().length()==0;
 	}
 	
 	public String addPost(UserEntity user, PostEntityAdapter adapter) {
 		EntityTransaction trans = null;
 		try {
 			PostEntity p = adapter.createPost(null, user);
-			if(p==null || checkInputParams(user, p.getSubject(), p.getContent())) {
+			if(p==null || checkInputParams(user, p.getSubject(), p.getContent(), false)) {
 				Log.info(this.getClass(), "Bad user input");
 				return BAD_USER_INPUT;
 			}
@@ -167,7 +170,10 @@ public class PostsModel {
 		} 
 	}
 
-	public String edit(UserEntity userEntity, long postEntityId, PostEntityAdapter postAdapter) {
+	public String edit(UserEntity userEntity, 
+			long postEntityId, 
+			PostEntityAdapter postAdapter,
+			boolean isEditingThread) {
 		EntityTransaction trans = mEntityManager.getTransaction();
 		try {
 			PostEntity post;
@@ -186,7 +192,7 @@ public class PostsModel {
 				Log.info(getClass(), "Edit post: PostAdapter returned null");
 				return UNKNOWN_ERROR;
 			}
-			if(checkInputParams(userEntity, post.getSubject(), post.getContent())) {
+			if(checkInputParams(userEntity, post.getSubject(), post.getContent(), isEditingThread)) {
 				Log.info(this.getClass(), "Edit user: Bad user input");
 				return BAD_USER_INPUT;
 			}

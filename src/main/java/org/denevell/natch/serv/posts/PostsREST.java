@@ -272,31 +272,43 @@ public class PostsREST {
 	@ApiErrors({
 		@ApiError(code=401, reason="Incorrect AuthKey header.")
 	})	
-	public EditPostResourceReturnData edit(
+	public EditPostResourceReturnData editpost(
 			@ApiParam(name="postId") @PathParam(value="postId") long postId, 
 			@ApiParam(name="editParam") EditPostResource editPostResource) {
+		return edit(postId, editPostResource, false);
+	}
+	
+	@POST
+	@Path("/editthread/{postId}") // Explicit for the servlet filter
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Edit a thread", notes="Must contain the AuthKey header.",
+		responseClass="org.denevell.natch.serv.posts.resources.EditPostResourceReturnData")
+	@ApiErrors({
+		@ApiError(code=401, reason="Incorrect AuthKey header.")
+	})	
+	public EditPostResourceReturnData editthread(
+			@ApiParam(name="postId") @PathParam(value="postId") long postId, 
+			@ApiParam(name="editParam") EditPostResource editPostResource) {
+		return edit(postId, editPostResource, true);
+	}		
+
+	private EditPostResourceReturnData edit(long postId, 
+			EditPostResource editPostResource, 
+			boolean isEditingThread) {
 		EditPostResourceReturnData ret = new EditPostResourceReturnData();
 		try {
 			mModel.init();
 			ret.setSuccessful(false);
 			UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-			if(userEntity==null) {
-				ret.setError(rb.getString(Strings.unknown_error)); // Unknown as this shouldn't happen
-				return ret;
-			}	
 			mEditPostAdapter.setPostWithNewData(editPostResource);
-			String result = mModel.edit(userEntity, postId, mEditPostAdapter); 
+			String result = mModel.edit(userEntity, postId, mEditPostAdapter, isEditingThread); 
 			generateEditReturnResource(ret, result);
-			return ret;
-		} catch(Exception e) {
-			Log.info(getClass(), "Couldn't edit post: " + e.toString());
-			ret.setError(rb.getString(Strings.unknown_error));
 			return ret;
 		} finally {
 			mModel.close();
 		} 		
 	}
-
+	
 	private void generateEditReturnResource(EditPostResourceReturnData ret,
 			String result) {
 		if(result.equals(PostsModel.EDITED)) {

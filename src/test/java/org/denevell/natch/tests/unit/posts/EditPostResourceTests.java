@@ -50,10 +50,10 @@ public class EditPostResourceTests {
 		// Arrange
 		EditPostResource editPostResource = null;
 		long postEntityId = 1l;
-		when(postsModel.edit(user, postEntityId, postEntityAdapter)).thenReturn(PostsModel.EDITED);
+		when(postsModel.edit(user, postEntityId, postEntityAdapter, false)).thenReturn(PostsModel.EDITED);
 		
 		// Act
-		EditPostResourceReturnData result = resource.edit(postEntityId, editPostResource);
+		EditPostResourceReturnData result = resource.editpost(postEntityId, editPostResource);
 		
 		// Assert
 		assertTrue(result.isSuccessful());
@@ -65,10 +65,10 @@ public class EditPostResourceTests {
 		// Arrange
 		EditPostResource editPostResource = null;
 		long postEntityId = 1l;
-		when(postsModel.edit(user, postEntityId, postEntityAdapter)).thenReturn(PostsModel.NOT_YOURS_TO_DELETE);
+		when(postsModel.edit(user, postEntityId, postEntityAdapter, false)).thenReturn(PostsModel.NOT_YOURS_TO_DELETE);
 		
 		// Act
-		EditPostResourceReturnData result = resource.edit(postEntityId, editPostResource);
+		EditPostResourceReturnData result = resource.editpost(postEntityId, editPostResource);
 		
 		// Assert
 		assertFalse(result.isSuccessful());
@@ -80,29 +80,14 @@ public class EditPostResourceTests {
 		// Arrange
 		EditPostResource editPostResource = null;
 		long postEntityId = 1l;
-		when(postsModel.edit(user, postEntityId, postEntityAdapter)).thenReturn(PostsModel.DOESNT_EXIST);
+		when(postsModel.edit(user, postEntityId, postEntityAdapter, false)).thenReturn(PostsModel.DOESNT_EXIST);
 		
 		// Act
-		EditPostResourceReturnData result = resource.edit(postEntityId, editPostResource);
+		EditPostResourceReturnData result = resource.editpost(postEntityId, editPostResource);
 		
 		// Assert
 		assertFalse(result.isSuccessful());
 		assertEquals("Error json", rb.getString(Strings.post_doesnt_exist), result.getError());
 	}
 	
-	@Test
-	public void shouldShowUnknownErrorOnException() {
-		// Arrange
-		EditPostResource editPostResource = null;
-		long postEntityId = 1l;
-		when(postsModel.edit(user, postEntityId, postEntityAdapter)).thenThrow(new RuntimeException());
-		
-		// Act
-		EditPostResourceReturnData result = resource.edit(postEntityId, editPostResource);
-		
-		// Assert
-		assertFalse(result.isSuccessful());
-		assertEquals("Error json", rb.getString(Strings.unknown_error), result.getError());
-	}
-		
 }

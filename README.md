@@ -5,6 +5,7 @@ The start of a REST interface for a forum.
 ### Current
 * ~~threads: Add max num of posts to thread object~~
 * posts: Order of posts if one deleted
+* Test for editing a post and thread separately
 * Test performance with multiple connections
 * Re-enable db locking 
 
@@ -119,7 +120,8 @@ The start of a REST interface for a forum.
  * Delete user
  * User id is number not name
 * Misc
- * Base64 login / reg or maybe ssl?
+ * Should not be able to edit a post with editthread and edit the subject / tags 
+ * SSL
  * Limit the thread ids, tags and usernames to certain character
  * Some kind of captcha thing on registeration.
  * More sensible threadid?
