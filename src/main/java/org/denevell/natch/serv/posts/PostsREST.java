@@ -21,7 +21,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.PostEntity;
-import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
@@ -30,7 +29,6 @@ import org.denevell.natch.io.posts.EditPostResource;
 import org.denevell.natch.io.posts.EditPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.posts.PostResource;
-import org.denevell.natch.io.threads.ThreadResource;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
@@ -183,40 +181,6 @@ public class PostsREST {
 			return null;
 		} else {
 			ListPostsResource adaptedPosts = new ListPostsResourceAdapter(posts);
-			return adaptedPosts;
-		}
-	}
-	
-	@GET
-	@Path("/{threadId}/{start}/{limit}")
-	@Produces(MediaType.APPLICATION_JSON)	
-	@ApiOperation(value = "Lists posts within the thread specified", responseClass="org.denevell.natch.serv.posts.resources.ThreadResource")
-	public ThreadResource listByThreadId(
-			@ApiParam(name="threadId") @PathParam("threadId") String threadId,
-			@ApiParam(name="start") @PathParam("start") int start, 	
-			@ApiParam(name="limit") @PathParam("limit") int limit 	
-			) throws IOException {
-		List<PostEntity> posts = null;
-		ThreadEntity thread= null;
-		String username = null;
-		try {
-			mModel.init();
-			posts = mModel.listByThreadId(threadId, start, limit);
-			if(posts!=null) thread = mModel.findThreadById(threadId);
-			if(thread!=null) username = thread.getRootPost().getUser().getUsername();
-			if(thread==null) {
-				mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
-				return null;
-			}
-		} finally {
-			mModel.close();
-		}
-		if(posts!=null && posts.size()==0) {
-			mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
-			return null;
-		} else {
-			ThreadResource adaptedPosts = new ThreadResourceAdapter(
-					username, posts, thread.getNumPosts());
 			return adaptedPosts;
 		}
 	}
