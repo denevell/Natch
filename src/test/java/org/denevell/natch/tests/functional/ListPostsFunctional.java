@@ -30,6 +30,7 @@ public class ListPostsFunctional {
 	
 	private LoginResourceReturnData loginResult;
 	private WebResource service;
+	private WebResource listThread;
 
 	@Before
 	public void setup() throws Exception {
@@ -47,6 +48,7 @@ public class ListPostsFunctional {
 	    		.path("rest").path("user").path("login")
 	    		.type(MediaType.APPLICATION_JSON)
 	    		.post(LoginResourceReturnData.class, loginInput);		
+		listThread = service.path("rest").path("post").path("thread");
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -238,8 +240,7 @@ public class ListPostsFunctional {
     	.put(AddPostResourceReturnData.class, input2); 
 		
 		// Act
-		ThreadResource returnData = service
-		.path("rest").path("post").path("t").path("0").path("20")
+		ThreadResource returnData = listThread.path("t").path("0").path("20")
     	.get(ThreadResource.class); 
 		
 		// Assert
@@ -261,25 +262,21 @@ public class ListPostsFunctional {
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
 		AddPostResourceInput input2 = new AddPostResourceInput("rubbish", "cont2", "t");
-		service
-		.path("rest").path("post").path("add")
+		service.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input); 
-		service
-		.path("rest").path("post").path("add")
+		service.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input1); 
-		service
-		.path("rest").path("post").path("add")
+		service.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input2); 
 		
 		// Act
-		ThreadResource returnData = service
-		.path("rest").path("post").path("t").path("1").path("1")
+		ThreadResource returnData = listThread.path("t").path("1").path("1")
     	.get(ThreadResource.class); 
 		
 		// Assert

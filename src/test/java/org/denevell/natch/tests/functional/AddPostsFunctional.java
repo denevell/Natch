@@ -155,14 +155,14 @@ public class AddPostsFunctional {
 		
 		// Act
 		AddPostResourceReturnData returnData = 
-		addPostService
+		TestUtils.getAddThreadClient()
 		.header("AuthKey", loginResult.getAuthKey())
 		.type(MediaType.APPLICATION_JSON)
 		.put(AddPostResourceReturnData.class, input); 
 		
 		// Assert
-		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
 		assertFalse(returnData.isSuccessful());
+		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
 	}
 	
 	@Test

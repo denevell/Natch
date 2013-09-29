@@ -179,7 +179,7 @@ public class EditPostModelTests {
 		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(postToEdit);
 		
 		// Act
-		String result = model.edit(userEntity, num, postEntityAdapter, false);
+		String result = model.edit(userEntity, num, postEntityAdapter, true);
 		
 		// Assert 
 		assertEquals(PostsModel.BAD_USER_INPUT, result);
@@ -198,7 +198,7 @@ public class EditPostModelTests {
 		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(postToEdit);
 		
 		// Act
-		String result = model.edit(userEntity, num, postEntityAdapter, false);
+		String result = model.edit(userEntity, num, postEntityAdapter, true);
 		
 		// Assert 
 		assertEquals(PostsModel.BAD_USER_INPUT, result);

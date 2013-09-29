@@ -48,8 +48,10 @@ public class PostsModel {
 		mThreadFactory = threadFactory;
 	}
 	
-	private boolean checkInputParams(UserEntity user, String subject, String content, boolean isEditingThread) {
-		return  user==null || user.getUsername()==null || user.getUsername().trim().length()==0 ||
+	public static boolean isBadInputParams(UserEntity user, String subject, String content, boolean isEditingThread) {
+		return  user==null || 
+				user.getUsername()==null || 
+				user.getUsername().trim().length()==0 ||
 				(isEditingThread && subject==null) || 
 				(isEditingThread && subject.trim().length()==0) || 
 				content==null || 
@@ -60,10 +62,6 @@ public class PostsModel {
 		EntityTransaction trans = null;
 		try {
 			PostEntity p = adapter.createPost(null, user);
-			if(p==null || checkInputParams(user, p.getSubject(), p.getContent(), false)) {
-				Log.info(this.getClass(), "Bad user input");
-				return BAD_USER_INPUT;
-			}
 			ThreadEntity thread = findThreadById(p.getThreadId());
 			if(thread==null) {
 				thread = mThreadFactory.makeThread(p);
@@ -193,7 +191,7 @@ public class PostsModel {
 				return UNKNOWN_ERROR;
 			}
 			if(!isEditingThread)  post.setSubject("-");
-			if(checkInputParams(userEntity, post.getSubject(), post.getContent(), isEditingThread)) {
+			if(isBadInputParams(userEntity, post.getSubject(), post.getContent(), isEditingThread)) {
 				Log.info(this.getClass(), "Edit user: Bad user input");
 				return BAD_USER_INPUT;
 			}

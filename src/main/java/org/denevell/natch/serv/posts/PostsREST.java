@@ -78,22 +78,48 @@ public class PostsREST {
 	@ApiErrors({
 		@ApiError(code=401, reason="Incorrect AuthKey header.")
 	})	
-	public AddPostResourceReturnData add(
-			@ApiParam(name="input") AddPostResourceInput input) {
+	public AddPostResourceReturnData addPost_(AddPostResourceInput input) {
+		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+		if(PostsModel.isBadInputParams(userEntity, 
+				input.getSubject(), 
+				input.getContent(), false)) {
+			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
+			regReturnData.setSuccessful(false);
+			regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
+			return regReturnData;
+		} else {
+			return addPostOrThread(input, userEntity);
+		}
+	}
+	
+	@PUT
+	@Path("/addthread") // Explicit for the servlet filter
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Add a post",	notes="Must contain the AuthKey header.",
+		responseClass="org.denevell.natch.serv.posts.resources.AddPostResourceReturnData")
+	@ApiErrors({
+		@ApiError(code=401, reason="Incorrect AuthKey header.")
+	})	
+	public AddPostResourceReturnData addThread(AddPostResourceInput input) {
+		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+		if(PostsModel.isBadInputParams(userEntity, 
+				input.getSubject(), 
+				input.getContent(), true)) {
+			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
+			regReturnData.setSuccessful(false);
+			regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
+			return regReturnData;
+		} else {
+			return addPostOrThread(input, userEntity);
+		}
+	}	
+
+	public AddPostResourceReturnData addPostOrThread(AddPostResourceInput input, UserEntity userEntity) {
 		try {
 			mModel.init();
 			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 			regReturnData.setSuccessful(false);
-			if(input==null || input.getContent()==null || input.getSubject()==null) {
-				regReturnData.setSuccessful(false);
-				regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
-				return regReturnData;
-			}
-			UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-			if(userEntity==null) {
-				regReturnData.setError(rb.getString(Strings.unknown_error)); // Unknown as this shouldn't happen
-				return regReturnData;
-			}
 			mAddPostAdapter.create(input);
 			String okay = mModel.addPost(userEntity, mAddPostAdapter);
 			generateAddPostReturnResource(regReturnData, okay, mAddPostAdapter);

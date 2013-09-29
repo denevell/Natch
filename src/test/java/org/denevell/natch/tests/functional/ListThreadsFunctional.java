@@ -182,7 +182,7 @@ public class ListThreadsFunctional {
 		editedInput.setContent("blar");
 		editedInput.setSubject("blar2");
 		EditPostResourceReturnData editReturnData = service
-		.path("rest").path("post").path("edit")
+		.path("rest").path("post").path("editthread")
 		.path(String.valueOf(listedPosts.getPosts().get(1).getId()))
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
@@ -223,7 +223,7 @@ public class ListThreadsFunctional {
 		editedInput.setSubject("blar2");
 		editedInput.setTags(new ArrayList<String>(){{add("a");add("b");}});
 		EditPostResourceReturnData editReturnData = service
-		.path("rest").path("post").path("edit")
+		.path("rest").path("post").path("editthread")
 		.path(String.valueOf(listedPosts.getPosts().get(1).getId()))
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
