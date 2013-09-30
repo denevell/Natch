@@ -215,4 +215,23 @@ public class AddPostsFunctional {
 		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
 		assertFalse(returnData.isSuccessful());
 	}
+	
+	@Test
+	public void shouldSeeAddThreadErrorOnUnAuthorised() {
+		// Arrange 
+		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
+		
+		// Act
+		try {
+			TestUtils.getAddThreadClient()
+			.header("AuthKey", loginResult.getAuthKey()+"BAD")
+			.type(MediaType.APPLICATION_JSON)
+		    	.put(AddPostResourceReturnData.class, input); 
+		} catch(UniformInterfaceException e) {
+			// Assert
+			assertEquals(401, e.getResponse().getClientResponseStatus().getStatusCode());
+			return;
+		}
+		assertFalse("Was excepting a 401 response", true);		
+	}	
 }
