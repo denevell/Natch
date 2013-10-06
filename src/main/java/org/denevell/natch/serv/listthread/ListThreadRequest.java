@@ -53,11 +53,13 @@ public class ListThreadRequest {
 		List<PostEntity> posts = null;
 		ThreadEntity thread= null;
 		String username = null;
+		List<String> tags = null;
 		try {
 			mModel.init();
 			posts = mModel.listByThreadId(threadId, start, limit);
 			if(posts!=null) thread = mModel.findThreadById(threadId);
 			if(thread!=null) username = thread.getRootPost().getUser().getUsername();
+			if(thread!=null) tags= thread.getRootPost().getTags();
 			if(thread==null) {
 				mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
 				return null;
@@ -71,6 +73,7 @@ public class ListThreadRequest {
 		} else {
 			ThreadResource adaptedPosts = new ThreadResourceAdapter(
 					username, posts, thread.getNumPosts());
+			adaptedPosts.setTags(tags);
 			return adaptedPosts;
 		}
 	}

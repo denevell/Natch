@@ -260,6 +260,8 @@ public class ListPostsFunctional {
 	public void shouldListPostsByThreadIdWithLimit() {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
+		ArrayList<String> tags = new ArrayList<String>(){{ add("again"); add("blar"); }};
+		input.setTags(tags);
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
 		AddPostResourceInput input2 = new AddPostResourceInput("rubbish", "cont2", "t");
 		service.path("rest").path("post").path("add")
@@ -282,6 +284,7 @@ public class ListPostsFunctional {
 		// Assert
 		assertEquals(1, returnData.getPosts().size());
 		assertEquals(2, returnData.getNumPosts());
+		assertEquals("again", returnData.getTags().get(0));
 		assertEquals("sub", returnData.getSubject());
 		assertEquals("aaron@aaron.com", returnData.getAuthor());
 		assertEquals("cont2", returnData.getPosts().get(0).getContent());
