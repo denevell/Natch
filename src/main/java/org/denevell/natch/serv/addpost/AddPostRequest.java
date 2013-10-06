@@ -96,7 +96,9 @@ public class AddPostRequest {
 	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, ThreadEntity thread, AddPostResourcePostEntityAdapter adapterThatCreatePost) {
 		if(thread!=null) {
 			if(adapterThatCreatePost!=null && adapterThatCreatePost.getCreatedPost()!=null) {
-				regReturnData.setThread(new ThreadResourceAdapter(thread));
+				ThreadResourceAdapter threadResource = new ThreadResourceAdapter(thread);
+				threadResource.setPosts(null);
+				regReturnData.setThread(threadResource);
 			} else {
 				Log.info(getClass(), "Added a post but the thread id was null when sending the json response...");
 			}
