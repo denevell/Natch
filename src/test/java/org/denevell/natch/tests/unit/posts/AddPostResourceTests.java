@@ -2,6 +2,7 @@ package org.denevell.natch.tests.unit.posts;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.PostEntity;
+import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
@@ -49,7 +51,7 @@ public class AddPostResourceTests {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
 		when(addPostAdapter.getCreatedPost()).thenReturn(new PostEntity(null, 123, 123, "a", "dsf", "thready"));
-		when(postsModel.addPost(user, addPostAdapter)).thenReturn(PostsModel.ADDED);
+		when(postsModel.addPost(user, addPostAdapter)).thenReturn(mock(ThreadEntity.class));
 		
 		// Act
 		AddPostResourceReturnData result = resource.addPost(input);
@@ -57,7 +59,7 @@ public class AddPostResourceTests {
 		// Assert
 		assertTrue("Result is a success", result.isSuccessful());
 		assertEquals("Error json", "", result.getError());
-		assertEquals("ThreadId", "thready", result.getThreadId());
+		assertNotNull(result.getThread());
 	}
 	
 	@Test
@@ -65,7 +67,7 @@ public class AddPostResourceTests {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("asdf", " ");
 		when(addPostAdapter.getCreatedPost()).thenReturn(new PostEntity(null, 123, 123, "a", "dsf", "thready"));
-		when(postsModel.addPost(user, addPostAdapter)).thenReturn(PostsModel.ADDED);
+		when(postsModel.addPost(user, addPostAdapter)).thenReturn(mock(ThreadEntity.class));
 		
 		// Act
 		AddPostResourceReturnData result = resource.addPost(input);
@@ -74,19 +76,5 @@ public class AddPostResourceTests {
 		assertFalse("Result is a success", result.isSuccessful());
 		assertEquals("Error json", rb.getString(Strings.post_fields_cannot_be_blank), result.getError());
 	}		
-	
-	@Test
-	public void shouldntRegisterWhenModelSaysBadInput() {
-		// Arrange
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		when(postsModel.addPost(user, addPostAdapter)).thenReturn(PostsModel.BAD_USER_INPUT);
-		
-		// Act
-		AddPostResourceReturnData result = resource.addPost(input);
-		
-		// Assert
-		assertFalse(result.isSuccessful());
-		assertEquals("Error json", rb.getString(Strings.post_fields_cannot_be_blank), result.getError());
-	}
 	
 }

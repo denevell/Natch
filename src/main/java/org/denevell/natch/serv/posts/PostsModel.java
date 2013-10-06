@@ -58,7 +58,7 @@ public class PostsModel {
 				content.trim().length()==0;
 	}
 	
-	public String addPost(UserEntity user, PostEntityAdapter adapter) {
+	public ThreadEntity addPost(UserEntity user, PostEntityAdapter adapter) {
 		EntityTransaction trans = null;
 		try {
 			PostEntity p = adapter.createPost(null, user);
@@ -72,12 +72,12 @@ public class PostsModel {
 			trans.begin();
 			mEntityManager.persist(thread);
 			trans.commit();
-			return ADDED;
+			return thread;
 		} catch(Exception e) {
 			Log.info(this.getClass(), e.toString());
 			e.printStackTrace();
 			if(trans!=null && trans.isActive()) trans.rollback();
-			return UNKNOWN_ERROR;
+			return null;
 		} 
 	}
 

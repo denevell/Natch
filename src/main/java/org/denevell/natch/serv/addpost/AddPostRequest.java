@@ -14,11 +14,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
+import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.serv.posts.AddPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;
+import org.denevell.natch.serv.posts.ThreadResourceAdapter;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
@@ -83,7 +85,7 @@ public class AddPostRequest {
 			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 			regReturnData.setSuccessful(false);
 			mAddPostAdapter.create(input);
-			String okay = mModel.addPost(userEntity, mAddPostAdapter);
+			ThreadEntity okay = mModel.addPost(userEntity, mAddPostAdapter);
 			generateAddPostReturnResource(regReturnData, okay, mAddPostAdapter);
 			return regReturnData;
 		} finally {
@@ -91,24 +93,18 @@ public class AddPostRequest {
 		}
 	}	
 	
-	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, String okay, AddPostResourcePostEntityAdapter adapterThatCreatePost) {
-		if(okay.equals(PostsModel.ADDED)) {
+	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, ThreadEntity thread, AddPostResourcePostEntityAdapter adapterThatCreatePost) {
+		if(thread!=null) {
 			if(adapterThatCreatePost!=null && adapterThatCreatePost.getCreatedPost()!=null) {
-				regReturnData.setThreadId(adapterThatCreatePost.getCreatedPost().getThreadId());
+				regReturnData.setThread(new ThreadResourceAdapter(thread));
 			} else {
 				Log.info(getClass(), "Added a post but the thread id was null when sending the json response...");
 			}
 			regReturnData.setSuccessful(true);
-		} else if(okay.equals(PostsModel.BAD_USER_INPUT)) {
-			regReturnData.setSuccessful(false);
-			regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
-		} else if(okay.equals(PostsModel.UNKNOWN_ERROR)){
-			regReturnData.setSuccessful(false);
-			regReturnData.setError(rb.getString(Strings.unknown_error));
 		} else {
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.unknown_error));
 		}
-	}	
+	}
 
 }

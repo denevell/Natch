@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.PostEntity;
+import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
@@ -50,7 +51,7 @@ public class AddThreadResourceTests {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput(" ", "cont");
 		when(addPostAdapter.getCreatedPost()).thenReturn(new PostEntity(null, 123, 123, "a", "dsf", "thready"));
-		when(postsModel.addPost(user, addPostAdapter)).thenReturn(PostsModel.ADDED);
+		when(postsModel.addPost(user, addPostAdapter)).thenReturn(mock(ThreadEntity.class));
 		
 		// Act
 		AddPostResourceReturnData result = resource.addThread(input);
@@ -65,7 +66,7 @@ public class AddThreadResourceTests {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", " ");
 		when(addPostAdapter.getCreatedPost()).thenReturn(new PostEntity(null, 123, 123, "a", "dsf", "thready"));
-		when(postsModel.addPost(user, addPostAdapter)).thenReturn(PostsModel.ADDED);
+		when(postsModel.addPost(user, addPostAdapter)).thenReturn(mock(ThreadEntity.class));
 		
 		// Act
 		AddPostResourceReturnData result = resource.addThread(input);

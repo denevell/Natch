@@ -1,6 +1,7 @@
 package org.denevell.natch.tests.unit.posts;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -56,10 +57,10 @@ public class AddPostModelTests {
 		when(threadFactory.makeThread(genericPost)).thenReturn(genericThread);
 		
 		// Act
-		String result = model.addPost(userEntity, adapter);
+		ThreadEntity result = model.addPost(userEntity, adapter);
 		
 		// Assert
-		assertEquals(PostsModel.ADDED, result);
+		assertNotNull(result);
 		verify(entityManager).persist(genericThread);
 	}
 	
@@ -75,10 +76,10 @@ public class AddPostModelTests {
 		when(threadFactory.makeThread(genericPost)).thenReturn(genericThread);
 		
 		// Act
-		String result = model.addPost(userEntity, adapter);
+		ThreadEntity result = model.addPost(userEntity, adapter);
 		
 		// Assert
-		assertEquals(PostsModel.ADDED, result);
+		assertNotNull(result);
 		verify(entityManager).persist(genericThread);
 	}	
 	
@@ -93,10 +94,10 @@ public class AddPostModelTests {
 		when(entityManager.getTransaction()).thenThrow(new RuntimeException());
 		
 		// Act
-		String result = model.addPost(userEntity, adapter);
+		ThreadEntity result = model.addPost(userEntity, adapter);
 		
 		// Assert
-		assertEquals(PostsModel.UNKNOWN_ERROR, result);
+		assertNull(result);
 		verify(entityManager, never()).persist(genericThread);
 	}
 		
