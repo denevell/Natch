@@ -68,29 +68,7 @@ public class PostsREST {
 		mEditPostAdapter = editPostAdapter;
 		mAddPostAdapter = addPostAdapter;
 	}
-	
-	@PUT
-	@Path("/add") // Explicit for the servlet filter
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Add a post",	notes="Must contain the AuthKey header.",
-		responseClass="org.denevell.natch.serv.posts.resources.AddPostResourceReturnData")
-	@ApiErrors({
-		@ApiError(code=401, reason="Incorrect AuthKey header.")
-	})	
-	public AddPostResourceReturnData addPost_(AddPostResourceInput input) {
-		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-		if(PostsModel.isBadInputParams(userEntity, 
-				input.getSubject(), 
-				input.getContent(), false)) {
-			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
-			regReturnData.setSuccessful(false);
-			regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
-			return regReturnData;
-		} else {
-			return addPostOrThread(input, userEntity);
-		}
-	}
+
 	
 	@PUT
 	@Path("/addthread") // Explicit for the servlet filter
