@@ -260,6 +260,7 @@ public class ListPostsFunctional {
 	public void shouldListPostsByThreadIdWithLimit() {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
+		@SuppressWarnings("serial")
 		ArrayList<String> tags = new ArrayList<String>(){{ add("again"); add("blar"); }};
 		input.setTags(tags);
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
