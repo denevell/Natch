@@ -50,20 +50,31 @@ public class DeletePostsFunctional {
 	@Test
 	public void shouldDeletePost() {
 		// Arrange 
-		TestUtils.addThread(loginResult.getAuthKey(), "a", "b", "adsf", "thread");
-		TestUtils.addThread(loginResult.getAuthKey(), "c", "d", "adsf", "thread");
-		ListPostsResource listPosts = service
-		.path("rest").path("post").path("0").path("10")
+		AddPostResourceInput input = new AddPostResourceInput("a", "b", "thread");	
+		AddPostResourceInput input2 = new AddPostResourceInput("d", "e", "thread");	
+
+		AddPostResourceReturnData res = service
+		.path("rest").path("post").path("addthread")
+	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListPostsResource.class); 		
-		ListPostsResource threadsBefore = TestUtils.getListPostThreadsPostClient()
-		.path("0").path("10")
+    	.put(AddPostResourceReturnData.class, input);
+		assertTrue("Added thraed", res.isSuccessful());				
+
+		res = service
+		.path("rest").path("post").path("addthread")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input2);
+		assertTrue("Added thraed", res.isSuccessful());				
+
+		ListPostsResource listPostsBefore = 
+		service.path("rest").path("post").path("0").path("10")
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 		
 		
 		// Act
 		DeletePostResourceReturnData ret = service.path("rest").path("post").path("del")
-		.path(String.valueOf(listPosts.getPosts().get(0).getId()))
+		.path(String.valueOf(listPostsBefore.getPosts().get(0).getId()))
 		.header("AuthKey", loginResult.getAuthKey())
 		.entity(null)
 		.delete(DeletePostResourceReturnData.class);
@@ -71,18 +82,12 @@ public class DeletePostsFunctional {
 		.path("rest").path("post").path("0").path("10")
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 		
-		ListPostsResource threadsAfter = TestUtils.getListPostThreadsPostClient()
-		.path("0").path("10")
-		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListPostsResource.class); 		
 		
 		// Assert
 		assertEquals("", ret.getError());
 		assertTrue(ret.isSuccessful());		
-		assertEquals(2, listPosts.getPosts().size());		
+		assertEquals(2, listPostsBefore.getPosts().size());		
 		assertEquals(1, listPostsAfter.getPosts().size());		
-		assertEquals(1, threadsBefore.getPosts().size());		
-		assertEquals(1, threadsAfter.getPosts().size());		
 	}
 	
 	@Test

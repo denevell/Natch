@@ -33,14 +33,12 @@ import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
-import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiError;
 import com.wordnik.swagger.annotations.ApiErrors;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
 @Path("post")
-@Api(value="/post", description="Adds, Deletes, Edits and Lists posts")
 public class PostsREST {
 	
 	@Context UriInfo mInfo;
@@ -244,14 +242,9 @@ public class PostsREST {
 	@POST
 	@Path("/editthread/{postId}") // Explicit for the servlet filter
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Edit a thread", notes="Must contain the AuthKey header.",
-		responseClass="org.denevell.natch.serv.posts.resources.EditPostResourceReturnData")
-	@ApiErrors({
-		@ApiError(code=401, reason="Incorrect AuthKey header.")
-	})	
 	public EditPostResourceReturnData editthread(
-			@ApiParam(name="postId") @PathParam(value="postId") long postId, 
-			@ApiParam(name="editParam") EditPostResource editPostResource) {
+			@PathParam(value="postId") long postId, 
+			EditPostResource editPostResource) {
 		return edit(postId, editPostResource, true);
 	}		
 

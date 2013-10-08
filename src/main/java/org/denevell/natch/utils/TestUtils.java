@@ -12,13 +12,11 @@ import org.denevell.natch.db.entities.PersistenceInfo;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.RegisterResourceInput;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
 
-import com.google.common.collect.Lists;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
@@ -145,23 +143,5 @@ public class TestUtils {
 		return ret.getAuthKey();
 	}
 	
-	public static String addThread(String authKey, String sub, String cont, String singleTag) {
-		return addThread(authKey, sub, cont, singleTag, null);
-	}
-	
-	public static String addPost(String threadId, String authKey, String sub, String cont, String singleTag) {
-		// Same call as add thread, but with threadid
-		return addThread(authKey, sub, cont, singleTag, threadId);
-	}
-
-	public static String addThread(String authKey, String sub, String cont, String singleTag, String threadId) {
-		AddPostResourceInput addInput = new AddPostResourceInput(sub, cont, Lists.newArrayList(singleTag, "other"));
-		if(threadId!=null) addInput.setThreadId(threadId);
-		AddPostResourceInput ret = TestUtils.getAddPostClient()
-		.type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", authKey)
-		.put(AddPostResourceInput.class, addInput);
-		return ret.getThreadId();
-	}
 
 }
