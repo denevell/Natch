@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.denevell.natch.db.entities.ThreadEntity;
@@ -51,6 +52,19 @@ public class ThreadModel {
 		if(resultList==null) return new ArrayList<ThreadEntity>();
 		else return resultList;
 	}	
+	
+	public long getNumOfPosts() {
+		Query q = (Query) mEntityManager.createQuery("select count(t) from ThreadEntity t");
+		long countResult= (Long) q.getSingleResult();				
+		return countResult;
+	}		
+
+	public long getNumOfPosts(String tag) {
+		Query q = (Query) mEntityManager.createQuery("select count(t) from ThreadEntity t  where :tag member of t.rootPost.tags");
+		q.setParameter("tag", tag);
+		long countResult= (Long) q.getSingleResult();				
+		return countResult;
+	}		
 	
 	public List<ThreadEntity> listThreadsByTag(String tag, int startPos, int limit) {
 		TypedQuery<ThreadEntity> q = mEntityManager.

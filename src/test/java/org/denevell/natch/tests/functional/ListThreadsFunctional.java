@@ -65,6 +65,7 @@ public class ListThreadsFunctional {
     	.get(ListThreadsResource.class); 
 		
 		// Assert
+		assertEquals(2, returnData.getNumOfThreads());
 		assertEquals(2, returnData.getThreads().size());
 		assertTrue(returnData.getThreads().get(0).getId()!=null);
 		assertTrue(returnData.getThreads().get(1).getId()!=null);
@@ -89,7 +90,8 @@ public class ListThreadsFunctional {
 		.path("rest").path("threads").path("1").path("1")
     	.get(ListThreadsResource.class); 
 		
-		// Assert
+		// Assert)
+		assertEquals(2, returnData.getNumOfThreads());
 		assertEquals(1, returnData.getThreads().size());
 		assertEquals("sub1", returnData.getThreads().get(0).getSubject());
 		assertEquals("other", returnData.getThreads().get(0).getId());
@@ -118,6 +120,7 @@ public class ListThreadsFunctional {
     	.get(ListThreadsResource.class); 
 		
 		// Assert
+		assertEquals(2, returnData.getNumOfThreads());
 		assertEquals(2, returnData.getThreads().size());
 		assertEquals("sub", returnData.getThreads().get(0).getSubject());
 		assertEquals("t", returnData.getThreads().get(0).getId());
@@ -151,6 +154,7 @@ public class ListThreadsFunctional {
     	.get(ListThreadsResource.class); 
 		
 		// Assert
+		assertEquals(2, returnData.getNumOfThreads());
 		assertEquals(1, returnData.getThreads().size());
 		assertEquals("x", returnData.getThreads().get(0).getSubject());
 		assertEquals("x", returnData.getThreads().get(0).getId());

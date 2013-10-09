@@ -53,9 +53,11 @@ public class ListThreadsRequest {
 		@ApiParam(name="limit") @PathParam("limit") int limit 	
 			) throws IOException {
 		List<ThreadEntity> threads = null;
+		long num = -1;
 		try {
 			mModel.init();
 			threads = mModel.listThreads(start, limit);
+			num = mModel.getNumOfPosts();
 		} catch(Exception e) {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
@@ -68,6 +70,7 @@ public class ListThreadsRequest {
 			return null;
 		} else {
 			ListThreadsResource adaptedPosts = new ListThreadsResourceAdapter(threads);
+			adaptedPosts.setNumOfThreads(num);
 			return adaptedPosts;
 		}
 	}	
@@ -81,9 +84,11 @@ public class ListThreadsRequest {
 			@PathParam("limit") int limit 	
 			) throws IOException {
 		List<ThreadEntity> threads = null;
+		long num = -1;
 		try {
 			mModel.init();
 			threads = mModel.listThreadsByTag(tag, start, limit);
+			num = mModel.getNumOfPosts(tag);
 		} catch(Exception e) {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
@@ -96,6 +101,7 @@ public class ListThreadsRequest {
 			return null;
 		} else {
 			ListThreadsResource adaptedPosts = new ListThreadsResourceAdapter(threads);
+			adaptedPosts.setNumOfThreads(num);
 			return adaptedPosts;
 		}		
 	}	
