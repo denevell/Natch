@@ -10,7 +10,7 @@ import org.denevell.natch.io.threads.ThreadResource;
 
 public class ThreadResourceAdapter extends ThreadResource {
 
-	public ThreadResourceAdapter(String threadAuthor, List<PostEntity> posts, long numPosts) {
+	public ThreadResourceAdapter(String threadAuthor, List<PostEntity> posts, ThreadEntity thread) {
 		List<PostResource> postsResources = new ArrayList<PostResource>();
 		for (PostEntity p: posts) {
 			PostResource postResource = new PostResource(p.getUser().getUsername(), 
@@ -23,12 +23,10 @@ public class ThreadResourceAdapter extends ThreadResource {
 			postResource.setThreadId(p.getThreadId());
 			postsResources.add(postResource);
 		}
-		if(postsResources.size()>0) {
-			setSubject(postsResources.get(0).getSubject());
-			setAuthor(threadAuthor);
-		}
+		setSubject(thread.getRootPost().getSubject());
+		setAuthor(thread.getRootPost().getUser().getUsername());
 		setPosts(postsResources);
-		setNumPosts((int) numPosts);
+		setNumPosts((int) thread.getNumPosts());
 	}
 
 	public ThreadResourceAdapter(ThreadEntity thread) {

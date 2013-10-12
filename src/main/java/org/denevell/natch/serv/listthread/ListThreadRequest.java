@@ -72,7 +72,7 @@ public class ListThreadRequest {
 			return null;
 		} else {
 			ThreadResource adaptedPosts = new ThreadResourceAdapter(
-					username, posts, thread.getNumPosts());
+					username, posts, thread);
 			adaptedPosts.setTags(tags);
 			return adaptedPosts;
 		}
