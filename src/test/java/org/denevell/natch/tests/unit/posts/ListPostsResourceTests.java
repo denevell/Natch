@@ -19,7 +19,7 @@ import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.io.threads.ThreadResource;
-import org.denevell.natch.serv.listthread.ListThreadRequest;
+import org.denevell.natch.serv.list_thread.ListThreadRequest;
 import org.denevell.natch.serv.posts.AddPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.EditPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;

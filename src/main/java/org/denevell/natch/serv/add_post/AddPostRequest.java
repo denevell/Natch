@@ -1,4 +1,4 @@
-package org.denevell.natch.serv.addpost;
+package org.denevell.natch.serv.add_post;
 
 import java.util.ResourceBundle;
 

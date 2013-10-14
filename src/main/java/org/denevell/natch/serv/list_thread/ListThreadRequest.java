@@ -1,4 +1,4 @@
-package org.denevell.natch.serv.listthread;
+package org.denevell.natch.serv.list_thread;
 
 import java.io.IOException;
 import java.util.List;

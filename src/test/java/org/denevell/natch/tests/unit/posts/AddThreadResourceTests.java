@@ -16,10 +16,9 @@ import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
+import org.denevell.natch.serv.add_thread.AddThreadRequest;
 import org.denevell.natch.serv.posts.AddPostResourcePostEntityAdapter;
-import org.denevell.natch.serv.posts.EditPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;
-import org.denevell.natch.serv.posts.PostsREST;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +27,7 @@ public class AddThreadResourceTests {
 	
 	private PostsModel postsModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
-	private PostsREST resource;
+	private AddThreadRequest resource;
 	private UserEntity user;
 	private HttpServletRequest request;
 	private AddPostResourcePostEntityAdapter addPostAdapter;
@@ -41,9 +40,8 @@ public class AddThreadResourceTests {
 		request = mock(HttpServletRequest.class);
 		when(request.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER)).thenReturn(user);
 		HttpServletResponse response = mock(HttpServletResponse.class);
-		EditPostResourcePostEntityAdapter editPostAdapter = mock(EditPostResourcePostEntityAdapter.class);
 		addPostAdapter = mock(AddPostResourcePostEntityAdapter.class);
-		resource = new PostsREST(postsModel, request, response, editPostAdapter, addPostAdapter);
+		resource = new AddThreadRequest(postsModel, request, response, addPostAdapter);
 	}
 
 	@Test

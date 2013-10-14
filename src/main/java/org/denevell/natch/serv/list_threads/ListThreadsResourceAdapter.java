@@ -1,4 +1,4 @@
-package org.denevell.natch.serv.listthreads;
+package org.denevell.natch.serv.list_threads;
 
 import java.util.ArrayList;
 import java.util.List;

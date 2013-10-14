@@ -14,10 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.DeletePostResourceReturnData;
-import org.denevell.natch.serv.posts.AddPostResourcePostEntityAdapter;
-import org.denevell.natch.serv.posts.EditPostResourcePostEntityAdapter;
+import org.denevell.natch.serv.delete_post.DeletePostRequest;
 import org.denevell.natch.serv.posts.PostsModel;
-import org.denevell.natch.serv.posts.PostsREST;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,10 +24,9 @@ public class DeletePostResourceTests {
 	
 	private PostsModel postsModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
-	private PostsREST resource;
+	private DeletePostRequest resource;
 	private UserEntity user;
 	private HttpServletRequest request;
-	private AddPostResourcePostEntityAdapter addPostAdapter;
 
 	@Before
 	public void setup() {
@@ -38,9 +35,7 @@ public class DeletePostResourceTests {
 		request = mock(HttpServletRequest.class);
 		when(request.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER)).thenReturn(user);
 		HttpServletResponse response = mock(HttpServletResponse.class);
-		EditPostResourcePostEntityAdapter postAdapter = mock(EditPostResourcePostEntityAdapter.class);
-		addPostAdapter = mock(AddPostResourcePostEntityAdapter.class);
-		resource = new PostsREST(postsModel, request, response, postAdapter, addPostAdapter);
+		resource = new DeletePostRequest(postsModel, request, response);
 	}
 	
 	@Test

@@ -13,7 +13,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
 import org.denevell.natch.db.entities.ThreadEntity;
-import org.denevell.natch.serv.listthreads.ThreadModel;
+import org.denevell.natch.serv.list_threads.ThreadModel;
 import org.junit.Before;
 import org.junit.Test;
 

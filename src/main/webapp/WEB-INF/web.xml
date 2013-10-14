@@ -41,7 +41,7 @@
 	    </init-param>		
 	    <init-param>
 	    	<param-name>com.sun.jersey.config.property.packages</param-name>
-			<param-value>org.denevell.natch.serv.addpost;org.denevell.natch.serv.testutils;org.denevell.natch.serv.posts;org.denevell.natch.serv.listthreads;org.denevell.natch.serv.single_post;org.denevell.natch.serv.users;org.denevell.natch.serv.listthread;org.denevell.natch.utils</param-value>
+			<param-value>org.denevell.natch.serv.delete_post;org.denevell.natch.serv.add_thread;org.denevell.natch.serv.add_post;org.denevell.natch.serv.testutils;org.denevell.natch.serv.posts;org.denevell.natch.serv.list_threads;org.denevell.natch.serv.single_post;org.denevell.natch.serv.users;org.denevell.natch.serv.list_thread;org.denevell.natch.utils</param-value>
 	    </init-param>
 	    <load-on-startup>1</load-on-startup>
 	</servlet>
