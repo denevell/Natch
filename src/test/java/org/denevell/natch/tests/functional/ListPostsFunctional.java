@@ -154,31 +154,6 @@ public class ListPostsFunctional {
 	}		
 	
 	@Test
-	public void shouldFindPost() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
-		// Get Id
-		ListPostsResource returnList = service
-		.path("rest").path("post").path("0").path("10")
-    	.get(ListPostsResource.class); 		
-		long id = returnList.getPosts().get(0).getId();
-		
-		// Act
-		PostResource returnData = service
-		.path("rest").path("post").path(String.valueOf(id))
-    	.get(PostResource.class); 
-		
-		// Assert
-		assertNotNull(returnData);
-		assertEquals("sub", returnData.getSubject());
-	}		
-	
-	@Test
 	public void shouldListByModificationDateWithNonSpecifiedThreadId() {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");

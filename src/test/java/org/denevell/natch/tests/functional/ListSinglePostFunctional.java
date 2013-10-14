@@ -60,7 +60,7 @@ public class ListSinglePostFunctional {
 		
 		// Act
 		PostResource returnData = service
-		.path("rest").path("post").path(postsList.getPosts().get(0).getId()+"")
+		.path("rest").path("post").path("single").path(postsList.getPosts().get(0).getId()+"")
     	.get(PostResource.class); 
 		
 		// Assert
@@ -87,7 +87,7 @@ public class ListSinglePostFunctional {
 		// Act
 		try {
 			service
-			.path("rest").path("post").path(postsList.getPosts().get(0).getId()+"blarblar")
+			.path("rest").path("post").path("single").path(postsList.getPosts().get(0).getId()+"blarblar")
 	    	.get(PostResource.class); 		
 		} catch (UniformInterfaceException e) {
 			assertEquals(404, e.getResponse().getStatus());

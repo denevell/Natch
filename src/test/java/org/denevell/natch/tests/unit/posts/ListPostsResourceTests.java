@@ -24,6 +24,7 @@ import org.denevell.natch.serv.posts.AddPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.EditPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.PostsREST;
+import org.denevell.natch.serv.single_post.SinglePostRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,9 +59,10 @@ public class ListPostsResourceTests {
 		postEntity.setId(400);
 		postEntity.setThreadId("1234");
 		when(postsModel.findPostById(0)).thenReturn(postEntity);
+		SinglePostRequest resourceShow = new SinglePostRequest(postsModel, request, response);
 		
 		// Act
-		PostResource result = resource.findById(0);
+		PostResource result = resourceShow.findById(0);
 		
 		// Assert
 		assertEquals(1, result.getCreation());
