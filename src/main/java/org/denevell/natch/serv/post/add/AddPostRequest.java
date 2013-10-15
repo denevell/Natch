@@ -34,17 +34,17 @@ public class AddPostRequest {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-	private PostsModel mModel;
+	private AddPostModel mModel;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
 	
 	public AddPostRequest() {
-		mModel = new PostsModel();
+		mModel = new AddPostModel();
 	}
 	
 	/**
 	 * For DI testing.
 	 */
-	public AddPostRequest(PostsModel postModel, 
+	public AddPostRequest(AddPostModel postModel, 
 			HttpServletRequest request, 
 			HttpServletResponse response
 			) {

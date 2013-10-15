@@ -18,6 +18,7 @@ import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
+import org.denevell.natch.serv.post.add.AddPostModel;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.ThreadResourceAdapter;
 import org.denevell.natch.utils.Log;
@@ -34,17 +35,17 @@ public class AddThreadRequest {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-	private PostsModel mModel;
+	private AddPostModel mModel;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
 	
 	public AddThreadRequest() {
-		mModel = new PostsModel();
+		mModel = new AddPostModel();
 	}
 	
 	/**
 	 * For DI testing.
 	 */
-	public AddThreadRequest(PostsModel postModel, 
+	public AddThreadRequest(AddPostModel postModel, 
 			HttpServletRequest request, 
 			HttpServletResponse response
 			) {

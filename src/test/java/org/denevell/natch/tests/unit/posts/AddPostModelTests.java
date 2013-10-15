@@ -14,7 +14,7 @@ import javax.persistence.EntityTransaction;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
-import org.denevell.natch.serv.posts.PostsModel;
+import org.denevell.natch.serv.post.add.AddPostModel;
 import org.denevell.natch.serv.posts.ThreadFactory;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -22,7 +22,7 @@ import org.junit.Test;
 
 public class AddPostModelTests {
 	
-	private PostsModel model;
+	private AddPostModel model;
 	private EntityTransaction trans;
 	private EntityManagerFactory factory;
 	private EntityManager entityManager;
@@ -41,7 +41,7 @@ public class AddPostModelTests {
 		genericThread = mock(ThreadEntity.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
 		threadFactory = mock(ThreadFactory.class);
-		model = new PostsModel(factory, entityManager, threadFactory);
+		model = new AddPostModel(factory, entityManager, threadFactory);
 	}
 	
 	@Ignore

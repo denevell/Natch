@@ -17,15 +17,15 @@ import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
+import org.denevell.natch.serv.post.add.AddPostModel;
 import org.denevell.natch.serv.post.add.AddPostRequest;
-import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
 
 public class AddPostResourceTests {
 	
-	private PostsModel postsModel;
+	private AddPostModel postsModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private AddPostRequest resource;
 	private UserEntity user;
@@ -33,7 +33,7 @@ public class AddPostResourceTests {
 
 	@Before
 	public void setup() {
-		postsModel = mock(PostsModel.class);
+		postsModel = mock(AddPostModel.class);
 		user = new UserEntity();
 		user.setUsername("dsf");
 		request = mock(HttpServletRequest.class);
