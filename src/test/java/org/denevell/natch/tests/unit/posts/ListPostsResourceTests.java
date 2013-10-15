@@ -19,12 +19,10 @@ import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.io.threads.ThreadResource;
-import org.denevell.natch.serv.list_thread.ListThreadRequest;
-import org.denevell.natch.serv.posts.AddPostResourcePostEntityAdapter;
-import org.denevell.natch.serv.posts.EditPostResourcePostEntityAdapter;
+import org.denevell.natch.serv.post.show.SinglePostRequest;
 import org.denevell.natch.serv.posts.PostsModel;
-import org.denevell.natch.serv.posts.PostsREST;
-import org.denevell.natch.serv.single_post.SinglePostRequest;
+import org.denevell.natch.serv.posts.list.ListPosts;
+import org.denevell.natch.serv.thread.list.ListThreadRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,19 +33,16 @@ public class ListPostsResourceTests {
 	
 	private PostsModel postsModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
-	private PostsREST resource;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
-	private AddPostResourcePostEntityAdapter addPostAdapter;
+	private ListPosts resourceList;
 
 	@Before
 	public void setup() {
 		postsModel = mock(PostsModel.class);
 		response = mock(HttpServletResponse.class);
 		request = mock(HttpServletRequest.class);
-		EditPostResourcePostEntityAdapter postAdapter = mock(EditPostResourcePostEntityAdapter.class);
-		addPostAdapter = mock(AddPostResourcePostEntityAdapter.class);
-		resource = new PostsREST(postsModel, request, response, postAdapter, addPostAdapter);
+		resourceList = new ListPosts(postsModel, request, response);
 	}
 	
 	@Test
@@ -88,7 +83,7 @@ public class ListPostsResourceTests {
 		when(postsModel.listByModificationDate(0, 10)).thenReturn(posts);
 		
 		// Act
-		ListPostsResource result = resource.listByModificationDate(0, 10);
+		ListPostsResource result = resourceList.listByModificationDate(0, 10);
 		
 		// Assert
 		assertEquals(2, result.getPosts().size());
@@ -113,7 +108,7 @@ public class ListPostsResourceTests {
 		when(postsModel.listByModificationDate(0, 10)).thenReturn(posts);
 		
 		// Act
-		ListPostsResource result = resource.listByModificationDate(0, 10);
+		ListPostsResource result = resourceList.listByModificationDate(0, 10);
 		
 		// Assert
 		assertEquals(0, result.getPosts().size());
@@ -125,7 +120,7 @@ public class ListPostsResourceTests {
 		when(postsModel.listByModificationDate(0, 10)).thenReturn(null);
 		
 		// Act
-		resource.listByModificationDate(0, 10);
+		resourceList.listByModificationDate(0, 10);
 		
 		// Assert
 		verify(response).sendError(500, "Unexcepted error");
@@ -137,7 +132,7 @@ public class ListPostsResourceTests {
 		when(postsModel.listByModificationDate(0, 10)).thenThrow(new RuntimeException());
 		
 		// Act
-		resource.listByModificationDate(0, 10);
+		resourceList.listByModificationDate(0, 10);
 		
 		// Assert
 		verify(response).sendError(500, "Unexcepted error");
@@ -153,7 +148,7 @@ public class ListPostsResourceTests {
 		when(postsModel.listByModificationDate(0, 10)).thenReturn(posts);
 		
 		// Act
-		ListPostsResource result = resource.listByModificationDate(0, 10);
+		ListPostsResource result = resourceList.listByModificationDate(0, 10);
 		
 		// Assert
 		assertEquals("threadId", result.getPosts().get(0).getThreadId());

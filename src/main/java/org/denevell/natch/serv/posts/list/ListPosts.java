@@ -1,6 +1,7 @@
-package org.denevell.natch.serv.single_post;
+package org.denevell.natch.serv.posts.list;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -14,12 +15,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.db.entities.PostEntity;
-import org.denevell.natch.io.posts.PostResource;
+import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.utils.Log;
 
-@Path("post/single")
-public class SinglePostRequest {
+@Path("post")
+public class ListPosts {
 	
 	@Context UriInfo mInfo;
 	@Context HttpServletRequest mRequest;
@@ -27,50 +28,44 @@ public class SinglePostRequest {
 	@Context HttpServletResponse mResponse;
 	private PostsModel mModel;
 	
-	public SinglePostRequest() {
+	public ListPosts() {
 		mModel = new PostsModel();
 	}
 	
 	/**
 	 * For DI testing.
-	 * @param editPostAdapter 
 	 */
-	public SinglePostRequest(PostsModel postModel, HttpServletRequest request, HttpServletResponse response) {
+	public ListPosts(PostsModel postModel, HttpServletRequest request, HttpServletResponse response) {
 		mModel = postModel;
 		mRequest = request;
 		mResponse = response;
 	}
 
 	@GET
-	@Path("{postId}")
+	@Path("/{start}/{limit}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public PostResource findById(
-		@PathParam("postId") long postId) throws IOException {
-		PostEntity post = null;
+	public ListPostsResource listByModificationDate(
+		@PathParam("start") int start, 	
+		@PathParam("limit") int limit 	
+			) throws IOException {
+		List<PostEntity> posts = null;
 		try {
 			mModel.init();
-			post = mModel.findPostById(postId);
+			posts = mModel.listByModificationDate(start, limit);
 		} catch(Exception e) {
-			Log.info(getClass(), "Couldn't find post: " + e.toString());
+			Log.info(getClass(), "Couldn't list posts: " + e.toString());
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
 		} finally {
 			mModel.close();
 		}
-		if(post==null) {
-			mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
+		if(posts==null) {
+			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
 		} else {
-			PostResource postResource = new PostResource(post.getUser().getUsername(), 
-					post.getCreated(), 
-					post.getModified(), 
-					post.getSubject(), 
-					post.getContent(), 
-					post.getTags());
-			postResource.setId(post.getId());
-			postResource.setThreadId(post.getThreadId());
-			return postResource;
+			ListPostsResource adaptedPosts = new ListPostsResourceAdapter(posts);
+			return adaptedPosts;
 		}
-	}	
+	}
 
 }

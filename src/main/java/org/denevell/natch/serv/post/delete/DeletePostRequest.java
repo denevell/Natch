@@ -1,4 +1,4 @@
-package org.denevell.natch.serv.delete_post;
+package org.denevell.natch.serv.post.delete;
 
 import java.util.ResourceBundle;
 

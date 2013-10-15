@@ -190,12 +190,12 @@ public class ListThreadsFunctional {
 		assertTrue(editReturnData.isSuccessful());
 		
 		// Assert - we've now got input1 first
-		listedPosts = service
-		.path("rest").path("post").path("0").path("10")
+		ListThreadsResource listedThreads = service
+		.path("rest").path("threads").path("0").path("10")
 		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListPostsResource.class); 				
+    	.get(ListThreadsResource.class); 				
 		// Assert - we've got input2 first
-		assertEquals("Listing by last added", "blar2", listedPosts.getPosts().get(0).getSubject());
+		assertEquals("Listing by last added", "blar2", listedThreads.getThreads().get(0).getSubject());
 	}
 	
 	@Ignore // Until we somehow get the edit ids when listing a post
