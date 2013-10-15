@@ -13,13 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
-import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.serv.post.add.AddPostRequest;
-import org.denevell.natch.serv.posts.AddPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
@@ -32,7 +30,6 @@ public class AddPostResourceTests {
 	private AddPostRequest resource;
 	private UserEntity user;
 	private HttpServletRequest request;
-	private AddPostResourcePostEntityAdapter addPostAdapter;
 
 	@Before
 	public void setup() {
@@ -42,16 +39,14 @@ public class AddPostResourceTests {
 		request = mock(HttpServletRequest.class);
 		when(request.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER)).thenReturn(user);
 		HttpServletResponse response = mock(HttpServletResponse.class);
-		addPostAdapter = mock(AddPostResourcePostEntityAdapter.class);
-		resource = new AddPostRequest(postsModel, request, response, addPostAdapter);
+		resource = new AddPostRequest(postsModel, request, response);
 	}
 	
 	@Test
 	public void shouldAddPost() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		when(addPostAdapter.getCreatedPost()).thenReturn(new PostEntity(null, 123, 123, "a", "dsf", "thready"));
-		when(postsModel.addPost(user, addPostAdapter)).thenReturn(mock(ThreadEntity.class));
+		when(postsModel.addPost(user, input)).thenReturn(mock(ThreadEntity.class));
 		
 		// Act
 		AddPostResourceReturnData result = resource.addPost(input);
@@ -66,8 +61,7 @@ public class AddPostResourceTests {
 	public void shouldntAddPostWithBlankContent() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("asdf", " ");
-		when(addPostAdapter.getCreatedPost()).thenReturn(new PostEntity(null, 123, 123, "a", "dsf", "thready"));
-		when(postsModel.addPost(user, addPostAdapter)).thenReturn(mock(ThreadEntity.class));
+		when(postsModel.addPost(user, input)).thenReturn(mock(ThreadEntity.class));
 		
 		// Act
 		AddPostResourceReturnData result = resource.addPost(input);

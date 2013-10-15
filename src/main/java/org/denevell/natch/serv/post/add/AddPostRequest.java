@@ -18,7 +18,6 @@ import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
-import org.denevell.natch.serv.posts.AddPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.ThreadResourceAdapter;
 import org.denevell.natch.utils.Log;
@@ -36,12 +35,10 @@ public class AddPostRequest {
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
 	private PostsModel mModel;
-	private AddPostResourcePostEntityAdapter mAddPostAdapter;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
 	
 	public AddPostRequest() {
 		mModel = new PostsModel();
-		mAddPostAdapter = new AddPostResourcePostEntityAdapter();
 	}
 	
 	/**
@@ -49,12 +46,11 @@ public class AddPostRequest {
 	 */
 	public AddPostRequest(PostsModel postModel, 
 			HttpServletRequest request, 
-			HttpServletResponse response,
-			AddPostResourcePostEntityAdapter adapter) {
+			HttpServletResponse response
+			) {
 		mModel = postModel;
 		mRequest = request;
 		mResponse = response;
-		mAddPostAdapter = adapter;
 	}
 		
 	@PUT
@@ -84,18 +80,17 @@ public class AddPostRequest {
 			mModel.init();
 			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 			regReturnData.setSuccessful(false);
-			mAddPostAdapter.create(input);
-			ThreadEntity okay = mModel.addPost(userEntity, mAddPostAdapter);
-			generateAddPostReturnResource(regReturnData, okay, mAddPostAdapter);
+			ThreadEntity okay = mModel.addPost(userEntity, input);
+			generateAddPostReturnResource(regReturnData, okay, input);
 			return regReturnData;
 		} finally {
 			mModel.close();
 		}
 	}	
 	
-	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, ThreadEntity thread, AddPostResourcePostEntityAdapter adapterThatCreatePost) {
+	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, ThreadEntity thread, AddPostResourceInput input) {
 		if(thread!=null) {
-			if(adapterThatCreatePost!=null && adapterThatCreatePost.getCreatedPost()!=null) {
+			if(input !=null) {
 				ThreadResourceAdapter threadResource = new ThreadResourceAdapter(thread);
 				threadResource.setPosts(null);
 				regReturnData.setThread(threadResource);

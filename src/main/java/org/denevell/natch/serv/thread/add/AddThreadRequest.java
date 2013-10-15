@@ -18,7 +18,6 @@ import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
-import org.denevell.natch.serv.posts.AddPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.ThreadResourceAdapter;
 import org.denevell.natch.utils.Log;
@@ -36,12 +35,10 @@ public class AddThreadRequest {
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
 	private PostsModel mModel;
-	private AddPostResourcePostEntityAdapter mAddPostAdapter;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
 	
 	public AddThreadRequest() {
 		mModel = new PostsModel();
-		mAddPostAdapter = new AddPostResourcePostEntityAdapter();
 	}
 	
 	/**
@@ -49,12 +46,11 @@ public class AddThreadRequest {
 	 */
 	public AddThreadRequest(PostsModel postModel, 
 			HttpServletRequest request, 
-			HttpServletResponse response,
-			AddPostResourcePostEntityAdapter adapter) {
+			HttpServletResponse response
+			) {
 		mModel = postModel;
 		mRequest = request;
 		mResponse = response;
-		mAddPostAdapter = adapter;
 	}
 		
 
@@ -85,24 +81,20 @@ public class AddThreadRequest {
 			mModel.init();
 			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 			regReturnData.setSuccessful(false);
-			mAddPostAdapter.create(input);
-			ThreadEntity thread = mModel.addPost(userEntity, mAddPostAdapter);
-			generateAddPostReturnResource(regReturnData, thread, mAddPostAdapter);
+			ThreadEntity thread = mModel.addPost(userEntity, input);
+			generateAddPostReturnResource(regReturnData, thread);
 			return regReturnData;
 		} finally {
 			mModel.close();
 		}
 	}
 
-	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, ThreadEntity thread, AddPostResourcePostEntityAdapter adapterThatCreatePost) {
+	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, ThreadEntity thread) {
 		if(thread!=null) {
-			if(adapterThatCreatePost!=null && adapterThatCreatePost.getCreatedPost()!=null) {
 				regReturnData.setThread(new ThreadResourceAdapter(thread));
-			} else {
-				Log.info(getClass(), "Added a post but the thread id was null when sending the json response...");
-			}
-			regReturnData.setSuccessful(true);
+				regReturnData.setSuccessful(true);
 		} else {
+			Log.info(getClass(), "Added a post but the thread id was null when sending the json response...");
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.unknown_error));
 		}

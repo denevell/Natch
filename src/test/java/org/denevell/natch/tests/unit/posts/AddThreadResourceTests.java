@@ -11,12 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
-import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
-import org.denevell.natch.serv.posts.AddPostResourcePostEntityAdapter;
 import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.thread.add.AddThreadRequest;
 import org.denevell.natch.utils.Strings;
@@ -30,7 +28,7 @@ public class AddThreadResourceTests {
 	private AddThreadRequest resource;
 	private UserEntity user;
 	private HttpServletRequest request;
-	private AddPostResourcePostEntityAdapter addPostAdapter;
+	private AddPostResourceInput addPostAdapter;
 
 	@Before
 	public void setup() {
@@ -40,15 +38,14 @@ public class AddThreadResourceTests {
 		request = mock(HttpServletRequest.class);
 		when(request.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER)).thenReturn(user);
 		HttpServletResponse response = mock(HttpServletResponse.class);
-		addPostAdapter = mock(AddPostResourcePostEntityAdapter.class);
-		resource = new AddThreadRequest(postsModel, request, response, addPostAdapter);
+		addPostAdapter = mock(AddPostResourceInput.class);
+		resource = new AddThreadRequest(postsModel, request, response);
 	}
 
 	@Test
 	public void shouldntAddThreadWithBlankSubject() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput(" ", "cont");
-		when(addPostAdapter.getCreatedPost()).thenReturn(new PostEntity(null, 123, 123, "a", "dsf", "thready"));
 		when(postsModel.addPost(user, addPostAdapter)).thenReturn(mock(ThreadEntity.class));
 		
 		// Act
@@ -63,7 +60,6 @@ public class AddThreadResourceTests {
 	public void shouldntAddThreadWithBlankContent() {
 		// Arrange
 		AddPostResourceInput input = new AddPostResourceInput("sub", " ");
-		when(addPostAdapter.getCreatedPost()).thenReturn(new PostEntity(null, 123, 123, "a", "dsf", "thready"));
 		when(postsModel.addPost(user, addPostAdapter)).thenReturn(mock(ThreadEntity.class));
 		
 		// Act
