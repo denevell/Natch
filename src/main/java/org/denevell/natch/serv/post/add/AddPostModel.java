@@ -14,7 +14,7 @@ import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
-import org.denevell.natch.serv.posts.ThreadFactory;
+import org.denevell.natch.serv.thread.add.ThreadFactory;
 import org.denevell.natch.utils.EntityUtils;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Log;

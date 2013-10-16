@@ -1,4 +1,4 @@
-package org.denevell.natch.serv.posts;
+package org.denevell.natch.serv.thread.add;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,15 +36,4 @@ public class ThreadFactory {
 		return thread;
 	}
 
-	public ThreadEntity updateThreadToRemovePost(ThreadEntity th, PostEntity pe) {
-		th.getPosts().remove(pe);
-		if(th.getRootPost()!=null && th.getRootPost().getId()==pe.getId()) {
-			th.setRootPost(null);
-		}
-		if(th.getLatestPost()!=null && th.getLatestPost().getId()==pe.getId() && th.getPosts()!=null && th.getPosts().size()>=1) {
-			th.setLatestPost(th.getPosts().get(th.getPosts().size()-1));
-		}
-		th.setNumPosts(th.getNumPosts()-1);
-		return th;
-	}
 }

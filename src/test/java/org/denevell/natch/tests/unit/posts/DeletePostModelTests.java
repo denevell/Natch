@@ -7,6 +7,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -15,7 +17,6 @@ import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.post.delete.DeletePostModel;
-import org.denevell.natch.serv.posts.ThreadFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,8 +26,6 @@ public class DeletePostModelTests {
 	private EntityTransaction trans;
 	private EntityManagerFactory factory;
 	private EntityManager entityManager;
-	private ThreadFactory threadFactory;
-	private ThreadEntity threadEntity;
 
 	@Before
 	public void setup() {
@@ -34,9 +33,7 @@ public class DeletePostModelTests {
 		factory = mock(EntityManagerFactory.class);
 		trans = mock(EntityTransaction.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
-		threadFactory = mock(ThreadFactory.class);
-		model = spy(new DeletePostModel(factory, entityManager, threadFactory));
-		threadEntity = mock(ThreadEntity.class);
+		model = spy(new DeletePostModel(factory, entityManager));
 	}
 	
 	@Test
@@ -44,11 +41,14 @@ public class DeletePostModelTests {
 		// Arrange
 		long num = 1;
 		PostEntity post = new PostEntity();
+		post.setThreadId("1");
 		post.setUser(new UserEntity("this_person", null));
 		doReturn(post).when(model).findPostById(num);
+		ThreadEntity thread = new ThreadEntity();
+		thread.setPosts(new ArrayList<PostEntity>());
+		doReturn(thread).when(model).findThreadById("1");
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");
-		when(threadFactory.updateThreadToRemovePost(null, post)).thenReturn(threadEntity);
 		
 		// Act
 		String result = model.delete(userEntity, num);
@@ -89,23 +89,6 @@ public class DeletePostModelTests {
 		
 		// Verify
 		assertEquals(DeletePostModel.DOESNT_EXIST, result);
-	}
-	
-	@Test
-	public void shouldReturnUnknownErrorOnException() {
-		// Arrange
-		long num = 1;
-		PostEntity post = new PostEntity();
-		post.setUser(new UserEntity("this_person", null));
-		doThrow(new RuntimeException()).when(model).findPostById(num);
-		UserEntity userEntity = new UserEntity();
-		userEntity.setUsername("this_person");
-		
-		// Act
-		String result = model.delete(userEntity, num);
-		
-		// Verify
-		assertEquals(DeletePostModel.UNKNOWN_ERROR, result);
 	}
 	
 	@Test

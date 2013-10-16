@@ -10,7 +10,6 @@ import javax.persistence.TypedQuery;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.serv.posts.ThreadFactory;
 import org.denevell.natch.utils.EntityUtils;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Log;
@@ -22,10 +21,8 @@ public class DeletePostModel {
 	public final static String UNKNOWN_ERROR = "unknownerror";
 	public final static String NOT_YOURS_TO_DELETE = "notyourtodelete";
 	private EntityManager mEntityManager;
-	private ThreadFactory mThreadFactory;
 	
 	public DeletePostModel() {
-		mThreadFactory = new ThreadFactory();
 	}
 	
 	public void init() {
@@ -40,9 +37,8 @@ public class DeletePostModel {
 	/**
 	 * For testing / di
 	 */
-	public DeletePostModel(EntityManagerFactory factory, EntityManager entityManager, ThreadFactory threadFactory) {
+	public DeletePostModel(EntityManagerFactory factory, EntityManager entityManager) {
 		mEntityManager = entityManager;
-		mThreadFactory = threadFactory;
 	}
 
 	
@@ -88,7 +84,7 @@ public class DeletePostModel {
 				return NOT_YOURS_TO_DELETE;
 			}
 			ThreadEntity th = findThreadById(pe.getThreadId());
-			th = mThreadFactory.updateThreadToRemovePost(th, pe);
+			th = updateThreadToRemovePost(th, pe);
 			trans.begin();
 			// Remote thread if needs be
 			if(th.getPosts()==null || th.getPosts().size()==0) {
@@ -111,5 +107,17 @@ public class DeletePostModel {
 			return UNKNOWN_ERROR;
 		} 
 	}
+	
+	private ThreadEntity updateThreadToRemovePost(ThreadEntity th, PostEntity pe) {
+		th.getPosts().remove(pe);
+		if(th.getRootPost()!=null && th.getRootPost().getId()==pe.getId()) {
+			th.setRootPost(null);
+		}
+		if(th.getLatestPost()!=null && th.getLatestPost().getId()==pe.getId() && th.getPosts()!=null && th.getPosts().size()>=1) {
+			th.setLatestPost(th.getPosts().get(th.getPosts().size()-1));
+		}
+		th.setNumPosts(th.getNumPosts()-1);
+		return th;
+	}	
 
 }
