@@ -38,7 +38,7 @@ public class ListThreadModel {
 	/**
 	 * For testing / di
 	 */
-	public ListThreadModel(EntityManagerFactory factory, EntityManager entityManager) {
+	public ListThreadModel(EntityManager entityManager) {
 		mEntityManager = entityManager;
 	}
 

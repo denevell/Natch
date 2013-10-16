@@ -64,8 +64,6 @@ public class EditPostRequest {
 			UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
 			PostEntity mPe = new PostEntity();
 			mPe.setContent(editPostResource.getContent());
-			mPe.setSubject(editPostResource.getSubject());
-			mPe.setTags(editPostResource.getTags());			
 			String result = mModel.edit(userEntity, postId, mPe, isEditingThread); 
 			EditThreadRequest.generateEditReturnResource(ret, result, rb);
 			return ret;

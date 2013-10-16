@@ -47,7 +47,16 @@ public class ListSinglePostFunctional {
 	@Test
 	public void shouldListSinglePost() {
 		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
+		// Add thread
+		AddPostResourceInput input = new AddPostResourceInput("subthread", "contthread");
+		AddPostResourceReturnData newThreads = service
+		.path("rest").path("post").path("addthread")
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.put(AddPostResourceReturnData.class, input); 
+		// Add post
+		input = new AddPostResourceInput("subpost", "contpost");
+		input.setThreadId(newThreads.getThread().getId());
 		service
 		.path("rest").path("post").path("add")
 	    .type(MediaType.APPLICATION_JSON)
@@ -64,8 +73,8 @@ public class ListSinglePostFunctional {
     	.get(PostResource.class); 
 		
 		// Assert
-		assertEquals("Get subject of post", "sub", returnData.getSubject());
-		assertEquals("Get content of post", "cont", returnData.getContent());
+		assertEquals("Get subject of post", "subthread", returnData.getSubject());
+		assertEquals("Get content of post", "contpost", returnData.getContent());
 		assertNotNull("Get id of post", returnData.getId());
 		assertNotNull("Get threadid of post", returnData.getThreadId());
 	}

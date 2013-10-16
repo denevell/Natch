@@ -16,10 +16,7 @@ import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.ListPostsResource;
-import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.io.threads.ThreadResource;
-import org.denevell.natch.serv.post.show.ShowPostModel;
-import org.denevell.natch.serv.post.show.SinglePostRequest;
 import org.denevell.natch.serv.posts.list.ListPosts;
 import org.denevell.natch.serv.posts.list.ListPostsModel;
 import org.denevell.natch.serv.thread.list.ListThreadModel;
@@ -37,41 +34,14 @@ public class ListPostsResourceTests {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private ListPosts resourceList;
-	private ShowPostModel showPostsModel;
 
 	@Before
 	public void setup() {
 		postsModel = mock(ListPostsModel.class);
-		showPostsModel = mock(ShowPostModel.class);
 		response = mock(HttpServletResponse.class);
 		request = mock(HttpServletRequest.class);
 		resourceList = new ListPosts(postsModel, request, response);
 	}
-	
-	@Test
-	public void shouldFindSinglePost() throws IOException {
-		// Arrange
-		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", null);
-		@SuppressWarnings("unchecked") List<String> asList = Arrays.asList(new String[] {"tag1"});
-		postEntity.setTags(asList);
-		postEntity.setId(400);
-		postEntity.setThreadId("1234");
-		when(showPostsModel.findPostById(0)).thenReturn(postEntity);
-		SinglePostRequest resourceShow = new SinglePostRequest(showPostsModel, request, response);
-		
-		// Act
-		PostResource result = resourceShow.findById(0);
-		
-		// Assert
-		assertEquals(1, result.getCreation());
-		assertEquals(1, result.getModification());
-		assertEquals("1234", result.getThreadId());
-		assertEquals("u1", result.getUsername());
-		assertEquals("s1", result.getSubject());
-		assertEquals("c1", result.getContent());
-		assertEquals("tag1", result.getTags().get(0));
-		assertEquals(400, result.getId());
-	}	
 	
 	@Test
 	public void shouldListPosts() throws IOException {

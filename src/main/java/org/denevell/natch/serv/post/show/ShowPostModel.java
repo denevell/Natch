@@ -20,7 +20,7 @@ public class ShowPostModel {
 	public final static String UNKNOWN_ERROR = "unknownerror";
 	public final static String BAD_USER_INPUT = "baduserinput";
 	public final static String NOT_YOURS_TO_DELETE = "notyourtodelete";
-	private EntityManager mEntityManager;
+	public EntityManager mEntityManager;
 	
 	public ShowPostModel() {
 	}

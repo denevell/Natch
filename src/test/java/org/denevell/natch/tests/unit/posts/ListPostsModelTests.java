@@ -32,11 +32,10 @@ public class ListPostsModelTests {
 	@Before
 	public void setup() {
 		entityManager = mock(EntityManager.class);
-		factory = mock(EntityManagerFactory.class);
 		trans = mock(EntityTransaction.class);
 		queryResults = mock(TypedQuery.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
-		modelThreads = new ListThreadModel(factory, entityManager);
+		modelThreads = new ListThreadModel(entityManager);
 		model = new ListPostsModel(factory, entityManager);
 	}
 	
