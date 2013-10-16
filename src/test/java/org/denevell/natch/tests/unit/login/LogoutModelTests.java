@@ -12,18 +12,16 @@ import javax.persistence.EntityTransaction;
 import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.db.entities.UserEntityQueries;
-import org.denevell.natch.serv.users.UsersModel;
-import org.denevell.natch.utils.PasswordSaltUtils;
+import org.denevell.natch.serv.users.logout.LogoutModel;
 import org.junit.Before;
 import org.junit.Test;
 
 public class LogoutModelTests {
 	
-	private UsersModel loginModel;
+	private LogoutModel loginModel;
 	private LoginAuthKeysSingleton authKeyGenerator;
 	private EntityManagerFactory factory;
 	private EntityTransaction trans;
-	private PasswordSaltUtils salter;
 	private EntityManager entityManager;
 	private UserEntityQueries queries;
 
@@ -31,12 +29,11 @@ public class LogoutModelTests {
 	public void setup() {
 		factory = mock(EntityManagerFactory.class);
 		trans = mock(EntityTransaction.class);
-		salter = mock(PasswordSaltUtils.class);
 		entityManager = mock(EntityManager.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
 		queries = mock(UserEntityQueries.class);
 		authKeyGenerator = mock(LoginAuthKeysSingleton.class);
-		loginModel = new UsersModel(queries, authKeyGenerator, factory, entityManager, salter);		
+		loginModel = new LogoutModel(queries, authKeyGenerator, factory, entityManager);		
 	}
 	
 	@Test

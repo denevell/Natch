@@ -12,31 +12,32 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.serv.users.UsersModel;
-import org.denevell.natch.serv.users.UsersModel.LoginResult;
-import org.denevell.natch.serv.users.UsersREST;
+import org.denevell.natch.serv.users.login.LoginModel;
+import org.denevell.natch.serv.users.login.LoginModel.LoginResult;
+import org.denevell.natch.serv.users.login.LoginRequest;
+import org.denevell.natch.serv.users.logout.LogoutModel;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
 
 public class LoginResourceTests {
 	
-	private UsersModel userModel;
-	private UsersREST resource;
+	private LoginModel userModel;
+	private LoginRequest resource;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	
 	@Before
 	public void setup() {
-		userModel = mock(UsersModel.class);
+		userModel = mock(LoginModel.class);
 		HttpServletRequest request = mock(HttpServletRequest.class);
-		resource = new UsersREST(userModel, request);
+		resource = new LoginRequest(userModel, request);
 	}
 	
 	@Test
 	public void shouldLoginWithUsernameAndPassword() {
 		// Arrange
 		LoginResourceInput loginInput = new LoginResourceInput("username", "password");
-		when(userModel.login("username", "password")).thenReturn(new LoginResult(UsersModel.LOGGED_IN, "authKey123"));
+		when(userModel.login("username", "password")).thenReturn(new LoginResult(LogoutModel.LOGGED_IN, "authKey123"));
 		
 		// Act
 		LoginResourceReturnData result = resource.login(loginInput);
@@ -50,7 +51,7 @@ public class LoginResourceTests {
 	public void shouldntLoginWithIncorrectUsernameAndPassword() {
 		// Arrange
 		LoginResourceInput loginInput = new LoginResourceInput("username", "password");
-		when(userModel.login("username", "password")).thenReturn(new LoginResult(UsersModel.CREDENTIALS_INCORRECT));
+		when(userModel.login("username", "password")).thenReturn(new LoginResult(LogoutModel.CREDENTIALS_INCORRECT));
 		
 		// Act
 		LoginResourceReturnData result = resource.login(loginInput);
@@ -64,7 +65,7 @@ public class LoginResourceTests {
 	public void shouldntLoginBadJsonInput() {
 		// Arrange
 		LoginResourceInput loginInput = new LoginResourceInput("username", "password");
-		when(userModel.login("username", "password")).thenReturn(new LoginResult(UsersModel.USER_INPUT_ERROR));
+		when(userModel.login("username", "password")).thenReturn(new LoginResult(LogoutModel.USER_INPUT_ERROR));
 		
 		// Act
 		LoginResourceReturnData result = resource.login(loginInput);
@@ -90,7 +91,7 @@ public class LoginResourceTests {
 	public void shouldReturnLoginAuthKey() {
 		// Arrange
 		LoginResourceInput loginInput = new LoginResourceInput("username", "password");
-		when(userModel.login("username", "password")).thenReturn(new LoginResult(UsersModel.LOGGED_IN, "authKey123"));
+		when(userModel.login("username", "password")).thenReturn(new LoginResult(LogoutModel.LOGGED_IN, "authKey123"));
 		
 		// Act
 		LoginResourceReturnData result = resource.login(loginInput);
@@ -103,7 +104,7 @@ public class LoginResourceTests {
 	public void shouldntReturnLoginAuthKeyOnBadCredentials() {	
 		// Arrange
 		LoginResourceInput loginInput = new LoginResourceInput("username", "password");
-		when(userModel.login("username", "password")).thenReturn(new LoginResult(UsersModel.CREDENTIALS_INCORRECT));
+		when(userModel.login("username", "password")).thenReturn(new LoginResult(LogoutModel.CREDENTIALS_INCORRECT));
 		
 		// Act
 		LoginResourceReturnData result = resource.login(loginInput);

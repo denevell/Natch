@@ -12,24 +12,24 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.io.users.LogoutResourceReturnData;
-import org.denevell.natch.serv.users.UsersModel;
-import org.denevell.natch.serv.users.UsersREST;
+import org.denevell.natch.serv.users.logout.LogoutModel;
+import org.denevell.natch.serv.users.logout.LogoutRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
 
 public class LogoutResourceTests {
 	
-	private UsersModel userModel;
-	private UsersREST resource;
+	private LogoutModel userModel;
+	private LogoutRequest resource;
 	private HttpServletRequest requestContext;
     ResourceBundle rb = Strings.getMainResourceBundle();
 
 	@Before
 	public void setup() {
-		userModel = mock(UsersModel.class);
+		userModel = mock(LogoutModel.class);
 		requestContext = mock(HttpServletRequest.class);
-		resource = new UsersREST(userModel, requestContext);
+		resource = new LogoutRequest(userModel, requestContext);
 	}
 	
 	@Test

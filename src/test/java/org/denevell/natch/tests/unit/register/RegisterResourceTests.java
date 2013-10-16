@@ -12,31 +12,32 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.denevell.natch.io.users.RegisterResourceInput;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
-import org.denevell.natch.serv.users.UsersModel;
-import org.denevell.natch.serv.users.UsersREST;
+import org.denevell.natch.serv.users.logout.LogoutModel;
+import org.denevell.natch.serv.users.register.RegisterModel;
+import org.denevell.natch.serv.users.register.RegisterRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
 
 public class RegisterResourceTests {
 	
-	private UsersModel userModel;
+	private RegisterModel userModel;
     private ResourceBundle rb = Strings.getMainResourceBundle();
 	private HttpServletRequest requestContext;
-	private UsersREST resource;
+	private RegisterRequest resource;
 
 	@Before
 	public void setup() {
-		userModel = mock(UsersModel.class);
+		userModel = mock(RegisterModel.class);
 		requestContext = mock(HttpServletRequest.class);
-		resource = new UsersREST(userModel, requestContext);		
+		resource = new RegisterRequest(userModel, requestContext);		
 	}
 	
 	@Test
 	public void shouldRegisterWithUsernameAndPassword() {
 		// Arrange
 		RegisterResourceInput registerInput = new RegisterResourceInput("username", "password");
-		when(userModel.addUserToSystem("username", "password")).thenReturn(UsersModel.REGISTERED);
+		when(userModel.addUserToSystem("username", "password")).thenReturn(RegisterModel.REGISTERED);
 		
 		// Act
 		RegisterResourceReturnData result = resource.register(registerInput);
@@ -50,7 +51,7 @@ public class RegisterResourceTests {
 	public void shouldntRegisterWithDuplicateUsername() {
 		// Arrange
 		RegisterResourceInput registerInput = new RegisterResourceInput("username", "password");
-		when(userModel.addUserToSystem("username", "password")).thenReturn(UsersModel.DUPLICATE_USERNAME);
+		when(userModel.addUserToSystem("username", "password")).thenReturn(RegisterModel.DUPLICATE_USERNAME);
 		
 		// Act
 		RegisterResourceReturnData result = resource.register(registerInput);
@@ -64,7 +65,7 @@ public class RegisterResourceTests {
 	public void shouldntRegisterWhenModelSaysBadInput() {
 		// Arrange
 		RegisterResourceInput registerInput = new RegisterResourceInput("username", "password");
-		when(userModel.addUserToSystem("username", "password")).thenReturn(UsersModel.USER_INPUT_ERROR);
+		when(userModel.addUserToSystem("username", "password")).thenReturn(LogoutModel.USER_INPUT_ERROR);
 		
 		// Act
 		RegisterResourceReturnData result = resource.register(registerInput);
@@ -77,7 +78,7 @@ public class RegisterResourceTests {
 	@Test
 	public void shouldntRegisterWithNullInputObject() {
 		// Arrange
-		when(userModel.addUserToSystem(null, null)).thenReturn(UsersModel.USER_INPUT_ERROR);
+		when(userModel.addUserToSystem(null, null)).thenReturn(LogoutModel.USER_INPUT_ERROR);
 		
 		// Act
 		RegisterResourceReturnData result = resource.register(null);
@@ -91,7 +92,7 @@ public class RegisterResourceTests {
 	public void shouldntRegisterWithUnknownError() {
 		// Arrange
 		RegisterResourceInput registerInput = new RegisterResourceInput("user", "pass");
-		when(userModel.addUserToSystem("user", "pass")).thenReturn(UsersModel.UNKNOWN_ERROR);
+		when(userModel.addUserToSystem("user", "pass")).thenReturn(LogoutModel.UNKNOWN_ERROR);
 		
 		// Act
 		RegisterResourceReturnData result = resource.register(registerInput);

@@ -1,8 +1,7 @@
-package org.denevell.natch.serv.users;
+package org.denevell.natch.serv.users.login;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 
 import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.db.entities.UserEntity;
@@ -12,18 +11,15 @@ import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.PasswordSaltUtils;
 
-public class UsersModel {
+public class LoginModel {
 	
 	private UserEntityQueries mUserEntityQueries;
 	private LoginAuthKeysSingleton mAuthDataGenerator;
 	private EntityManager mEntityManager;
-	private PasswordSaltUtils mPasswordSalter;
 	public static String LOGGED_IN = "loggedIn";
 	public static String USER_INPUT_ERROR = "inputError";
 	public static String UNKNOWN_ERROR = "unknownError";
 	public static String CREDENTIALS_INCORRECT = "credIncorect";
-	public static String REGISTERED="registered";
-	public static String DUPLICATE_USERNAME="dupusername";
 	public static class LoginResult {
 		private String authKey = "";
 		private String result;
@@ -51,48 +47,28 @@ public class UsersModel {
 	/**
 	 * For DI testing
 	 */
-	public UsersModel(UserEntityQueries ueq, LoginAuthKeysSingleton authKeyGenerator, EntityManagerFactory factory, EntityManager entityManager, PasswordSaltUtils saltUtils) {
+	public LoginModel(UserEntityQueries ueq, LoginAuthKeysSingleton authKeyGenerator, EntityManagerFactory factory, EntityManager entityManager) {
 		mUserEntityQueries = ueq;
 		mAuthDataGenerator = authKeyGenerator;
 		mEntityManager =  entityManager;
 		mUserEntityQueries = ueq;
-		mPasswordSalter = saltUtils;
 	}
 	
-	public UsersModel() {
+	public LoginModel() {
 		mUserEntityQueries = new UserEntityQueries(new PasswordSaltUtils());
 		mAuthDataGenerator = LoginAuthKeysSingleton.getInstance();
 		mUserEntityQueries = new UserEntityQueries(new PasswordSaltUtils());
-		mPasswordSalter = new PasswordSaltUtils();
 	}
 	
-	public String addUserToSystem(String username, String password) {
-		EntityTransaction trans = null;
-		try {
-			if(password==null || password.trim().length()==0 || username==null || username.trim().length()==0) {
-				return USER_INPUT_ERROR;
-			}
-			UserEntity u = new UserEntity();
-			password = mPasswordSalter.generatedSaltedPassword(password);
-			u.setPassword(password);
-			u.setUsername(username);
-			if(!mUserEntityQueries.doesUsernameExist(username, mEntityManager)) {
-				trans = mEntityManager.getTransaction();
-				trans.begin();
-				mEntityManager.persist(u);
-				trans.commit();
-				return REGISTERED;
-			} else {
-				return DUPLICATE_USERNAME;
-			}
-		} catch(Exception e) {
-			Log.info(this.getClass(), e.toString());
-			e.printStackTrace();
-			if(trans!=null && trans.isActive()) trans.rollback();
-			return UNKNOWN_ERROR;
-		} 
-	}	
+	public void init() {
+		EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
+		mEntityManager = factory.createEntityManager();   		
+	}
 
+	public void close() {
+		EntityUtils.closeEntityConnection(mEntityManager);
+	}		
+	
 	public LoginResult login(String username, String password) {
 		try {
 			if(password==null || password.trim().length()==0 || username==null || username.trim().length()==0) {
@@ -112,34 +88,6 @@ public class UsersModel {
 		} 
 	}
 	
-	public boolean logout(String authKey) {
-		if(authKey==null || authKey.trim().length()==0) {
-			return false;
-		}
-		mAuthDataGenerator.remove(authKey);
-		UserEntity username = mAuthDataGenerator.retrieveUserEntity(authKey);
-		if(username!=null) {
-			return false;
-		} else {
-			return true;
-		}
-	}	
-
-	/**
-	 * @return Null when false
-	 */
-	public UserEntity loggedInAs(String authKey) {
-		UserEntity username = mAuthDataGenerator.retrieveUserEntity(authKey);
-		return username;
-	}
 	
-	public void init() {
-		EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
-		mEntityManager = factory.createEntityManager();   		
-	}
-
-	public void close() {
-		EntityUtils.closeEntityConnection(mEntityManager);
-	}	
 
 }
