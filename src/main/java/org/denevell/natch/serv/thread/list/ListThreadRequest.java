@@ -1,6 +1,7 @@
 package org.denevell.natch.serv.thread.list;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -16,8 +17,8 @@ import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
+import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.io.threads.ThreadResource;
-import org.denevell.natch.serv.posts.ThreadResourceAdapter;
 
 @Path("post/thread")
 public class ListThreadRequest {
@@ -70,11 +71,32 @@ public class ListThreadRequest {
 			mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return null;
 		} else {
-			ThreadResource adaptedPosts = new ThreadResourceAdapter(
+			ThreadResource adaptedPosts = adaptPosts(
 					username, posts, thread);
 			adaptedPosts.setTags(tags);
 			return adaptedPosts;
 		}
 	}
+
+	private ThreadResource adaptPosts(String threadAuthor, List<PostEntity> posts, ThreadEntity thread) {
+		ThreadResource tr =  new ThreadResource();
+		List<PostResource> postsResources = new ArrayList<PostResource>();
+		for (PostEntity p: posts) {
+			PostResource postResource = new PostResource(p.getUser().getUsername(), 
+					p.getCreated(), 
+					p.getModified(), 
+					p.getSubject(), 
+					p.getContent(),
+					p.getTags());
+			postResource.setId(p.getId());
+			postResource.setThreadId(p.getThreadId());
+			postsResources.add(postResource);
+		}
+		tr.setSubject(thread.getRootPost().getSubject());
+		tr.setAuthor(thread.getRootPost().getUser().getUsername());
+		tr.setPosts(postsResources);
+		tr.setNumPosts((int) thread.getNumPosts());
+		return tr;
+	}	
 
 }

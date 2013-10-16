@@ -19,8 +19,8 @@ import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.serv.post.add.AddPostModel;
+import org.denevell.natch.serv.post.add.AddPostRequest;
 import org.denevell.natch.serv.post.edit.EditPostModel;
-import org.denevell.natch.serv.posts.ThreadResourceAdapter;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
@@ -92,7 +92,7 @@ public class AddThreadRequest {
 
 	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, ThreadEntity thread) {
 		if(thread!=null) {
-				regReturnData.setThread(new ThreadResourceAdapter(thread));
+				regReturnData.setThread(AddPostRequest.adaptThread(thread));
 				regReturnData.setSuccessful(true);
 		} else {
 			Log.info(getClass(), "Added a post but the thread id was null when sending the json response...");
