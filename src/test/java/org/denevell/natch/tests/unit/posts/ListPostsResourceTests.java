@@ -2,7 +2,6 @@ package org.denevell.natch.tests.unit.posts;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -19,9 +18,11 @@ import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.io.threads.ThreadResource;
+import org.denevell.natch.serv.post.show.ShowPostModel;
 import org.denevell.natch.serv.post.show.SinglePostRequest;
-import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.list.ListPosts;
+import org.denevell.natch.serv.posts.list.ListPostsModel;
+import org.denevell.natch.serv.thread.list.ListThreadModel;
 import org.denevell.natch.serv.thread.list.ListThreadRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
@@ -31,15 +32,17 @@ import scala.actors.threadpool.Arrays;
 
 public class ListPostsResourceTests {
 	
-	private PostsModel postsModel;
+	private ListPostsModel postsModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private ListPosts resourceList;
+	private ShowPostModel showPostsModel;
 
 	@Before
 	public void setup() {
-		postsModel = mock(PostsModel.class);
+		postsModel = mock(ListPostsModel.class);
+		showPostsModel = mock(ShowPostModel.class);
 		response = mock(HttpServletResponse.class);
 		request = mock(HttpServletRequest.class);
 		resourceList = new ListPosts(postsModel, request, response);
@@ -53,8 +56,8 @@ public class ListPostsResourceTests {
 		postEntity.setTags(asList);
 		postEntity.setId(400);
 		postEntity.setThreadId("1234");
-		when(postsModel.findPostById(0)).thenReturn(postEntity);
-		SinglePostRequest resourceShow = new SinglePostRequest(postsModel, request, response);
+		when(showPostsModel.findPostById(0)).thenReturn(postEntity);
+		SinglePostRequest resourceShow = new SinglePostRequest(showPostsModel, request, response);
 		
 		// Act
 		PostResource result = resourceShow.findById(0);
@@ -113,31 +116,7 @@ public class ListPostsResourceTests {
 		// Assert
 		assertEquals(0, result.getPosts().size());
 	}
-	
-	@Test
-	public void shouldThrow500OnNullFromModel() throws IOException {
-		// Arrange
-		when(postsModel.listByModificationDate(0, 10)).thenReturn(null);
 		
-		// Act
-		resourceList.listByModificationDate(0, 10);
-		
-		// Assert
-		verify(response).sendError(500, "Unexcepted error");
-	}
-	
-	@Test
-	public void shouldThrow500OnExceptionFromModel() throws IOException {
-		// Arrange
-		when(postsModel.listByModificationDate(0, 10)).thenThrow(new RuntimeException());
-		
-		// Act
-		resourceList.listByModificationDate(0, 10);
-		
-		// Assert
-		verify(response).sendError(500, "Unexcepted error");
-	}
-	
 	@Test
 	public void shouldListPostsWithThreadId() throws IOException {
 		// Arrange
@@ -165,11 +144,12 @@ public class ListPostsResourceTests {
 		posts.add(new PostEntity(new UserEntity("u2", ""), 2, 2, "s2", "c2", "t"));
 		ThreadEntity thread = new ThreadEntity(postEntity, posts);
 		thread.setNumPosts(5);
-		when(postsModel.listByThreadId("t", 0, 10)).thenReturn(posts);
-		when(postsModel.findThreadById("t")).thenReturn(thread);
+		ListThreadModel model = mock(ListThreadModel.class);
+		when(model.listByThreadId("t", 0, 10)).thenReturn(posts);
+		when(model.findThreadById("t")).thenReturn(thread);
 		
 		// Act
-		ListThreadRequest res = new ListThreadRequest(postsModel, request, response);
+		ListThreadRequest res = new ListThreadRequest(model, request, response);
 		ThreadResource result = res.listByThreadId("t", 0, 10);
 		
 		// Assert

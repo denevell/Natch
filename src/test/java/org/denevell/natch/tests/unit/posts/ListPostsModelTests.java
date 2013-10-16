@@ -14,19 +14,19 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
 import org.denevell.natch.db.entities.PostEntity;
-import org.denevell.natch.serv.posts.PostsModel;
-import org.denevell.natch.serv.posts.ThreadFactory;
+import org.denevell.natch.serv.posts.list.ListPostsModel;
+import org.denevell.natch.serv.thread.list.ListThreadModel;
 import org.junit.Before;
 import org.junit.Test;
 
 public class ListPostsModelTests {
 	
-	private PostsModel model;
+	private ListPostsModel model;
 	private EntityTransaction trans;
 	private EntityManagerFactory factory;
 	private EntityManager entityManager;
 	private TypedQuery<PostEntity> queryResults;
-	private ThreadFactory threadFactory;
+	private ListThreadModel modelThreads;
 
 	@SuppressWarnings("unchecked")
 	@Before
@@ -36,8 +36,8 @@ public class ListPostsModelTests {
 		trans = mock(EntityTransaction.class);
 		queryResults = mock(TypedQuery.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
-		threadFactory = mock(ThreadFactory.class);
-		model = new PostsModel(factory, entityManager, threadFactory);
+		modelThreads = new ListThreadModel(factory, entityManager);
+		model = new ListPostsModel(factory, entityManager);
 	}
 	
 	@Test
@@ -119,7 +119,7 @@ public class ListPostsModelTests {
 		when(queryResults.getResultList()).thenReturn(posts);
 		
 		// Act
-		List<PostEntity> result = model.listByThreadId("t", 0, 10);
+		List<PostEntity> result = modelThreads.listByThreadId("t", 0, 10);
 		
 		// Assert
 		assertEquals(2, result.size());

@@ -16,26 +16,27 @@ import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.io.posts.ListPostsResource;
-import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.utils.Log;
 
 @Path("post")
 public class ListPosts {
 	
+	
 	@Context UriInfo mInfo;
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-	private PostsModel mModel;
+	private ListPostsModel mModel;
 	
 	public ListPosts() {
-		mModel = new PostsModel();
+		mModel = new ListPostsModel();
 	}
 	
 	/**
 	 * For DI testing.
+	 * @param editPostAdapter 
 	 */
-	public ListPosts(PostsModel postModel, HttpServletRequest request, HttpServletResponse response) {
+	public ListPosts(ListPostsModel postModel, HttpServletRequest request, HttpServletResponse response) {
 		mModel = postModel;
 		mRequest = request;
 		mResponse = response;

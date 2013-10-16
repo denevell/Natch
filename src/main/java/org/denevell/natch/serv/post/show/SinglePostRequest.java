@@ -15,7 +15,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.io.posts.PostResource;
-import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.utils.Log;
 
 @Path("post/single")
@@ -25,17 +24,17 @@ public class SinglePostRequest {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-	private PostsModel mModel;
+	private ShowPostModel mModel;
 	
 	public SinglePostRequest() {
-		mModel = new PostsModel();
+		mModel = new ShowPostModel();
 	}
 	
 	/**
 	 * For DI testing.
 	 * @param editPostAdapter 
 	 */
-	public SinglePostRequest(PostsModel postModel, HttpServletRequest request, HttpServletResponse response) {
+	public SinglePostRequest(ShowPostModel postModel, HttpServletRequest request, HttpServletResponse response) {
 		mModel = postModel;
 		mRequest = request;
 		mResponse = response;

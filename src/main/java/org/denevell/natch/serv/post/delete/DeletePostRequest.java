@@ -16,7 +16,6 @@ import javax.ws.rs.core.UriInfo;
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.DeletePostResourceReturnData;
-import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
@@ -28,21 +27,28 @@ import com.wordnik.swagger.annotations.ApiParam;
 @Path("post/del")
 public class DeletePostRequest {
 	
+	public final static String EDITED = "edited";
+	public final static String DELETED = "deleted";
+	public final static String ADDED = "added";
+	public final static String DOESNT_EXIST = "doesntexist";
+	public final static String UNKNOWN_ERROR = "unknownerror";
+	public final static String BAD_USER_INPUT = "baduserinput";
+	public final static String NOT_YOURS_TO_DELETE = "notyourtodelete";	
 	@Context UriInfo mInfo;
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-	private PostsModel mModel;
+	private DeletePostModel mModel;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
 	
 	public DeletePostRequest() {
-		mModel = new PostsModel();
+		mModel = new DeletePostModel();
 	}
 	
 	/**
 	 * For DI testing.
 	 */
-	public DeletePostRequest(PostsModel postModel, 
+	public DeletePostRequest(DeletePostModel postModel, 
 			HttpServletRequest request, 
 			HttpServletResponse response
 			) {
@@ -83,13 +89,13 @@ public class DeletePostRequest {
 	}
 
 	private void generateDeleteReturnResource(String result, DeletePostResourceReturnData ret, UserEntity userEntity) {
-		if(result.equals(PostsModel.DELETED)) {
+		if(result.equals(DELETED)) {
 			ret.setSuccessful(true);
-		} else if(result.equals(PostsModel.DOESNT_EXIST)) {
+		} else if(result.equals(DOESNT_EXIST)) {
 			ret.setError(rb.getString(Strings.post_doesnt_exist));
-		} else if(result.equals(PostsModel.NOT_YOURS_TO_DELETE)) {
+		} else if(result.equals(NOT_YOURS_TO_DELETE)) {
 			ret.setError(rb.getString(Strings.post_not_yours));
-		} else if(result.equals(PostsModel.UNKNOWN_ERROR)) {
+		} else if(result.equals(UNKNOWN_ERROR)) {
 			ret.setError(rb.getString(Strings.unknown_error));
 		}
 	}

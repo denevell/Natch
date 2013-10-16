@@ -14,14 +14,14 @@ import javax.persistence.EntityTransaction;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.serv.posts.PostsModel;
+import org.denevell.natch.serv.post.delete.DeletePostModel;
 import org.denevell.natch.serv.posts.ThreadFactory;
 import org.junit.Before;
 import org.junit.Test;
 
 public class DeletePostModelTests {
 	
-	private PostsModel model;
+	private DeletePostModel model;
 	private EntityTransaction trans;
 	private EntityManagerFactory factory;
 	private EntityManager entityManager;
@@ -35,7 +35,7 @@ public class DeletePostModelTests {
 		trans = mock(EntityTransaction.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
 		threadFactory = mock(ThreadFactory.class);
-		model = spy(new PostsModel(factory, entityManager, threadFactory));
+		model = spy(new DeletePostModel(factory, entityManager, threadFactory));
 		threadEntity = mock(ThreadEntity.class);
 	}
 	
@@ -54,7 +54,7 @@ public class DeletePostModelTests {
 		String result = model.delete(userEntity, num);
 		
 		// Verify
-		assertEquals(PostsModel.DELETED, result);
+		assertEquals(DeletePostModel.DELETED, result);
 	}
 	
 	@Test
@@ -71,7 +71,7 @@ public class DeletePostModelTests {
 		String result = model.delete(userEntity, num);
 		
 		// Verify
-		assertEquals(PostsModel.NOT_YOURS_TO_DELETE, result);
+		assertEquals(DeletePostModel.NOT_YOURS_TO_DELETE, result);
 	}
 	
 	@Test
@@ -88,7 +88,7 @@ public class DeletePostModelTests {
 		String result = model.delete(userEntity, num);
 		
 		// Verify
-		assertEquals(PostsModel.DOESNT_EXIST, result);
+		assertEquals(DeletePostModel.DOESNT_EXIST, result);
 	}
 	
 	@Test
@@ -105,7 +105,7 @@ public class DeletePostModelTests {
 		String result = model.delete(userEntity, num);
 		
 		// Verify
-		assertEquals(PostsModel.UNKNOWN_ERROR, result);
+		assertEquals(DeletePostModel.UNKNOWN_ERROR, result);
 	}
 	
 	@Test
@@ -122,6 +122,6 @@ public class DeletePostModelTests {
 		String result = model.delete(null, num);
 		
 		// Verify
-		assertEquals(PostsModel.UNKNOWN_ERROR, result);
+		assertEquals(DeletePostModel.UNKNOWN_ERROR, result);
 	}
 }

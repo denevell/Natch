@@ -14,11 +14,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
+import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.EditPostResource;
 import org.denevell.natch.io.posts.EditPostResourceReturnData;
-import org.denevell.natch.serv.posts.EditPostResourcePostEntityAdapter;
-import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.thread.edit.EditThreadRequest;
 import org.denevell.natch.utils.Strings;
 
@@ -30,23 +29,20 @@ public class EditPostRequest {
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
-	private PostsModel mModel;
-	private EditPostResourcePostEntityAdapter mEditPostAdapter;
+	private EditPostModel mModel;
 	
 	public EditPostRequest() {
-		mModel = new PostsModel();
-		mEditPostAdapter = new EditPostResourcePostEntityAdapter();
+		mModel = new EditPostModel();
 	}
 	
 	/**
 	 * For DI testing.
 	 * @param editPostAdapter 
 	 */
-	public EditPostRequest(PostsModel postModel, HttpServletRequest request, HttpServletResponse response, EditPostResourcePostEntityAdapter editPostAdapter ) {
+	public EditPostRequest(EditPostModel postModel, HttpServletRequest request, HttpServletResponse response) {
 		mModel = postModel;
 		mRequest = request;
 		mResponse = response;
-		mEditPostAdapter = editPostAdapter;
 	}
 	
 	@POST
@@ -66,8 +62,11 @@ public class EditPostRequest {
 			mModel.init();
 			ret.setSuccessful(false);
 			UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-			mEditPostAdapter.setPostWithNewData(editPostResource);
-			String result = mModel.edit(userEntity, postId, mEditPostAdapter, isEditingThread); 
+			PostEntity mPe = new PostEntity();
+			mPe.setContent(editPostResource.getContent());
+			mPe.setSubject(editPostResource.getSubject());
+			mPe.setTags(editPostResource.getTags());			
+			String result = mModel.edit(userEntity, postId, mPe, isEditingThread); 
 			EditThreadRequest.generateEditReturnResource(ret, result, rb);
 			return ret;
 		} finally {

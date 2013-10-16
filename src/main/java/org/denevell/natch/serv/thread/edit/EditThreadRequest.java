@@ -14,38 +14,42 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
+import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.EditPostResource;
 import org.denevell.natch.io.posts.EditPostResourceReturnData;
-import org.denevell.natch.serv.posts.EditPostResourcePostEntityAdapter;
-import org.denevell.natch.serv.posts.PostsModel;
+import org.denevell.natch.serv.post.edit.EditPostModel;
 import org.denevell.natch.utils.Strings;
 
 @Path("post/editthread")
 public class EditThreadRequest {
 	
+	public final static String EDITED = "edited";
+	public final static String DELETED = "deleted";
+	public final static String ADDED = "added";
+	public final static String DOESNT_EXIST = "doesntexist";
+	public final static String UNKNOWN_ERROR = "unknownerror";
+	public final static String BAD_USER_INPUT = "baduserinput";
+	public final static String NOT_YOURS_TO_DELETE = "notyourtodelete";		
 	@Context UriInfo mInfo;
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
-	private PostsModel mModel;
-	private EditPostResourcePostEntityAdapter mEditPostAdapter;
+	private EditPostModel mModel;
 	
 	public EditThreadRequest() {
-		mModel = new PostsModel();
-		mEditPostAdapter = new EditPostResourcePostEntityAdapter();		
+		mModel = new EditPostModel();
 	}
 	
 	/**
 	 * For DI testing.
 	 * @param editPostAdapter 
 	 */
-	public EditThreadRequest(PostsModel postModel, HttpServletRequest request, HttpServletResponse response, EditPostResourcePostEntityAdapter editPostAdapter ) {
+	public EditThreadRequest(EditPostModel postModel, HttpServletRequest request, HttpServletResponse response) {
 		mModel = postModel;
 		mRequest = request;
 		mResponse = response;
-		mEditPostAdapter = editPostAdapter;
 	}
 	
 	@POST
@@ -65,8 +69,11 @@ public class EditThreadRequest {
 			mModel.init();
 			ret.setSuccessful(false);
 			UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-			mEditPostAdapter.setPostWithNewData(editPostResource);
-			String result = mModel.edit(userEntity, postId, mEditPostAdapter, isEditingThread); 
+			PostEntity mPe = new PostEntity();
+			mPe.setContent(editPostResource.getContent());
+			mPe.setSubject(editPostResource.getSubject());
+			mPe.setTags(editPostResource.getTags());
+			String result = mModel.edit(userEntity, postId, mPe, isEditingThread); 
 			generateEditReturnResource(ret, result, rb);
 			return ret;
 		} finally {
@@ -76,15 +83,15 @@ public class EditThreadRequest {
 	
 	public static void generateEditReturnResource(EditPostResourceReturnData ret,
 			String result, ResourceBundle rb) {
-		if(result.equals(PostsModel.EDITED)) {
+		if(result.equals(EDITED)) {
 			ret.setSuccessful(true);
-		} else if(result.equals(PostsModel.DOESNT_EXIST)) {
+		} else if(result.equals(DOESNT_EXIST)) {
 			ret.setError(rb.getString(Strings.post_doesnt_exist));
-		} else if(result.equals(PostsModel.NOT_YOURS_TO_DELETE)) {
+		} else if(result.equals(NOT_YOURS_TO_DELETE)) {
 			ret.setError(rb.getString(Strings.post_not_yours));
-		} else if(result.equals(PostsModel.UNKNOWN_ERROR)) {
+		} else if(result.equals(UNKNOWN_ERROR)) {
 			ret.setError(rb.getString(Strings.unknown_error));
-		} else if(result.equals(PostsModel.BAD_USER_INPUT)) {
+		} else if(result.equals(BAD_USER_INPUT)) {
 			ret.setError(rb.getString(Strings.post_fields_cannot_be_blank));
 		}
 	}

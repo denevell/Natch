@@ -17,7 +17,6 @@ import javax.ws.rs.core.UriInfo;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.io.threads.ThreadResource;
-import org.denevell.natch.serv.posts.PostsModel;
 import org.denevell.natch.serv.posts.ThreadResourceAdapter;
 
 @Path("post/thread")
@@ -27,17 +26,17 @@ public class ListThreadRequest {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-	private PostsModel mModel;
+	private ListThreadModel mModel;
 	
 	public ListThreadRequest() {
-		mModel = new PostsModel();
+		mModel = new ListThreadModel();
 	}
 	
 	/**
 	 * For DI testing.
 	 * @param editPostAdapter 
 	 */
-	public ListThreadRequest(PostsModel postModel, HttpServletRequest request, HttpServletResponse response) {
+	public ListThreadRequest(ListThreadModel postModel, HttpServletRequest request, HttpServletResponse response) {
 		mModel = postModel;
 		mRequest = request;
 		mResponse = response;

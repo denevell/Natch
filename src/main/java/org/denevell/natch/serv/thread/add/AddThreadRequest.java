@@ -19,7 +19,7 @@ import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.serv.post.add.AddPostModel;
-import org.denevell.natch.serv.posts.PostsModel;
+import org.denevell.natch.serv.post.edit.EditPostModel;
 import org.denevell.natch.serv.posts.ThreadResourceAdapter;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
@@ -65,7 +65,7 @@ public class AddThreadRequest {
 	})	
 	public AddPostResourceReturnData addThread(AddPostResourceInput input) {
 		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-		if(PostsModel.isBadInputParams(userEntity, 
+		if(EditPostModel.isBadInputParams(userEntity, 
 				input.getSubject(), 
 				input.getContent(), true)) {
 			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
