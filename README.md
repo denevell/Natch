@@ -3,8 +3,6 @@
 The start of a REST interface for a forum.
 
 ### Current
-* posts: Order of posts if one deleted
-* Test for editing a post and thread separately
 * Test performance with multiple connections
 * Re-enable db locking 
 * Length of a tag and length of a subject.

@@ -1,6 +1,7 @@
 package org.denevell.natch.tests.functional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import org.denevell.natch.io.posts.EditPostResource;
 import org.denevell.natch.io.posts.EditPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.threads.ListThreadsResource;
+import org.denevell.natch.io.threads.ThreadResource;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.RegisterResourceInput;
@@ -59,10 +61,7 @@ public class ListThreadsFunctional {
 		addThread(input1); 
 		addThread(input2); 
 		
-		// Act
-		ListThreadsResource returnData = service
-		.path("rest").path("threads").path("0").path("10")
-    	.get(ListThreadsResource.class); 
+		ListThreadsResource returnData = listThreads(); 
 		
 		// Assert
 		assertEquals(2, returnData.getNumOfThreads());
@@ -73,6 +72,28 @@ public class ListThreadsFunctional {
 		assertEquals("sub1", returnData.getThreads().get(1).getSubject());
 		assertEquals("other", returnData.getThreads().get(1).getId());		
 		assertEquals("t", returnData.getThreads().get(0).getId());		
+	}
+	
+	@Test
+	public void shouldListThreadsWithModificationDateAsLatestPost() {
+		// Arrange 
+		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
+		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "t");
+		addThread(input); 
+		addPost(input1); 
+		
+		// Act
+		ListThreadsResource threads = listThreads(); 
+		ThreadResource thread = listThreadById("t"); 		
+		
+		// Assert
+		assertEquals("Has latest post's modificaton date", 
+				threads.getThreads().get(0).getModification(), 
+				thread.getPosts().get(1).getModification());
+
+		assertNotEquals("Doesn't have latest post's modificaton date", 
+				threads.getThreads().get(0).getModification(), 
+				thread.getPosts().get(0).getModification());
 	}
 	
 	@Test
@@ -256,4 +277,18 @@ public class ListThreadsFunctional {
     	.put(AddPostResourceReturnData.class, input2);
 		assertTrue("Added thraed", res.isSuccessful());
 	}		
+	
+	public ThreadResource listThreadById(String id) {
+		ThreadResource thread = service
+		.path("rest").path("post").path("thread").path(id).path("0").path("10")
+		.get(ThreadResource.class);
+		return thread;
+	}		
+	
+	public ListThreadsResource listThreads() {
+		ListThreadsResource threads = service
+		.path("rest").path("threads").path("0").path("10")
+    	.get(ListThreadsResource.class);
+		return threads;
+	}	
 }

@@ -22,7 +22,7 @@ public class ListThreadsResourceAdapter extends ListThreadsResource {
 				postResource.setNumPosts((int) p.getNumPosts());
 				postResource.setSubject(p.getRootPost().getSubject());
 				postResource.setTags(p.getRootPost().getTags());
-				postResource.setModification(p.getRootPost().getModified());
+				postResource.setModification(p.getLatestPost().getModified());
 				postResource.setCreation(p.getRootPost().getCreated());
 				postResource.setId(p.getId());
 				postsResources.add(postResource);
