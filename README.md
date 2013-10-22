@@ -89,9 +89,6 @@ The start of a REST interface for a forum.
 
 ### Icebox 
 
-* Site management
- * Superuser
- * Move posts into existing threads or new threads
 * Posts
  * Search
 * User management 
