@@ -12,7 +12,6 @@ import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceLoggedInReturnData;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.RegisterResourceInput;
-import org.denevell.natch.io.users.RegisterResourceReturnData;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
@@ -37,35 +36,23 @@ public class LoginFunctional {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
-	    	.put(RegisterResourceReturnData.class, registerInput);
-	    
+	    RegisterFunctional.register(service, registerInput);
 	    // Act
-		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput);
+		LoginResourceReturnData loginResult = login(service, loginInput);
 		
 		// Assert
 		assertEquals("", loginResult.getError());
 		assertTrue("Should return true as 'successful' field", loginResult.isSuccessful());
 	}
+
 	
 	@Test
 	public void shouldSeeJsonErrorOnBadCredentials() {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passyWRONG");
-		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
-	    	.put(RegisterResourceReturnData.class, registerInput);
-	    
-	    // Act
-		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput);
+	    RegisterFunctional.register(service, registerInput);
+	    LoginResourceReturnData loginResult = login(service, loginInput);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
@@ -76,12 +63,7 @@ public class LoginFunctional {
 	public void login_shouldSeeJsonErrorOnBlanksPassed() {
 		// Arrange 
 	    LoginResourceInput loginInput = new LoginResourceInput(" ", " ");
-	    
-	    // Act
-		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput);
+	    LoginResourceReturnData loginResult = login(service, loginInput);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
@@ -92,12 +74,7 @@ public class LoginFunctional {
 	public void login_shouldSeeJsonErrorOnBlankUsername() {
 		// Arrange 
 	    LoginResourceInput loginInput = new LoginResourceInput(" ", "password");
-	    
-	    // Act
-		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput);
+	    LoginResourceReturnData loginResult = login(service, loginInput);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
@@ -108,12 +85,7 @@ public class LoginFunctional {
 	public void login_shouldSeeJsonErrorOnBlankPassword() {
 		// Arrange 
 	    LoginResourceInput loginInput = new LoginResourceInput("username", " ");
-	    
-	    // Act
-		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput);
+	    LoginResourceReturnData loginResult = login(service, loginInput);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
@@ -124,12 +96,8 @@ public class LoginFunctional {
 	public void login_shouldSeeJsonErrorOnNullUsername() {
 		// Arrange 
 	    LoginResourceInput loginInput = new LoginResourceInput(null, "password");
-	    
-	    // Act
-		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput);
+	    LoginResourceReturnData loginResult = login(service, loginInput);
+
 		
 		// Assert
 		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
@@ -140,12 +108,7 @@ public class LoginFunctional {
 	public void login_shouldSeeJsonErrorOnNullPassword() {
 		// Arrange 
 	    LoginResourceInput loginInput = new LoginResourceInput("username", null);
-	    
-	    // Act
-		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput);
+	    LoginResourceReturnData loginResult = login(service, loginInput);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
@@ -161,19 +124,10 @@ public class LoginFunctional {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
-	    	.put(RegisterResourceReturnData.class, registerInput);
+	    RegisterFunctional.register(service, registerInput);
 	    
-	    // Act
-		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput);
-		LoginResourceReturnData loginResult2 = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput);
+	    LoginResourceReturnData loginResult = login(service, loginInput);
+	    LoginResourceReturnData loginResult2 = login(service, loginInput);
 		
 		// Assert
 		assertEquals("", loginResult.getError());
@@ -187,15 +141,9 @@ public class LoginFunctional {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
-	    	.put(RegisterResourceReturnData.class, registerInput);
+	    RegisterFunctional.register(service, registerInput);
 	    
-	    // Act
-		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput);
+	    LoginResourceReturnData loginResult = login(service, loginInput);
 		
 		// Assert
 		assertTrue("Should return auth key", loginResult.getAuthKey().length()>5);
@@ -206,19 +154,10 @@ public class LoginFunctional {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
-	    	.put(RegisterResourceReturnData.class, registerInput);
+	    RegisterFunctional.register(service, registerInput);
 	    
-	    // Act
-		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput);
-		LoginResourceReturnData loginResult1 = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput);
+	    LoginResourceReturnData loginResult = login(service, loginInput);
+	    LoginResourceReturnData loginResult1 = login(service, loginInput);
 		
 		// Assert
 		assertFalse("Should return different auth key", loginResult.getAuthKey().equals(loginResult1.getAuthKey()));		
@@ -229,13 +168,8 @@ public class LoginFunctional {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
-	    	.put(RegisterResourceReturnData.class, registerInput);
-		LoginResourceReturnData loginResult = service
-	    	.path("rest").path("user").path("login")
-	    	.type(MediaType.APPLICATION_JSON)
-	    	.post(LoginResourceReturnData.class, loginInput);
+	    RegisterFunctional.register(service, registerInput);
+	    LoginResourceReturnData loginResult = login(service, loginInput);
 	    
 	    // Act
 		LoginResourceLoggedInReturnData authResult = service
@@ -253,13 +187,9 @@ public class LoginFunctional {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
-	    	.put(RegisterResourceReturnData.class, registerInput);
-		LoginResourceReturnData loginResult = service
-	    	.path("rest").path("user").path("login")
-	    	.type(MediaType.APPLICATION_JSON)
-	    	.post(LoginResourceReturnData.class, loginInput);
+	    RegisterFunctional.register(service, registerInput);
+	    LoginResourceReturnData loginResult = login(service, loginInput);
+
 		loginResult.getAuthKey();
 	    
 	    // Act
@@ -282,17 +212,9 @@ public class LoginFunctional {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
-	    	.put(RegisterResourceReturnData.class, registerInput);
-		LoginResourceReturnData loginResult = service
-	    	.path("rest").path("user").path("login")
-	    	.type(MediaType.APPLICATION_JSON)
-	    	.post(LoginResourceReturnData.class, loginInput);
-		service
-	    	.path("rest").path("user").path("login")
-	    	.type(MediaType.APPLICATION_JSON)
-	    	.post(LoginResourceReturnData.class, loginInput);
+	    RegisterFunctional.register(service, registerInput);
+	    LoginResourceReturnData loginResult = login(service, loginInput);
+	    login(service, loginInput);
 	    
 	    // Act
 
@@ -308,6 +230,15 @@ public class LoginFunctional {
 			return;
 		}
 		assertTrue("Wanted to see a 401", false);		
+	}	
+	
+
+	public static LoginResourceReturnData login(WebResource service, LoginResourceInput loginInput) {
+		LoginResourceReturnData loginResult = service
+	    		.path("rest").path("user").path("login")
+	    		.type(MediaType.APPLICATION_JSON)
+	    		.post(LoginResourceReturnData.class, loginInput);
+		return loginResult;
 	}	
 	
 }

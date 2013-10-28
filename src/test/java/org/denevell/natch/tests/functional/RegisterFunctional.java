@@ -8,6 +8,8 @@ import java.util.ResourceBundle;
 
 import javax.ws.rs.core.MediaType;
 
+import org.denevell.natch.io.users.LoginResourceInput;
+import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.RegisterResourceInput;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
 import org.denevell.natch.utils.Strings;
@@ -19,12 +21,12 @@ import com.sun.jersey.api.client.WebResource;
 
 public class RegisterFunctional {
 	
-	private WebResource registerService;
     ResourceBundle rb = Strings.getMainResourceBundle();
+	private WebResource service;
 
 	@Before
 	public void setup() throws Exception {
-		registerService = TestUtils.getRESTRegisterClient();
+		service = TestUtils.getRESTClient();
 		TestUtils.deleteTestDb();
 	}
 
@@ -32,11 +34,7 @@ public class RegisterFunctional {
 	public void shouldRegisterWithUsernameAndPassword() {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
-	    
-	    // Act
-		RegisterResourceReturnData result = registerService
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.put(RegisterResourceReturnData.class, registerInput);
+	    RegisterResourceReturnData result = register(service, registerInput);
 		
 		// Assert
 		assertEquals("", result.getError());
@@ -44,17 +42,45 @@ public class RegisterFunctional {
 	}
 	
 	@Test
+	public void shouldAdminBitSet() {
+		// Arrange 
+	    // Act
+	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron", "aaron");
+	    RegisterResourceReturnData result = register(service, registerInput);
+		
+		LoginResourceInput loginInput = new LoginResourceInput("aaron", "aaron");
+		LoginResourceReturnData login = LoginFunctional.login(TestUtils.getRESTClient(), loginInput);
+
+		// Assert
+		assertTrue("Should register", result.isSuccessful());
+		assertTrue("See admin bit", login.isAdmin()==true);
+	}
+
+	@Test
+	public void shouldntSeeAdminBitSet() {
+		// Arrange 
+	    // Act
+	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron", "aaron");
+	    RegisterResourceReturnData result = register(service, registerInput);
+	    registerInput = new RegisterResourceInput("aaron1", "aaron1");
+	    result = register(service, registerInput);
+		
+		LoginResourceInput loginInput = new LoginResourceInput("aaron1", "aaron1");
+		LoginResourceReturnData login = LoginFunctional.login(TestUtils.getRESTClient(), loginInput);
+
+		// Assert
+		assertTrue("Should register", result.isSuccessful());
+		assertFalse("Shouldn't see admin bit", login.isAdmin());
+	}
+
+	@Test
 	public void shouldSeeErrorJsonOnExistingUsername() {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
-	    
-	    // Act
-		RegisterResourceReturnData result = registerService
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.put(RegisterResourceReturnData.class, registerInput);
-		RegisterResourceReturnData result2 = registerService
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.put(RegisterResourceReturnData.class, registerInput);
+
+	    // Act 
+	    RegisterResourceReturnData result = register(service, registerInput);
+	    RegisterResourceReturnData result2 = register(service, registerInput);	    
 		
 		// Assert
 		assertTrue("Should return true as 'successful' field", result.isSuccessful());
@@ -67,11 +93,7 @@ public class RegisterFunctional {
 	public void shouldSeeErrorJsonOnBlanksPassed() {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput("", "");
-	    
-	    // Act
-		RegisterResourceReturnData result = registerService
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.put(RegisterResourceReturnData.class, registerInput);
+	    RegisterResourceReturnData result = register(service, registerInput);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.user_pass_cannot_be_blank), result.getError());
@@ -82,11 +104,7 @@ public class RegisterFunctional {
 	public void shouldSeeErrorJsonOnBlankUsername() {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput("", "passy");
-	    
-	    // Act
-		RegisterResourceReturnData result = registerService
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.put(RegisterResourceReturnData.class, registerInput);
+	    RegisterResourceReturnData result = register(service, registerInput);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.user_pass_cannot_be_blank), result.getError());
@@ -97,11 +115,7 @@ public class RegisterFunctional {
 	public void shouldSeeErrorJsonOnBlankPassword() {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "");
-	    
-	    // Act
-		RegisterResourceReturnData result = registerService
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.put(RegisterResourceReturnData.class, registerInput);
+	    RegisterResourceReturnData result = register(service, registerInput);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.user_pass_cannot_be_blank), result.getError());
@@ -112,12 +126,8 @@ public class RegisterFunctional {
 	public void shouldSeeErrorJsonOnNulls() {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput(null, null);
-	    
-	    // Act
-		RegisterResourceReturnData result = registerService
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.put(RegisterResourceReturnData.class, registerInput);
-		
+	    RegisterResourceReturnData result = register(service, registerInput);		
+
 		// Assert
 		assertEquals(rb.getString(Strings.user_pass_cannot_be_blank), result.getError());
 		assertFalse("Should return false 'successful' field", result.isSuccessful());		
@@ -127,11 +137,7 @@ public class RegisterFunctional {
 	public void shouldSeeErrorJsonOnNullUsername() {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput(null, "passy");
-	    
-	    // Act
-		RegisterResourceReturnData result = registerService
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.put(RegisterResourceReturnData.class, registerInput);
+	    RegisterResourceReturnData result = register(service, registerInput);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.user_pass_cannot_be_blank), result.getError());
@@ -142,23 +148,20 @@ public class RegisterFunctional {
 	public void shouldSeeErrorJsonOnNullPassword() {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", null);
-	    
-	    // Act
-		RegisterResourceReturnData result = registerService
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.put(RegisterResourceReturnData.class, registerInput);
+	    RegisterResourceReturnData result = register(service, registerInput);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.user_pass_cannot_be_blank), result.getError());
 		assertFalse("Should return false 'successful' field", result.isSuccessful());		
 	}	
+
+	public static RegisterResourceReturnData register(WebResource service, RegisterResourceInput registerInput) {
+		RegisterResourceReturnData result = service 
+	    		.path("rest").path("user")
+				.type(MediaType.APPLICATION_JSON)
+	    		.put(RegisterResourceReturnData.class, registerInput);
+		return result;
+	}	
 	
-	public void shouldSeeJsonErrorOnGarbageInput() {
-		// Deferred functional requirement
-	}
-	
-	public void shouldSaltPassword() {
-		// Completed non functional requirement
-	}
 	
 }

@@ -23,12 +23,14 @@ public class LoginModel {
 	public static class LoginResult {
 		private String authKey = "";
 		private String result;
+		private boolean admin;
 		public LoginResult(String result) {
 			this.result = result;
 		}
-		public LoginResult(String result, String authKey) {
+		public LoginResult(String result, String authKey, boolean admin) {
 			this.result = result;
 			this.authKey = authKey;
+			this.setAdmin(admin);
 		}
 		public String getAuthKey() {
 			return authKey;
@@ -41,6 +43,12 @@ public class LoginModel {
 		}
 		public void setResult(String result) {
 			this.result = result;
+		}
+		public boolean isAdmin() {
+			return admin;
+		}
+		public void setAdmin(boolean admin) {
+			this.admin = admin;
 		}
 	}
 	
@@ -77,7 +85,7 @@ public class LoginModel {
 			UserEntity res = mUserEntityQueries.areCredentialsCorrect(username, password, mEntityManager);
 			if(res!=null) {
 				String authKey = mAuthDataGenerator.generate(res);
-				return new LoginResult(LOGGED_IN, authKey);
+				return new LoginResult(LOGGED_IN, authKey, res.isAdmin());
 			} else {
 				return new LoginResult(CREDENTIALS_INCORRECT);
 			}

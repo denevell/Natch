@@ -64,6 +64,7 @@ public class LoginRequest {
 			LoginResult loginResult = mLoginModel.login(username, password);
 			if(loginResult.getResult().equals(LoginModel.LOGGED_IN)) {
 				returnResult.setSuccessful(true);
+				returnResult.setAdmin(loginResult.isAdmin());
 				returnResult.setAuthKey(loginResult.getAuthKey());
 			} else if(loginResult.getResult().equals(LoginModel.CREDENTIALS_INCORRECT)
 					|| loginResult.getResult().equals(LoginModel.USER_INPUT_ERROR)){

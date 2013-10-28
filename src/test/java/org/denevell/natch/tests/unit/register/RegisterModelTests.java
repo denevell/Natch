@@ -1,15 +1,17 @@
 package org.denevell.natch.tests.unit.register;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 
 import org.denevell.natch.auth.LoginAuthKeysSingleton;
-import org.denevell.natch.db.entities.UserEntityQueries;
+import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.serv.users.logout.LogoutModel;
 import org.denevell.natch.serv.users.register.RegisterModel;
 import org.denevell.natch.utils.PasswordSaltUtils;
@@ -18,28 +20,26 @@ import org.junit.Test;
 
 public class RegisterModelTests {
 	
-	private UserEntityQueries queries;
 	private EntityTransaction trans;
 	private EntityManager entityManager;
-	private EntityManagerFactory factory;
 	private PasswordSaltUtils salter;
 	private LoginAuthKeysSingleton authManager;
 
 	@Before
 	public void setup() {
-		factory = mock(EntityManagerFactory.class);
 		trans = mock(EntityTransaction.class);
 		salter = mock(PasswordSaltUtils.class);
 		entityManager = mock(EntityManager.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
 		authManager = mock(LoginAuthKeysSingleton.class);
-		queries = mock(UserEntityQueries.class);
 	}
 	
 	@Test
 	public void shouldRegisterWithUsernameAndPassword() {
 		// Arrange
-		RegisterModel um = new RegisterModel(queries, authManager, factory, entityManager, salter);
+		RegisterModel um = spy(new RegisterModel(authManager, entityManager, salter));
+		doReturn(false).when(um).doesUsernameExist("user", entityManager);
+		doReturn(false).when(um).isFirstUser();
 		
 		// Act
 		String result = um.addUserToSystem("user", "pass");
@@ -50,8 +50,8 @@ public class RegisterModelTests {
 	
 	@Test
 	public void shouldntRegisterWithBlankUsername() {
-		// Arrange
-		RegisterModel um = new RegisterModel(queries, authManager, factory, entityManager, salter);
+		// ArrangeaddUserToSystem
+		RegisterModel um = new RegisterModel(authManager, entityManager, salter);
 		
 		// Act
 		String result = um.addUserToSystem("", "asd");
@@ -63,7 +63,7 @@ public class RegisterModelTests {
 	@Test
 	public void shouldntRegisterWithNullUsername() {
 		// Arrange
-		RegisterModel um = new RegisterModel(queries, authManager, factory, entityManager, salter);
+		RegisterModel um = new RegisterModel(authManager, entityManager, salter);
 		
 		// Act
 		String result = um.addUserToSystem(null, "asd");
@@ -75,7 +75,7 @@ public class RegisterModelTests {
 	@Test
 	public void shouldntRegisterWithBlankPassword() {
 		// Arrange
-		RegisterModel um = new RegisterModel(queries, authManager, factory, entityManager, salter);
+		RegisterModel um = new RegisterModel(authManager, entityManager, salter);
 		
 		// Act
 		String result = um.addUserToSystem("dsfd", "");
@@ -87,7 +87,7 @@ public class RegisterModelTests {
 	@Test
 	public void shouldntRegisterWithNullPassword() {
 		// Arrange
-		RegisterModel um = new RegisterModel(queries, authManager, factory, entityManager, salter);
+		RegisterModel um = new RegisterModel(authManager, entityManager, salter);
 		
 		// Act
 		String result = um.addUserToSystem("dsfd", null);
@@ -100,7 +100,7 @@ public class RegisterModelTests {
 	public void shouldntRegisterWithEntityMangerException() { 
 		// Arrange
 		when(entityManager.getTransaction()).thenThrow(new RuntimeException());
-		RegisterModel um = new RegisterModel(queries, authManager, factory, entityManager, salter);
+		RegisterModel um = new RegisterModel(authManager, entityManager, salter);
 		
 		// Act
 		String result = um.addUserToSystem("dsfd", "dsfsdf");
@@ -112,14 +112,46 @@ public class RegisterModelTests {
 	@Test
 	public void shouldntRegisterWithDuplicateUsername() { 
 		// Arrange
-		when(queries.doesUsernameExist("username", entityManager)).thenReturn(true);
-		RegisterModel um = new RegisterModel(queries, authManager, factory, entityManager, salter);
+		RegisterModel um = spy(new RegisterModel(authManager, entityManager, salter));
+		doReturn(true).when(um).doesUsernameExist("username", entityManager);
+		doReturn(false).when(um).isFirstUser();
 		
-		// Act
+		// ActtoBeReturned
 		String result = um.addUserToSystem("username", "dsfsdf");
 		
 		// Assert
 		assertEquals(RegisterModel.DUPLICATE_USERNAME, result);
 	}	
+	
+	@Test
+	public void shouldShowFirstUser() { 
+		// Arrange
+		RegisterModel um = new RegisterModel(authManager, entityManager, salter);
+		Query q = mock(Query.class);
+		when(q.getSingleResult()).thenReturn(0);
+		when(entityManager.createNamedQuery(UserEntity.NAMED_QUERY_COUNT)).thenReturn(q);
+		
+		// Act
+		boolean result = um.isFirstUser();
+		
+		// Assert
+		assertTrue("Is first user", result);
+	}	
+	
+	@Test
+	public void shouldntShowFirstUser() { 
+		// Arrange
+		RegisterModel um = new RegisterModel(authManager, entityManager, salter);
+		Query q = mock(Query.class);
+		when(q.getSingleResult()).thenReturn(1);
+		when(entityManager.createNamedQuery(UserEntity.NAMED_QUERY_COUNT)).thenReturn(q);
+		
+		// Act
+		boolean result = um.isFirstUser();
+		
+		// Assert
+		assertFalse("Is first user", result);
+	}		
+	
 
 }

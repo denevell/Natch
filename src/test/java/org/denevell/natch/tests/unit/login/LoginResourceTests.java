@@ -37,7 +37,7 @@ public class LoginResourceTests {
 	public void shouldLoginWithUsernameAndPassword() {
 		// Arrange
 		LoginResourceInput loginInput = new LoginResourceInput("username", "password");
-		when(userModel.login("username", "password")).thenReturn(new LoginResult(LogoutModel.LOGGED_IN, "authKey123"));
+		when(userModel.login("username", "password")).thenReturn(new LoginResult(LogoutModel.LOGGED_IN, "authKey123", true));
 		
 		// Act
 		LoginResourceReturnData result = resource.login(loginInput);
@@ -45,7 +45,22 @@ public class LoginResourceTests {
 		// Assert
 		assertTrue(result.isSuccessful());
 		assertEquals("Error json", "", result.getError());
+		assertEquals("Is admin", true, result.isAdmin());
 	}
+	
+	@Test
+	public void shouldLoginAsNonAdmin() {
+		// Arrange
+		LoginResourceInput loginInput = new LoginResourceInput("username", "password");
+		when(userModel.login("username", "password")).thenReturn(new LoginResult(LogoutModel.LOGGED_IN, "authKey123", false));
+		
+		// Act
+		LoginResourceReturnData result = resource.login(loginInput);
+		
+		// Assert
+		assertTrue(result.isSuccessful());
+		assertEquals("Is admin", false, result.isAdmin());
+	}	
 	
 	@Test
 	public void shouldntLoginWithIncorrectUsernameAndPassword() {
@@ -91,7 +106,7 @@ public class LoginResourceTests {
 	public void shouldReturnLoginAuthKey() {
 		// Arrange
 		LoginResourceInput loginInput = new LoginResourceInput("username", "password");
-		when(userModel.login("username", "password")).thenReturn(new LoginResult(LogoutModel.LOGGED_IN, "authKey123"));
+		when(userModel.login("username", "password")).thenReturn(new LoginResult(LogoutModel.LOGGED_IN, "authKey123", true));
 		
 		// Act
 		LoginResourceReturnData result = resource.login(loginInput);

@@ -1,8 +1,11 @@
 package org.denevell.natch.serv.users.register;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 
 import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.db.entities.UserEntity;
@@ -14,7 +17,6 @@ import org.denevell.natch.utils.PasswordSaltUtils;
 
 public class RegisterModel {
 	
-	private UserEntityQueries mUserEntityQueries;
 	private EntityManager mEntityManager;
 	private PasswordSaltUtils mPasswordSalter;
 	public static String USER_INPUT_ERROR = "inputError";
@@ -25,14 +27,12 @@ public class RegisterModel {
 	/**
 	 * For DI testing
 	 */
-	public RegisterModel(UserEntityQueries ueq, LoginAuthKeysSingleton authKeyGenerator, EntityManagerFactory factory, EntityManager entityManager, PasswordSaltUtils saltUtils) {
-		mUserEntityQueries = ueq;
+	public RegisterModel(LoginAuthKeysSingleton authKeyGenerator, EntityManager entityManager, PasswordSaltUtils saltUtils) {
 		mEntityManager =  entityManager;
 		mPasswordSalter = saltUtils;
 	}
 	
 	public RegisterModel() {
-		mUserEntityQueries = new UserEntityQueries(new PasswordSaltUtils());
 		mPasswordSalter = new PasswordSaltUtils();
 	}
 
@@ -55,7 +55,8 @@ public class RegisterModel {
 			password = mPasswordSalter.generatedSaltedPassword(password);
 			u.setPassword(password);
 			u.setUsername(username);
-			if(!mUserEntityQueries.doesUsernameExist(username, mEntityManager)) {
+			if(isFirstUser()) u.setAdmin(true);
+			if(!doesUsernameExist(username, mEntityManager)) {
 				trans = mEntityManager.getTransaction();
 				trans.begin();
 				mEntityManager.persist(u);
@@ -72,5 +73,18 @@ public class RegisterModel {
 		} 
 	}	
 
+	public boolean doesUsernameExist(String username, EntityManager entityManager) {
+		List<UserEntity> resultList = UserEntityQueries.getUserByUsername(username, entityManager);
+		boolean okay = false;
+		if(resultList!=null) okay = resultList.size()>0;
+		return okay;
+	}	
+	
+	public boolean isFirstUser() {
+		Query q = mEntityManager.createNamedQuery(UserEntity.NAMED_QUERY_COUNT); 
+	    Number cResults=(Number) q.getSingleResult();		
+		return cResults.intValue()==0;	
+	}
+	
 
 }

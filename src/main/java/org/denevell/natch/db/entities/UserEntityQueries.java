@@ -15,19 +15,13 @@ public class UserEntityQueries {
 		mSaltedPasswordUtils = new PasswordSaltUtils();
 	}	
 
-	private List<UserEntity> getUserByUsername(String username, EntityManager entityManager) {
+	public static List<UserEntity> getUserByUsername(String username, EntityManager entityManager) {
 		TypedQuery<UserEntity> q = entityManager.createNamedQuery(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME, UserEntity.class)
 			.setParameter(UserEntity.NAMED_QUERY_PARAM_USERNAME, username);
 		List<UserEntity> resultList = q.getResultList();
 		return resultList;
 	}	
 
-	public boolean doesUsernameExist(String username, EntityManager entityManager) {
-		List<UserEntity> resultList = getUserByUsername(username, entityManager);
-		boolean okay = false;
-		if(resultList!=null) okay = resultList.size()>0;
-		return okay;
-	}
 
 	public UserEntity areCredentialsCorrect(String username, String password, EntityManager entityManager) {
 		List<UserEntity> results = getUserByUsername(username, entityManager);
