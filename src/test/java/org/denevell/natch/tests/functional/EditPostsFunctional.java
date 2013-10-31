@@ -2,6 +2,7 @@ package org.denevell.natch.tests.functional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -18,7 +19,6 @@ import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.RegisterResourceInput;
-import org.denevell.natch.io.users.RegisterResourceReturnData;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
@@ -38,19 +38,13 @@ public class EditPostsFunctional {
 	@Before
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
-		// Delete all users
+		// Delete all users and add one new
 		TestUtils.deleteTestDb();
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
-	    // Register
-		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
-	    	.put(RegisterResourceReturnData.class, registerInput);
-		// Login
+	    RegisterFunctional.register(service, registerInput);
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-		loginResult = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput);			
+	    loginResult = LoginFunctional.login(service, loginInput);
+
 		// Add post
 		initalInput = new AddPostResourceInput("sub", "cont");
 		initalInput.setTags(Arrays.asList(new String[] {"tag1", "tag2"}));
@@ -111,13 +105,9 @@ public class EditPostsFunctional {
 		editedInput.setSubject("sup two?");
 		// Login with another user
 	    LoginResourceInput loginInput1 = new LoginResourceInput("aaron1@aaron.com", "passy");
-		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
-	    	.put(RegisterResourceReturnData.class, loginInput1);
-		LoginResourceReturnData loginResult1 = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput1);				
+	    RegisterResourceInput regInput1 = new RegisterResourceInput("aaron1@aaron.com", "passy");
+	    RegisterFunctional.register(service, regInput1);
+	    LoginResourceReturnData loginResult1 = LoginFunctional.login(service, loginInput1);
 		
 		// Act - edit with different user then list
 		EditPostResourceReturnData editReturnData = service
@@ -136,6 +126,51 @@ public class EditPostsFunctional {
 		assertFalse(editReturnData.isSuccessful());		
 		assertEquals(initalInput.getContent(), newListedPosts.getPosts().get(0).getContent());
 		assertEquals(initalInput.getSubject(), newListedPosts.getPosts().get(0).getSubject());
+	}
+
+	@Test
+	public void shouldEditAsAdmin() {
+		// Arrange
+		// Login with another user
+        LoginResourceInput loginInput1 = new LoginResourceInput("aaron1@aaron.com", "passy");
+        RegisterResourceInput regInput1 = new RegisterResourceInput("aaron1@aaron.com", "passy");
+        RegisterFunctional.register(service, regInput1);
+        LoginResourceReturnData loginResult1 = LoginFunctional.login(service, loginInput1);
+        // Add a post as new user
+        AddPostResourceInput postInput = new AddPostResourceInput("sub", "cont");
+        postInput.setTags(Arrays.asList(new String[] {"tag1", "tag2"}));
+        service
+        .path("rest").path("post").path("add")
+        .type(MediaType.APPLICATION_JSON)
+        .header("AuthKey", loginResult1.getAuthKey())
+        .put(AddPostResourceReturnData.class, postInput);         
+        // List it
+        ListPostsResource originalPosts = service
+        .path("rest").path("post").path("0").path("10")
+        .header("AuthKey", loginResult1.getAuthKey())
+        .get(ListPostsResource.class);          
+		PostResource addedPost = originalPosts.getPosts().get(originalPosts.getPosts().size()-1);
+		
+		// Act - edit with first, admin, user
+		EditPostResource editedInput = new EditPostResource();
+		editedInput.setContent("sup");
+		editedInput.setSubject("sup two?");
+        EditPostResourceReturnData editReturnData = service
+		.path("rest").path("post").path("editpost")
+		.path(String.valueOf(addedPost.getId()))
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", loginResult.getAuthKey())
+    	.post(EditPostResourceReturnData.class, editedInput); 		
+		ListPostsResource newListedPosts = service
+		.path("rest").path("post").path("0").path("10")
+		.header("AuthKey", loginResult.getAuthKey())
+    	.get(ListPostsResource.class); 			
+		
+		// Assert
+		assertEquals("", editReturnData.getError());
+		assertTrue(editReturnData.isSuccessful());		
+		assertNotEquals(addedPost.getContent(), newListedPosts.getPosts().get(0).getContent());
+		assertNotEquals(addedPost.getSubject(), newListedPosts.getPosts().get(0).getSubject());
 	}
 	
 	@Test

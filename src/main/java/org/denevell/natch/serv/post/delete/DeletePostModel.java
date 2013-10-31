@@ -80,7 +80,7 @@ public class DeletePostModel {
 			PostEntity pe = findPostById(postEntityId);
 			if(pe==null) {
 				return DOESNT_EXIST;
-			} else if(!pe.getUser().getUsername().equals(userEntity.getUsername())) {
+			} else if(!userEntity.isAdmin() && !pe.getUser().getUsername().equals(userEntity.getUsername())) {
 				return NOT_YOURS_TO_DELETE;
 			}
 			ThreadEntity th = findThreadById(pe.getThreadId());

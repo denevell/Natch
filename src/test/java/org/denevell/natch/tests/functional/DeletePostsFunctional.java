@@ -94,15 +94,12 @@ public class DeletePostsFunctional {
 	public void shouldSeeErrorOnUnAuthorised() {
 		// Arrange 
 		// Register other user
+	    RegisterResourceInput regInput1 = new RegisterResourceInput("aaron1@aaron.com", "passy");
+	    RegisterFunctional.register(service, regInput1);
 	    LoginResourceInput loginInput1 = new LoginResourceInput("aaron1@aaron.com", "passy");
-		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
-	    	.put(RegisterResourceReturnData.class, loginInput1);
-		LoginResourceReturnData loginResult1 = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput1);				
-		// Make post with first user
+		LoginResourceReturnData loginResult1 = LoginFunctional.login(service, loginInput1);
+
+		// Make post with user one 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
 		service
 		.path("rest").path("post").path("add")
@@ -114,7 +111,7 @@ public class DeletePostsFunctional {
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 		
 		
-		// Act - delete with second user then list
+		// Act - delete with second user
 		DeletePostResourceReturnData ret = service.path("rest").path("post").path("del")
 		.path(String.valueOf(listPosts.getPosts().get(0).getId()))
 		.header("AuthKey", loginResult1.getAuthKey())
@@ -122,7 +119,7 @@ public class DeletePostsFunctional {
 		.delete(DeletePostResourceReturnData.class);
 		ListPostsResource listPostsAfter = service
 		.path("rest").path("post").path("0").path("10")
-		.header("AuthKey", loginResult.getAuthKey())
+		.header("AuthKey", loginResult1.getAuthKey())
     	.get(ListPostsResource.class); 		
 		
 		// Assert
@@ -131,6 +128,45 @@ public class DeletePostsFunctional {
 		assertEquals(1, listPosts.getPosts().size());		
 		assertEquals(1, listPostsAfter.getPosts().size());		
 	}
+	
+    @Test
+    public void shouldAllowAdminToDelete() {
+        // Arrange 
+        // Register other user
+        RegisterResourceInput regInput1 = new RegisterResourceInput("aaron1@aaron.com", "passy");
+        RegisterFunctional.register(service, regInput1);
+        LoginResourceInput loginInput1 = new LoginResourceInput("aaron1@aaron.com", "passy");
+        LoginResourceReturnData loginResult1 = LoginFunctional.login(service, loginInput1);
+
+        // Make post with user two
+        AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
+        service
+        .path("rest").path("post").path("add")
+        .type(MediaType.APPLICATION_JSON)
+        .header("AuthKey", loginResult1.getAuthKey())
+        .put(AddPostResourceReturnData.class, input); 
+        ListPostsResource listPosts = service
+        .path("rest").path("post").path("0").path("10")
+        .header("AuthKey", loginResult1.getAuthKey())
+        .get(ListPostsResource.class);      
+        
+        // Act - delete with first user, admin user
+        DeletePostResourceReturnData ret = service.path("rest").path("post").path("del")
+        .path(String.valueOf(listPosts.getPosts().get(0).getId()))
+        .header("AuthKey", loginResult.getAuthKey())
+        .entity(null)
+        .delete(DeletePostResourceReturnData.class);
+        ListPostsResource listPostsAfter = service
+        .path("rest").path("post").path("0").path("10")
+        .header("AuthKey", loginResult.getAuthKey())
+        .get(ListPostsResource.class);      
+        
+        // Assert
+        assertEquals("", ret.getError());
+        assertTrue(ret.isSuccessful());     
+        assertEquals(1, listPosts.getPosts().size());       
+        assertEquals(0, listPostsAfter.getPosts().size());      
+    }	
 	
 	@Test
 	public void shouldSeeErrorOnUnknownPost() {

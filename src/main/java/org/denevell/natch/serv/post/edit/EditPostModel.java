@@ -57,7 +57,7 @@ public class EditPostModel {
 			PostEntity pe = findPostById(postEntityId);
 			if(pe==null) {
 				return DOESNT_EXIST;
-			} else if(!pe.getUser().getUsername().equals(userEntity.getUsername())) {
+			} else if(!userEntity.isAdmin() && !pe.getUser().getUsername().equals(userEntity.getUsername())) {
 				return NOT_YOURS_TO_DELETE;
 			}
 			mPe.setCreated(pe.getCreated());

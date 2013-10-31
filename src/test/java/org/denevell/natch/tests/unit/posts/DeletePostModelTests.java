@@ -66,12 +66,34 @@ public class DeletePostModelTests {
 		doReturn(post).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");
-		
+
 		// Act
 		String result = model.delete(userEntity, num);
 		
 		// Verify
 		assertEquals(DeletePostModel.NOT_YOURS_TO_DELETE, result);
+	}
+
+	@Test
+	public void shouldAllowAdminToDelete() {
+		// Arrange
+		long num = 1;
+		PostEntity post = new PostEntity();
+		post.setUser(new UserEntity("that_person", null));
+		post.setThreadId("1");
+		doReturn(post).when(model).findPostById(num);
+		ThreadEntity thread = new ThreadEntity();
+		thread.setPosts(new ArrayList<PostEntity>());
+		doReturn(thread).when(model).findThreadById("1");
+		UserEntity userEntity = new UserEntity();
+		userEntity.setUsername("this_person");
+		userEntity.setAdmin(true);
+		
+		// Act
+		String result = model.delete(userEntity, num);
+		
+		// Verify
+		assertEquals(DeletePostModel.DELETED, result);
 	}
 	
 	@Test
