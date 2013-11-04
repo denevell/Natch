@@ -40,7 +40,7 @@ public class ListPostsFunctional {
 	    RegisterFunctional.register(service, registerInput);
 		// Login
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-	    LoginFunctional.login(service, loginInput);
+	    loginResult = LoginFunctional.login(service, loginInput);
 		listThread = service.path("rest").path("post").path("thread");
 	}
 	
