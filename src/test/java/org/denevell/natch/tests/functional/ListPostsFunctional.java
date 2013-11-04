@@ -8,10 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.ws.rs.core.MediaType;
-
 import org.denevell.natch.io.posts.AddPostResourceInput;
-import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.threads.ThreadResource;
 import org.denevell.natch.io.users.LoginResourceInput;
@@ -53,21 +50,9 @@ public class ListPostsFunctional {
 		input.setTags(asList);
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1");
 		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2");
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input1); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input2); 
+		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input);
+		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input1);
+		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input2);
 		
 		// Act
 		ListPostsResource returnData = listRecentPostsThreads(service); 
@@ -92,21 +77,9 @@ public class ListPostsFunctional {
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1");
 		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2");
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input1); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input2); 
+		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input);
+		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input1);
+		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input2);
 		
 		// Act
 		ListPostsResource returnData = service
@@ -127,11 +100,7 @@ public class ListPostsFunctional {
 		@SuppressWarnings("serial")
 		ArrayList<String> tags = new ArrayList<String>(){{ add("<again>"); add("<hmm>"); }};
 		input.setTags(tags);
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
+		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input);
 		
 		ListPostsResource returnData = listRecentPostsThreads(service); 		
 		
@@ -145,11 +114,7 @@ public class ListPostsFunctional {
 	public void shouldListByModificationDateWithNonSpecifiedThreadId() {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
+		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input);
 		
 		ListPostsResource returnData = listRecentPostsThreads(service); 
 		
@@ -162,11 +127,7 @@ public class ListPostsFunctional {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
 		input.setThreadId("threadId");
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
+		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input);
 		
 		ListPostsResource returnData = listRecentPostsThreads(service); 
 		
@@ -180,21 +141,9 @@ public class ListPostsFunctional {
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
 		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input1); 
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input2); 
+		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input);
+		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input1);
+		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input2);
 		
 		// Act
 		ThreadResource returnData = listThread.path("t").path("0").path("20")
@@ -222,18 +171,9 @@ public class ListPostsFunctional {
 		input.setTags(tags);
 		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
 		AddPostResourceInput input2 = new AddPostResourceInput("rubbish", "cont2", "t");
-		service.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
-		service.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input1); 
-		service.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input2); 
+		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input);
+		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input1);
+		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input2);
 		
 		// Act
 		ThreadResource returnData = listThread.path("t").path("1").path("1")
