@@ -27,13 +27,13 @@ import com.sun.jersey.api.client.WebResource;
 
 public class AddThreadFunctional {
 	
-	private WebResource addPostService;
+	private WebResource service;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private LoginResourceReturnData loginResult;
 	
 	@Before
 	public void setup() throws Exception {
-		addPostService = TestUtils.getAddPostClient();
+		service = TestUtils.getRESTClient();
 		TestUtils.deleteTestDb();
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 		// Register
@@ -48,104 +48,18 @@ public class AddThreadFunctional {
 	}
 	
 	@Test
-	public void shouldMakePost() {
+	public void shouldMakeThread() {
 		// Arrange 
 		List<String> tags = Arrays.asList("tag1", "tag2");
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", tags);
 		
 		// Act
-		AddPostResourceReturnData returnData = 
-		addPostService
-		.header("AuthKey", loginResult.getAuthKey())
-		.type(MediaType.APPLICATION_JSON)
-		.put(AddPostResourceReturnData.class, input); 
+		AddPostResourceReturnData returnData = addThread(service, loginResult.getAuthKey(), input); 
 		
 		// Assert
 		assertEquals("", returnData.getError());
 		assertNotNull(returnData.getThread().getSubject());
 		assertTrue(returnData.isSuccessful());
-	}
-	
-	@Test public void shouldMakePostWithSameContentAndSubject() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		
-		// Act
-		AddPostResourceReturnData returnData = 
-		addPostService
-		.header("AuthKey", loginResult.getAuthKey())
-		.type(MediaType.APPLICATION_JSON)
-		.put(AddPostResourceReturnData.class, input); 
-		AddPostResourceReturnData returnData1 = 
-		addPostService
-		.header("AuthKey", loginResult.getAuthKey())
-		.type(MediaType.APPLICATION_JSON)
-		.put(AddPostResourceReturnData.class, input); 
-		
-		// Assert
-		assertEquals("", returnData.getError());
-		assertEquals("", returnData1.getError());
-		assertTrue(returnData.isSuccessful());
-		assertTrue(returnData1.isSuccessful());
-	}
-	
-	@Test 
-	public void shouldMakePostWithLongPost() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", 
-				"Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
-				"sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." +
-				"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
-				"ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit" +
-				"esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, " +
-				"sunt in culpa qui officia deserunt mollit anim id est laborum. 	Lorem ipsum dolor sit " +
-				"amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore " +
-				"magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut " +
-				"aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit " +
-				"esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident," +
-				" sunt in culpa qui officia deserunt mollit anim id est laborum. 	Lorem ipsum dolor sit " +
-				"amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore " +
-				"magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut " +
-				"aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit " +
-				"esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, " +
-				"sunt in culpa qui officia deserunt mollit anim id est laborum.");
-		
-		// Act
-		AddPostResourceReturnData returnData = 
-		addPostService
-		.header("AuthKey", loginResult.getAuthKey())
-		.type(MediaType.APPLICATION_JSON)
-		.put(AddPostResourceReturnData.class, input); 
-		AddPostResourceReturnData returnData1 = 
-		addPostService
-		.header("AuthKey", loginResult.getAuthKey())
-		.type(MediaType.APPLICATION_JSON)
-		.put(AddPostResourceReturnData.class, input); 
-		
-		// Assert
-		assertEquals("", returnData.getError());
-		assertEquals("", returnData1.getError());
-		assertTrue(returnData.isSuccessful());
-		assertTrue(returnData1.isSuccessful());
-	}	
-	
-	@Test
-	public void shouldSeeErrorOnUnAuthorised() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		
-		// Act
-		try {
-			addPostService
-			.header("AuthKey", loginResult.getAuthKey()+"BAD")
-			.type(MediaType.APPLICATION_JSON)
-		    	.put(AddPostResourceReturnData.class, input); 
-		} catch(UniformInterfaceException e) {
-			// Assert
-			assertEquals(401, e.getResponse().getClientResponseStatus().getStatusCode());
-			return;
-		}
-		assertFalse("Was excepting a 401 response", true);		
 	}
 	
 	@Test
@@ -154,68 +68,13 @@ public class AddThreadFunctional {
 		AddPostResourceInput input = new AddPostResourceInput(" ", "cont");
 		
 		// Act
-		AddPostResourceReturnData returnData = 
-		TestUtils.getAddThreadClient()
-		.header("AuthKey", loginResult.getAuthKey())
-		.type(MediaType.APPLICATION_JSON)
-		.put(AddPostResourceReturnData.class, input); 
+		AddPostResourceReturnData returnData = addThread(service, loginResult.getAuthKey(), input);
 		
 		// Assert
 		assertFalse(returnData.isSuccessful());
 		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
 	}
-	
-	@Test
-	public void shouldSeeErrorOnBlankContent() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", " ");
-		
-		// Act
-		AddPostResourceReturnData returnData = 
-		addPostService
-		.header("AuthKey", loginResult.getAuthKey())
-		.type(MediaType.APPLICATION_JSON)
-		.put(AddPostResourceReturnData.class, input); 
-		
-		// Assert
-		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
-		assertFalse(returnData.isSuccessful());
-	}
-	
-	@Test
-	public void shouldSeeErrorOnBlanks() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput(" ", " ");
-		
-		// Act
-		AddPostResourceReturnData returnData = 
-		addPostService
-		.header("AuthKey", loginResult.getAuthKey())
-		.type(MediaType.APPLICATION_JSON)
-		.put(AddPostResourceReturnData.class, input); 
-		
-		// Assert
-		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
-		assertFalse(returnData.isSuccessful());
-	}
-	
-	@Test
-	public void shouldSeeErrorOnNulls() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput(null,null);
-		
-		// Act
-		AddPostResourceReturnData returnData = 
-		addPostService
-		.header("AuthKey", loginResult.getAuthKey())
-		.type(MediaType.APPLICATION_JSON)
-		.put(AddPostResourceReturnData.class, input); 
-		
-		// Assert
-		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
-		assertFalse(returnData.isSuccessful());
-	}
-	
+
 	@Test
 	public void shouldSeeAddThreadErrorOnUnAuthorised() {
 		// Arrange 
@@ -223,10 +82,7 @@ public class AddThreadFunctional {
 		
 		// Act
 		try {
-			TestUtils.getAddThreadClient()
-			.header("AuthKey", loginResult.getAuthKey()+"BAD")
-			.type(MediaType.APPLICATION_JSON)
-		    	.put(AddPostResourceReturnData.class, input); 
+		    addThread(service, loginResult.getAuthKey()+"BAD", input);
 		} catch(UniformInterfaceException e) {
 			// Assert
 			assertEquals(401, e.getResponse().getClientResponseStatus().getStatusCode());
@@ -234,4 +90,15 @@ public class AddThreadFunctional {
 		}
 		assertFalse("Was excepting a 401 response", true);		
 	}	
+
+    public static AddPostResourceReturnData addThread(WebResource service, Object authKey, AddPostResourceInput input) {
+        AddPostResourceReturnData returnData = 
+        service
+        .path("rest").path("post").path("addthread")
+		.header("AuthKey", authKey)
+		.type(MediaType.APPLICATION_JSON)
+		.put(AddPostResourceReturnData.class, input);
+        return returnData;
+    }
+	
 }

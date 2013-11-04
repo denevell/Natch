@@ -17,7 +17,6 @@ import org.denevell.natch.io.threads.ThreadResource;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.RegisterResourceInput;
-import org.denevell.natch.io.users.RegisterResourceReturnData;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,15 +37,10 @@ public class ListPostsFunctional {
 		TestUtils.deleteTestDb();
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    // Register
-		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
-	    	.put(RegisterResourceReturnData.class, registerInput);
+	    RegisterFunctional.register(service, registerInput);
 		// Login
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-		loginResult = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput);		
+	    LoginFunctional.login(service, loginInput);
 		listThread = service.path("rest").path("post").path("thread");
 	}
 	
@@ -76,9 +70,7 @@ public class ListPostsFunctional {
     	.put(AddPostResourceReturnData.class, input2); 
 		
 		// Act
-		ListPostsResource returnData = service
-		.path("rest").path("post").path("0").path("10")
-    	.get(ListPostsResource.class); 
+		ListPostsResource returnData = listRecentPostsThreads(service); 
 		
 		// Assert
 		assertEquals(3, returnData.getPosts().size());
@@ -93,7 +85,7 @@ public class ListPostsFunctional {
 		assertEquals("cont", returnData.getPosts().get(2).getContent());
 		assertEquals("tagy1", returnData.getPosts().get(2).getTags().get(1));
 	}
-	
+
 	@Test
 	public void shouldListByCreationDateWithLimit() {
 		// Arrange 
@@ -141,10 +133,7 @@ public class ListPostsFunctional {
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input); 
 		
-		// Act
-		ListPostsResource returnData = service
-		.path("rest").path("post").path("0").path("10")
-    	.get(ListPostsResource.class); 		
+		ListPostsResource returnData = listRecentPostsThreads(service); 		
 		
 		// Assert
 		assertEquals("&lt;hi&gt;", returnData.getPosts().get(0).getSubject());
@@ -162,10 +151,7 @@ public class ListPostsFunctional {
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input); 
 		
-		// Act
-		ListPostsResource returnData = service
-		.path("rest").path("post").path("0").path("10")
-    	.get(ListPostsResource.class); 
+		ListPostsResource returnData = listRecentPostsThreads(service); 
 		
 		// Assert
 		assertNotNull(returnData.getPosts().get(0).getThreadId());
@@ -182,10 +168,7 @@ public class ListPostsFunctional {
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input); 
 		
-		// Act
-		ListPostsResource returnData = service
-		.path("rest").path("post").path("0").path("10")
-    	.get(ListPostsResource.class); 
+		ListPostsResource returnData = listRecentPostsThreads(service); 
 		
 		// Assert
 		assertEquals("threadId", returnData.getPosts().get(0).getThreadId());
@@ -286,5 +269,13 @@ public class ListPostsFunctional {
 		// Assert
 		assertTrue("Expected 404", false);
 	}	
+
+    public static ListPostsResource listRecentPostsThreads(WebResource service) {
+        ListPostsResource returnData = service
+		.path("rest").path("post").path("0").path("10")
+    	.get(ListPostsResource.class);
+        return returnData;
+    }
+	
 	
 }

@@ -2,7 +2,6 @@ package org.denevell.natch.tests.functional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -11,7 +10,6 @@ import java.util.ResourceBundle;
 import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.io.posts.AddPostResourceInput;
-import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.posts.EditPostResource;
 import org.denevell.natch.io.posts.EditPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
@@ -34,6 +32,7 @@ public class EditPostsFunctional {
 	private PostResource initialPost;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private ListPostsResource originallyListedPosts;
+    private String authKey;
 
 	@Before
 	public void setup() throws Exception {
@@ -44,20 +43,13 @@ public class EditPostsFunctional {
 	    RegisterFunctional.register(service, registerInput);
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 	    loginResult = LoginFunctional.login(service, loginInput);
+	    authKey = loginResult.getAuthKey();
 
 		// Add post
 		initalInput = new AddPostResourceInput("sub", "cont");
 		initalInput.setTags(Arrays.asList(new String[] {"tag1", "tag2"}));
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, initalInput); 		
-		// List it
-		originallyListedPosts = service
-		.path("rest").path("post").path("0").path("10")
-		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListPostsResource.class); 	
+		AddPostFunctional.addPost(service, authKey, initalInput);
+		originallyListedPosts = ListPostsFunctional.listRecentPostsThreads(service);
 		// save it
 		initialPost = originallyListedPosts.getPosts().get(0);
 		// Pre assert
@@ -74,16 +66,8 @@ public class EditPostsFunctional {
 		editedInput.setTags(Arrays.asList(new String[] {"tagx", "tagy"}));
 		
 		// Act - edit then list
-		EditPostResourceReturnData editReturnData = service
-		.path("rest").path("post").path("editpost")
-		.path(String.valueOf(initialPost.getId()))
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.post(EditPostResourceReturnData.class, editedInput); 		
-		ListPostsResource newListedPosts = service
-		.path("rest").path("post").path("0").path("10")
-		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListPostsResource.class); 	
+		EditPostResourceReturnData editReturnData = editPost(service, authKey, initialPost.getId(), editedInput); 		
+		ListPostsResource newListedPosts = ListPostsFunctional.listRecentPostsThreads(service);
 		
 		// Assert
 		assertEquals("", editReturnData.getError());
@@ -96,6 +80,15 @@ public class EditPostsFunctional {
 		//assertEquals("sup two?", newListedPosts.getPosts().get(0).getSubject());
 		assertTrue(newListedPosts.getPosts().get(0).getModification() > initialPost.getModification());
 	}
+
+    public static EditPostResourceReturnData editPost(WebResource service, String authKey, long postId, EditPostResource editedInput) {
+        return service
+		.path("rest").path("post").path("editpost")
+		.path(String.valueOf(postId))
+	    .type(MediaType.APPLICATION_JSON)
+		.header("AuthKey", authKey)
+    	.post(EditPostResourceReturnData.class, editedInput);
+    }
 	
 	@Test
 	public void shouldSeeErrorOnUnAuthorised() {
@@ -110,16 +103,8 @@ public class EditPostsFunctional {
 	    LoginResourceReturnData loginResult1 = LoginFunctional.login(service, loginInput1);
 		
 		// Act - edit with different user then list
-		EditPostResourceReturnData editReturnData = service
-		.path("rest").path("post").path("editpost")
-		.path(String.valueOf(initialPost.getId()))
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult1.getAuthKey())
-    	.post(EditPostResourceReturnData.class, editedInput); 		
-		ListPostsResource newListedPosts = service
-		.path("rest").path("post").path("0").path("10")
-		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListPostsResource.class); 			
+		EditPostResourceReturnData editReturnData = editPost(service, loginResult1.getAuthKey(), initialPost.getId(), editedInput); 		
+		ListPostsResource newListedPosts = ListPostsFunctional.listRecentPostsThreads(service);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.post_not_yours), editReturnData.getError());
@@ -136,67 +121,28 @@ public class EditPostsFunctional {
         RegisterResourceInput regInput1 = new RegisterResourceInput("aaron1@aaron.com", "passy");
         RegisterFunctional.register(service, regInput1);
         LoginResourceReturnData loginResult1 = LoginFunctional.login(service, loginInput1);
-        // Add a post as new user
-        AddPostResourceInput postInput = new AddPostResourceInput("sub", "cont");
+
+        // Act - Add a post as new user
+        AddPostResourceInput postInput = new AddPostResourceInput("presubadminedit", "precontadminedit");
         postInput.setTags(Arrays.asList(new String[] {"tag1", "tag2"}));
-        service
-        .path("rest").path("post").path("add")
-        .type(MediaType.APPLICATION_JSON)
-        .header("AuthKey", loginResult1.getAuthKey())
-        .put(AddPostResourceReturnData.class, postInput);         
+        AddPostFunctional.addPost(service, loginResult1.getAuthKey(), postInput);         
         // List it
-        ListPostsResource originalPosts = service
-        .path("rest").path("post").path("0").path("10")
-        .header("AuthKey", loginResult1.getAuthKey())
-        .get(ListPostsResource.class);          
-		PostResource addedPost = originalPosts.getPosts().get(originalPosts.getPosts().size()-1);
+		ListPostsResource originalPosts = ListPostsFunctional.listRecentPostsThreads(service);
+		PostResource addedPost = originalPosts.getPosts().get(0);
 		
 		// Act - edit with first, admin, user
 		EditPostResource editedInput = new EditPostResource();
-		editedInput.setContent("sup");
-		editedInput.setSubject("sup two?");
-        EditPostResourceReturnData editReturnData = service
-		.path("rest").path("post").path("editpost")
-		.path(String.valueOf(addedPost.getId()))
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.post(EditPostResourceReturnData.class, editedInput); 		
-		ListPostsResource newListedPosts = service
-		.path("rest").path("post").path("0").path("10")
-		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListPostsResource.class); 			
+		editedInput.setContent("supadmineditedcontent");
+		editedInput.setSubject("supadminedited");
+		EditPostResourceReturnData editReturnData = editPost(service, loginResult.getAuthKey(), addedPost.getId(), editedInput); 		
+		ListPostsResource newListedPosts = ListPostsFunctional.listRecentPostsThreads(service);
+		PostResource editPost = newListedPosts.getPosts().get(0);
 		
 		// Assert
 		assertEquals("", editReturnData.getError());
 		assertTrue(editReturnData.isSuccessful());		
-		assertNotEquals(addedPost.getContent(), newListedPosts.getPosts().get(0).getContent());
-		assertNotEquals(addedPost.getSubject(), newListedPosts.getPosts().get(0).getSubject());
-	}
-	
-	@Test
-	public void shouldSeeErrorOnBlankSubject() {
-		// Arrange
-		EditPostResource editedInput = new EditPostResource();
-		editedInput.setContent("sdfsfd");
-		editedInput.setSubject(" ");
-		
-		// Act - edit then list
-		EditPostResourceReturnData editReturnData = service
-		.path("rest").path("post").path("editthread")
-		.path(String.valueOf(initialPost.getId()))
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.post(EditPostResourceReturnData.class, editedInput); 		
-		ListPostsResource newListedPosts = service
-		.path("rest").path("post").path("0").path("10")
-		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListPostsResource.class); 			
-		
-		// Assert
-		assertFalse(editReturnData.isSuccessful());		
-		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), editReturnData.getError());
-		assertEquals(initalInput.getContent(), newListedPosts.getPosts().get(0).getContent());
-		assertEquals(initalInput.getSubject(), newListedPosts.getPosts().get(0).getSubject());
+		assertEquals("supadmineditedcontent", editPost.getContent());
+		assertEquals("aaron1@aaron.com", editPost.getUsername());
 	}
 	
 	@Test
@@ -206,17 +152,8 @@ public class EditPostsFunctional {
 		editedInput.setContent(" ");
 		editedInput.setSubject("dsfsdf");
 		
-		// Act - edit then list
-		EditPostResourceReturnData editReturnData = service
-		.path("rest").path("post").path("editpost")
-		.path(String.valueOf(initialPost.getId()))
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.post(EditPostResourceReturnData.class, editedInput); 		
-		ListPostsResource newListedPosts = service
-		.path("rest").path("post").path("0").path("10")
-		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListPostsResource.class); 			
+		EditPostResourceReturnData editReturnData = editPost(service, loginResult.getAuthKey(), initialPost.getId(), editedInput); 		
+		ListPostsResource newListedPosts = ListPostsFunctional.listRecentPostsThreads(service);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), editReturnData.getError());
@@ -232,17 +169,8 @@ public class EditPostsFunctional {
 		editedInput.setContent(" ");
 		editedInput.setSubject(" ");
 		
-		// Act - edit then list
-		EditPostResourceReturnData editReturnData = service
-		.path("rest").path("post").path("editpost")
-		.path(String.valueOf(initialPost.getId()))
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.post(EditPostResourceReturnData.class, editedInput); 		
-		ListPostsResource newListedPosts = service
-		.path("rest").path("post").path("0").path("10")
-		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListPostsResource.class); 			
+		EditPostResourceReturnData editReturnData = editPost(service, loginResult.getAuthKey(), initialPost.getId(), editedInput); 		
+		ListPostsResource newListedPosts = ListPostsFunctional.listRecentPostsThreads(service);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), editReturnData.getError());

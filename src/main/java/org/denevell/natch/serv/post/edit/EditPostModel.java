@@ -64,7 +64,11 @@ public class EditPostModel {
 			mPe.setId(pe.getId());
 			mPe.setThreadId(pe.getThreadId());
 			mPe.setModified(new Date().getTime());
-			mPe.setUser(userEntity);			
+			if(!userEntity.getUsername().equals(pe.getUser().getUsername()) && userEntity.isAdmin()) {
+			   mPe.setUser(pe.getUser()); 
+			} else {
+			    mPe.setUser(userEntity);			
+			}
 			if(!isEditingThread)  mPe.setSubject("-");
 			if(isBadInputParams(userEntity, mPe.getSubject(), mPe.getContent(), isEditingThread)) {
 				Log.info(this.getClass(), "Edit user: Bad user input");
