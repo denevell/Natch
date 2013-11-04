@@ -67,7 +67,8 @@ public class SinglePostRequest {
 						post.getModified(), 
 						thread.getRootPost().getSubject(), 
 						post.getContent(), 
-						post.getTags());
+						post.getTags(), 
+						post.isAdminEdited());
 				postResource.setId(post.getId());
 				postResource.setThreadId(post.getThreadId());
 				return postResource;

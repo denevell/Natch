@@ -65,6 +65,7 @@ public class EditPostModel {
 			mPe.setThreadId(pe.getThreadId());
 			mPe.setModified(new Date().getTime());
 			if(!userEntity.getUsername().equals(pe.getUser().getUsername()) && userEntity.isAdmin()) {
+			   mPe.adminEdited();
 			   mPe.setUser(pe.getUser()); 
 			} else {
 			    mPe.setUser(userEntity);			

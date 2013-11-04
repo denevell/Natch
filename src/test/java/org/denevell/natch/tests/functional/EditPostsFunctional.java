@@ -77,6 +77,7 @@ public class EditPostsFunctional {
 		assertEquals(initialPost.getUsername(), newListedPosts.getPosts().get(0).getUsername());
 		assertEquals(initialPost.getThreadId(), newListedPosts.getPosts().get(0).getThreadId());
 		assertEquals("sup", newListedPosts.getPosts().get(0).getContent());
+		assertFalse("Edit as admin not set", newListedPosts.getPosts().get(0).isAdminEdited());
 		//assertEquals("sup two?", newListedPosts.getPosts().get(0).getSubject());
 		assertTrue(newListedPosts.getPosts().get(0).getModification() > initialPost.getModification());
 	}
@@ -143,6 +144,8 @@ public class EditPostsFunctional {
 		assertTrue(editReturnData.isSuccessful());		
 		assertEquals("supadmineditedcontent", editPost.getContent());
 		assertEquals("aaron1@aaron.com", editPost.getUsername());
+		assertFalse("Edited as admin flag not set originally", addedPost.isAdminEdited());
+		assertTrue("Edited as admin flag set", editPost.isAdminEdited());
 	}
 	
 	@Test

@@ -117,7 +117,8 @@ public class AddPostRequest {
 					p.getModified(), 
 					p.getSubject(), 
 					p.getContent(),
-					p.getTags());
+					p.getTags(), 
+					p.isAdminEdited());
 			postResource.setId(p.getId());
 			postResource.setThreadId(p.getThreadId());
 			postsResources.add(postResource);

@@ -20,6 +20,7 @@ public class PostEntity {
 	private String threadId;
 	private List<String> tags;
 	private UserEntity user;
+    private boolean adminEdited = false;
 	
 	public PostEntity() {
 	}
@@ -103,4 +104,12 @@ public class PostEntity {
 	public void setTags(List<String> tags) {
 		this.tags = tags;
 	}
+
+    public void adminEdited() {
+        adminEdited = true;
+    }
+    
+    public boolean isAdminEdited() {
+        return adminEdited;
+    }
 }
