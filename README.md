@@ -3,6 +3,10 @@
 The start of a REST interface for a forum.
 
 ### Current
+
+* Should be able to make another user an admin user
+* Should be able to remove another admin user is admin user has a higher priority
+
 * Test performance with multiple connections
 * Re-enable db locking 
 * Length of a tag and length of a subject.
@@ -15,6 +19,7 @@ The start of a REST interface for a forum.
 * ~~register: shouldSeeErrorJsonOnBadJsonPassed -- deferring until later~~
 * ~~register: shouldSeeErrorJsonOnUnknownError~~
 * ~~register: shouldSaltPassword~~
+* ~~register: First user is admin user~~
 * ~~login: shouldLoginWithGoodCredentials~~
 * ~~login: shouldSeeJsonErrorOnBadCredentials~~
 * ~~login: shouldSeeJsonErrorOnBadJson -- deferring until later~~
@@ -35,6 +40,8 @@ The start of a REST interface for a forum.
 * ~~posts: shouldSeeJsonErrorDelete~~
 * ~~posts: shouldSeeUnauthorisedPostDelete~~
 * ~~posts: should add a tag to a post~~
+* ~~Admin user can edit a post and leave a marker~~
+* ~~Admin user can delete a post and leave a marker~~
 * ~~threaded posts: Should make a threaded post in response to another~~
 * ~~threaded posts: Should be able to edit thread title and keep thread -- in main edit functional test~~
 * ~~threaded posts: Make it so you can list a new Thread object from the db~~
