@@ -49,12 +49,12 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	           <lob/>
 	       </basic>	       
 	       <one-to-one name="user" optional="false">
-	       	  <join-column name="user_reference" />
+	       	  <join-column name="user_reference" referenced-column-name="username"/>
 	       </one-to-one>
 		   <element-collection name="tags" fetch="eager">
 	          <column name="tag_text" nullable="true" />
 	          <collection-table name="post_tags">
-	              <join-column name="post_id"/>
+	              <join-column name="post_id" />
 	          </collection-table>	   
 		   </element-collection>
 	       <basic name="subject">
@@ -94,10 +94,10 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	           <column name="id" nullable="false" />
 	       </id>       
 	       <one-to-one name="latestPost" optional="false">
-	       	  <join-column name="latestPost_reference" />
+	       	  <join-column name="latestPost_reference" referenced-column-name="id" />
 	       </one-to-one>
 	       <one-to-one name="rootPost" optional="false">
-	       	  <join-column name="rootPost_reference" />
+	       	  <join-column name="rootPost_reference" referenced-column-name="id" />
 	       </one-to-one>
 	       <one-to-many name="posts" optional="false">
 	       		<cascade>

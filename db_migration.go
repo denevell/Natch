@@ -102,15 +102,22 @@ func (m migration) Migration_1() {
 }
 
 func (m migration) Migration_2() {
-	_, err := m.Tx.Exec("create table postentity (id integer not null primary key, content text, subject varchar(300), threadId integer, created integer, modified integer)");
+	_, err := m.Tx.Exec("create table postentity (id integer not null primary key, content text, subject varchar(300), threadId integer, created integer not null, modified integer not null, user_reference varchar(50) not null references userentity(username))");
 	if err != nil {
 		panic(err)
 	}
-	_, err = m.Tx.Exec("create table postentity_userentity (postentity_id integer, userentity integer");
+	_, err = m.Tx.Exec("create table post_tags (post_id integer references postentity(id) primary key, tag_text varchar(20))");
 	if err != nil {
 		panic(err)
 	}
-	_, err = m.Tx.Exec("create table postentity_tags (postentity_id integer, tags varchar(20)");
+}
+
+func (m migration) Migration_3() {
+	_, err := m.Tx.Exec("create table threadentity (id integer not null primary key, numPosts integer not null, latestPost_reference integer not null references postentity(id), rootPost_reference integer not null references postentity(id))");
+	if err != nil {
+		panic(err)
+	}
+	_, err = m.Tx.Exec("create table thread_posts (thread_id integer not null references threadentity(id) primary key, post_id integer not null references postentity(id))");
 	if err != nil {
 		panic(err)
 	}
