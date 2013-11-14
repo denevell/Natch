@@ -61,8 +61,11 @@ task deployWarForAutomatedTests (dependsOn: war) << {
 
 test.dependsOn deployWarForAutomatedTests
 
+task migrate() {
+	migrationScript()
+}
 
-
+war.dependsOn migrate
 
 
 
@@ -71,6 +74,18 @@ test.dependsOn deployWarForAutomatedTests
 
 
 // utility function
+
+def migrationScript() {
+        cmdstr = 'go run db_migration.go'
+        cmd = cmdstr.execute()
+	cmd.waitFor()
+	cmdres = cmd.text
+	if(cmd.exitValue()) { 
+		throw new GradleException("Couldn't complete migration script: " + cmd.err.text)
+	} else {
+		println "Migration script okay.: " + cmdres
+	}	
+}
 
 def undeployDeployWar(warfile, warfilepath) {
 	// Undeploy it

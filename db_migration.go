@@ -29,10 +29,25 @@ func versionsAvailable() int {
 }
 
 func dbVersionNumber(con *sql.Tx) (int, error) {
+	_, err := con.Exec("create table if not exists version_number (version_number integer)")
+	if err != nil {
+		return 0, err
+	}
 	row := con.QueryRow("SELECT version_number FROM version_number")
 	var id int 
-	err := row.Scan(&id)
-	return id, err;
+	err = row.Scan(&id)
+	if err == sql.ErrNoRows {
+		_, err = con.Exec("insert into version_number values(1)")
+		if err != nil {
+			return 0, err
+		}
+		row := con.QueryRow("SELECT version_number FROM version_number")
+		var id int 
+		err = row.Scan(&id)
+		return id, err;
+	} else {
+		return id, err;
+	}
 }
 
 func updateVersionNumber(con *sql.Tx, version int) error {
@@ -95,29 +110,37 @@ func main() {
 }
 
 func (m migration) Migration_1() {
-	_, err := m.Tx.Exec("create table userentity (username varchar(50) not null primary key, admin bool, password varchar(200) not null)");
+	_, err := m.Tx.Exec("create table sequence (seq_name varchar(50) not null primary key, seq_count int)");
+	if err != nil {
+		panic(err)
+	}
+	_, err = m.Tx.Exec("insert into sequence (seq_name, seq_count) values('SEQ_GEN', 1)");
+	if err != nil {
+		panic(err)
+	}
+	_, err = m.Tx.Exec("create table userentity (username varchar(50) not null primary key, admin bool, password varchar(200) not null)");
 	if err != nil {
 		panic(err)
 	}
 }
 
 func (m migration) Migration_2() {
-	_, err := m.Tx.Exec("create table postentity (id integer not null primary key, content text, subject varchar(300), threadId integer, created integer not null, modified integer not null, user_reference varchar(50) not null references userentity(username))");
+	_, err := m.Tx.Exec("create table postentity (id integer not null primary key, content text, adminedited boolean not null, subject varchar(300), threadId varchar(100), created decimal not null, modified decimal not null, user_reference varchar(50) not null references userentity(username))");
 	if err != nil {
 		panic(err)
 	}
-	_, err = m.Tx.Exec("create table post_tags (post_id integer references postentity(id) primary key, tag_text varchar(20))");
+	_, err = m.Tx.Exec("create table post_tags (post_id integer references postentity(id), tag_text varchar(20))");
 	if err != nil {
 		panic(err)
 	}
 }
 
 func (m migration) Migration_3() {
-	_, err := m.Tx.Exec("create table threadentity (id integer not null primary key, numPosts integer not null, latestPost_reference integer not null references postentity(id), rootPost_reference integer not null references postentity(id))");
+	_, err := m.Tx.Exec("create table threadentity (id varchar(100) not null primary key, numPosts decimal not null, latestPost_reference integer not null references postentity(id), rootPost_reference integer references postentity(id))");
 	if err != nil {
 		panic(err)
 	}
-	_, err = m.Tx.Exec("create table thread_posts (thread_id integer not null references threadentity(id) primary key, post_id integer not null references postentity(id))");
+	_, err = m.Tx.Exec("create table thread_posts (thread_id varchar(100) not null references threadentity(id), post_id integer not null references postentity(id))");
 	if err != nil {
 		panic(err)
 	}

@@ -57,6 +57,9 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	              <join-column name="post_id" />
 	          </collection-table>	   
 		   </element-collection>
+	       <basic name="adminEdited">
+	          <column name="adminedited" nullable="false" />
+	       </basic>    		   
 	       <basic name="subject">
 	          <column name="subject" nullable="false" length="200" />
 	       </basic>    		   
