@@ -76,7 +76,7 @@ war.dependsOn migrate
 // utility function
 
 def migrationScript() {
-        cmdstr = 'go run db_migration.go'
+        cmdstr = 'go run '+file('.')+'/db_migration.go'
         cmd = cmdstr.execute()
 	cmd.waitFor()
 	cmdres = cmd.text
