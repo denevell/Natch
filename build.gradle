@@ -61,7 +61,7 @@ task deployWarForAutomatedTests (dependsOn: war) << {
 
 test.dependsOn deployWarForAutomatedTests
 
-task migrate() {
+task migrate() << {
 	migrationScript()
 }
 
