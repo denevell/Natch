@@ -48,6 +48,7 @@ func dbVersionNumber(con *sql.Tx) (int, error) {
 	} else {
 		return id, err;
 	}
+	return id, err;
 }
 
 func updateVersionNumber(con *sql.Tx, version int) error {
