@@ -41,31 +41,43 @@ dependencies {
 	compile 'com.wordnik:swagger-jaxrs_2.9.1:1.2.1'
 }    
 
-task createProductionRestWar(type: War) {
-	classifier = 'Production'
+// DB MIGRATION
+
+task migrate() << {
+	connStr = "postgres://denevell:user@localhost:5432/testnatch"
+	migrationScript(connStr)
+}
+
+task migrateProd() << {
+	connStr = "postgres://denevell:user@localhost:5432/prodnatch"
+	migrationScript(connStr)
+}
+
+// PROD
+
+task createProd (type: War, dependsOn: [classes, build, migrateProd]) << {
+	classifier 'Production'
 	manifest { attributes "ISPROD": "TRUE" }
 }
 
-// ------------------
-// The rest war - used for testing
-// ------------------
-
-war {
-	classifier = 'ForAutomatedTests'
-	manifest { attributes "ISPROD": "FALSE" }
+task deployProd (dependsOn: [createProd]) << {
+	undeployDeployWar(project.name+'-Production', ''+file('.')+'/build/libs/')
 }
 
-task deployWarForAutomatedTests (dependsOn: war) << {
+// UAT 
+
+task createTest (type: War, dependsOn: [migrate]) << {
+	manifest { attributes "ISPROD": "FALSE" }
+}
+createTest.classifier = 'ForAutomatedTests'
+
+task deployTest (dependsOn: [createTest]) << {
 	undeployDeployWar(project.name+'-ForAutomatedTests', ''+file('.')+'/build/libs/')
 }
 
-test.dependsOn deployWarForAutomatedTests
+task doTest (type: Test, dependsOn: [deployTest]) {}
 
-task migrate() << {
-	migrationScript()
-}
 
-war.dependsOn migrate
 
 
 
@@ -75,8 +87,8 @@ war.dependsOn migrate
 
 // utility function
 
-def migrationScript() {
-        cmdstr = 'go run '+file('.')+'/db_migration.go'
+def migrationScript(connStr) {
+        cmdstr = 'go run '+file('.')+'/db_migration.go ' + connStr
         cmd = cmdstr.execute()
 	cmd.waitFor()
 	cmdres = cmd.text

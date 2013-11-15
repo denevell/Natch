@@ -63,7 +63,8 @@ func updateVersionNumber(con *sql.Tx, version int) error {
 func main() {
 	// Open db
 	var err error
-	con, err = sql.Open("postgres", "postgres://denevell:user@localhost:5432/testnatch")
+	connStr := os.Args[1]
+	con, err = sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
 	}
