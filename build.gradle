@@ -55,10 +55,9 @@ task migrateProd() << {
 
 // PROD
 
-task createProd (type: War, dependsOn: [classes, build, migrateProd]) << {
-	classifier 'Production'
-	manifest { attributes "ISPROD": "TRUE" }
-}
+task createProd (type: War, dependsOn: [migrateProd]) << {} 
+createProd.classifier = 'Production'
+createProd.manifest = manifest { attributes  "ISPROD": "TRUE"  }
 
 task deployProd (dependsOn: [createProd]) << {
 	undeployDeployWar(project.name+'-Production', ''+file('.')+'/build/libs/')
@@ -66,10 +65,9 @@ task deployProd (dependsOn: [createProd]) << {
 
 // UAT 
 
-task createTest (type: War, dependsOn: [migrate]) << {
-	manifest { attributes "ISPROD": "FALSE" }
-}
+task createTest (type: War, dependsOn: [migrate]) << {}
 createTest.classifier = 'ForAutomatedTests'
+createTest.manifest = manifest { attributes  "ISPROD": "FALSE"  }
 
 task deployTest (dependsOn: [createTest]) << {
 	undeployDeployWar(project.name+'-ForAutomatedTests', ''+file('.')+'/build/libs/')
@@ -88,10 +86,10 @@ task doTest (type: Test, dependsOn: [deployTest]) {}
 // utility function
 
 def migrationScript(connStr) {
-        cmdstr = 'go run '+file('.')+'/db_migration.go ' + connStr
-        cmd = cmdstr.execute()
+        def cmdstr = 'go run '+file('.')+'/db_migration.go ' + connStr
+        def cmd = cmdstr.execute()
 	cmd.waitFor()
-	cmdres = cmd.text
+	def cmdres = cmd.text
 	if(cmd.exitValue()) { 
 		throw new GradleException("Couldn't complete migration script: " + cmd.err.text)
 	} else {
