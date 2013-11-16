@@ -4,13 +4,6 @@ The start of a REST interface for a forum.
 
 ### Current
 
-* Should be able to make another user an admin user
-* Should be able to remove another admin user is admin user has a higher priority
-
-* Test performance with multiple connections
-* Re-enable db locking 
-* Length of a tag and length of a subject.
-
 ### Dev complete
 
 * ~~register: shouldRegisterWithUsernameAndPassword~~
