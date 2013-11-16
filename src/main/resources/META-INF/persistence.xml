@@ -9,7 +9,7 @@
 	     <class>org.denevell.natch.db.entities.PostEntity</class>
 	     <class>org.denevell.natch.db.entities.ThreadEntity</class>
 	     <properties>
-			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/prodnatch" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://denevell.org:5432/prodnatch" />
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
 			<property name="javax.persistence.jdbc.user" value="denevell" />
 			<property name="javax.persistence.jdbc.password" value="user" />

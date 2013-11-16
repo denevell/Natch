@@ -49,7 +49,7 @@ task migrate() << {
 }
 
 task migrateProd() << {
-	connStr = "postgres://denevell:user@localhost:5432/prodnatch"
+	connStr = "postgres://denevell:user@denevell.org:5432/prodnatch"
 	migrationScript(connStr)
 }
 
