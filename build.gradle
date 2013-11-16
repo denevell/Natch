@@ -44,12 +44,12 @@ dependencies {
 // DB MIGRATION
 
 task migrate() << {
-	connStr = "postgres://denevell:user@localhost:5432/testnatch"
+	def connStr = "postgres://denevell:user@localhost:5432/testnatch"
 	migrationScript(connStr)
 }
 
 task migrateProd() << {
-	connStr = "postgres://denevell:user@denevell.org:5432/prodnatch"
+	def connStr = "postgres://denevell:user@denevell.org:5432/prodnatch"
 	migrationScript(connStr)
 }
 
