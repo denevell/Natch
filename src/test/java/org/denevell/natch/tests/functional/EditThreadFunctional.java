@@ -62,6 +62,26 @@ public class EditThreadFunctional {
 		assertEquals(thread.getSubject(), newListedPosts.getPosts().get(0).getSubject());
 	}
 
+    @Test
+    public void shouldSeeErrorOnLargeSubject() {
+		AddPostResourceInput threadInput = new AddPostResourceInput("thread", "threadc");
+	    AddThreadFunctional.addThread(service, authKey, threadInput);
+	    PostResource thread = ListPostsFunctional.listRecentPostsThreads(service).getPosts().get(0);
+		EditPostResource editedInput = new EditPostResource();
+		editedInput.setContent("sdfsfd");
+		editedInput.setSubject("sdfsdfassdfklasjdflksdfkjasfl;kjasdl;kfjsd;lfjasdl;fjsal;fjas;ldfjasld;fjasl;fjasl;fjsal;dfjsdlfkjasdjf;lkasjf;lajsdfl;ajsdf;ljasdf;lkjsdlfjasd;lkfjasl;dfkjasdlfjasdlfkjasdlfjsadlkfjasldfkjsadlfkjlkdfj;alskdfjasl;kdfjasl;dfj;alsdfjal;skdfj;alsdkjf;slajdflk;asjflkasdjflasjflkajdflkasdjflksdjflkasdjflkasjdflkasdjf;lasdjf;lasjdf;lkasdjfl;sjadfl;asjdfl;asjdf;lasjdf");
+		
+		// Act - edit then list
+		EditPostResourceReturnData editReturnData = editThread(service, authKey, thread.getId(), editedInput); 		
+		ListPostsResource newListedPosts = ListPostsFunctional.listRecentPostsThreads(service);
+		
+		// Assert
+		assertFalse(editReturnData.isSuccessful());		
+		assertEquals(rb.getString(Strings.subject_too_large), editReturnData.getError());
+		assertEquals(thread.getContent(), newListedPosts.getPosts().get(0).getContent());
+		assertEquals(thread.getSubject(), newListedPosts.getPosts().get(0).getSubject());
+    }
+
 	@SuppressWarnings("serial")
     @Test
 	public void shouldSeeErrorOnLargeTag() {

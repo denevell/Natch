@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
+import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
@@ -21,7 +22,6 @@ import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.serv.post.add.AddPostModel;
 import org.denevell.natch.serv.post.add.AddPostRequest;
 import org.denevell.natch.serv.post.edit.EditPostModel;
-import org.denevell.natch.serv.thread.edit.EditThreadRequest;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
@@ -73,17 +73,22 @@ public class AddThreadRequest {
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
 			return regReturnData;
-		} else if (!EditThreadRequest.isTagLengthOkay(input.getTags())) {
+		} else if (input.getTags()!=null && !PostEntity.isTagLengthOkay(input.getTags())) {
 			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.tag_too_large));
+			return regReturnData;
+		} else if (PostEntity.isSubjectTooLarge(input.getSubject())) {
+			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
+			regReturnData.setSuccessful(false);
+			regReturnData.setError(rb.getString(Strings.subject_too_large));
 			return regReturnData;
 		} else {
 			return addPostOrThread(input, userEntity);
 		}
 	}	
 
-	public AddPostResourceReturnData addPostOrThread(AddPostResourceInput input, UserEntity userEntity) {
+    public AddPostResourceReturnData addPostOrThread(AddPostResourceInput input, UserEntity userEntity) {
 		try {
 			mModel.init();
 			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();

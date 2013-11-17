@@ -35,7 +35,23 @@ public class PostEntity {
 		this.content = content;
 		this.threadId = threadId;
 	}
+
+	public static boolean isSubjectTooLarge(String subject) {
+	    return subject!=null && subject.length()>PostEntity.MAX_SUBJECT_LENGTH;
+    }
+
+    public static boolean isTagLengthOkay(List<String> tags) {
+        if(tags!=null && tags.size()>0) {
+            for (String tag : tags) {
+               if(tag!=null & tag.length() > PostEntity.MAX_TAG_LENGTH) {
+                   return false;
+               }
+            }
+        }
+        return true;
+    }
 	
+
 	public long getCreated() {
 		return created;
 	}

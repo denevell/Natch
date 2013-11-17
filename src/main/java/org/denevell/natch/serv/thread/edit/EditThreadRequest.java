@@ -1,6 +1,5 @@
 package org.denevell.natch.serv.thread.edit;
 
-import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
@@ -32,7 +31,8 @@ public class EditThreadRequest {
 	public final static String UNKNOWN_ERROR = "unknownerror";
 	public final static String BAD_USER_INPUT = "baduserinput";
 	public final static String NOT_YOURS_TO_DELETE = "notyourtodelete";
-    private static final String TAG_TOO_LARGE = "tagtoolarge";		
+    private static final String TAG_TOO_LARGE = "tagtoolarge";
+    private static final String SUBJECT_TOO_LARGE = "subtoolarge";		
 	@Context UriInfo mInfo;
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
@@ -71,8 +71,12 @@ public class EditThreadRequest {
 			mModel.init();
 			ret.setSuccessful(false);
 
-			if(editPostResource.getTags()!=null && !isTagLengthOkay(editPostResource.getTags())) {
+			if(editPostResource.getTags()!=null && !PostEntity.isTagLengthOkay(editPostResource.getTags())) {
     		    generateEditReturnResource(ret, TAG_TOO_LARGE, rb);
+    		    return ret;
+			}
+			if(editPostResource.getSubject()!=null && PostEntity.isSubjectTooLarge(editPostResource.getSubject())) {
+    		    generateEditReturnResource(ret, SUBJECT_TOO_LARGE, rb);
     		    return ret;
 			}
 
@@ -88,17 +92,6 @@ public class EditThreadRequest {
 			mModel.close();
 		} 		
 	}
-
-    public static boolean isTagLengthOkay(List<String> tags) {
-        if(tags!=null && tags.size()>0) {
-            for (String tag : tags) {
-               if(tag!=null & tag.length() > PostEntity.MAX_TAG_LENGTH) {
-                   return false;
-               }
-            }
-        }
-        return true;
-    }
 	
 	public static void generateEditReturnResource(EditPostResourceReturnData ret,
 			String result, ResourceBundle rb) {
@@ -106,6 +99,8 @@ public class EditThreadRequest {
 			ret.setSuccessful(true);
 		} else if(result.equals(DOESNT_EXIST)) {
 			ret.setError(rb.getString(Strings.post_doesnt_exist));
+		} else if(result.equals(SUBJECT_TOO_LARGE)) {
+			ret.setError(rb.getString(Strings.subject_too_large));
 		} else if(result.equals(NOT_YOURS_TO_DELETE)) {
 			ret.setError(rb.getString(Strings.post_not_yours));
 		} else if(result.equals(UNKNOWN_ERROR)) {

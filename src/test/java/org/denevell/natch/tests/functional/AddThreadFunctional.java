@@ -14,10 +14,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
-import org.denevell.natch.io.posts.EditPostResource;
-import org.denevell.natch.io.posts.EditPostResourceReturnData;
-import org.denevell.natch.io.posts.ListPostsResource;
-import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.RegisterResourceInput;
@@ -84,6 +80,19 @@ public class AddThreadFunctional {
         assertFalse(returnData.isSuccessful());     
         assertEquals(rb.getString(Strings.tag_too_large), returnData.getError());
     }	
+
+    @Test
+    public void shouldSeeErrorOnLargeSubject() {
+        // Arrange
+        AddPostResourceInput threadInput = new AddPostResourceInput("threadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthreadthread", "threadc");
+        
+        // Act - edit then list
+		AddPostResourceReturnData returnData = addThread(service, loginResult.getAuthKey(), threadInput); 
+        
+        // Assert
+        assertFalse(returnData.isSuccessful());     
+        assertEquals(rb.getString(Strings.subject_too_large), returnData.getError());
+    }
 	
 	@Test
 	public void shouldSeeErrorOnBlankSubject() {
