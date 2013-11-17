@@ -21,6 +21,7 @@ import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.serv.post.add.AddPostModel;
 import org.denevell.natch.serv.post.add.AddPostRequest;
 import org.denevell.natch.serv.post.edit.EditPostModel;
+import org.denevell.natch.serv.thread.edit.EditThreadRequest;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
@@ -71,6 +72,11 @@ public class AddThreadRequest {
 			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
+			return regReturnData;
+		} else if (!EditThreadRequest.isTagLengthOkay(input.getTags())) {
+			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
+			regReturnData.setSuccessful(false);
+			regReturnData.setError(rb.getString(Strings.tag_too_large));
 			return regReturnData;
 		} else {
 			return addPostOrThread(input, userEntity);

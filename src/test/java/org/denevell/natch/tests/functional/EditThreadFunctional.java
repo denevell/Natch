@@ -3,6 +3,7 @@ package org.denevell.natch.tests.functional;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javax.ws.rs.core.MediaType;
@@ -57,6 +58,32 @@ public class EditThreadFunctional {
 		// Assert
 		assertFalse(editReturnData.isSuccessful());		
 		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), editReturnData.getError());
+		assertEquals(thread.getContent(), newListedPosts.getPosts().get(0).getContent());
+		assertEquals(thread.getSubject(), newListedPosts.getPosts().get(0).getSubject());
+	}
+
+	@SuppressWarnings("serial")
+    @Test
+	public void shouldSeeErrorOnLargeTag() {
+        // Arrange
+		AddPostResourceInput threadInput = new AddPostResourceInput("thread", "threadc");
+	    AddThreadFunctional.addThread(service, authKey, threadInput);
+	    PostResource thread = ListPostsFunctional.listRecentPostsThreads(service).getPosts().get(0);
+		EditPostResource editedInput = new EditPostResource();
+		editedInput.setContent("sdfsfd");
+		editedInput.setSubject("sdfsdf");
+		editedInput.setTags(new ArrayList<String>(){{
+		   add("small");
+		   add("thisislargerthan20charactersdefiniteily");
+		}});
+		
+		// Act - edit then list
+		EditPostResourceReturnData editReturnData = editThread(service, authKey, thread.getId(), editedInput); 		
+		ListPostsResource newListedPosts = ListPostsFunctional.listRecentPostsThreads(service);
+		
+		// Assert
+		assertFalse(editReturnData.isSuccessful());		
+		assertEquals(rb.getString(Strings.tag_too_large), editReturnData.getError());
 		assertEquals(thread.getContent(), newListedPosts.getPosts().get(0).getContent());
 		assertEquals(thread.getSubject(), newListedPosts.getPosts().get(0).getSubject());
 	}

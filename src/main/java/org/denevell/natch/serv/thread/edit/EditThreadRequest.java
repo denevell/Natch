@@ -1,5 +1,6 @@
 package org.denevell.natch.serv.thread.edit;
 
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
@@ -30,7 +31,8 @@ public class EditThreadRequest {
 	public final static String DOESNT_EXIST = "doesntexist";
 	public final static String UNKNOWN_ERROR = "unknownerror";
 	public final static String BAD_USER_INPUT = "baduserinput";
-	public final static String NOT_YOURS_TO_DELETE = "notyourtodelete";		
+	public final static String NOT_YOURS_TO_DELETE = "notyourtodelete";
+    private static final String TAG_TOO_LARGE = "tagtoolarge";		
 	@Context UriInfo mInfo;
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
@@ -68,6 +70,12 @@ public class EditThreadRequest {
 		try {
 			mModel.init();
 			ret.setSuccessful(false);
+
+			if(editPostResource.getTags()!=null && !isTagLengthOkay(editPostResource.getTags())) {
+    		    generateEditReturnResource(ret, TAG_TOO_LARGE, rb);
+    		    return ret;
+			}
+
 			UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
 			PostEntity mPe = new PostEntity();
 			mPe.setContent(editPostResource.getContent());
@@ -80,6 +88,17 @@ public class EditThreadRequest {
 			mModel.close();
 		} 		
 	}
+
+    public static boolean isTagLengthOkay(List<String> tags) {
+        if(tags!=null && tags.size()>0) {
+            for (String tag : tags) {
+               if(tag!=null & tag.length() > PostEntity.MAX_TAG_LENGTH) {
+                   return false;
+               }
+            }
+        }
+        return true;
+    }
 	
 	public static void generateEditReturnResource(EditPostResourceReturnData ret,
 			String result, ResourceBundle rb) {
@@ -93,6 +112,8 @@ public class EditThreadRequest {
 			ret.setError(rb.getString(Strings.unknown_error));
 		} else if(result.equals(BAD_USER_INPUT)) {
 			ret.setError(rb.getString(Strings.post_fields_cannot_be_blank));
+		} else if(result.equals(TAG_TOO_LARGE)) {
+			ret.setError(rb.getString(Strings.tag_too_large));
 		}
 	}
 
