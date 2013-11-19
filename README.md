@@ -2,7 +2,7 @@
 
 The start of a REST interface for a forum.
 
-### Current
+See the README for Natch-JSP for the icebox, backlog and in dev work.
 
 ### Dev complete
 
@@ -23,6 +23,7 @@ The start of a REST interface for a forum.
 * ~~login: shouldntBeAbleToLoginTwiceAndLogoutBackInWithTheFirstKey~~
 * ~~logout: shouldLogout~~
 * ~~logout: shouldSeeErrorJsonIfNotLoggedInAsThatUser -- shows 401 if bad auth data~~
+* users: Can list all users if admin
 * ~~posts: shouldMakePost (creation date, modification date, subject, content, thread id)~~
 * ~~posts: shouldSeeJsonErrorPostMake~~
 * ~~posts: shouldSeeUnauthorisedPostMake~~
@@ -86,18 +87,3 @@ The start of a REST interface for a forum.
 * ~~Tech task: Map sql via xml, to ease changes of database / provider, database migration~~
 * ~~Tech task: Cannot pass in single item tags list.~~
 * ~~Tech task: Escape text in tags.~~
-
-### Icebox 
-
-* Posts
- * Search
-* User management 
- * Change username
- * Password reset
-     * Email users
- * Delete user
- * User id is number not name
-* Misc
- * SSL
- * More sensible threadid?
- * Entity bean null / blank problem?
