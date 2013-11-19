@@ -15,6 +15,7 @@
 	  <url-pattern>/rest/user/logout</url-pattern>
 	  <url-pattern>/rest/user/is</url-pattern>
 	  <url-pattern>/rest/post/add</url-pattern>
+	  <url-pattern>/rest/user/list</url-pattern>
 	  <url-pattern>/rest/post/addthread</url-pattern>
 	  <url-pattern>/rest/post/editthread/*</url-pattern>
 	  <url-pattern>/rest/post/editpost/*</url-pattern>

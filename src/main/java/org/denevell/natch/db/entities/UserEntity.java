@@ -5,6 +5,7 @@ public class UserEntity {
 	public static final String NAMED_QUERY_FIND_WITH_USERNAME_AND_PASSWORD = "findWithUsernamePassword";
 	public static final String NAMED_QUERY_FIND_EXISTING_USERNAME= "findExistingUsername";
 	public static final String NAMED_QUERY_COUNT= "countUsers";
+	public static final String NAMED_QUERY_LIST_USERS= "listUsers";
 	public static final String NAMED_QUERY_PARAM_PASSWORD = "password";
 	public static final String NAMED_QUERY_PARAM_USERNAME = "username";
 	
