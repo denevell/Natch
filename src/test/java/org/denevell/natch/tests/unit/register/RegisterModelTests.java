@@ -1,6 +1,8 @@
 package org.denevell.natch.tests.unit.register;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -37,7 +39,7 @@ public class RegisterModelTests {
 	@Test
 	public void shouldRegisterWithUsernameAndPassword() {
 		// Arrange
-		RegisterModel um = spy(new RegisterModel(authManager, entityManager, salter));
+		RegisterModel um = spy(new RegisterModel(authManager, entityManager, salter, null));
 		doReturn(false).when(um).doesUsernameExist("user", entityManager);
 		doReturn(false).when(um).isFirstUser();
 		
@@ -51,7 +53,7 @@ public class RegisterModelTests {
 	@Test
 	public void shouldntRegisterWithBlankUsername() {
 		// ArrangeaddUserToSystem
-		RegisterModel um = new RegisterModel(authManager, entityManager, salter);
+		RegisterModel um = spy(new RegisterModel(authManager, entityManager, salter, null));
 		
 		// Act
 		String result = um.addUserToSystem("", "asd");
@@ -63,7 +65,7 @@ public class RegisterModelTests {
 	@Test
 	public void shouldntRegisterWithNullUsername() {
 		// Arrange
-		RegisterModel um = new RegisterModel(authManager, entityManager, salter);
+		RegisterModel um = spy(new RegisterModel(authManager, entityManager, salter, null));
 		
 		// Act
 		String result = um.addUserToSystem(null, "asd");
@@ -75,7 +77,7 @@ public class RegisterModelTests {
 	@Test
 	public void shouldntRegisterWithBlankPassword() {
 		// Arrange
-		RegisterModel um = new RegisterModel(authManager, entityManager, salter);
+		RegisterModel um = spy(new RegisterModel(authManager, entityManager, salter, null));
 		
 		// Act
 		String result = um.addUserToSystem("dsfd", "");
@@ -87,7 +89,7 @@ public class RegisterModelTests {
 	@Test
 	public void shouldntRegisterWithNullPassword() {
 		// Arrange
-		RegisterModel um = new RegisterModel(authManager, entityManager, salter);
+		RegisterModel um = spy(new RegisterModel(authManager, entityManager, salter, null));
 		
 		// Act
 		String result = um.addUserToSystem("dsfd", null);
@@ -100,7 +102,7 @@ public class RegisterModelTests {
 	public void shouldntRegisterWithEntityMangerException() { 
 		// Arrange
 		when(entityManager.getTransaction()).thenThrow(new RuntimeException());
-		RegisterModel um = new RegisterModel(authManager, entityManager, salter);
+		RegisterModel um = spy(new RegisterModel(authManager, entityManager, salter, null));
 		
 		// Act
 		String result = um.addUserToSystem("dsfd", "dsfsdf");
@@ -112,7 +114,7 @@ public class RegisterModelTests {
 	@Test
 	public void shouldntRegisterWithDuplicateUsername() { 
 		// Arrange
-		RegisterModel um = spy(new RegisterModel(authManager, entityManager, salter));
+		RegisterModel um = spy(new RegisterModel(authManager, entityManager, salter, null));
 		doReturn(true).when(um).doesUsernameExist("username", entityManager);
 		doReturn(false).when(um).isFirstUser();
 		
@@ -126,7 +128,7 @@ public class RegisterModelTests {
 	@Test
 	public void shouldShowFirstUser() { 
 		// Arrange
-		RegisterModel um = new RegisterModel(authManager, entityManager, salter);
+		RegisterModel um = spy(new RegisterModel(authManager, entityManager, salter, null));
 		Query q = mock(Query.class);
 		when(q.getSingleResult()).thenReturn(0);
 		when(entityManager.createNamedQuery(UserEntity.NAMED_QUERY_COUNT)).thenReturn(q);
@@ -141,7 +143,7 @@ public class RegisterModelTests {
 	@Test
 	public void shouldntShowFirstUser() { 
 		// Arrange
-		RegisterModel um = new RegisterModel(authManager, entityManager, salter);
+        RegisterModel um = spy(new RegisterModel(authManager, entityManager, salter, null));
 		Query q = mock(Query.class);
 		when(q.getSingleResult()).thenReturn(1);
 		when(entityManager.createNamedQuery(UserEntity.NAMED_QUERY_COUNT)).thenReturn(q);

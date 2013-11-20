@@ -23,17 +23,23 @@ public class RegisterModel {
 	public static String UNKNOWN_ERROR = "unknownError";
 	public static String REGISTERED="registered";
 	public static String DUPLICATE_USERNAME="dupusername";
+	private UserEntityQueries mUserEntityQueries;
 	
 	/**
 	 * For DI testing
 	 */
-	public RegisterModel(LoginAuthKeysSingleton authKeyGenerator, EntityManager entityManager, PasswordSaltUtils saltUtils) {
+	public RegisterModel(LoginAuthKeysSingleton authKeyGenerator, 
+	        EntityManager entityManager, 
+	        PasswordSaltUtils saltUtils,
+	        UserEntityQueries entityQueries) {
 		mEntityManager =  entityManager;
 		mPasswordSalter = saltUtils;
+		mUserEntityQueries = entityQueries;
 	}
 	
 	public RegisterModel() {
 		mPasswordSalter = new PasswordSaltUtils();
+		mUserEntityQueries = new UserEntityQueries(null);
 	}
 
 	public void init() {
@@ -74,7 +80,7 @@ public class RegisterModel {
 	}	
 
 	public boolean doesUsernameExist(String username, EntityManager entityManager) {
-		List<UserEntity> resultList = UserEntityQueries.getUserByUsername(username, entityManager);
+		List<UserEntity> resultList = mUserEntityQueries.getUserByUsername(username, entityManager);
 		boolean okay = false;
 		if(resultList!=null) okay = resultList.size()>0;
 		return okay;
