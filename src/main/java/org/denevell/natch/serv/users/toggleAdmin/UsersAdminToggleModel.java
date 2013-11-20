@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
+import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.db.entities.UserEntityQueries;
 import org.denevell.natch.utils.EntityUtils;
@@ -16,18 +17,22 @@ public class UsersAdminToggleModel {
 	
 	private EntityManager mEntityManager;
     private UserEntityQueries mUserEntityQueries;
+    private LoginAuthKeysSingleton mAuthDataGenerator;
 	
 	/**
 	 * For DI testing
 	 * @param userEntites 
+	 * @param authData 
 	 */
-	public UsersAdminToggleModel(EntityManager entityManager, UserEntityQueries userEntites) {
+	public UsersAdminToggleModel(EntityManager entityManager, UserEntityQueries userEntites, LoginAuthKeysSingleton authData) {
 		mEntityManager =  entityManager;
 		mUserEntityQueries = userEntites;
+		mAuthDataGenerator = authData;
 	}
 	
 	public UsersAdminToggleModel() {
 	    mUserEntityQueries = new UserEntityQueries(null);
+        mAuthDataGenerator = LoginAuthKeysSingleton.getInstance();
 	}
 	
 	public void init() {
@@ -52,6 +57,10 @@ public class UsersAdminToggleModel {
             UserEntity userEntity = userEntities.get(0);
             boolean admin = (userEntity.isAdmin()) ? false : true;
             userEntity.setAdmin(admin);
+            UserEntity loggedInEntity = mAuthDataGenerator.getLoggedinUser(userId);
+            if(loggedInEntity!=null) {
+                loggedInEntity.setAdmin(admin);
+            }
             mEntityManager.merge(userEntity);
             trans.commit();
             return null;

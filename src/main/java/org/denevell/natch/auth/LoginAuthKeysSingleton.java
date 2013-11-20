@@ -49,6 +49,16 @@ public class LoginAuthKeysSingleton {
 		mLoginKeys.remove(authKey);
 	}
 
+	public UserEntity getLoggedinUser(String userName) {
+		Map<String, UserEntity> userKey = mLoginKeys;
+		for (Entry<String, UserEntity> keyUserEntity : userKey.entrySet()) {
+		    if(keyUserEntity.getValue().getUsername().equals(userName)) {
+		        return keyUserEntity.getValue();
+		    }
+        }
+		return null;
+	}
+
 	public void clearAllKeys() {
 		mLoginKeys.clear();
 	}

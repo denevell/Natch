@@ -62,6 +62,35 @@ public class UserAdminToggleFunctional {
 	}
 
 	@Test
+	public void shouldToggleWorksImmediately() {
+		// Arrange 
+	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron", "aaron");
+	    ;
+	    RegisterFunctional.register(service, registerInput);
+	    RegisterFunctional.register(service, new RegisterResourceInput("other1", "other1"));
+		LoginResourceReturnData loginResultAdmin = LoginFunctional.login(service, new LoginResourceInput("aaron", "aaron")); 
+		LoginResourceReturnData loginResultUser = LoginFunctional.login(service, new LoginResourceInput("other1", "other1"));
+		UserList users = UsersListFunctional.listUsers(service, loginResultAdmin.getAuthKey());
+		assertEquals("other1", users.getUsers().get(1).getUsername());
+		assertEquals(false, users.getUsers().get(1).isAdmin());
+
+	    // Act - make normal user an admin
+        SuccessOrError result = toggleAdmin(loginResultAdmin);   
+	    // Act - now back to a non-admin
+        result = toggleAdmin(loginResultAdmin);   
+
+		// Assert - the normal user can run an admin commnad, i.e. toggle admin 
+	    // Act
+		try {
+		    toggleAdmin(loginResultUser);   
+        } catch (UniformInterfaceException e) {
+            assertTrue("Get a 401 when not an admin", e.getResponse().getStatus()==401);
+            return;
+        }
+		assertFalse("Was excepting an exception", true);
+	}
+
+	@Test
 	public void shouldntToggleAdminIfNotAdmin() {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron", "aaron");

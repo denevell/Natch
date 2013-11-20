@@ -24,6 +24,7 @@ See the README for Natch-JSP for the icebox, backlog and in dev work.
 * ~~logout: shouldLogout~~
 * ~~logout: shouldSeeErrorJsonIfNotLoggedInAsThatUser -- shows 401 if bad auth data~~
 * users: Can list all users if admin
+* users: Admin can toggle as user as admin
 * ~~posts: shouldMakePost (creation date, modification date, subject, content, thread id)~~
 * ~~posts: shouldSeeJsonErrorPostMake~~
 * ~~posts: shouldSeeUnauthorisedPostMake~~

@@ -21,8 +21,6 @@ import org.denevell.natch.db.entities.UserEntityQueries;
 import org.denevell.natch.io.base.SuccessOrError;
 import org.denevell.natch.utils.Strings;
 
-import com.wordnik.swagger.annotations.Api;
-
 
 @Path("user/admin/toggle")
 public class UsersAdminToggleRequest {
@@ -51,7 +49,7 @@ public class UsersAdminToggleRequest {
 	@Path("/{userId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public SuccessOrError listUsers(@PathParam("userId") String userId) throws IOException {
+	public SuccessOrError toggleAdmin(@PathParam("userId") String userId) throws IOException {
 		try {
 			mModel.init();
             UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
