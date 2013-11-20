@@ -25,7 +25,6 @@ import com.wordnik.swagger.annotations.Api;
 
 
 @Path("user/admin/toggle")
-@Api(value="/user", description="Register, login, logout and see if a user is logged in.")
 public class UsersAdminToggleRequest {
 	
 	@Context UriInfo info;
