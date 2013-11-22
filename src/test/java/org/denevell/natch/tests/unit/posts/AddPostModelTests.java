@@ -41,7 +41,7 @@ public class AddPostModelTests {
 		genericThread = mock(ThreadEntity.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
 		threadFactory = mock(ThreadFactory.class);
-		model = new AddPostModel(factory, entityManager, threadFactory);
+		model = new AddPostModel(factory, entityManager, threadFactory, null);
 	}
 	
 	@Ignore

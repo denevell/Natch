@@ -13,6 +13,7 @@ import javax.persistence.TypedQuery;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
+import org.denevell.natch.db.entities.UserEntityQueries;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.serv.thread.add.ThreadFactory;
 import org.denevell.natch.utils.EntityUtils;
@@ -23,9 +24,11 @@ public class AddPostModel {
 
 	private EntityManager mEntityManager;
 	private ThreadFactory mThreadFactory;
+    private UserEntityQueries mUserEntityQueries;
 	
 	public AddPostModel() {
 		mThreadFactory = new ThreadFactory();
+		mUserEntityQueries = new UserEntityQueries(null);
 	}
 	
 	public void init() {
@@ -40,12 +43,25 @@ public class AddPostModel {
 	/**
 	 * For testing / di
 	 */
-	public AddPostModel(EntityManagerFactory factory, EntityManager entityManager, ThreadFactory threadFactory) {
+	public AddPostModel(EntityManagerFactory factory, 
+	        EntityManager entityManager, 
+	        ThreadFactory threadFactory, 
+	        UserEntityQueries userQueries) {
 		mEntityManager = entityManager;
 		mThreadFactory = threadFactory;
+		mUserEntityQueries = userQueries;
+	}
+
+	public ThreadEntity addPostAsDifferntUser(String userId, AddPostResourceInput input) {
+	    List<UserEntity> user = mUserEntityQueries.getUserByUsername(userId, mEntityManager);
+	    return addPost(user.get(0), input, true);
+	}
+
+	public ThreadEntity addPost(UserEntity user, AddPostResourceInput input) {
+	    return addPost(user, input, false);
 	}
 	
-	public ThreadEntity addPost(UserEntity user, AddPostResourceInput input) {
+	public ThreadEntity addPost(UserEntity user, AddPostResourceInput input, boolean adminEdited) {
 		EntityTransaction trans = null;
 		try {
 			long created = new Date().getTime();
@@ -63,6 +79,9 @@ public class AddPostModel {
 			mPost.setUser(user);
 			mPost.setCreated(created);
 			mPost.setModified(created);			
+			if(adminEdited) {
+			    mPost.adminEdited();
+			}
 
 			ThreadEntity thread = findThreadById(mPost.getThreadId());
 			if(thread==null) {

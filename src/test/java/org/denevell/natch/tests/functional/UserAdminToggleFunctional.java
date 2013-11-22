@@ -65,7 +65,6 @@ public class UserAdminToggleFunctional {
 	public void shouldToggleWorksImmediately() {
 		// Arrange 
 	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron", "aaron");
-	    ;
 	    RegisterFunctional.register(service, registerInput);
 	    RegisterFunctional.register(service, new RegisterResourceInput("other1", "other1"));
 		LoginResourceReturnData loginResultAdmin = LoginFunctional.login(service, new LoginResourceInput("aaron", "aaron")); 
@@ -75,9 +74,9 @@ public class UserAdminToggleFunctional {
 		assertEquals(false, users.getUsers().get(1).isAdmin());
 
 	    // Act - make normal user an admin
-        SuccessOrError result = toggleAdmin(loginResultAdmin);   
+        toggleAdmin(loginResultAdmin);   
 	    // Act - now back to a non-admin
-        result = toggleAdmin(loginResultAdmin);   
+        toggleAdmin(loginResultAdmin);   
 
 		// Assert - the normal user can run an admin commnad, i.e. toggle admin 
 	    // Act
