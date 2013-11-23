@@ -87,10 +87,11 @@ public class DeletePostModel {
 			th = updateThreadToRemovePost(th, pe);
 			trans.begin();
 			// Remote thread if needs be
+			ThreadEntity thm = null;
 			if(th.getPosts()==null || th.getPosts().size()==0) {
 				mEntityManager.remove(th);
 			} else {
-				mEntityManager.merge(th);
+				thm = mEntityManager.merge(th);
 			}
 			mEntityManager.remove(pe);
 			trans.commit();

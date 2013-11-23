@@ -1,4 +1,4 @@
-package org.denevell.natch.serv.thread.frompost;
+package org.denevell.natch.serv.thread.from_post;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -58,10 +58,10 @@ public class ThreadFromPostRequest {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public AddPostResourceReturnData addThreadFromPost(AddThreadFromPostResourceInput input) throws IOException {
+	    AddPostResourceReturnData regReturnData = null;
 		try {
 			mModel.init();
-			mDeletePostModel.init();
-			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
+			regReturnData = new AddPostResourceReturnData();
 			regReturnData.setSuccessful(false);
 		    UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
 		    if(!userEntity.isAdmin()) {
@@ -69,13 +69,20 @@ public class ThreadFromPostRequest {
 		        return null;
 		    }
 			ThreadEntity thread = mModel.addPostAsDifferntUser(input.getUserId(), input);
-			mDeletePostModel.delete(userEntity, input.getPostId());
 			generateAddPostReturnResource(regReturnData, thread);
-			return regReturnData;
 		} finally {
 			mModel.close();
-			mDeletePostModel.init();
 		}
+
+		try {
+		    UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+			mDeletePostModel.init();
+			mDeletePostModel.delete(userEntity, input.getPostId());
+		} finally {
+			mDeletePostModel.close();
+		}
+
+		return regReturnData;
 	}
 
 	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, ThreadEntity thread) {
