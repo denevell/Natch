@@ -25,6 +25,7 @@ See the README for Natch-JSP for the icebox, backlog and in dev work.
 * ~~logout: shouldSeeErrorJsonIfNotLoggedInAsThatUser -- shows 401 if bad auth data~~
 * users: Can list all users if admin
 * users: Admin can toggle as user as admin
+* posts: Should be able to move post as a new thread, keeping the original author, with the admin edited flag set
 * ~~posts: shouldMakePost (creation date, modification date, subject, content, thread id)~~
 * ~~posts: shouldSeeJsonErrorPostMake~~
 * ~~posts: shouldSeeUnauthorisedPostMake~~
