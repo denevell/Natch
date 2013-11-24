@@ -22,6 +22,7 @@ import org.denevell.natch.io.threads.AddThreadFromPostResourceInput;
 import org.denevell.natch.serv.post.add.AddPostModel;
 import org.denevell.natch.serv.post.add.AddPostRequest;
 import org.denevell.natch.serv.post.delete.DeletePostModel;
+import org.denevell.natch.serv.post.edit.EditPostModel;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
@@ -66,6 +67,16 @@ public class ThreadFromPostRequest {
 		    UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
 		    if(!userEntity.isAdmin()) {
 		        mResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+		        return null;
+		    }
+		    if(input.getPostId()<=0 
+		               || input.getUserId()==null 
+		               || input.getUserId().trim().isEmpty()
+		               || EditPostModel.isBadInputParams(userEntity, 
+		                       input.getSubject(), 
+		                       input.getContent(), 
+		                       true)) {
+		        mResponse.sendError(HttpServletResponse.SC_BAD_REQUEST);
 		        return null;
 		    }
 			ThreadEntity thread = mModel.addPostAsDifferntUser(input.getUserId(), input);
