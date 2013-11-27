@@ -8,7 +8,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.TypedQuery;
+import javax.persistence.LockModeType;
 
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
@@ -123,12 +123,8 @@ public class AddPostModel {
 	
 	public ThreadEntity findThreadById(String id) {
 		try {
-			TypedQuery<ThreadEntity> q = mEntityManager
-					.createNamedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID, ThreadEntity.class);
-			q.setParameter(ThreadEntity.NAMED_QUERY_PARAM_ID, id);
-			List<ThreadEntity> resultList = q.getResultList();		
-			if(resultList==null || resultList.size()==0) return null;
-			else return resultList.get(0);
+		    ThreadEntity thread = mEntityManager.find(ThreadEntity.class, id, LockModeType.PESSIMISTIC_READ);
+			return thread;
 		} catch(Exception e) {
 			Log.info(getClass(), "Error finding thread by id: " + e.toString());
 			return null;
