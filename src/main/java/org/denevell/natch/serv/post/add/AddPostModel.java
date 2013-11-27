@@ -82,15 +82,14 @@ public class AddPostModel {
 			if(adminEdited) {
 			    mPost.adminEdited();
 			}
-
+			trans = mEntityManager.getTransaction();
+			trans.begin();
 			ThreadEntity thread = findThreadById(mPost.getThreadId());
 			if(thread==null) {
 				thread = mThreadFactory.makeThread(mPost);
 			} else {
 				thread = mThreadFactory.makeThread(thread, mPost);
 			}
-			trans = mEntityManager.getTransaction();
-			trans.begin();
 			mEntityManager.persist(thread);
 			trans.commit();
 			return thread;
