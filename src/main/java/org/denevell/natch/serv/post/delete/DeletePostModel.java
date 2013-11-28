@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.LockModeType;
 import javax.persistence.TypedQuery;
 
 import org.denevell.natch.db.entities.PostEntity;
@@ -56,19 +57,15 @@ public class DeletePostModel {
 		}
 	}
 	
-	public ThreadEntity findThreadById(String id) {
-		try {
-			TypedQuery<ThreadEntity> q = mEntityManager
-					.createNamedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID, ThreadEntity.class);
-			q.setParameter(ThreadEntity.NAMED_QUERY_PARAM_ID, id);
-			List<ThreadEntity> resultList = q.getResultList();		
-			if(resultList==null || resultList.size()==0) return null;
-			else return resultList.get(0);
-		} catch(Exception e) {
-			Log.info(getClass(), "Error finding thread by id: " + e.toString());
-			return null;
-		} 
-	}	
+    public ThreadEntity findThreadById(String id) {
+        try {
+            ThreadEntity thread = mEntityManager.find(ThreadEntity.class, id, LockModeType.PESSIMISTIC_READ);
+            return thread;
+        } catch(Exception e) {
+            Log.info(getClass(), "Error finding thread by id: " + e.toString());
+            return null;
+        } 
+    }       
 	
 	public String delete(UserEntity userEntity, long postEntityId) {
 		EntityTransaction trans = mEntityManager.getTransaction();
@@ -83,9 +80,9 @@ public class DeletePostModel {
 			} else if(!userEntity.isAdmin() && !pe.getUser().getUsername().equals(userEntity.getUsername())) {
 				return NOT_YOURS_TO_DELETE;
 			}
+			trans.begin();
 			ThreadEntity th = findThreadById(pe.getThreadId());
 			th = updateThreadToRemovePost(th, pe);
-			trans.begin();
 			// Remote thread if needs be
 			if(th.getPosts()==null || th.getPosts().size()==0) {
 				mEntityManager.remove(th);
