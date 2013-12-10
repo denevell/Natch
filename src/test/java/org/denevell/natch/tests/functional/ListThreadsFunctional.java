@@ -73,6 +73,24 @@ public class ListThreadsFunctional {
 		assertEquals("other", returnData.getThreads().get(1).getId());		
 		assertEquals("t", returnData.getThreads().get(0).getId());		
 	}
+
+	@Test
+	public void shouldHaveRootPostIdInThread() {
+		// Arrange 
+		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
+		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
+		addThread(input); 
+		addThread(input1); 
+		
+		ListThreadsResource returnData = listThreads(); 
+		
+		// Assert
+		long rootPostId1 = returnData.getThreads().get(0).getRootPostId();
+        assertTrue("Thread has root post", rootPostId1>0);
+		long rootPostId2 = returnData.getThreads().get(1).getRootPostId();
+        assertTrue("Thread has root post", rootPostId2>0);
+		assertTrue("Root posts aren't the same", rootPostId1!=rootPostId2);
+	}
 	
 	@Test
 	public void shouldListThreadsWithModificationDateAsLatestPost() {
