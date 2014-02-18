@@ -200,4 +200,13 @@ public class DeletePostsFunctional {
 		assertEquals(1, listPostsAfter.getPosts().size());				
 	}
 	
+	public static DeletePostResourceReturnData deletePost(WebResource service, long postId, String authKey) {
+		DeletePostResourceReturnData ret = service.path("rest").path("post").path("del")
+		.path(String.valueOf(postId))
+		.header("AuthKey", authKey)
+		.entity(null)
+		.delete(DeletePostResourceReturnData.class);	
+		return ret;
+	}
+	
 }

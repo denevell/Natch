@@ -75,6 +75,28 @@ public class ListThreadsFunctional {
 	}
 
 	@Test
+	public void shouldListThreadsAfterThreadDelete() {
+		// Arrange 
+		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
+		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
+		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
+		AddPostResourceReturnData threadWithSecondPost = addThread(input); 
+		addThread(input1); 
+		addThread(input2); 
+		
+		// Act
+		DeletePostsFunctional.deletePost(
+				service, 
+				threadWithSecondPost.getThread().getPosts().get(0).getId(), 
+				loginResult.getAuthKey());
+		ListThreadsResource returnData = listThreads(); 
+		
+		// Assert
+		assertEquals(1, returnData.getNumOfThreads());
+		assertEquals(1, returnData.getThreads().size());
+	}
+
+	@Test
 	public void shouldHaveRootPostIdInThread() {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
@@ -287,13 +309,14 @@ public class ListThreadsFunctional {
     	.put(AddPostResourceReturnData.class, input2);
 	}		
 
-	public void addThread(AddPostResourceInput input2) {
+	public AddPostResourceReturnData addThread(AddPostResourceInput input2) {
 		AddPostResourceReturnData res = service
 		.path("rest").path("post").path("addthread")
 	    .type(MediaType.APPLICATION_JSON)
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(AddPostResourceReturnData.class, input2);
 		assertTrue("Added thraed", res.isSuccessful());
+		return res;
 	}		
 	
 	public ThreadResource listThreadById(String id) {

@@ -54,13 +54,13 @@ public class ThreadModel {
 	}	
 	
 	public long getNumOfPosts() {
-		Query q = (Query) mEntityManager.createQuery("select count(t) from ThreadEntity t");
+		Query q = (Query) mEntityManager.createNamedQuery(ThreadEntity.NAMED_QUERY_COUNT_THREADS);
 		long countResult= (Long) q.getSingleResult();				
 		return countResult;
 	}		
 
 	public long getNumOfPosts(String tag) {
-		Query q = (Query) mEntityManager.createQuery("select count(t) from ThreadEntity t  where :tag member of t.rootPost.tags");
+		Query q = (Query) mEntityManager.createNamedQuery(ThreadEntity.NAMED_QUERY_COUNT_THREAD_BY_TAG);
 		q.setParameter("tag", tag);
 		long countResult= (Long) q.getSingleResult();				
 		return countResult;

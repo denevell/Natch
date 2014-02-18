@@ -83,6 +83,12 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	   <named-query name="findThreads">
 	       <query>select p from ThreadEntity p where p.rootPost is not null order by p.latestPost.modified desc</query>
 	   </named-query>       
+	   <named-query name="countThreads">
+	       <query>select count(p) from ThreadEntity p where p.rootPost is not null</query>
+	   </named-query>       
+	   <named-query name="countThreadsWithTag">
+	       <query>select count(p) from ThreadEntity p where p.rootPost is not null and :tag member of p.rootPost.tags</query>
+	   </named-query>       
 	   <named-query name="findThreadByTag">
 	       <query>select p from ThreadEntity p where :tag member of p.rootPost.tags order by p.latestPost.modified desc</query>
 	   </named-query>       
