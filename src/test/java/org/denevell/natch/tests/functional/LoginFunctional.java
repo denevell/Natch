@@ -8,9 +8,9 @@ import java.util.ResourceBundle;
 
 import javax.ws.rs.core.MediaType;
 
-import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceLoggedInReturnData;
 import org.denevell.natch.io.users.LoginResourceReturnData;
+import org.denevell.natch.tests.ui.pageobjects.LoginPO;
 import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
@@ -37,9 +37,7 @@ public class LoginFunctional {
 	public void shouldLoginWithGoodCredentials() {
 		// Arrange 
 	    registerPo.register("aaron@aaron.com", "passy");
-	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-	    // Act
-		LoginResourceReturnData loginResult = login(service, loginInput);
+		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
 		
 		// Assert
 		assertEquals("", loginResult.getError());
@@ -50,9 +48,8 @@ public class LoginFunctional {
 	@Test
 	public void shouldSeeJsonErrorOnBadCredentials() {
 		// Arrange 
-	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passyWRONG");
 	    registerPo.register("aaron@aaron.com", "passy");
-	    LoginResourceReturnData loginResult = login(service, loginInput);
+		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron@aaron.com", "passyWRONG");
 		
 		// Assert
 		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
@@ -62,8 +59,7 @@ public class LoginFunctional {
 	@Test
 	public void login_shouldSeeJsonErrorOnBlanksPassed() {
 		// Arrange 
-	    LoginResourceInput loginInput = new LoginResourceInput(" ", " ");
-	    LoginResourceReturnData loginResult = login(service, loginInput);
+		LoginResourceReturnData loginResult = new LoginPO(service).login(" ", " ");
 		
 		// Assert
 		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
@@ -73,8 +69,7 @@ public class LoginFunctional {
 	@Test
 	public void login_shouldSeeJsonErrorOnBlankUsername() {
 		// Arrange 
-	    LoginResourceInput loginInput = new LoginResourceInput(" ", "password");
-	    LoginResourceReturnData loginResult = login(service, loginInput);
+		LoginResourceReturnData loginResult = new LoginPO(service).login(" ", "password");
 		
 		// Assert
 		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
@@ -84,8 +79,7 @@ public class LoginFunctional {
 	@Test
 	public void login_shouldSeeJsonErrorOnBlankPassword() {
 		// Arrange 
-	    LoginResourceInput loginInput = new LoginResourceInput("username", " ");
-	    LoginResourceReturnData loginResult = login(service, loginInput);
+		LoginResourceReturnData loginResult = new LoginPO(service).login("username", " ");
 		
 		// Assert
 		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
@@ -95,9 +89,7 @@ public class LoginFunctional {
 	@Test
 	public void login_shouldSeeJsonErrorOnNullUsername() {
 		// Arrange 
-	    LoginResourceInput loginInput = new LoginResourceInput(null, "password");
-	    LoginResourceReturnData loginResult = login(service, loginInput);
-
+		LoginResourceReturnData loginResult = new LoginPO(service).login(null, "password");
 		
 		// Assert
 		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
@@ -107,8 +99,7 @@ public class LoginFunctional {
 	@Test
 	public void login_shouldSeeJsonErrorOnNullPassword() {
 		// Arrange 
-	    LoginResourceInput loginInput = new LoginResourceInput("username", null);
-	    LoginResourceReturnData loginResult = login(service, loginInput);
+		LoginResourceReturnData loginResult = new LoginPO(service).login("username", null);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
@@ -123,10 +114,8 @@ public class LoginFunctional {
 	public void login_shouldBeAbleToLoginTwice() {
 		// Arrange 
 	    registerPo.register("aaron@aaron.com", "passy");
-	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-	    
-	    LoginResourceReturnData loginResult = login(service, loginInput);
-	    LoginResourceReturnData loginResult2 = login(service, loginInput);
+		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
+		LoginResourceReturnData loginResult2 = new LoginPO(service).login("aaron@aaron.com", "passy");
 		
 		// Assert
 		assertEquals("", loginResult.getError());
@@ -139,9 +128,7 @@ public class LoginFunctional {
 	public void shouldReturnAuthKeyOnLogin() {
 		// Arrange 
 	    registerPo.register("aaron@aaron.com", "passy");
-	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-	    
-	    LoginResourceReturnData loginResult = login(service, loginInput);
+		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
 		
 		// Assert
 		assertTrue("Should return auth key", loginResult.getAuthKey().length()>5);
@@ -151,10 +138,8 @@ public class LoginFunctional {
 	public void shouldReturnDifferentAuthKeys() {
 		// Arrange 
 	    registerPo.register("aaron@aaron.com", "passy");
-	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-	    
-	    LoginResourceReturnData loginResult = login(service, loginInput);
-	    LoginResourceReturnData loginResult1 = login(service, loginInput);
+		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
+		LoginResourceReturnData loginResult1 = new LoginPO(service).login("aaron@aaron.com", "passy");
 		
 		// Assert
 		assertFalse("Should return different auth key", loginResult.getAuthKey().equals(loginResult1.getAuthKey()));		
@@ -164,8 +149,7 @@ public class LoginFunctional {
 	public void shouldLoginWithAuthKey() {
 		// Arrange 
 	    registerPo.register("aaron@aaron.com", "passy");
-	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-	    LoginResourceReturnData loginResult = login(service, loginInput);
+		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
 	    
 	    // Act
 		LoginResourceLoggedInReturnData authResult = service
@@ -182,8 +166,7 @@ public class LoginFunctional {
 	public void shouldntLoginWithBadAuthKey() {
 		// Arrange 
 	    registerPo.register("aaron@aaron.com", "passy");
-	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-	    LoginResourceReturnData loginResult = login(service, loginInput);
+		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
 
 		loginResult.getAuthKey();
 	    
@@ -206,9 +189,8 @@ public class LoginFunctional {
 	public void shouldntLoginWithOldAuthKey() {
 		// Arrange 
 	    registerPo.register("aaron@aaron.com", "passy");
-	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-	    LoginResourceReturnData loginResult = login(service, loginInput);
-	    login(service, loginInput);
+		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
+		new LoginPO(service).login("aaron@aaron.com", "passy");
 	    
 	    // Act
 
@@ -224,15 +206,6 @@ public class LoginFunctional {
 			return;
 		}
 		assertTrue("Wanted to see a 401", false);		
-	}	
-	
-
-	public static LoginResourceReturnData login(WebResource service, LoginResourceInput loginInput) {
-		LoginResourceReturnData loginResult = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput);
-		return loginResult;
 	}	
 	
 }

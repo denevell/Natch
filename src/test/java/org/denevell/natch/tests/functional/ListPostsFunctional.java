@@ -11,8 +11,8 @@ import java.util.List;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.threads.ThreadResource;
-import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
+import org.denevell.natch.tests.ui.pageobjects.LoginPO;
 import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
@@ -33,10 +33,8 @@ public class ListPostsFunctional {
 		// Delete all users
 		TestUtils.deleteTestDb();
 	    new RegisterPO(service).register("aaron@aaron.com", "passy");
-		// Login
-	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-	    loginResult = LoginFunctional.login(service, loginInput);
 		listThread = service.path("rest").path("post").path("thread");
+		loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

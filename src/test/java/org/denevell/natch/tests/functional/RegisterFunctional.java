@@ -6,9 +6,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ResourceBundle;
 
-import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
+import org.denevell.natch.tests.ui.pageobjects.LoginPO;
 import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
@@ -44,9 +44,7 @@ public class RegisterFunctional {
 		// Arrange 
 	    // Act
 	    RegisterResourceReturnData result = registerPo.register("aaron", "aaron");
-		
-		LoginResourceInput loginInput = new LoginResourceInput("aaron", "aaron");
-		LoginResourceReturnData login = LoginFunctional.login(TestUtils.getRESTClient(), loginInput);
+		LoginResourceReturnData login = new LoginPO(service).login("aaron", "aaron");
 
 		// Assert
 		assertTrue("Should register", result.isSuccessful());
@@ -59,8 +57,7 @@ public class RegisterFunctional {
 	    // Act
 	    registerPo.register("aaron", "aaron");
 	    RegisterResourceReturnData resultInput = registerPo.register("aaron1", "aaron1");
-		LoginResourceInput loginInput = new LoginResourceInput("aaron1", "aaron1");
-		LoginResourceReturnData login = LoginFunctional.login(TestUtils.getRESTClient(), loginInput);
+		LoginResourceReturnData login = new LoginPO(service).login("aaron1", "aaron1");
 
 		// Assert
 		assertTrue("Should register", resultInput.isSuccessful());

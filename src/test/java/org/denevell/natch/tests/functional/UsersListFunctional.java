@@ -5,9 +5,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ResourceBundle;
 
-import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.UserList;
+import org.denevell.natch.tests.ui.pageobjects.LoginPO;
 import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
@@ -35,8 +35,7 @@ public class UsersListFunctional {
 		// Arrange 
 	    registerPo.register("aaron", "aaron");
 	    registerPo.register("other1", "other1");
-	    LoginResourceInput loginInput = new LoginResourceInput("aaron", "aaron");
-		LoginResourceReturnData loginResult = LoginFunctional.login(service, loginInput);
+		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron", "aaron");
 
 	    // Act
 		UserList thread = listUsers(service, loginResult.getAuthKey());	
@@ -62,8 +61,7 @@ public class UsersListFunctional {
         // Arrange 
 	    registerPo.register("aaron", "aaron");
 	    registerPo.register("other1", "other1");
-        LoginResourceInput loginInput = new LoginResourceInput("other1", "other1");
-        LoginResourceReturnData loginResult = LoginFunctional.login(service, loginInput);
+		LoginResourceReturnData loginResult = new LoginPO(service).login("other1", "other1");
 
         // Act
         try {

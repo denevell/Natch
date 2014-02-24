@@ -7,9 +7,9 @@ import static org.junit.Assert.assertTrue;
 import java.util.ResourceBundle;
 
 import org.denevell.natch.io.base.SuccessOrError;
-import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.UserList;
+import org.denevell.natch.tests.ui.pageobjects.LoginPO;
 import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
@@ -37,8 +37,7 @@ public class UserAdminToggleFunctional {
 		// Arrange 
 	    registerPo.register("aaron", "aaron");
 	    registerPo.register("other1", "other1");
-	    LoginResourceInput loginInput = new LoginResourceInput("aaron", "aaron");
-		LoginResourceReturnData loginResult = LoginFunctional.login(service, loginInput);
+		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron", "aaron");
 		UserList users = UsersListFunctional.listUsers(service, loginResult.getAuthKey());
 		assertEquals("other1", users.getUsers().get(1).getUsername());
 		assertEquals(false, users.getUsers().get(1).isAdmin());
@@ -67,8 +66,8 @@ public class UserAdminToggleFunctional {
 		// Arrange 
 	    registerPo.register("aaron", "aaron");
 	    registerPo.register("other1", "other1");
-		LoginResourceReturnData loginResultAdmin = LoginFunctional.login(service, new LoginResourceInput("aaron", "aaron")); 
-		LoginResourceReturnData loginResultUser = LoginFunctional.login(service, new LoginResourceInput("other1", "other1"));
+		LoginResourceReturnData loginResultAdmin = new LoginPO(service).login("aaron", "aaron");
+		LoginResourceReturnData loginResultUser = new LoginPO(service).login("other1", "other1");
 		UserList users = UsersListFunctional.listUsers(service, loginResultAdmin.getAuthKey());
 		assertEquals("other1", users.getUsers().get(1).getUsername());
 		assertEquals(false, users.getUsers().get(1).isAdmin());
@@ -94,8 +93,7 @@ public class UserAdminToggleFunctional {
 		// Arrange 
 	    registerPo.register("aaron", "aaron");
 	    registerPo.register("other1", "other1");
-	    LoginResourceInput loginInput = new LoginResourceInput("other1", "other1");
-		LoginResourceReturnData loginResult = LoginFunctional.login(service, loginInput);
+		LoginResourceReturnData loginResult = new LoginPO(service).login("other1", "other1");
 
 	    // Act
 		try {

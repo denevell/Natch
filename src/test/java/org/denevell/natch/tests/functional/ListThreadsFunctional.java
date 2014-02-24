@@ -16,8 +16,8 @@ import org.denevell.natch.io.posts.EditPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.threads.ListThreadsResource;
 import org.denevell.natch.io.threads.ThreadResource;
-import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
+import org.denevell.natch.tests.ui.pageobjects.LoginPO;
 import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
@@ -39,11 +39,7 @@ public class ListThreadsFunctional {
 	    // Register
 	    new RegisterPO(service).register("aaron@aaron.com", "passy");
 		// Login
-	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-		loginResult = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput);		
+		loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
 	}
 
 	

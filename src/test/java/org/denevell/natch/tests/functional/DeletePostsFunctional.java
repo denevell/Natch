@@ -12,8 +12,8 @@ import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.posts.DeletePostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
-import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
+import org.denevell.natch.tests.ui.pageobjects.LoginPO;
 import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
@@ -35,12 +35,7 @@ public class DeletePostsFunctional {
 		TestUtils.deleteTestDb();
 	    registerPo = new RegisterPO(service);
 	    registerPo.register("aaron@aaron.com", "passy");
-		// Login
-	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-		loginResult = service
-	    		.path("rest").path("user").path("login")
-	    		.type(MediaType.APPLICATION_JSON)
-	    		.post(LoginResourceReturnData.class, loginInput);				
+		loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
 	}
 	
 	@Test
@@ -91,8 +86,7 @@ public class DeletePostsFunctional {
 		// Arrange 
 		// Register other user
 	    registerPo.register("aaron1@aaron.com", "passy");
-	    LoginResourceInput loginInput1 = new LoginResourceInput("aaron1@aaron.com", "passy");
-		LoginResourceReturnData loginResult1 = LoginFunctional.login(service, loginInput1);
+		LoginResourceReturnData loginResult1 = new LoginPO(service).login("aaron1@aaron.com", "passy");
 
 		// Make post with user one 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
@@ -129,8 +123,7 @@ public class DeletePostsFunctional {
         // Arrange 
         // Register other user
 	    registerPo.register("aaron1@aaron.com", "passy");
-        LoginResourceInput loginInput1 = new LoginResourceInput("aaron1@aaron.com", "passy");
-        LoginResourceReturnData loginResult1 = LoginFunctional.login(service, loginInput1);
+		LoginResourceReturnData loginResult1 = new LoginPO(service).login("aaron1@aaron.com", "passy");
 
         // Make post with user two
         AddPostResourceInput input = new AddPostResourceInput("sub", "cont");

@@ -12,8 +12,8 @@ import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.threads.AddThreadFromPostResourceInput;
-import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
+import org.denevell.natch.tests.ui.pageobjects.LoginPO;
 import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
@@ -36,16 +36,14 @@ public class AddThreadFromMovedPostFunctional {
 		registerPo = new RegisterPO(service);
 		TestUtils.deleteTestDb();
 	    new RegisterPO(service).register("aaron", "aaron");
-		LoginResourceInput loginInput = new LoginResourceInput("aaron", "aaron");
-		adminLoginResult = LoginFunctional.login(service, loginInput);
+		adminLoginResult = new LoginPO(service).login("aaron", "aaron");
 	}
 	
 	@Test
 	public void shouldMakeThreadFromPost() {
 	    // Arrange -- login as other user
 	    registerPo.register("other", "other");
-		LoginResourceInput loginInput = new LoginResourceInput("other", "other");
-		LoginResourceReturnData loginResult = LoginFunctional.login(service, loginInput);
+		LoginResourceReturnData loginResult = new LoginPO(service).login("other", "other");
 		// Arrange -- add thread and post 
 		AddPostResourceInput threadInput = new AddPostResourceInput("c", "s");
 		AddPostResourceReturnData threadRet = AddThreadFunctional.addThread(service, loginResult.getAuthKey(), threadInput);
@@ -76,8 +74,7 @@ public class AddThreadFromMovedPostFunctional {
 	public void shouldThrow401WhenNotAdmin() {
 	    // Arrange -- login as other user
 	    registerPo.register("other", "other");
-		LoginResourceInput loginInput = new LoginResourceInput("other", "other");
-		LoginResourceReturnData loginResult = LoginFunctional.login(service, loginInput);
+		LoginResourceReturnData loginResult = new LoginPO(service).login("other", "other");
 		// Arrange -- add thread and post 
 		AddPostResourceInput threadInput = new AddPostResourceInput("c", "s");
 		AddPostResourceReturnData threadRet = AddThreadFunctional.addThread(service, loginResult.getAuthKey(), threadInput);

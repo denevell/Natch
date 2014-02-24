@@ -14,8 +14,8 @@ import org.denevell.natch.io.posts.EditPostResource;
 import org.denevell.natch.io.posts.EditPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.posts.PostResource;
-import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
+import org.denevell.natch.tests.ui.pageobjects.LoginPO;
 import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
@@ -42,8 +42,7 @@ public class EditPostsFunctional {
 		TestUtils.deleteTestDb();
 	    registerPo = new RegisterPO(service);
 	    registerPo.register("aaron@aaron.com", "passy");
-	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-	    loginResult = LoginFunctional.login(service, loginInput);
+		loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
 	    authKey = loginResult.getAuthKey();
 
 		// Add post
@@ -99,9 +98,8 @@ public class EditPostsFunctional {
 		editedInput.setContent("sup");
 		editedInput.setSubject("sup two?");
 		// Login with another user
-	    LoginResourceInput loginInput1 = new LoginResourceInput("aaron1@aaron.com", "passy");
 	    registerPo.register("aaron1@aaron.com", "passy");
-	    LoginResourceReturnData loginResult1 = LoginFunctional.login(service, loginInput1);
+		LoginResourceReturnData loginResult1 = new LoginPO(service).login("aaron1@aaron.com", "passy");
 		
 		// Act - edit with different user then list
 		EditPostResourceReturnData editReturnData = editPost(service, loginResult1.getAuthKey(), initialPost.getId(), editedInput); 		
@@ -118,9 +116,8 @@ public class EditPostsFunctional {
 	public void shouldEditAsAdmin() {
 		// Arrange
 		// Login with another user
-        LoginResourceInput loginInput1 = new LoginResourceInput("aaron1@aaron.com", "passy");
 	    registerPo.register("aaron1@aaron.com", "passy");
-        LoginResourceReturnData loginResult1 = LoginFunctional.login(service, loginInput1);
+		LoginResourceReturnData loginResult1 = new LoginPO(service).login("aaron1@aaron.com", "passy");
 
         // Act - Add a post as new user
         AddPostResourceInput postInput = new AddPostResourceInput("presubadminedit", "precontadminedit");
