@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceLoggedInReturnData;
 import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.io.users.RegisterResourceInput;
+import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
@@ -24,19 +24,20 @@ public class LoginFunctional {
 	
 	private WebResource service;
     ResourceBundle rb = Strings.getMainResourceBundle();
+	private RegisterPO registerPo;
 
 	@Before
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
+		registerPo = new RegisterPO(service);
 		TestUtils.deleteTestDb();
 	}
 	
 	@Test
 	public void shouldLoginWithGoodCredentials() {
 		// Arrange 
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
+	    registerPo.register("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-	    RegisterFunctional.register(service, registerInput);
 	    // Act
 		LoginResourceReturnData loginResult = login(service, loginInput);
 		
@@ -49,9 +50,8 @@ public class LoginFunctional {
 	@Test
 	public void shouldSeeJsonErrorOnBadCredentials() {
 		// Arrange 
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passyWRONG");
-	    RegisterFunctional.register(service, registerInput);
+	    registerPo.register("aaron@aaron.com", "passy");
 	    LoginResourceReturnData loginResult = login(service, loginInput);
 		
 		// Assert
@@ -122,9 +122,8 @@ public class LoginFunctional {
 	@Test
 	public void login_shouldBeAbleToLoginTwice() {
 		// Arrange 
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
+	    registerPo.register("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-	    RegisterFunctional.register(service, registerInput);
 	    
 	    LoginResourceReturnData loginResult = login(service, loginInput);
 	    LoginResourceReturnData loginResult2 = login(service, loginInput);
@@ -139,9 +138,8 @@ public class LoginFunctional {
 	@Test
 	public void shouldReturnAuthKeyOnLogin() {
 		// Arrange 
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
+	    registerPo.register("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-	    RegisterFunctional.register(service, registerInput);
 	    
 	    LoginResourceReturnData loginResult = login(service, loginInput);
 		
@@ -152,9 +150,8 @@ public class LoginFunctional {
 	@Test
 	public void shouldReturnDifferentAuthKeys() {
 		// Arrange 
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
+	    registerPo.register("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-	    RegisterFunctional.register(service, registerInput);
 	    
 	    LoginResourceReturnData loginResult = login(service, loginInput);
 	    LoginResourceReturnData loginResult1 = login(service, loginInput);
@@ -166,9 +163,8 @@ public class LoginFunctional {
 	@Test
 	public void shouldLoginWithAuthKey() {
 		// Arrange 
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
+	    registerPo.register("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-	    RegisterFunctional.register(service, registerInput);
 	    LoginResourceReturnData loginResult = login(service, loginInput);
 	    
 	    // Act
@@ -185,9 +181,8 @@ public class LoginFunctional {
 	@Test
 	public void shouldntLoginWithBadAuthKey() {
 		// Arrange 
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
+	    registerPo.register("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-	    RegisterFunctional.register(service, registerInput);
 	    LoginResourceReturnData loginResult = login(service, loginInput);
 
 		loginResult.getAuthKey();
@@ -210,9 +205,8 @@ public class LoginFunctional {
 	@Test
 	public void shouldntLoginWithOldAuthKey() {
 		// Arrange 
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
+	    registerPo.register("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-	    RegisterFunctional.register(service, registerInput);
 	    LoginResourceReturnData loginResult = login(service, loginInput);
 	    login(service, loginInput);
 	    

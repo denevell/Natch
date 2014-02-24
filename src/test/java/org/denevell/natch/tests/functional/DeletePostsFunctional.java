@@ -14,8 +14,7 @@ import org.denevell.natch.io.posts.DeletePostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.io.users.RegisterResourceInput;
-import org.denevell.natch.io.users.RegisterResourceReturnData;
+import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
@@ -28,17 +27,14 @@ public class DeletePostsFunctional {
 	private WebResource service;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private LoginResourceReturnData loginResult;
+	private RegisterPO registerPo;
 
 	@Before
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
-		// Delete all users
 		TestUtils.deleteTestDb();
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
-	    // Register
-		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
-	    	.put(RegisterResourceReturnData.class, registerInput);
+	    registerPo = new RegisterPO(service);
+	    registerPo.register("aaron@aaron.com", "passy");
 		// Login
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 		loginResult = service
@@ -94,8 +90,7 @@ public class DeletePostsFunctional {
 	public void shouldSeeErrorOnUnAuthorised() {
 		// Arrange 
 		// Register other user
-	    RegisterResourceInput regInput1 = new RegisterResourceInput("aaron1@aaron.com", "passy");
-	    RegisterFunctional.register(service, regInput1);
+	    registerPo.register("aaron1@aaron.com", "passy");
 	    LoginResourceInput loginInput1 = new LoginResourceInput("aaron1@aaron.com", "passy");
 		LoginResourceReturnData loginResult1 = LoginFunctional.login(service, loginInput1);
 
@@ -133,8 +128,7 @@ public class DeletePostsFunctional {
     public void shouldAllowAdminToDelete() {
         // Arrange 
         // Register other user
-        RegisterResourceInput regInput1 = new RegisterResourceInput("aaron1@aaron.com", "passy");
-        RegisterFunctional.register(service, regInput1);
+	    registerPo.register("aaron1@aaron.com", "passy");
         LoginResourceInput loginInput1 = new LoginResourceInput("aaron1@aaron.com", "passy");
         LoginResourceReturnData loginResult1 = LoginFunctional.login(service, loginInput1);
 

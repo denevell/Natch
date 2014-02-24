@@ -9,8 +9,8 @@ import java.util.ResourceBundle;
 import org.denevell.natch.io.base.SuccessOrError;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.io.users.RegisterResourceInput;
 import org.denevell.natch.io.users.UserList;
+import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
@@ -23,20 +23,21 @@ public class UserAdminToggleFunctional {
 	
 	private WebResource service;
     ResourceBundle rb = Strings.getMainResourceBundle();
+	private RegisterPO registerPo;
 
 	@Before
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
+	    registerPo = new RegisterPO(service);
 		TestUtils.deleteTestDb();
 	}
 	
 	@Test
 	public void shouldToggleUserAdmin() {
 		// Arrange 
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron", "aaron");
+	    registerPo.register("aaron", "aaron");
+	    registerPo.register("other1", "other1");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron", "aaron");
-	    RegisterFunctional.register(service, registerInput);
-	    RegisterFunctional.register(service, new RegisterResourceInput("other1", "other1"));
 		LoginResourceReturnData loginResult = LoginFunctional.login(service, loginInput);
 		UserList users = UsersListFunctional.listUsers(service, loginResult.getAuthKey());
 		assertEquals("other1", users.getUsers().get(1).getUsername());
@@ -64,9 +65,8 @@ public class UserAdminToggleFunctional {
 	@Test
 	public void shouldToggleWorksImmediately() {
 		// Arrange 
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron", "aaron");
-	    RegisterFunctional.register(service, registerInput);
-	    RegisterFunctional.register(service, new RegisterResourceInput("other1", "other1"));
+	    registerPo.register("aaron", "aaron");
+	    registerPo.register("other1", "other1");
 		LoginResourceReturnData loginResultAdmin = LoginFunctional.login(service, new LoginResourceInput("aaron", "aaron")); 
 		LoginResourceReturnData loginResultUser = LoginFunctional.login(service, new LoginResourceInput("other1", "other1"));
 		UserList users = UsersListFunctional.listUsers(service, loginResultAdmin.getAuthKey());
@@ -92,9 +92,8 @@ public class UserAdminToggleFunctional {
 	@Test
 	public void shouldntToggleAdminIfNotAdmin() {
 		// Arrange 
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron", "aaron");
-	    RegisterFunctional.register(service, registerInput);
-	    RegisterFunctional.register(service, new RegisterResourceInput("other1", "other1"));
+	    registerPo.register("aaron", "aaron");
+	    registerPo.register("other1", "other1");
 	    LoginResourceInput loginInput = new LoginResourceInput("other1", "other1");
 		LoginResourceReturnData loginResult = LoginFunctional.login(service, loginInput);
 

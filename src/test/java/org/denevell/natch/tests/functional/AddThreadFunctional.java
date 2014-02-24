@@ -16,8 +16,7 @@ import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.io.users.RegisterResourceInput;
-import org.denevell.natch.io.users.RegisterResourceReturnData;
+import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
@@ -36,11 +35,7 @@ public class AddThreadFunctional {
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
 		TestUtils.deleteTestDb();
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
-		// Register
-		TestUtils.getRegisterClient()
-		.type(MediaType.APPLICATION_JSON)
-	    	.put(RegisterResourceReturnData.class, registerInput);
+	    new RegisterPO(service).register("aaron@aaron.com", "passy");
 		// Login
 		LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 		loginResult = TestUtils.getLoginClient()

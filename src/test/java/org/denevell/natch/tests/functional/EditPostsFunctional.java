@@ -16,7 +16,7 @@ import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.io.users.RegisterResourceInput;
+import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
@@ -33,14 +33,15 @@ public class EditPostsFunctional {
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private ListPostsResource originallyListedPosts;
     private String authKey;
+	private RegisterPO registerPo;
 
 	@Before
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
 		// Delete all users and add one new
 		TestUtils.deleteTestDb();
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
-	    RegisterFunctional.register(service, registerInput);
+	    registerPo = new RegisterPO(service);
+	    registerPo.register("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 	    loginResult = LoginFunctional.login(service, loginInput);
 	    authKey = loginResult.getAuthKey();
@@ -99,8 +100,7 @@ public class EditPostsFunctional {
 		editedInput.setSubject("sup two?");
 		// Login with another user
 	    LoginResourceInput loginInput1 = new LoginResourceInput("aaron1@aaron.com", "passy");
-	    RegisterResourceInput regInput1 = new RegisterResourceInput("aaron1@aaron.com", "passy");
-	    RegisterFunctional.register(service, regInput1);
+	    registerPo.register("aaron1@aaron.com", "passy");
 	    LoginResourceReturnData loginResult1 = LoginFunctional.login(service, loginInput1);
 		
 		// Act - edit with different user then list
@@ -119,8 +119,7 @@ public class EditPostsFunctional {
 		// Arrange
 		// Login with another user
         LoginResourceInput loginInput1 = new LoginResourceInput("aaron1@aaron.com", "passy");
-        RegisterResourceInput regInput1 = new RegisterResourceInput("aaron1@aaron.com", "passy");
-        RegisterFunctional.register(service, regInput1);
+	    registerPo.register("aaron1@aaron.com", "passy");
         LoginResourceReturnData loginResult1 = LoginFunctional.login(service, loginInput1);
 
         // Act - Add a post as new user

@@ -13,7 +13,7 @@ import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.threads.ThreadResource;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.io.users.RegisterResourceInput;
+import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,9 +32,7 @@ public class ListPostsFunctional {
 		service = TestUtils.getRESTClient();
 		// Delete all users
 		TestUtils.deleteTestDb();
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
-	    // Register
-	    RegisterFunctional.register(service, registerInput);
+	    new RegisterPO(service).register("aaron@aaron.com", "passy");
 		// Login
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 	    loginResult = LoginFunctional.login(service, loginInput);

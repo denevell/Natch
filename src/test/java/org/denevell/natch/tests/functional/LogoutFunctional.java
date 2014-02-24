@@ -9,8 +9,7 @@ import javax.ws.rs.core.MediaType;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.LogoutResourceReturnData;
-import org.denevell.natch.io.users.RegisterResourceInput;
-import org.denevell.natch.io.users.RegisterResourceReturnData;
+import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,11 +30,8 @@ public class LogoutFunctional {
 	@Test
 	public void shouldLogout() {
 		// Arrange
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
+	    new RegisterPO(service).register("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
-	    	.put(RegisterResourceReturnData.class, registerInput);
 		LoginResourceReturnData loginResult = service
 	    	.path("rest").path("user").path("login")
 	    	.type(MediaType.APPLICATION_JSON)
@@ -54,11 +50,8 @@ public class LogoutFunctional {
 	@Test
 	public void shouldntLogoutIfBadAuthData() {
 		// Arrange
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
+	    new RegisterPO(service).register("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
-		service
-	    	.path("rest").path("user").type(MediaType.APPLICATION_JSON)
-	    	.put(RegisterResourceReturnData.class, registerInput);
 		LoginResourceReturnData loginResult = service
 	    	.path("rest").path("user").path("login")
 	    	.type(MediaType.APPLICATION_JSON)

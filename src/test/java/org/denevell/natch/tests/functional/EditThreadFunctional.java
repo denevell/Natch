@@ -15,7 +15,7 @@ import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.io.users.RegisterResourceInput;
+import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
@@ -34,8 +34,7 @@ public class EditThreadFunctional {
 		service = TestUtils.getRESTClient();
 		// Delete all users and add one new
 		TestUtils.deleteTestDb();
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
-	    RegisterFunctional.register(service, registerInput);
+	    new RegisterPO(service).register("aaron@aaron.com", "passy");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 	    LoginResourceReturnData loginResult = LoginFunctional.login(service, loginInput);
 	    authKey = loginResult.getAuthKey();

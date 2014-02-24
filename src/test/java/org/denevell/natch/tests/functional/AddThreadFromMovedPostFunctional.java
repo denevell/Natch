@@ -14,7 +14,7 @@ import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.threads.AddThreadFromPostResourceInput;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.io.users.RegisterResourceInput;
+import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
@@ -28,13 +28,14 @@ public class AddThreadFromMovedPostFunctional {
 	private WebResource service;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private LoginResourceReturnData adminLoginResult;
+	private RegisterPO registerPo;
 	
 	@Before
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
+		registerPo = new RegisterPO(service);
 		TestUtils.deleteTestDb();
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron", "aaron");
-	    RegisterFunctional.register(service, registerInput);
+	    new RegisterPO(service).register("aaron", "aaron");
 		LoginResourceInput loginInput = new LoginResourceInput("aaron", "aaron");
 		adminLoginResult = LoginFunctional.login(service, loginInput);
 	}
@@ -42,8 +43,7 @@ public class AddThreadFromMovedPostFunctional {
 	@Test
 	public void shouldMakeThreadFromPost() {
 	    // Arrange -- login as other user
-	    RegisterResourceInput registerInput = new RegisterResourceInput("other", "other");
-	    RegisterFunctional.register(service, registerInput);
+	    registerPo.register("other", "other");
 		LoginResourceInput loginInput = new LoginResourceInput("other", "other");
 		LoginResourceReturnData loginResult = LoginFunctional.login(service, loginInput);
 		// Arrange -- add thread and post 
@@ -75,8 +75,7 @@ public class AddThreadFromMovedPostFunctional {
 	@Test
 	public void shouldThrow401WhenNotAdmin() {
 	    // Arrange -- login as other user
-	    RegisterResourceInput registerInput = new RegisterResourceInput("other", "other");
-	    RegisterFunctional.register(service, registerInput);
+	    registerPo.register("other", "other");
 		LoginResourceInput loginInput = new LoginResourceInput("other", "other");
 		LoginResourceReturnData loginResult = LoginFunctional.login(service, loginInput);
 		// Arrange -- add thread and post 

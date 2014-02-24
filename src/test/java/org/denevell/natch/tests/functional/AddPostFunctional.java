@@ -15,7 +15,7 @@ import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.io.users.RegisterResourceInput;
+import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
@@ -35,8 +35,7 @@ public class AddPostFunctional {
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
 		TestUtils.deleteTestDb();
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron@aaron.com", "passy");
-	    RegisterFunctional.register(service, registerInput);
+	    new RegisterPO(service).register("aaron@aaron.com", "passy");
 		LoginResourceInput loginInput = new LoginResourceInput("aaron@aaron.com", "passy");
 		loginResult = LoginFunctional.login(service, loginInput);
 		authKey = loginResult.getAuthKey();

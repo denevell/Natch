@@ -7,8 +7,8 @@ import java.util.ResourceBundle;
 
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.io.users.RegisterResourceInput;
 import org.denevell.natch.io.users.UserList;
+import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
@@ -21,20 +21,21 @@ public class UsersListFunctional {
 	
 	private WebResource service;
     ResourceBundle rb = Strings.getMainResourceBundle();
+	private RegisterPO registerPo;
 
 	@Before
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
+	    registerPo = new RegisterPO(service);
 		TestUtils.deleteTestDb();
 	}
 	
 	@Test
 	public void shouldListUsersAsAdmin() {
 		// Arrange 
-	    RegisterResourceInput registerInput = new RegisterResourceInput("aaron", "aaron");
+	    registerPo.register("aaron", "aaron");
+	    registerPo.register("other1", "other1");
 	    LoginResourceInput loginInput = new LoginResourceInput("aaron", "aaron");
-	    RegisterFunctional.register(service, registerInput);
-	    RegisterFunctional.register(service, new RegisterResourceInput("other1", "other1"));
 		LoginResourceReturnData loginResult = LoginFunctional.login(service, loginInput);
 
 	    // Act
@@ -59,9 +60,8 @@ public class UsersListFunctional {
     @Test
     public void shouldntListUsersAsNormalUser() {
         // Arrange 
-        RegisterResourceInput registerInput = new RegisterResourceInput("aaron", "aaron");
-        RegisterFunctional.register(service, registerInput);
-        RegisterFunctional.register(service, new RegisterResourceInput("other1", "other1"));
+	    registerPo.register("aaron", "aaron");
+	    registerPo.register("other1", "other1");
         LoginResourceInput loginInput = new LoginResourceInput("other1", "other1");
         LoginResourceReturnData loginResult = LoginFunctional.login(service, loginInput);
 
