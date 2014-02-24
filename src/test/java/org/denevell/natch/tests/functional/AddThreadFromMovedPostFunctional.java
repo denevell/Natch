@@ -6,13 +6,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ResourceBundle;
 
-import javax.ws.rs.core.MediaType;
-
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
-import org.denevell.natch.io.threads.AddThreadFromPostResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.tests.functional.pageobjects.AddPostPO;
+import org.denevell.natch.tests.functional.pageobjects.AddThreadFromPostPO;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
@@ -30,36 +28,41 @@ public class AddThreadFromMovedPostFunctional {
 	private LoginResourceReturnData adminLoginResult;
 	private RegisterPO registerPo;
 	private AddPostPO addPostPo;
+	private LoginPO loginPo;
+	private AddThreadFromPostPO addThreadFromPostPo;
 	
 	@Before
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
 		registerPo = new RegisterPO(service);
+		loginPo = new LoginPO(service);
+		addPostPo = new AddPostPO(service);
+		addThreadFromPostPo = new AddThreadFromPostPO(service);
 		TestUtils.deleteTestDb();
 	    new RegisterPO(service).register("aaron", "aaron");
 		adminLoginResult = new LoginPO(service).login("aaron", "aaron");
-		addPostPo = new AddPostPO(service);
 	}
 	
 	@Test
 	public void shouldMakeThreadFromPost() {
-	    // Arrange -- login as other user
 	    registerPo.register("other", "other");
-		LoginResourceReturnData loginResult = new LoginPO(service).login("other", "other");
-		// Arrange -- add thread and post 
-		AddPostResourceReturnData threadRet = addPostPo.add("c", "s", loginResult.getAuthKey());
+		LoginResourceReturnData loginResult = 
+				loginPo.login("other", "other");
+		AddPostResourceReturnData threadRet = 
+				addPostPo.add("c", "s", loginResult.getAuthKey());
 		addPostPo.add("-", "b", loginResult.getAuthKey(), threadRet.getThread().getId());
-		// Arrange -- get posts
-		ListPostsResource posts = ListPostsFunctional.listRecentPostsThreads(service);
+		ListPostsResource posts = 
+				ListPostsFunctional.listRecentPostsThreads(service);
 		assertTrue("Should have two posts, thread starter and first post", posts.getPosts().size()==2);
 		
         // Act
-		AddThreadFromPostResourceInput threadFromPostInput = new AddThreadFromPostResourceInput();
-		threadFromPostInput.setContent("b");
-		threadFromPostInput.setSubject("New subject");
-		threadFromPostInput.setPostId(posts.getPosts().get(0).getId());
-		threadFromPostInput.setUserId("other");
-		AddPostResourceReturnData returnData = addThreadFromPost(service, adminLoginResult.getAuthKey(), threadFromPostInput); 
+		AddPostResourceReturnData returnData = 
+				addThreadFromPostPo.addThreadFromPost(
+						"New subject",
+						"b",
+						posts.getPosts().get(0).getId(),
+						"other",
+						adminLoginResult.getAuthKey()); 
 		
 		// Assert
 		assertTrue(returnData.isSuccessful());
@@ -71,23 +74,22 @@ public class AddThreadFromMovedPostFunctional {
 
 	@Test
 	public void shouldThrow401WhenNotAdmin() {
-	    // Arrange -- login as other user
 	    registerPo.register("other", "other");
-		LoginResourceReturnData loginResult = new LoginPO(service).login("other", "other");
-		// Arrange -- add thread and post 
-		AddPostResourceReturnData threadRet = addPostPo.add("c", "s", loginResult.getAuthKey());
+		LoginResourceReturnData loginResult = 
+				loginPo.login("other", "other");
+		AddPostResourceReturnData threadRet = 
+				addPostPo.add("c", "s", loginResult.getAuthKey());
 		addPostPo.add("-", "b", loginResult.getAuthKey(), threadRet.getThread().getId());
-		// Arrange -- get posts
 		ListPostsResource posts = ListPostsFunctional.listRecentPostsThreads(service);
 		
         // Act
-		AddThreadFromPostResourceInput threadFromPostInput = new AddThreadFromPostResourceInput();
-		threadFromPostInput.setContent("b");
-		threadFromPostInput.setSubject("New subject");
-		threadFromPostInput.setPostId(posts.getPosts().get(0).getId());
-		threadFromPostInput.setUserId("other");
 		try {
-		    addThreadFromPost(service, loginResult.getAuthKey(), threadFromPostInput); 
+				addThreadFromPostPo.addThreadFromPost(
+						"New subject",
+						"b",
+						posts.getPosts().get(0).getId(),
+						"other",
+						loginResult.getAuthKey()); 
         } catch (UniformInterfaceException e) {
             assertTrue(e.getResponse().getStatus()==401);
             return;
@@ -96,15 +98,5 @@ public class AddThreadFromMovedPostFunctional {
 	}
 	
 	// TODO: 401 when not an admin
-	
-    public static AddPostResourceReturnData addThreadFromPost(WebResource service, Object authKey, AddThreadFromPostResourceInput input) {
-        AddPostResourceReturnData returnData = 
-        service
-        .path("rest").path("thread").path("frompost")
-        .header("AuthKey", authKey)
-        .type(MediaType.APPLICATION_JSON)
-        .put(AddPostResourceReturnData.class, input);
-        return returnData;
-    }	
 	
 }

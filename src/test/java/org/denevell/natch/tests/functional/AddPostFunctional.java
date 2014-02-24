@@ -22,7 +22,7 @@ import com.sun.jersey.api.client.WebResource;
 
 public class AddPostFunctional {
 	
-    ResourceBundle rb = Strings.getMainResourceBundle();
+    private ResourceBundle rb = Strings.getMainResourceBundle();
 	private LoginResourceReturnData loginResult;
     private WebResource service;
     private String authKey;
@@ -31,17 +31,17 @@ public class AddPostFunctional {
 	@Before
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
+		addPostPo = new AddPostPO(service);
 		TestUtils.deleteTestDb();
 	    new RegisterPO(service).register("aaron@aaron.com", "passy");
 		loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
 		authKey = loginResult.getAuthKey();
-		addPostPo = new AddPostPO(service);
 	}
 	
 	@Test
 	public void shouldMakePost() {
-		// Arrange 
-		AddPostResourceReturnData returnData = addPostPo.add("sub", "cont", new String[] {"tag1", "tag2"}, authKey);
+		AddPostResourceReturnData returnData = 
+				addPostPo.add("sub", "cont", new String[] {"tag1", "tag2"}, authKey);
 		
 		// Assert
 		assertEquals("", returnData.getError());
@@ -50,9 +50,10 @@ public class AddPostFunctional {
 	}
 
 	@Test public void shouldMakePostWithSameContentAndSubject() {
-		// Arrange 
-		AddPostResourceReturnData returnData = addPostPo.add("sub", "cont", new String[] {"tag1", "tag2"}, authKey);
-		AddPostResourceReturnData returnData1 = addPostPo.add("sub", "cont", new String[] {"tag1", "tag2"}, authKey);
+		AddPostResourceReturnData returnData = 
+				addPostPo.add("sub", "cont", new String[] {"tag1", "tag2"}, authKey);
+		AddPostResourceReturnData returnData1 = 
+				addPostPo.add("sub", "cont", new String[] {"tag1", "tag2"}, authKey);
 		
 		// Assert
 		assertEquals("", returnData.getError());
@@ -63,7 +64,6 @@ public class AddPostFunctional {
 	
 	@Test 
 	public void shouldMakePostWithLongPost() {
-		// Arrange 
 		String largeContent = "Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
 				"sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." +
 				"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
@@ -80,9 +80,10 @@ public class AddPostFunctional {
 				"aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit " +
 				"esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, " +
 				"sunt in culpa qui officia deserunt mollit anim id est laborum.";
-		
-		AddPostResourceReturnData returnData = addPostPo.add("sub", largeContent, new String[] {"tag1", "tag2"}, authKey);
-		AddPostResourceReturnData returnData1 = addPostPo.add("sub", largeContent, new String[] {"tag1", "tag2"}, authKey);
+		AddPostResourceReturnData returnData = 
+				addPostPo.add("sub", largeContent, new String[] {"tag1", "tag2"}, authKey);
+		AddPostResourceReturnData returnData1 = 
+				addPostPo.add("sub", largeContent, new String[] {"tag1", "tag2"}, authKey);
 		
 		// Assert
 		assertEquals("", returnData.getError());
@@ -105,8 +106,8 @@ public class AddPostFunctional {
 	
 	@Test
 	public void shouldSeeErrorOnBlankContent() {
-		// Arrange / Act
-		AddPostResourceReturnData returnData = addPostPo.add("sub", " ", authKey);
+		AddPostResourceReturnData returnData = 
+				addPostPo.add("sub", " ", authKey);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
@@ -115,8 +116,8 @@ public class AddPostFunctional {
 	
 	@Test
 	public void shouldSeeErrorOnBlanks() {
-		// Arrange / Act
-		AddPostResourceReturnData returnData = addPostPo.add(" ", " ", authKey);
+		AddPostResourceReturnData returnData = 
+				addPostPo.add(" ", " ", authKey);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
@@ -125,8 +126,8 @@ public class AddPostFunctional {
 	
 	@Test
 	public void shouldSeeErrorOnNulls() {
-		// Arrange 
-		AddPostResourceReturnData returnData = addPostPo.add(null, null, authKey);
+		AddPostResourceReturnData returnData = 
+				addPostPo.add(null, null, authKey);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
