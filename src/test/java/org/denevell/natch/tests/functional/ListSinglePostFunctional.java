@@ -40,11 +40,7 @@ public class ListSinglePostFunctional {
 		// Arrange 
 		// Add thread
 		AddPostResourceInput input = new AddPostResourceInput("subthread", "contthread");
-		AddPostResourceReturnData newThreads = service
-		.path("rest").path("post").path("addthread")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
+		AddPostResourceReturnData newThreads = AddThreadFunctional.addThread(service, loginResult.getAuthKey(), input);
 		// Add post
 		input = new AddPostResourceInput("subpost", "contpost");
 		input.setThreadId(newThreads.getThread().getId());
@@ -74,11 +70,7 @@ public class ListSinglePostFunctional {
 	public void shouldShow404OnNoPost() {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
+		AddThreadFunctional.addThread(service, loginResult.getAuthKey(), input);
 		// Arrange list posts 
 		ListPostsResource postsList = service
 		.path("rest").path("post").path("0").path("10")
