@@ -8,13 +8,13 @@ import java.util.ResourceBundle;
 
 import javax.ws.rs.core.MediaType;
 
-import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.threads.AddThreadFromPostResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.tests.ui.pageobjects.LoginPO;
-import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
+import org.denevell.natch.tests.functional.pageobjects.AddPostPO;
+import org.denevell.natch.tests.functional.pageobjects.LoginPO;
+import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
@@ -29,6 +29,7 @@ public class AddThreadFromMovedPostFunctional {
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private LoginResourceReturnData adminLoginResult;
 	private RegisterPO registerPo;
+	private AddPostPO addPostPo;
 	
 	@Before
 	public void setup() throws Exception {
@@ -37,6 +38,7 @@ public class AddThreadFromMovedPostFunctional {
 		TestUtils.deleteTestDb();
 	    new RegisterPO(service).register("aaron", "aaron");
 		adminLoginResult = new LoginPO(service).login("aaron", "aaron");
+		addPostPo = new AddPostPO(service);
 	}
 	
 	@Test
@@ -45,18 +47,15 @@ public class AddThreadFromMovedPostFunctional {
 	    registerPo.register("other", "other");
 		LoginResourceReturnData loginResult = new LoginPO(service).login("other", "other");
 		// Arrange -- add thread and post 
-		AddPostResourceInput threadInput = new AddPostResourceInput("c", "s");
-		AddPostResourceReturnData threadRet = AddThreadFunctional.addThread(service, loginResult.getAuthKey(), threadInput);
-		AddPostResourceInput postInput = new AddPostResourceInput("-", "b");
-		postInput.setThreadId(threadRet.getThread().getId());
-		AddPostFunctional.addPost(service, loginResult.getAuthKey(), postInput);
+		AddPostResourceReturnData threadRet = addPostPo.add("c", "s", loginResult.getAuthKey());
+		addPostPo.add("-", "b", loginResult.getAuthKey(), threadRet.getThread().getId());
 		// Arrange -- get posts
 		ListPostsResource posts = ListPostsFunctional.listRecentPostsThreads(service);
 		assertTrue("Should have two posts, thread starter and first post", posts.getPosts().size()==2);
 		
         // Act
 		AddThreadFromPostResourceInput threadFromPostInput = new AddThreadFromPostResourceInput();
-		threadFromPostInput.setContent(postInput.getContent());
+		threadFromPostInput.setContent("b");
 		threadFromPostInput.setSubject("New subject");
 		threadFromPostInput.setPostId(posts.getPosts().get(0).getId());
 		threadFromPostInput.setUserId("other");
@@ -76,17 +75,14 @@ public class AddThreadFromMovedPostFunctional {
 	    registerPo.register("other", "other");
 		LoginResourceReturnData loginResult = new LoginPO(service).login("other", "other");
 		// Arrange -- add thread and post 
-		AddPostResourceInput threadInput = new AddPostResourceInput("c", "s");
-		AddPostResourceReturnData threadRet = AddThreadFunctional.addThread(service, loginResult.getAuthKey(), threadInput);
-		AddPostResourceInput postInput = new AddPostResourceInput("-", "b");
-		postInput.setThreadId(threadRet.getThread().getId());
-		AddPostFunctional.addPost(service, loginResult.getAuthKey(), postInput);
+		AddPostResourceReturnData threadRet = addPostPo.add("c", "s", loginResult.getAuthKey());
+		addPostPo.add("-", "b", loginResult.getAuthKey(), threadRet.getThread().getId());
 		// Arrange -- get posts
 		ListPostsResource posts = ListPostsFunctional.listRecentPostsThreads(service);
 		
         // Act
 		AddThreadFromPostResourceInput threadFromPostInput = new AddThreadFromPostResourceInput();
-		threadFromPostInput.setContent(postInput.getContent());
+		threadFromPostInput.setContent("b");
 		threadFromPostInput.setSubject("New subject");
 		threadFromPostInput.setPostId(posts.getPosts().get(0).getId());
 		threadFromPostInput.setUserId("other");

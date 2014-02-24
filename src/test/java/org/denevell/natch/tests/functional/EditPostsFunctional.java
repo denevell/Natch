@@ -15,8 +15,9 @@ import org.denevell.natch.io.posts.EditPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.tests.ui.pageobjects.LoginPO;
-import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
+import org.denevell.natch.tests.functional.pageobjects.AddPostPO;
+import org.denevell.natch.tests.functional.pageobjects.LoginPO;
+import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
@@ -34,13 +35,15 @@ public class EditPostsFunctional {
 	private ListPostsResource originallyListedPosts;
     private String authKey;
 	private RegisterPO registerPo;
+	private AddPostPO addPostPo;
 
 	@Before
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
-		// Delete all users and add one new
 		TestUtils.deleteTestDb();
 	    registerPo = new RegisterPO(service);
+	    addPostPo = new AddPostPO(service);
+
 	    registerPo.register("aaron@aaron.com", "passy");
 		loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
 	    authKey = loginResult.getAuthKey();
@@ -48,7 +51,7 @@ public class EditPostsFunctional {
 		// Add post
 		initalInput = new AddPostResourceInput("sub", "cont");
 		initalInput.setTags(Arrays.asList(new String[] {"tag1", "tag2"}));
-		AddPostFunctional.addPost(service, authKey, initalInput);
+		addPostPo.add("sub", "cont", authKey);
 		originallyListedPosts = ListPostsFunctional.listRecentPostsThreads(service);
 		// save it
 		initialPost = originallyListedPosts.getPosts().get(0);
@@ -120,10 +123,7 @@ public class EditPostsFunctional {
 		LoginResourceReturnData loginResult1 = new LoginPO(service).login("aaron1@aaron.com", "passy");
 
         // Act - Add a post as new user
-        AddPostResourceInput postInput = new AddPostResourceInput("presubadminedit", "precontadminedit");
-        postInput.setTags(Arrays.asList(new String[] {"tag1", "tag2"}));
-        AddPostFunctional.addPost(service, loginResult1.getAuthKey(), postInput);         
-        // List it
+        addPostPo.add("presubadminedit", "precontadminedit", new String[] {"tag1", "tag2"}, loginResult1.getAuthKey());
 		ListPostsResource originalPosts = ListPostsFunctional.listRecentPostsThreads(service);
 		PostResource addedPost = originalPosts.getPosts().get(0);
 		

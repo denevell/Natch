@@ -5,17 +5,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.ws.rs.core.MediaType;
-
-import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.tests.ui.pageobjects.LoginPO;
-import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
+import org.denevell.natch.tests.functional.pageobjects.AddPostPO;
+import org.denevell.natch.tests.functional.pageobjects.LoginPO;
+import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
@@ -30,6 +26,7 @@ public class AddPostFunctional {
 	private LoginResourceReturnData loginResult;
     private WebResource service;
     private String authKey;
+	private AddPostPO addPostPo;
 	
 	@Before
 	public void setup() throws Exception {
@@ -38,16 +35,13 @@ public class AddPostFunctional {
 	    new RegisterPO(service).register("aaron@aaron.com", "passy");
 		loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
 		authKey = loginResult.getAuthKey();
+		addPostPo = new AddPostPO(service);
 	}
 	
 	@Test
 	public void shouldMakePost() {
 		// Arrange 
-		List<String> tags = Arrays.asList("tag1", "tag2");
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", tags);
-		
-		// Act
-		AddPostResourceReturnData returnData = addPost(service, authKey, input); 
+		AddPostResourceReturnData returnData = addPostPo.add("sub", "cont", new String[] {"tag1", "tag2"}, authKey);
 		
 		// Assert
 		assertEquals("", returnData.getError());
@@ -57,10 +51,8 @@ public class AddPostFunctional {
 
 	@Test public void shouldMakePostWithSameContentAndSubject() {
 		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		
-		AddPostResourceReturnData returnData = addPost(service, authKey, input); 
-		AddPostResourceReturnData returnData1 = addPost(service, authKey, input); 
+		AddPostResourceReturnData returnData = addPostPo.add("sub", "cont", new String[] {"tag1", "tag2"}, authKey);
+		AddPostResourceReturnData returnData1 = addPostPo.add("sub", "cont", new String[] {"tag1", "tag2"}, authKey);
 		
 		// Assert
 		assertEquals("", returnData.getError());
@@ -72,8 +64,7 @@ public class AddPostFunctional {
 	@Test 
 	public void shouldMakePostWithLongPost() {
 		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", 
-				"Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
+		String largeContent = "Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
 				"sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." +
 				"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
 				"ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit" +
@@ -88,10 +79,10 @@ public class AddPostFunctional {
 				"magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut " +
 				"aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit " +
 				"esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, " +
-				"sunt in culpa qui officia deserunt mollit anim id est laborum.");
+				"sunt in culpa qui officia deserunt mollit anim id est laborum.";
 		
-		AddPostResourceReturnData returnData = addPost(service, authKey, input); 
-		AddPostResourceReturnData returnData1 = addPost(service, authKey, input); 
+		AddPostResourceReturnData returnData = addPostPo.add("sub", largeContent, new String[] {"tag1", "tag2"}, authKey);
+		AddPostResourceReturnData returnData1 = addPostPo.add("sub", largeContent, new String[] {"tag1", "tag2"}, authKey);
 		
 		// Assert
 		assertEquals("", returnData.getError());
@@ -102,12 +93,8 @@ public class AddPostFunctional {
 	
 	@Test
 	public void shouldSeeErrorOnUnAuthorised() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		
-		// Act
 		try {
-		    addPost(service, authKey+"BAD", input); 
+			addPostPo.add("sub", "cont", new String[] {"tag1", "tag2"}, authKey+"BAD");
 		} catch(UniformInterfaceException e) {
 			// Assert
 			assertEquals(401, e.getResponse().getClientResponseStatus().getStatusCode());
@@ -118,10 +105,8 @@ public class AddPostFunctional {
 	
 	@Test
 	public void shouldSeeErrorOnBlankContent() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", " ");
-		
-		AddPostResourceReturnData returnData = addPost(service, authKey, input); 
+		// Arrange / Act
+		AddPostResourceReturnData returnData = addPostPo.add("sub", " ", authKey);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
@@ -130,10 +115,8 @@ public class AddPostFunctional {
 	
 	@Test
 	public void shouldSeeErrorOnBlanks() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput(" ", " ");
-		
-		AddPostResourceReturnData returnData = addPost(service, authKey, input); 
+		// Arrange / Act
+		AddPostResourceReturnData returnData = addPostPo.add(" ", " ", authKey);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
@@ -143,23 +126,11 @@ public class AddPostFunctional {
 	@Test
 	public void shouldSeeErrorOnNulls() {
 		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput(null,null);
-		
-		AddPostResourceReturnData returnData = addPost(service, authKey, input); 
+		AddPostResourceReturnData returnData = addPostPo.add(null, null, authKey);
 		
 		// Assert
 		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
 		assertFalse(returnData.isSuccessful());
 	}
-	
-    public static AddPostResourceReturnData addPost(WebResource service, String authKey, AddPostResourceInput input)  {
-        AddPostResourceReturnData returnData = 
-		service
-		.path("rest").path("post").path("add")
-		.header("AuthKey", authKey)
-		.type(MediaType.APPLICATION_JSON)
-		.put(AddPostResourceReturnData.class, input);
-        return returnData;
-    }
 	
 }

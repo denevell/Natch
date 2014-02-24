@@ -6,8 +6,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.LogoutResourceReturnData;
-import org.denevell.natch.tests.ui.pageobjects.LoginPO;
-import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
+import org.denevell.natch.tests.functional.pageobjects.LoginPO;
+import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;

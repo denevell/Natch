@@ -4,16 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.threads.ThreadResource;
 import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.tests.ui.pageobjects.LoginPO;
-import org.denevell.natch.tests.ui.pageobjects.RegisterPO;
+import org.denevell.natch.tests.functional.pageobjects.AddPostPO;
+import org.denevell.natch.tests.functional.pageobjects.LoginPO;
+import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +22,7 @@ public class ListPostsFunctional {
 	private LoginResourceReturnData loginResult;
 	private WebResource service;
 	private WebResource listThread;
+	private AddPostPO addPostPo;
 
 	@Before
 	public void setup() throws Exception {
@@ -35,20 +32,15 @@ public class ListPostsFunctional {
 	    new RegisterPO(service).register("aaron@aaron.com", "passy");
 		listThread = service.path("rest").path("post").path("thread");
 		loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
+	    addPostPo = new AddPostPO(service);
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void shouldListByCreationDate() {
 		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		List asList = Arrays.asList(new String[] {"tagy", "tagy1"});
-		input.setTags(asList);
-		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1");
-		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2");
-		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input);
-		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input1);
-		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input2);
+		addPostPo.add("sub", "cont", new String[] {"tagy", "tagy1"}, loginResult.getAuthKey());
+		addPostPo.add("sub1", "cont1", loginResult.getAuthKey());
+		addPostPo.add("sub2", "cont2", loginResult.getAuthKey());
 		
 		// Act
 		ListPostsResource returnData = listRecentPostsThreads(service); 
@@ -70,12 +62,9 @@ public class ListPostsFunctional {
 	@Test
 	public void shouldListByCreationDateWithLimit() {
 		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1");
-		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2");
-		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input);
-		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input1);
-		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input2);
+		addPostPo.add("sub", "cont", loginResult.getAuthKey());
+		addPostPo.add("sub1", "cont1", loginResult.getAuthKey());
+		addPostPo.add("sub2", "cont2", loginResult.getAuthKey());
 		
 		// Act
 		ListPostsResource returnData = service
@@ -92,12 +81,9 @@ public class ListPostsFunctional {
 	@Test
 	public void shouldHtmlEscapeSubjectContentTags() {
 		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("<hi>", "<there>");
-		@SuppressWarnings("serial")
-		ArrayList<String> tags = new ArrayList<String>(){{ add("<again>"); add("<hmm>"); }};
-		input.setTags(tags);
-		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input);
+		addPostPo.add("<hi>", "<there>", new String[] {"<again>", "<hmm>"}, loginResult.getAuthKey());
 		
+		// Act
 		ListPostsResource returnData = listRecentPostsThreads(service); 		
 		
 		// Assert
@@ -109,8 +95,7 @@ public class ListPostsFunctional {
 	@Test
 	public void shouldListByModificationDateWithNonSpecifiedThreadId() {
 		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input);
+		addPostPo.add("sub", "cont", loginResult.getAuthKey());
 		
 		ListPostsResource returnData = listRecentPostsThreads(service); 
 		
@@ -121,9 +106,7 @@ public class ListPostsFunctional {
 	@Test
 	public void shouldListByModificationDateWithSpecifiedThreadId() {
 		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		input.setThreadId("threadId");
-		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input);
+		addPostPo.add("sub", "cont", loginResult.getAuthKey(), "threadId");
 		
 		ListPostsResource returnData = listRecentPostsThreads(service); 
 		
@@ -134,12 +117,9 @@ public class ListPostsFunctional {
 	@Test
 	public void shouldPostsListByThreadId() {
 		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
-		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
-		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
-		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input);
-		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input1);
-		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input2);
+		addPostPo.add("sub", "cont", loginResult.getAuthKey(), "t");
+		addPostPo.add("sub1", "cont1", loginResult.getAuthKey(), "other");
+		addPostPo.add("sub2", "cont2", loginResult.getAuthKey(), "t");
 		
 		// Act
 		ThreadResource returnData = listThread.path("t").path("0").path("20")
@@ -161,15 +141,9 @@ public class ListPostsFunctional {
 	@Test
 	public void shouldListPostsByThreadIdWithLimit() {
 		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
-		@SuppressWarnings("serial")
-		ArrayList<String> tags = new ArrayList<String>(){{ add("again"); add("blar"); }};
-		input.setTags(tags);
-		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
-		AddPostResourceInput input2 = new AddPostResourceInput("rubbish", "cont2", "t");
-		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input);
-		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input1);
-		AddPostFunctional.addPost(service, loginResult.getAuthKey(), input2);
+		addPostPo.add("sub", "cont", new String[] {"again", "blar"}, loginResult.getAuthKey(), "t");
+		addPostPo.add("sub1", "cont1", loginResult.getAuthKey(), "other");
+		addPostPo.add("rubbish", "cont2", loginResult.getAuthKey(), "t");
 		
 		// Act
 		ThreadResource returnData = listThread.path("t").path("1").path("1")

@@ -1,4 +1,4 @@
-package org.denevell.natch.tests.ui.pageobjects;
+package org.denevell.natch.tests.functional.pageobjects;
 
 import javax.ws.rs.core.MediaType;
 
