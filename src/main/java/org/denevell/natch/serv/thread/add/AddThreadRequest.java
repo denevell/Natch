@@ -2,6 +2,10 @@ package org.denevell.natch.serv.thread.add;
 
 import java.util.ResourceBundle;
 
+import com.google.android.gcm.server.Message;
+import com.google.android.gcm.server.Result;
+import com.google.android.gcm.server.Sender;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +17,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
@@ -94,11 +99,32 @@ public class AddThreadRequest {
 			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 			regReturnData.setSuccessful(false);
 			ThreadEntity thread = mModel.addPost(userEntity, input);
+			sendPushNotifications(thread);
 			generateAddPostReturnResource(regReturnData, thread);
 			return regReturnData;
 		} finally {
 			mModel.close();
 		}
+	}
+
+	private void sendPushNotifications(final ThreadEntity thread) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {	
+		       String id = "APA91bEObg_VIOvtTZpd2O_HPZBJq-qjB8uK_8hZ3Tn5sDZqv9EiBlvd44RQjFTcnopeEl3W09-JwrO3K7nnwPPsPopZrPMmDB0K2iHvFd-uH592B3HenoQncBpDdWOWZ1vOFF_6rCuQPNQHzNZV1ozgIYzZcbv_-A2WI0HYOd0njFFWkiMojzs";
+		       String key = "AIzaSyDa1_2hWr2uH7VTEUf95rN7uev3Z5AJGi0";
+		       Sender sender = new Sender(key);
+		       String registrationId = id;
+		       try {
+		    	   String s = new ObjectMapper().writeValueAsString(thread);
+		    	   Message message = new Message.Builder().addData("thread", s).build();
+		    	   Result result = sender.send(message, registrationId, 5);
+		    	   Log.info(AddThreadRequest.class, "Push send result: " + result);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			}
+		}).start();
 	}
 
 	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, ThreadEntity thread) {

@@ -2,11 +2,9 @@ package org.denevell.natch.tests.functional.pageobjects;
 
 import javax.ws.rs.core.MediaType;
 
-import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.threads.AddThreadFromPostResourceInput;
 
-import com.google.common.collect.Lists;
 import com.sun.jersey.api.client.WebResource;
 
 public class AddThreadFromPostPO {
