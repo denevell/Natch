@@ -14,12 +14,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
+import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.io.threads.ListThreadsResource;
 import org.denevell.natch.utils.Log;
-
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
 
 @Path("threads")
 public class ListThreadsRequest {
@@ -28,51 +26,34 @@ public class ListThreadsRequest {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-	private ThreadModel mModel;
+	private CallDbBuilder<ThreadEntity> mModel;
 	
 	public ListThreadsRequest() {
-		mModel = new ThreadModel();
+		mModel = new CallDbBuilder<ThreadEntity>();
 	}
 	
 	/**
 	 * For DI testing.
-	 * @param editPostAdapter 
 	 */
-	public ListThreadsRequest(ThreadModel postModel, HttpServletRequest request, HttpServletResponse response) {
+	public ListThreadsRequest(CallDbBuilder<ThreadEntity> postModel, HttpServletRequest request, HttpServletResponse response) {
 		mModel = postModel;
 		mRequest = request;
 		mResponse = response;
 	}
-	
+
 	@GET
 	@Path("/{start}/{limit}")
 	@Produces(MediaType.APPLICATION_JSON)	
-	@ApiOperation(value = "Lists threads, mostly recently created first", responseClass="org.denevell.natch.serv.posts.resources.ListPostsResource")
 	public ListThreadsResource listThreads(
-		@ApiParam(name="start") @PathParam("start") int start, 	
-		@ApiParam(name="limit") @PathParam("limit") int limit 	
+		@PathParam("start") int start, 	
+		@PathParam("limit") int limit 	
 			) throws IOException {
-		List<ThreadEntity> threads = null;
-		long num = -1;
-		try {
-			mModel.init();
-			threads = mModel.listThreads(start, limit);
-			num = mModel.getNumOfPosts();
-		} catch(Exception e) {
-			Log.info(getClass(), "Couldn't list posts: " + e.toString());
-			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
-			return null;
-		} finally {
-			mModel.close();
-		}
-		if(threads==null) {
-			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
-			return null;
-		} else {
-			ListThreadsResource adaptedPosts = new ListThreadsResourceAdapter(threads);
-			adaptedPosts.setNumOfThreads(num);
-			return adaptedPosts;
-		}
+		return listThreads(
+				null, 
+				start, 
+				limit, 
+				ThreadEntity.NAMED_QUERY_LIST_THREADS,
+				ThreadEntity.NAMED_QUERY_COUNT_THREADS);
 	}	
 	
 	@GET
@@ -83,19 +64,40 @@ public class ListThreadsRequest {
 			@PathParam("start") int start, 	
 			@PathParam("limit") int limit 	
 			) throws IOException {
+		return listThreads(
+				tag, 
+				start, 
+				limit, 
+				ThreadEntity.NAMED_QUERY_LIST_THREADS_BY_TAG,
+				ThreadEntity.NAMED_QUERY_COUNT_THREAD_BY_TAG);
+	}
+
+	private ListThreadsResource listThreads(
+			String tag, 
+			int start, 
+			int limit,
+			String listQuery,
+			String countQuery)
+			throws IOException {
 		List<ThreadEntity> threads = null;
 		long num = -1;
 		try {
-			mModel.init();
-			threads = mModel.listThreadsByTag(tag, start, limit);
-			num = mModel.getNumOfPosts(tag);
+			if(tag!=null) {
+				mModel = mModel.queryParam("tag", tag);
+			}
+			threads = mModel
+					.start(start)
+					.max(limit)
+					.namedQuery(listQuery)
+					.list(ThreadEntity.class);
+			num = mModel
+					.namedQuery(countQuery)
+					.count(ThreadEntity.class);
 		} catch(Exception e) {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
-		} finally {
-			mModel.close();
-		}
+		} 
 		if(threads==null) {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
@@ -103,7 +105,7 @@ public class ListThreadsRequest {
 			ListThreadsResource adaptedPosts = new ListThreadsResourceAdapter(threads);
 			adaptedPosts.setNumOfThreads(num);
 			return adaptedPosts;
-		}		
+		}
 	}	
 
 }

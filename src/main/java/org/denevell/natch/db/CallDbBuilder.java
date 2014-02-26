@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.denevell.natch.utils.EntityUtils;
@@ -44,38 +45,62 @@ public class CallDbBuilder<ListItem> {
 	}
 	
 	public List<ListItem> list(Class<ListItem> clazz) {
-		EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
-		mEntityManager = factory.createEntityManager();   		
+		try {
+			EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
+			mEntityManager = factory.createEntityManager();   		
 
-	    TypedQuery<ListItem> nq = mEntityManager.createNamedQuery(mNamedQuery, clazz);
-	    for (Entry<String, Object> qp: mQueryParams.entrySet()) {
-	    	nq.setParameter(qp.getKey(), qp.getValue());
+			TypedQuery<ListItem> nq = mEntityManager.createNamedQuery(mNamedQuery, clazz);
+			for (Entry<String, Object> qp: mQueryParams.entrySet()) {
+				nq.setParameter(qp.getKey(), qp.getValue());
+			}
+			if(mFirstResult<0) mFirstResult=0; if(mMaxResults<0) mMaxResults=0;
+			if(mFirstResult!=-1) {
+				nq.setFirstResult(mFirstResult);
+			}
+			if(mMaxResults!=-1) {
+				nq.setMaxResults(mMaxResults);
+			}
+			List<ListItem> rl = nq.getResultList();
+			if(rl==null) return new ArrayList<ListItem>();
+			return rl;
+			//if(limit < resultList.size() && resultList.size()>0) resultList.remove(resultList.size()-1); // For some reason we're returning two records on 1 as max results.
+		} finally {
+			EntityUtils.closeEntityConnection(mEntityManager);
 		}
-		if(mFirstResult<0) mFirstResult=0; if(mMaxResults<0) mMaxResults=0;
-	    if(mFirstResult!=-1) {
-	    	nq.setFirstResult(mFirstResult);
-	    }
-	    if(mMaxResults!=-1) {
-	    	nq.setMaxResults(mMaxResults);
-	    }
-	    List<ListItem> rl = nq.getResultList();
-		if(rl==null) return new ArrayList<ListItem>();
-		EntityUtils.closeEntityConnection(mEntityManager);
-		return rl;
-		//if(limit < resultList.size() && resultList.size()>0) resultList.remove(resultList.size()-1); // For some reason we're returning two records on 1 as max results.
 	}
 
 	public ListItem single(Class<ListItem> clazz) {
-		EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
-		mEntityManager = factory.createEntityManager();   		
+		try {
+			EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
+			mEntityManager = factory.createEntityManager();   		
 
-	    TypedQuery<ListItem> nq = mEntityManager.createNamedQuery(mNamedQuery, clazz);
-	    for (Entry<String, Object> qp: mQueryParams.entrySet()) {
-	    	nq.setParameter(qp.getKey(), qp.getValue());
+			TypedQuery<ListItem> nq = mEntityManager.createNamedQuery(mNamedQuery, clazz);
+			for (Entry<String, Object> qp: mQueryParams.entrySet()) {
+				nq.setParameter(qp.getKey(), qp.getValue());
+			}
+			List<ListItem> rl = nq.getResultList();
+			if(rl==null || rl.size()==0) return null;
+			else return rl.get(0);
+		} finally {
+			EntityUtils.closeEntityConnection(mEntityManager);
 		}
-	    List<ListItem> rl = nq.getResultList();
-	    if(rl==null || rl.size()==0) return null;
-	    else return rl.get(0);
+	}
+	
+	public long count(Class<ListItem> clazz) {
+		try {
+			EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
+			mEntityManager = factory.createEntityManager();   		
+
+			Query q = (Query) mEntityManager.createNamedQuery(mNamedQuery);
+			for (Entry<String, Object> entry : mQueryParams.entrySet()) {
+				q.setParameter(entry.getKey(), entry.getValue());
+			}
+		
+			long countResult= (Long) q.getSingleResult();				
+			return countResult;
+		} finally {
+			EntityUtils.closeEntityConnection(mEntityManager);
+		}
 	}
 	
 }
