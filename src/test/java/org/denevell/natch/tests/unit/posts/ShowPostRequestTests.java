@@ -17,7 +17,7 @@ import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.PostResource;
-import org.denevell.natch.serv.post.show.SinglePostRequest;
+import org.denevell.natch.serv.post.SinglePostRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;

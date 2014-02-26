@@ -18,7 +18,7 @@ import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.EditPostResource;
 import org.denevell.natch.io.posts.EditPostResourceReturnData;
-import org.denevell.natch.serv.thread.edit.EditThreadRequest;
+import org.denevell.natch.serv.thread.EditThreadRequest;
 import org.denevell.natch.utils.Strings;
 
 @Path("post/editpost")

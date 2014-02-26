@@ -17,7 +17,7 @@ import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.threads.ListThreadsResource;
-import org.denevell.natch.serv.threads.list.ListThreadsRequest;
+import org.denevell.natch.serv.thread.ListThreadsRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;

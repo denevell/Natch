@@ -1,4 +1,4 @@
-package org.denevell.natch.serv.post.show;
+package org.denevell.natch.serv.post;
 
 import java.io.IOException;
 

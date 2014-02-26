@@ -1,4 +1,4 @@
-package org.denevell.natch.serv.users.list;
+package org.denevell.natch.serv.users;
 
 import java.io.IOException;
 import java.util.List;

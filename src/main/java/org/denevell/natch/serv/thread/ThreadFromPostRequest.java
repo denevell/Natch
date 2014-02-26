@@ -1,4 +1,4 @@
-package org.denevell.natch.serv.thread.from_post;
+package org.denevell.natch.serv.thread;
 
 import java.io.IOException;
 import java.util.ResourceBundle;

@@ -1,4 +1,4 @@
-package org.denevell.natch.serv.thread.edit;
+package org.denevell.natch.serv.thread;
 
 import java.util.ResourceBundle;
 
