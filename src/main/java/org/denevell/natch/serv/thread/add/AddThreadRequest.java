@@ -2,10 +2,6 @@ package org.denevell.natch.serv.thread.add;
 
 import java.util.ResourceBundle;
 
-import com.google.android.gcm.server.Message;
-import com.google.android.gcm.server.Result;
-import com.google.android.gcm.server.Sender;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,12 +20,16 @@ import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
+import org.denevell.natch.io.threads.CutDownThreadResource;
 import org.denevell.natch.serv.post.add.AddPostModel;
 import org.denevell.natch.serv.post.add.AddPostRequest;
 import org.denevell.natch.serv.post.edit.EditPostModel;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
+import com.google.android.gcm.server.Message;
+import com.google.android.gcm.server.Result;
+import com.google.android.gcm.server.Sender;
 import com.wordnik.swagger.annotations.ApiError;
 import com.wordnik.swagger.annotations.ApiErrors;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -116,11 +116,12 @@ public class AddThreadRequest {
 		       Sender sender = new Sender(key);
 		       String registrationId = id;
 		       try {
-		    	   String s = new ObjectMapper().writeValueAsString(thread);
+		    	   String s = new ObjectMapper().writeValueAsString(new CutDownThreadResource(thread.getThread()));
 		    	   Message message = new Message.Builder().addData("thread", s).build();
 		    	   Result result = sender.send(message, registrationId, 5);
 		    	   Log.info(AddThreadRequest.class, "Push send result: " + result);
 			} catch (Exception e) {
+				Log.info(AddThreadRequest.class, "Error sending push message: " + e.getMessage());
 				e.printStackTrace();
 			}
 			}
