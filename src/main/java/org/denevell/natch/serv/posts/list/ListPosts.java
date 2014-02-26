@@ -14,6 +14,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
+import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.utils.Log;
@@ -26,18 +27,18 @@ public class ListPosts {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-	private ListPostsModel mModel;
+	private CallDbBuilder<PostEntity> mModel;
 	
 	public ListPosts() {
-		mModel = new ListPostsModel();
+		mModel = new CallDbBuilder<PostEntity>();
 	}
 	
 	/**
 	 * For DI testing.
 	 * @param editPostAdapter 
 	 */
-	public ListPosts(ListPostsModel postModel, HttpServletRequest request, HttpServletResponse response) {
-		mModel = postModel;
+	public ListPosts(CallDbBuilder<PostEntity> model, HttpServletRequest request, HttpServletResponse response) {
+		mModel = model;
 		mRequest = request;
 		mResponse = response;
 	}
@@ -51,15 +52,17 @@ public class ListPosts {
 			) throws IOException {
 		List<PostEntity> posts = null;
 		try {
-			mModel.init();
-			posts = mModel.listByModificationDate(start, limit);
+			posts = mModel
+				.start(start)
+				.max(limit)
+				.namedQuery(PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE)
+				.list(PostEntity.class);
 		} catch(Exception e) {
-			Log.info(getClass(), "Couldn't list posts: " + e.toString());
+			Log.error(getClass(), "Couldn't list posts: ", e);
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
-		} finally {
-			mModel.close();
-		}
+		} 
+
 		if(posts==null) {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;

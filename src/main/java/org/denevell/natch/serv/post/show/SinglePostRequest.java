@@ -13,10 +13,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
+import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.io.posts.PostResource;
-import org.denevell.natch.serv.thread.list.ListThreadModel;
 import org.denevell.natch.utils.Log;
 
 @Path("post/single")
@@ -26,19 +26,23 @@ public class SinglePostRequest {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-	private ShowPostModel mModel;
-	private ListThreadModel mListThreadModel;
+	private CallDbBuilder<PostEntity> mModel;
+	private CallDbBuilder<ThreadEntity> mListThreadModel;
 	
 	public SinglePostRequest() {
-		mModel = new ShowPostModel();
+		mModel = new CallDbBuilder<PostEntity>() 
+				.namedQuery(PostEntity.NAMED_QUERY_FIND_BY_THREADID);
+
+		mListThreadModel = new CallDbBuilder<ThreadEntity>()
+				.namedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID);
 	}
 	
 	/**
 	 * For DI testing.
 	 * @param editPostAdapter 
 	 */
-	public SinglePostRequest(ShowPostModel postModel,
-			ListThreadModel threadModel,
+	public SinglePostRequest(CallDbBuilder<PostEntity> postModel,
+			CallDbBuilder<ThreadEntity> threadModel,
 			HttpServletRequest request, HttpServletResponse response) {
 		mModel = postModel;
 		mRequest = request;
@@ -54,14 +58,17 @@ public class SinglePostRequest {
 		PostEntity post = null;
 		ThreadEntity thread = null;
 		try {
-			mModel.init();
-			if(mListThreadModel==null) mListThreadModel = new ListThreadModel(mModel.mEntityManager);
-			post = mModel.findPostById(postId);
+			post = mModel
+				.namedQuery(PostEntity.NAMED_QUERY_FIND_BY_ID)
+				.queryParam("id", postId)
+				.single(PostEntity.class);
 			if(post==null) {
 				mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
 				return null;
 			} else {
-				thread = mListThreadModel.findThreadById(post.getThreadId());
+				thread = mListThreadModel
+						.queryParam("id", post.getThreadId())
+						.single(ThreadEntity.class);		
 				PostResource postResource = new PostResource(post.getUser().getUsername(), 
 						post.getCreated(), 
 						post.getModified(), 
@@ -77,9 +84,7 @@ public class SinglePostRequest {
 			Log.info(getClass(), "Couldn't find post: " + e.toString());
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
 			return null;
-		} finally {
-			mModel.close();
-		}
+		} 
 	}	
 
 }

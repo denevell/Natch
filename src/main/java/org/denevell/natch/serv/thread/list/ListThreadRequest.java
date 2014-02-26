@@ -15,6 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
+import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.io.posts.PostResource;
@@ -27,18 +28,24 @@ public class ListThreadRequest {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-	private ListThreadModel mModel;
+	private CallDbBuilder<PostEntity> mModel;
+	private CallDbBuilder<ThreadEntity> mThreadModel;
 	
 	public ListThreadRequest() {
-		mModel = new ListThreadModel();
+		mModel = new CallDbBuilder<PostEntity>();
+		mThreadModel = new CallDbBuilder<ThreadEntity>();
 	}
 	
 	/**
 	 * For DI testing.
 	 * @param editPostAdapter 
 	 */
-	public ListThreadRequest(ListThreadModel postModel, HttpServletRequest request, HttpServletResponse response) {
+	public ListThreadRequest(
+			CallDbBuilder<PostEntity> postModel, 
+			CallDbBuilder<ThreadEntity> threadModel,
+			HttpServletRequest request, HttpServletResponse response) {
 		mModel = postModel;
+		mThreadModel = threadModel;
 		mRequest = request;
 		mResponse = response;
 	}
@@ -54,19 +61,27 @@ public class ListThreadRequest {
 		ThreadEntity thread= null;
 		String username = null;
 		List<String> tags = null;
-		try {
-			mModel.init();
-			posts = mModel.listByThreadId(threadId, start, limit);
-			if(posts!=null) thread = mModel.findThreadById(threadId);
+
+			posts = mModel
+					.start(start)
+					.max(limit)
+					.namedQuery(PostEntity.NAMED_QUERY_FIND_BY_THREADID)
+					.queryParam("threadId", threadId)
+					.list(PostEntity.class);
+
+			if(posts!=null)  {
+				thread = mThreadModel 
+					.namedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID)
+					.queryParam("id", threadId)
+					.single(ThreadEntity.class);
+			}
 			if(thread!=null) username = thread.getRootPost().getUser().getUsername();
 			if(thread!=null) tags= thread.getRootPost().getTags();
 			if(thread==null) {
 				mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
 				return null;
 			}
-		} finally {
-			mModel.close();
-		}
+
 		if(posts!=null && posts.size()==0) {
 			mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return null;

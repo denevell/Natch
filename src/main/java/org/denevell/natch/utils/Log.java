@@ -24,4 +24,8 @@ public class Log {
 	public static void info(@SuppressWarnings("rawtypes") Class c, String s) {
 		Logger.getLogger(c).info(s);
 	}
+
+	public static void error(@SuppressWarnings("rawtypes") Class c, String s, Exception e) {
+		Logger.getLogger(c).error(s, e);
+	}
 }

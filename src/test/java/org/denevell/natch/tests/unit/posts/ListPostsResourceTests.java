@@ -12,14 +12,13 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.threads.ThreadResource;
 import org.denevell.natch.serv.posts.list.ListPosts;
-import org.denevell.natch.serv.posts.list.ListPostsModel;
-import org.denevell.natch.serv.thread.list.ListThreadModel;
 import org.denevell.natch.serv.thread.list.ListThreadRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
@@ -29,15 +28,19 @@ import scala.actors.threadpool.Arrays;
 
 public class ListPostsResourceTests {
 	
-	private ListPostsModel postsModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private ListPosts resourceList;
+	private CallDbBuilder<PostEntity> postsModel;
 
+	@SuppressWarnings("unchecked")
 	@Before
 	public void setup() {
-		postsModel = mock(ListPostsModel.class);
+		postsModel = mock(CallDbBuilder.class);
+		when(postsModel.max(0)).thenReturn(postsModel);
+		when(postsModel.start(0)).thenReturn(postsModel);
+		when(postsModel.namedQuery(PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE)).thenReturn(postsModel);
 		response = mock(HttpServletResponse.class);
 		request = mock(HttpServletRequest.class);
 		resourceList = new ListPosts(postsModel, request, response);
@@ -53,10 +56,10 @@ public class ListPostsResourceTests {
 		postEntity.setId(400);
 		posts.add(postEntity);
 		posts.add(new PostEntity(new UserEntity("u2", ""), 2, 2, "s2", "c2", null));
-		when(postsModel.listByModificationDate(0, 10)).thenReturn(posts);
+		when(postsModel.list(PostEntity.class)).thenReturn(posts);
 		
 		// Act
-		ListPostsResource result = resourceList.listByModificationDate(0, 10);
+		ListPostsResource result = resourceList.listByModificationDate(0, 0);
 		
 		// Assert
 		assertEquals(2, result.getPosts().size());
@@ -78,10 +81,10 @@ public class ListPostsResourceTests {
 	public void shouldListZeroPosts() throws IOException {
 		// Arrange
 		List<PostEntity> posts = new ArrayList<PostEntity>();
-		when(postsModel.listByModificationDate(0, 10)).thenReturn(posts);
+		when(postsModel.list(PostEntity.class)).thenReturn(posts);
 		
 		// Act
-		ListPostsResource result = resourceList.listByModificationDate(0, 10);
+		ListPostsResource result = resourceList.listByModificationDate(0, 0);
 		
 		// Assert
 		assertEquals(0, result.getPosts().size());
@@ -94,10 +97,10 @@ public class ListPostsResourceTests {
 		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", "threadId");
 		postEntity.setId(400);
 		posts.add(postEntity);
-		when(postsModel.listByModificationDate(0, 10)).thenReturn(posts);
+		when(postsModel.list(PostEntity.class)).thenReturn(posts);
 		
 		// Act
-		ListPostsResource result = resourceList.listByModificationDate(0, 10);
+		ListPostsResource result = resourceList.listByModificationDate(0, 0);
 		
 		// Assert
 		assertEquals("threadId", result.getPosts().get(0).getThreadId());
@@ -114,13 +117,18 @@ public class ListPostsResourceTests {
 		posts.add(new PostEntity(new UserEntity("u2", ""), 2, 2, "s2", "c2", "t"));
 		ThreadEntity thread = new ThreadEntity(postEntity, posts);
 		thread.setNumPosts(5);
-		ListThreadModel model = mock(ListThreadModel.class);
-		when(model.listByThreadId("t", 0, 10)).thenReturn(posts);
-		when(model.findThreadById("t")).thenReturn(thread);
 		
+		@SuppressWarnings("unchecked")
+		CallDbBuilder<ThreadEntity> threadModel = mock(CallDbBuilder.class);
+		when(threadModel.max(0)).thenReturn(threadModel);
+		when(threadModel.start(0)).thenReturn(threadModel);
+		when(threadModel.queryParam("id", "t")).thenReturn(threadModel);
+		when(threadModel.namedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID)).thenReturn(threadModel);
+		when(threadModel.single(ThreadEntity.class)).thenReturn(thread);
+
 		// Act
-		ListThreadRequest res = new ListThreadRequest(model, request, response);
-		ThreadResource result = res.listByThreadId("t", 0, 10);
+		ListThreadRequest res = new ListThreadRequest(postsModel, threadModel, request, response);
+		ThreadResource result = res.listByThreadId("t", 0, 0);
 		
 		// Assert
 		assertEquals(2, result.getPosts().size());
