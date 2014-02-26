@@ -99,19 +99,19 @@ public class AddThreadRequest {
 			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 			regReturnData.setSuccessful(false);
 			ThreadEntity thread = mModel.addPost(userEntity, input);
-			sendPushNotifications(thread);
 			generateAddPostReturnResource(regReturnData, thread);
+			sendPushNotifications(regReturnData);
 			return regReturnData;
 		} finally {
 			mModel.close();
 		}
 	}
 
-	private void sendPushNotifications(final ThreadEntity thread) {
+	private void sendPushNotifications(final AddPostResourceReturnData thread) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {	
-		       String id = "APA91bEObg_VIOvtTZpd2O_HPZBJq-qjB8uK_8hZ3Tn5sDZqv9EiBlvd44RQjFTcnopeEl3W09-JwrO3K7nnwPPsPopZrPMmDB0K2iHvFd-uH592B3HenoQncBpDdWOWZ1vOFF_6rCuQPNQHzNZV1ozgIYzZcbv_-A2WI0HYOd0njFFWkiMojzs";
+		       String id = "APA91bHxWB0Ss1Xv_22Y7Vxa4Qt4Ppi2fqLi532t5tBk0MI6uVLKClVTE9TP4qpcSjznUOPw3byMn2sJnVP8JPcrruWtg3FJ5X-25dKIS5FS-cz9jfvMmgy28d_ECfaEVw0uq3MRAp5X-g_grzfZux-5G-Kqph6qIQCbCHiMQ7jE8ckQcwCeslQ";
 		       String key = "AIzaSyDa1_2hWr2uH7VTEUf95rN7uev3Z5AJGi0";
 		       Sender sender = new Sender(key);
 		       String registrationId = id;
