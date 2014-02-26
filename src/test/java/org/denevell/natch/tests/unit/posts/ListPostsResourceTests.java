@@ -126,8 +126,16 @@ public class ListPostsResourceTests {
 		when(threadModel.namedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID)).thenReturn(threadModel);
 		when(threadModel.single(ThreadEntity.class)).thenReturn(thread);
 
+		@SuppressWarnings("unchecked")
+		CallDbBuilder<PostEntity> newPostsModel = mock(CallDbBuilder.class);
+		when(newPostsModel.max(0)).thenReturn(newPostsModel);
+		when(newPostsModel.start(0)).thenReturn(newPostsModel);
+		when(newPostsModel.queryParam("threadId", "t")).thenReturn(newPostsModel);
+		when(newPostsModel.namedQuery(PostEntity.NAMED_QUERY_FIND_BY_THREADID)).thenReturn(newPostsModel);
+		when(newPostsModel.list(PostEntity.class)).thenReturn(posts);
+
 		// Act
-		ListThreadRequest res = new ListThreadRequest(postsModel, threadModel, request, response);
+		ListThreadRequest res = new ListThreadRequest(newPostsModel, threadModel, request, response);
 		ThreadResource result = res.listByThreadId("t", 0, 0);
 		
 		// Assert

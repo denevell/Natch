@@ -30,11 +30,9 @@ public class SinglePostRequest {
 	private CallDbBuilder<ThreadEntity> mListThreadModel;
 	
 	public SinglePostRequest() {
-		mModel = new CallDbBuilder<PostEntity>() 
-				.namedQuery(PostEntity.NAMED_QUERY_FIND_BY_THREADID);
+		mModel = new CallDbBuilder<PostEntity>();
 
-		mListThreadModel = new CallDbBuilder<ThreadEntity>()
-				.namedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID);
+		mListThreadModel = new CallDbBuilder<ThreadEntity>();
 	}
 	
 	/**
@@ -67,6 +65,7 @@ public class SinglePostRequest {
 				return null;
 			} else {
 				thread = mListThreadModel
+						.namedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID)
 						.queryParam("id", post.getThreadId())
 						.single(ThreadEntity.class);		
 				PostResource postResource = new PostResource(post.getUser().getUsername(), 
