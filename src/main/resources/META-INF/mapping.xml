@@ -5,6 +5,18 @@
 http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
     version="2.0">
 
+    <entity class="org.denevell.natch.db.entities.PushEntity"> 
+       <table name="PushIds" />
+	   <named-query name="listIds">
+	       <query>select p from PushEntity p</query>
+	   </named-query>       
+       <attributes>
+            <id name="clientId">
+	           <column name="client_id" nullable="false" length="500" />
+            </id>
+       </attributes>
+    </entity>    
+
     <entity class="org.denevell.natch.db.entities.UserEntity"> 
        <table name="UserEntity" />
 	   <named-query name="findWithUsernamePassword">

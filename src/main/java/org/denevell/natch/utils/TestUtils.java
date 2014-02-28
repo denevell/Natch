@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.db.entities.PersistenceInfo;
 import org.denevell.natch.db.entities.PostEntity;
+import org.denevell.natch.db.entities.PushEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.users.LoginResourceInput;
@@ -48,6 +49,10 @@ public class TestUtils {
 			}
 			List<UserEntity> resultU = mEntityManager.createQuery("select a from UserEntity a", UserEntity.class).getResultList();
 			for (UserEntity postEntity : resultU) {
+				mEntityManager.remove(postEntity);
+			}
+			List<PushEntity> resultP = mEntityManager.createQuery("select a from PushEntity a", PushEntity.class).getResultList();
+			for (PushEntity postEntity : resultP) {
 				mEntityManager.remove(postEntity);
 			}
 			trans.commit();

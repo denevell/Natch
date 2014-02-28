@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
@@ -98,6 +99,20 @@ public class CallDbBuilder<ListItem> {
 		
 			long countResult= (Long) q.getSingleResult();				
 			return countResult;
+		} finally {
+			EntityUtils.closeEntityConnection(mEntityManager);
+		}
+	}
+
+	public void add(ListItem instance) {
+		try {
+			EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
+			mEntityManager = factory.createEntityManager();   		
+			
+			EntityTransaction trans = mEntityManager.getTransaction();
+			trans.begin();
+			mEntityManager.persist(instance);
+			trans.commit();
 		} finally {
 			EntityUtils.closeEntityConnection(mEntityManager);
 		}
