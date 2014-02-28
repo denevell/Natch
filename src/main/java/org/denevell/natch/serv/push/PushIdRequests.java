@@ -46,6 +46,7 @@ public class PushIdRequests {
 		
 	@PUT
 	@Path("add")
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public SuccessOrError addPost(PushInput pushId) {
 		PushEntity pushEntity = new PushEntity();
