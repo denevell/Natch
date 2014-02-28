@@ -2,6 +2,7 @@ package org.denevell.natch.tests.functional.pageobjects;
 
 import javax.ws.rs.core.MediaType;
 
+import org.denevell.natch.serv.push.PushInput;
 import org.denevell.natch.serv.push.PushResource;
 
 import com.sun.jersey.api.client.WebResource;
@@ -15,10 +16,12 @@ public class PushIdsPO {
 	}
 
 	public void add(String id) {
+		PushInput entity = new PushInput();
+		entity.setId(id);
         	mService
         	.path("rest").path("push").path("add")
         	.type(MediaType.APPLICATION_JSON)
-        	.put(id);
+        	.put(entity);
 		return;
 	}	
 

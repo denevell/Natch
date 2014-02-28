@@ -62,6 +62,7 @@ public class UserAdminToggleFunctional {
 		user = users.getUsers().get(1);
 		if(!user.getUsername().equals("other1")) {
 			user = users.getUsers().get(0);
+			assertEquals("aaron", users.getUsers().get(1).getUsername());
 		}
 		assertEquals("other1", user.getUsername());
 		assertEquals(false, user.isAdmin());

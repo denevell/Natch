@@ -47,9 +47,9 @@ public class PushIdRequests {
 	@Path("add")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void addPost(String pushId) {
+	public void addPost(PushInput pushId) {
 		PushEntity pushEntity = new PushEntity();
-		pushEntity.setClientId(pushId);
+		pushEntity.setClientId(pushId.getId());
 		mModel
 			.add(pushEntity);
 	}
