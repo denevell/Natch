@@ -17,6 +17,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.db.entities.PushEntity;
+import org.denevell.natch.io.base.SuccessOrError;
 
 @Path("push")
 public class PushIdRequests {
@@ -46,12 +47,15 @@ public class PushIdRequests {
 	@PUT
 	@Path("add")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void addPost(PushInput pushId) {
+	public SuccessOrError addPost(PushInput pushId) {
 		PushEntity pushEntity = new PushEntity();
 		pushEntity.setClientId(pushId.getId());
 		mModel
 			.queryParam("id", pushId.getId())
 			.addIfDoesntExist(PushEntity.NAMED_QUERY_FIND_ID, pushEntity);
+		SuccessOrError successOrError = new SuccessOrError();
+		successOrError.setSuccessful(true); // Oh well
+		return successOrError;
 	}
 
 	@GET
