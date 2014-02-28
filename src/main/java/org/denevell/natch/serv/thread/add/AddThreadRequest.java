@@ -1,5 +1,6 @@
 package org.denevell.natch.serv.thread.add;
 
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
@@ -15,7 +16,9 @@ import javax.ws.rs.core.UriInfo;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.denevell.natch.auth.LoginHeadersFilter;
+import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.db.entities.PostEntity;
+import org.denevell.natch.db.entities.PushEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
@@ -110,20 +113,27 @@ public class AddThreadRequest {
 	private void sendPushNotifications(final AddPostResourceReturnData thread) {
 		new Thread(new Runnable() {
 			@Override
-			public void run() {	
-		       String id = "APA91bHxWB0Ss1Xv_22Y7Vxa4Qt4Ppi2fqLi532t5tBk0MI6uVLKClVTE9TP4qpcSjznUOPw3byMn2sJnVP8JPcrruWtg3FJ5X-25dKIS5FS-cz9jfvMmgy28d_ECfaEVw0uq3MRAp5X-g_grzfZux-5G-Kqph6qIQCbCHiMQ7jE8ckQcwCeslQ";
-		       String key = "AIzaSyDa1_2hWr2uH7VTEUf95rN7uev3Z5AJGi0";
-		       Sender sender = new Sender(key);
-		       String registrationId = id;
-		       try {
-		    	   String s = new ObjectMapper().writeValueAsString(new CutDownThreadResource(thread.getThread()));
-		    	   Message message = new Message.Builder().addData("thread", s).build();
-		    	   Result result = sender.send(message, registrationId, 5);
-		    	   Log.info(AddThreadRequest.class, "Push send result: " + result);
-			} catch (Exception e) {
-				Log.info(AddThreadRequest.class, "Error sending push message: " + e.getMessage());
-				e.printStackTrace();
-			}
+			public void run() {
+				Log.info(AddThreadRequest.class, "Starting to send push notifications");
+				String key = "AIzaSyDa1_2hWr2uH7VTEUf95rN7uev3Z5AJGi0";
+				Sender sender = new Sender(key);
+				List<PushEntity> list = new CallDbBuilder<PushEntity>()
+						.namedQuery(PushEntity.NAMED_QUERY_LIST_IDS)
+						.list(PushEntity.class);
+				for (PushEntity pushEntity : list) {
+					try {
+						String registrationId = pushEntity.getClientId();
+						String s = new ObjectMapper().writeValueAsString(new CutDownThreadResource(thread.getThread()));
+						Message message = new Message.Builder().addData("thread", s).build();
+						Log.info(AddThreadRequest.class, "Sending to push client id: " + registrationId);
+						Result result = sender.send(message, registrationId, 5);
+						Log.info(AddThreadRequest.class, "Push send result: " + result);
+					} catch (Exception e) {
+						Log.info(AddThreadRequest.class, "Error sending push message: " + e.getMessage());
+						e.printStackTrace();
+					}
+				}
+				Log.info(AddThreadRequest.class, "Finished sending push notifications");
 			}
 		}).start();
 	}

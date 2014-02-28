@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 
 import org.denevell.natch.io.base.SuccessOrError;
 import org.denevell.natch.io.users.LoginResourceReturnData;
+import org.denevell.natch.io.users.User;
 import org.denevell.natch.io.users.UserList;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
@@ -48,8 +49,9 @@ public class UserAdminToggleFunctional {
 		// Assert
         assertTrue("Is successful", result.isSuccessful());
 		users = UsersListFunctional.listUsers(service, loginResult.getAuthKey());
-		assertEquals("other1", users.getUsers().get(1).getUsername());
-		assertEquals(true, users.getUsers().get(1).isAdmin());
+		User user = users.getUsers().get(1);
+		assertEquals("other1", user.getUsername());
+		assertEquals(true, user.isAdmin());
 
 	    // Act
         result = toggleAdmin(loginResult);   
@@ -57,8 +59,12 @@ public class UserAdminToggleFunctional {
 		// Assert
         assertTrue("Is successful", result.isSuccessful());
 		users = UsersListFunctional.listUsers(service, loginResult.getAuthKey());
-		assertEquals("other1", users.getUsers().get(1).getUsername());
-		assertEquals(false, users.getUsers().get(1).isAdmin());
+		user = users.getUsers().get(1);
+		if(!user.getUsername().equals("other1")) {
+			user = users.getUsers().get(0);
+		}
+		assertEquals("other1", user.getUsername());
+		assertEquals(false, user.isAdmin());
 	}
 
 	@Test
