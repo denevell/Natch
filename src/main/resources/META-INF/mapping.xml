@@ -10,6 +10,9 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	   <named-query name="listIds">
 	       <query>select p from PushEntity p</query>
 	   </named-query>       
+	   <named-query name="findId">
+	       <query>select p from PushEntity p where p.clientId = :id</query>
+	   </named-query>       
        <attributes>
             <id name="clientId">
 	           <column name="client_id" nullable="false" length="500" />

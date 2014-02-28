@@ -136,6 +136,15 @@ public class CallDbBuilder<ListItem> {
 			EntityUtils.closeEntityConnection(mEntityManager);
 		}
 	}
+	
+	public void addIfDoesntExist(String listNamedQuery, ListItem instance) {
+		namedQuery(listNamedQuery);
+		if(!exists()) {
+			add(instance);
+		} else {
+			Log.info(getClass(), "It appears this push id already exists");
+		}
+	}
 
 	/**
 	 * Needs a named query set which returns a list

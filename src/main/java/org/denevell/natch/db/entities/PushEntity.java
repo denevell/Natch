@@ -2,7 +2,9 @@ package org.denevell.natch.db.entities;
 
 public class PushEntity {
 	
+	public static String NAMED_QUERY_FIND_ID = "findId";
 	public static String NAMED_QUERY_LIST_IDS = "listIds";
+	
 	private String clientId;
 	
 	public PushEntity() {

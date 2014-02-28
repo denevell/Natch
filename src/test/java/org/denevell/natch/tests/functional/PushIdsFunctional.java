@@ -25,6 +25,18 @@ public class PushIdsFunctional {
 	@Test
 	public void shouldAddPushId() {
 		addPushIdsPo.add("pushId1");
+		addPushIdsPo.add("pushId2");
+		
+		PushResource ids = addPushIdsPo.list(); 
+		assertEquals(2, ids.getIds().size());
+		assertEquals("pushId1", ids.getIds().get(0).getClientId());
+		assertEquals("pushId2", ids.getIds().get(1).getClientId());
+	}
+
+	@Test
+	public void shouldntAddDuplicated() {
+		addPushIdsPo.add("pushId1");
+		addPushIdsPo.add("pushId1");
 		
 		PushResource ids = addPushIdsPo.list(); 
 		assertEquals(1, ids.getIds().size());

@@ -45,13 +45,13 @@ public class PushIdRequests {
 		
 	@PUT
 	@Path("add")
-	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void addPost(PushInput pushId) {
 		PushEntity pushEntity = new PushEntity();
 		pushEntity.setClientId(pushId.getId());
 		mModel
-			.add(pushEntity);
+			.queryParam("id", pushId.getId())
+			.addIfDoesntExist(PushEntity.NAMED_QUERY_FIND_ID, pushEntity);
 	}
 
 	@GET
