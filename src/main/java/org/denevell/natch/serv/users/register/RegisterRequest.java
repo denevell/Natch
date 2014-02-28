@@ -49,30 +49,26 @@ public class RegisterRequest {
 	public RegisterResourceReturnData register(
 			@ApiParam(name="registerInput") RegisterResourceInput registerInput) {
 		RegisterResourceReturnData regReturnData = new RegisterResourceReturnData();
-		try {
-			mModel.init();
-			if(registerInput==null) {
-				regReturnData.setSuccessful(false);
-				regReturnData.setError(rb.getString(Strings.user_pass_cannot_be_blank));
-				return regReturnData;
-			}
-			String okay = mModel.addUserToSystem(registerInput.getUsername(), registerInput.getPassword());
-			if(okay.equals(RegisterModel.REGISTERED)) {
-				regReturnData.setSuccessful(true);
-			} else if(okay.equals(RegisterModel.USER_INPUT_ERROR)) {
-				regReturnData.setSuccessful(false);
-				regReturnData.setError(rb.getString(Strings.user_pass_cannot_be_blank));
-			} else if(okay.equals(RegisterModel.DUPLICATE_USERNAME)){
-				regReturnData.setSuccessful(false);
-				regReturnData.setError(rb.getString(Strings.username_already_exists));
-			} else {
-				regReturnData.setSuccessful(false);
-				regReturnData.setError(rb.getString(Strings.unknown_error));
-			}
+		if (registerInput == null) {
+			regReturnData.setSuccessful(false);
+			regReturnData.setError(rb.getString(Strings.user_pass_cannot_be_blank));
 			return regReturnData;
-		} finally {
-			mModel.close();
 		}
+		String okay = mModel.addUserToSystem(registerInput.getUsername(),
+				registerInput.getPassword());
+		if (okay.equals(RegisterModel.REGISTERED)) {
+			regReturnData.setSuccessful(true);
+		} else if (okay.equals(RegisterModel.USER_INPUT_ERROR)) {
+			regReturnData.setSuccessful(false);
+			regReturnData.setError(rb.getString(Strings.user_pass_cannot_be_blank));
+		} else if (okay.equals(RegisterModel.DUPLICATE_USERNAME)) {
+			regReturnData.setSuccessful(false);
+			regReturnData.setError(rb.getString(Strings.username_already_exists));
+		} else {
+			regReturnData.setSuccessful(false);
+			regReturnData.setError(rb.getString(Strings.unknown_error));
+		}
+		return regReturnData;
 	}	
 	
 }

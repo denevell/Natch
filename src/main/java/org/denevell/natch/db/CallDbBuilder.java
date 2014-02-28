@@ -8,11 +8,13 @@ import java.util.Map.Entry;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.denevell.natch.utils.EntityUtils;
 import org.denevell.natch.utils.JPAFactoryContextListener;
+import org.denevell.natch.utils.Log;
 
 public class CallDbBuilder<ListItem> {
 	
@@ -87,7 +89,11 @@ public class CallDbBuilder<ListItem> {
 		}
 	}
 	
-	public long count(Class<ListItem> clazz) {
+	/**
+	 * Should take in a 'count' named query
+	 * @return
+	 */
+	public long count() {
 		try {
 			EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
 			mEntityManager = factory.createEntityManager();   		
@@ -104,18 +110,56 @@ public class CallDbBuilder<ListItem> {
 		}
 	}
 
+	/**
+	 * Should take in a 'count' named query
+	 * @return
+	 */
+	public boolean isFirst() {
+		return count()==0;
+	}
+
 	public void add(ListItem instance) {
+		EntityTransaction trans = null;
 		try {
 			EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
 			mEntityManager = factory.createEntityManager();   		
 			
-			EntityTransaction trans = mEntityManager.getTransaction();
+			trans = mEntityManager.getTransaction();
 			trans.begin();
 			mEntityManager.persist(instance);
 			trans.commit();
+		} catch(Exception e){
+			Log.info(this.getClass(), e.toString());
+			e.printStackTrace();
+			if(trans!=null && trans.isActive()) trans.rollback();
 		} finally {
 			EntityUtils.closeEntityConnection(mEntityManager);
 		}
 	}
-	
+
+	/**
+	 * Needs a named query set which returns a list
+	 */
+	public boolean exists() {
+		try {
+			EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
+			mEntityManager = factory.createEntityManager();   		
+
+			Query q = (Query) mEntityManager.createNamedQuery(mNamedQuery);
+			for (Entry<String, Object> entry : mQueryParams.entrySet()) {
+				q.setParameter(entry.getKey(), entry.getValue());
+			}
+			try {
+				@SuppressWarnings("rawtypes")
+				List list = q.getResultList();
+				if(list.size()>0) return true;
+				else return false;
+			} catch(NoResultException e) {
+				return false;
+			}
+		} finally {
+			EntityUtils.closeEntityConnection(mEntityManager);
+		}
+	}
+
 }
