@@ -137,12 +137,17 @@ public class CallDbBuilder<ListItem> {
 		}
 	}
 	
-	public void addIfDoesntExist(String listNamedQuery, ListItem instance) {
+	/**
+	 * @return false if it already exists
+	 */
+	public boolean addIfDoesntExist(String listNamedQuery, ListItem instance) {
 		namedQuery(listNamedQuery);
 		if(!exists()) {
 			add(instance);
+			return true;
 		} else {
-			Log.info(getClass(), "It appears this push id already exists");
+			Log.info(getClass(), "Can't add, already exists");
+			return false;
 		}
 	}
 
