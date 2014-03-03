@@ -28,12 +28,12 @@ public class RegisterModel {
 			return USER_INPUT_ERROR;
 		}
 		if(mModel
-				.queryParam("username", u.getUsername())
 				.ifFirstItem(UserEntity.NAMED_QUERY_COUNT, new RunnableWith<UserEntity>() {
 							@Override public void item(UserEntity item) {
 								item.setAdmin(true);
 							}
 						})
+				.queryParam("username", u.getUsername())
 				.addIfDoesntExist(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME, u)) {
 			return REGISTERED;
 		} else {

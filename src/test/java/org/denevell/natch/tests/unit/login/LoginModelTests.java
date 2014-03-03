@@ -1,7 +1,6 @@
 package org.denevell.natch.tests.unit.login;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -16,7 +15,6 @@ import org.denevell.natch.db.entities.UserEntityQueries;
 import org.denevell.natch.serv.users.login.LoginModel;
 import org.denevell.natch.serv.users.login.LoginModel.LoginResult;
 import org.denevell.natch.serv.users.logout.LogoutModel;
-import org.denevell.natch.serv.users.status.StatusModel;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -155,33 +153,6 @@ public class LoginModelTests {
 		// Assert
 		assertTrue("Blank auth key on incorrect credentials", result.getAuthKey().length()==0);
 	}
-	
-	@Test
-	public void shouldBeLoggedInWithCorrectAuthKey() {
-		// Arrange
-		String authKey = "auth123";
-		UserEntity userEntity = new UserEntity();
-		when(authKeyGenerator.retrieveUserEntity("auth123")).thenReturn(userEntity);
-		
-		// Act
-		StatusModel statusModel = new  StatusModel(authKeyGenerator, entityManager);
-		UserEntity username = statusModel.loggedInAs(authKey);
-		
-		// Assert
-		assertEquals(userEntity, username);
-	}
-	
-	@Test
-	public void shouldntBeLoggedInWithIncorrectAuthKey() {
-		// Arrange
-		when(authKeyGenerator.retrieveUserEntity("auth123")).thenReturn(new UserEntity());
-		StatusModel statusModel = new  StatusModel(authKeyGenerator, entityManager);
-		
-		// Act
-		UserEntity username = statusModel.loggedInAs("badAuth123");
-		
-		// Assert
-		assertNull(username);
-	}	
+
 	
 }
