@@ -1,6 +1,7 @@
 package org.denevell.natch.serv.users.register;
 
 import org.denevell.natch.db.CallDbBuilder;
+import org.denevell.natch.db.CallDbBuilder.RunnableWith;
 import org.denevell.natch.db.entities.UserEntity;
 
 public class RegisterModel {
@@ -21,18 +22,18 @@ public class RegisterModel {
 		mModel = new CallDbBuilder<UserEntity>();
 	}
 
-	public String addUserToSystem(String username, String password) {
-		if(password==null || password.trim().length()==0 || username==null || username.trim().length()==0) {
+	public String addUserToSystem(UserEntity u) {
+		if(u.getOriginalPassword()==null || u.getOriginalPassword().trim().length()==0 || 
+				u.getUsername()==null || u.getUsername().trim().length()==0) {
 			return USER_INPUT_ERROR;
 		}
-		UserEntity u = new UserEntity();
-		u.generatePassword(password);
-		u.setUsername(username);
-		if(mModel.namedQuery(UserEntity.NAMED_QUERY_COUNT).isFirst()) {
-			u.setAdmin(true);
-		}
 		if(mModel
-				.queryParam("username", username)
+				.queryParam("username", u.getUsername())
+				.ifFirstItem(UserEntity.NAMED_QUERY_COUNT, new RunnableWith<UserEntity>() {
+							@Override public void item(UserEntity item) {
+								item.setAdmin(true);
+							}
+						})
 				.addIfDoesntExist(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME, u)) {
 			return REGISTERED;
 		} else {

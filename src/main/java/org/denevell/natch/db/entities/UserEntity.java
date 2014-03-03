@@ -1,5 +1,8 @@
 package org.denevell.natch.db.entities;
 
+import javax.persistence.Transient;
+
+import org.denevell.natch.io.users.RegisterResourceInput;
 import org.denevell.natch.utils.PasswordSaltUtils;
 
 public class UserEntity {
@@ -13,12 +16,20 @@ public class UserEntity {
 	
 	private String username;
 	private String password;
+	@Transient
+	private String originalPassword;
 	private boolean admin;
 	
 	// For testing only
 	public UserEntity(String username, String pass) {
 		this.username = username;
 		this.password = pass;
+	}
+	
+	public UserEntity(RegisterResourceInput register) {
+		this.username = register.getUsername();
+		this.originalPassword = register.getPassword();
+		generatePassword(originalPassword);
 	}
 	
 	public UserEntity() {
@@ -50,5 +61,15 @@ public class UserEntity {
 
 	public void setAdmin(boolean admin) {
 		this.admin = admin;
+	}
+
+	@Transient
+	public String getOriginalPassword() {
+		return originalPassword;
+	}
+
+	@Transient
+	public void setOriginalPassword(String originalPassword) {
+		this.originalPassword = originalPassword;
 	}
 }

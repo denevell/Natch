@@ -18,11 +18,17 @@ import org.denevell.natch.utils.Log;
 
 public class CallDbBuilder<ListItem> {
 	
+	public static interface RunnableWith<ListItem> {
+		public void item(ListItem item);
+	}
+
 	private EntityManager mEntityManager;
 	private String mNamedQuery;
 	private int mFirstResult;
 	private int mMaxResults;
 	private HashMap<String, Object> mQueryParams = new HashMap<String, Object>();
+	private RunnableWith<ListItem> mMethodIfFirstItem;
+	private String mCountNamedQueryForFirstItemMethod;
 	
 	public CallDbBuilder() {
 	}
@@ -121,9 +127,15 @@ public class CallDbBuilder<ListItem> {
 	public void add(ListItem instance) {
 		EntityTransaction trans = null;
 		try {
+			mQueryParams = new HashMap<String, Object>(); // So as not to use ones for addIfDoesntExist
+			if(mCountNamedQueryForFirstItemMethod!=null &&
+					mMethodIfFirstItem!=null &&
+					namedQuery(mCountNamedQueryForFirstItemMethod).isFirst()) {
+				mMethodIfFirstItem.item(instance);
+			}
+
 			EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
 			mEntityManager = factory.createEntityManager();   		
-			
 			trans = mEntityManager.getTransaction();
 			trans.begin();
 			mEntityManager.persist(instance);
@@ -174,6 +186,16 @@ public class CallDbBuilder<ListItem> {
 		} finally {
 			EntityUtils.closeEntityConnection(mEntityManager);
 		}
+	}
+	
+	/**
+	 * RunnableWith run in the add method.
+	 * Any query parameters are cleared before this is called
+	 */
+	public CallDbBuilder<ListItem> ifFirstItem(String countNamedQuery, RunnableWith<ListItem> runnableWith) {
+		mCountNamedQueryForFirstItemMethod = countNamedQuery;
+		mMethodIfFirstItem = runnableWith;
+		return this;
 	}
 
 }

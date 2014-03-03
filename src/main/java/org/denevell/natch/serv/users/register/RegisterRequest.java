@@ -12,6 +12,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
+import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.users.RegisterResourceInput;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
 import org.denevell.natch.utils.Strings;
@@ -54,8 +55,7 @@ public class RegisterRequest {
 			regReturnData.setError(rb.getString(Strings.user_pass_cannot_be_blank));
 			return regReturnData;
 		}
-		String okay = mModel.addUserToSystem(registerInput.getUsername(),
-				registerInput.getPassword());
+		String okay = mModel.addUserToSystem(new UserEntity(registerInput));
 		if (okay.equals(RegisterModel.REGISTERED)) {
 			regReturnData.setSuccessful(true);
 		} else if (okay.equals(RegisterModel.USER_INPUT_ERROR)) {
