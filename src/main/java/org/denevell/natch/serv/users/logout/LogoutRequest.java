@@ -52,20 +52,15 @@ public class LogoutRequest {
 		@ApiError(code=401, reason="Incorrect AuthKey header.")
 	})
 	public LogoutResourceReturnData logout() {
-		try {
-			mLoginModel.init();
-			LogoutResourceReturnData returnResult = new LogoutResourceReturnData();
-			String authKey = mRequest.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_AUTHKEY).toString();
-			if(mLoginModel.logout(authKey)) {
-				returnResult.setSuccessful(true);
-			} else {
-				returnResult.setSuccessful(false);
-				returnResult.setError(rb.getString(Strings.unknown_error));
-			}
-			return returnResult;
-		} finally {
-			mLoginModel.close();
+		LogoutResourceReturnData returnResult = new LogoutResourceReturnData();
+		String authKey = mRequest.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_AUTHKEY).toString();
+		if(mLoginModel.logout(authKey)) {
+			returnResult.setSuccessful(true);
+		} else {
+			returnResult.setSuccessful(false);
+			returnResult.setError(rb.getString(Strings.unknown_error));
 		}
+		return returnResult;
 	}	
 
 }
