@@ -16,9 +16,6 @@ import org.denevell.natch.io.users.LogoutResourceReturnData;
 import org.denevell.natch.utils.Strings;
 
 import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiError;
-import com.wordnik.swagger.annotations.ApiErrors;
-import com.wordnik.swagger.annotations.ApiOperation;
 
 @Path("user/logout")
 @Api(value="/user", description="Register, login, logout and see if a user is logged in.")
@@ -45,12 +42,6 @@ public class LogoutRequest {
 		
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Logout", 
-		notes="Must contain the AuthKey header.",
-		responseClass="org.denevell.natch.serv.users.resources.LogoutResourceReturnData")
-	@ApiErrors({
-		@ApiError(code=401, reason="Incorrect AuthKey header.")
-	})
 	public LogoutResourceReturnData logout() {
 		LogoutResourceReturnData returnResult = new LogoutResourceReturnData();
 		String authKey = mRequest.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_AUTHKEY).toString();

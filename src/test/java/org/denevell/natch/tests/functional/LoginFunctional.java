@@ -8,8 +8,10 @@ import java.util.ResourceBundle;
 
 import javax.ws.rs.core.MediaType;
 
+import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.users.LoginResourceLoggedInReturnData;
 import org.denevell.natch.io.users.LoginResourceReturnData;
+import org.denevell.natch.tests.functional.pageobjects.AddPostPO;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
@@ -152,14 +154,10 @@ public class LoginFunctional {
 		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
 	    
 	    // Act
-		LoginResourceLoggedInReturnData authResult = service
-	    		.path("rest").path("user").path("is")
-	    		.type(MediaType.APPLICATION_JSON)
-				.header("AuthKey", loginResult.getAuthKey())
-	    		.get(LoginResourceLoggedInReturnData.class);
+		AddPostResourceReturnData result = new AddPostPO(service).add("s", "c", loginResult.getAuthKey());
 		
 		// Assert
-		assertTrue("Should say true to is logged in", authResult.isSuccessful());		
+		assertTrue("Should be logged in to do this", result.isSuccessful());		
 	}
 	
 	@Test
