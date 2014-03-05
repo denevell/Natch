@@ -6,6 +6,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ResourceBundle;
 
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.client.WebTarget;
+
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
@@ -14,8 +17,6 @@ import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
-
-import javax.ws.rs.client.WebTarget;
 
 public class RegisterFunctional {
 	
@@ -81,62 +82,68 @@ public class RegisterFunctional {
 	
 	@Test
 	public void shouldSeeErrorJsonOnBlanksPassed() {
-		// Arrange 
-	    RegisterResourceReturnData result = registerPo.register("", "");
-		
-		// Assert
-		assertEquals(rb.getString(Strings.user_pass_cannot_be_blank), result.getError());
-		assertFalse("Should return false 'successful' field", result.isSuccessful());		
+		try{
+			registerPo.register("", "");
+		} catch(BadRequestException e) {
+			assertEquals(400, e.getResponse().getStatus());
+			return;
+		}
+		assertFalse("Excepted a 400", true);
 	}
 	
 	@Test
 	public void shouldSeeErrorJsonOnBlankUsername() {
-		// Arrange 
-	    RegisterResourceReturnData result = registerPo.register("", "passy");
-		
-		// Assert
-		assertEquals(rb.getString(Strings.user_pass_cannot_be_blank), result.getError());
-		assertFalse("Should return false 'successful' field", result.isSuccessful());		
+		try{
+			registerPo.register("", "passy");
+		} catch(BadRequestException e) {
+			assertEquals(400, e.getResponse().getStatus());
+			return;
+		}
+		assertFalse("Excepted a 400", true);
 	}
 	
 	@Test
 	public void shouldSeeErrorJsonOnBlankPassword() {
-		// Arrange 
-	    RegisterResourceReturnData result = registerPo.register("aaron@aaron.com", "");
-		
-		// Assert
-		assertEquals(rb.getString(Strings.user_pass_cannot_be_blank), result.getError());
-		assertFalse("Should return false 'successful' field", result.isSuccessful());		
+		try{
+			registerPo.register("aaron@aaron.com", "");
+		} catch(BadRequestException e) {
+			assertEquals(400, e.getResponse().getStatus());
+			return;
+		}
+		assertFalse("Excepted a 400", true);
 	}
 	
 	@Test
 	public void shouldSeeErrorJsonOnNulls() {
-		// Arrange 
-	    RegisterResourceReturnData result = registerPo.register(null, null);
-
-		// Assert
-		assertEquals(rb.getString(Strings.user_pass_cannot_be_blank), result.getError());
-		assertFalse("Should return false 'successful' field", result.isSuccessful());		
+		try{
+			registerPo.register(null, null);
+		} catch(BadRequestException e) {
+			assertEquals(400, e.getResponse().getStatus());
+			return;
+		}
+		assertFalse("Excepted a 400", true);
 	}
 	
 	@Test
 	public void shouldSeeErrorJsonOnNullUsername() {
-		// Arrange 
-	    RegisterResourceReturnData result = registerPo.register(null, "passy");
-		
-		// Assert
-		assertEquals(rb.getString(Strings.user_pass_cannot_be_blank), result.getError());
-		assertFalse("Should return false 'successful' field", result.isSuccessful());		
+		try{
+			registerPo.register(null, "passy");
+		} catch(BadRequestException e) {
+			assertEquals(400, e.getResponse().getStatus());
+			return;
+		}
+		assertFalse("Excepted a 400", true);
 	}
 	
 	@Test
 	public void shouldSeeErrorJsonOnNullPassword() {
-		// Arrange 
-	    RegisterResourceReturnData result = registerPo.register("username", null);
-		
-		// Assert
-		assertEquals(rb.getString(Strings.user_pass_cannot_be_blank), result.getError());
-		assertFalse("Should return false 'successful' field", result.isSuccessful());		
+		try{
+			registerPo.register("username", null);
+		} catch(BadRequestException e) {
+			assertEquals(400, e.getResponse().getStatus());
+			return;
+		}
+		assertFalse("Excepted a 400", true);
 	}	
 
 	

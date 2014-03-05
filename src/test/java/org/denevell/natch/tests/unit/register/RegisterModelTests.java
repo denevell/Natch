@@ -1,13 +1,11 @@
 package org.denevell.natch.tests.unit.register;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import javax.persistence.Query;
 
 import org.denevell.natch.db.CallDbBuilder;
-import org.denevell.natch.serv.users.register.RegisterModel;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -17,10 +15,9 @@ import org.junit.Test;
  * @author user
  *
  */
-@SuppressWarnings("unchecked")
 public class RegisterModelTests {
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unused" })
 	private CallDbBuilder entityManager;
 
 	@Before
@@ -120,12 +117,11 @@ public class RegisterModelTests {
 		//assertEquals(RegisterModel.DUPLICATE_USERNAME, result);
 	}	
 	
-	@SuppressWarnings("unused")
 	@Ignore
 	@Test
 	public void shouldShowFirstUser() { 
 		// Arrange
-		RegisterModel um = spy(new RegisterModel(entityManager));
+		//RegisterModel um = spy(new RegisterModel(entityManager));
 		Query q = mock(Query.class);
 		when(q.getSingleResult()).thenReturn(0);
 		//when(entityManager.createNamedQuery(UserEntity.NAMED_QUERY_COUNT)).thenReturn(q);
@@ -137,12 +133,11 @@ public class RegisterModelTests {
 		//assertTrue("Is first user", result);
 	}	
 	
-	@SuppressWarnings("unused")
 	@Ignore
 	@Test
 	public void shouldntShowFirstUser() { 
 		// Arrange
-        RegisterModel um = spy(new RegisterModel(entityManager));
+        //RegisterModel um = spy(new RegisterModel(entityManager));
 		Query q = mock(Query.class);
 		when(q.getSingleResult()).thenReturn(1);
 		//when(entityManager.createNamedQuery(UserEntity.NAMED_QUERY_COUNT)).thenReturn(q);

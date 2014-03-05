@@ -6,10 +6,6 @@ import org.denevell.natch.db.entities.UserEntity;
 public class LogoutModel {
 	
 	private LoginAuthKeysSingleton mAuthDataGenerator;
-	public static String LOGGED_IN = "loggedIn";
-	public static String USER_INPUT_ERROR = "inputError";
-	public static String UNKNOWN_ERROR = "unknownError";
-	public static String CREDENTIALS_INCORRECT = "credIncorect";		
 
 	/**
 	 * For DI testing

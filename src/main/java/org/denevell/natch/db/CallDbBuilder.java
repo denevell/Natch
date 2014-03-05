@@ -124,6 +124,9 @@ public class CallDbBuilder<ListItem> {
 		return count()==0;
 	}
 
+	/**
+	 * @throws RuntimeException if there was an error adding
+	 */
 	public void add(ListItem instance) {
 		EntityTransaction trans = null;
 		try {
@@ -142,8 +145,9 @@ public class CallDbBuilder<ListItem> {
 			trans.commit();
 		} catch(Exception e){
 			Log.info(this.getClass(), e.toString());
-			e.printStackTrace();
 			if(trans!=null && trans.isActive()) trans.rollback();
+			e.printStackTrace();
+			throw new RuntimeException(e);
 		} finally {
 			EntityUtils.closeEntityConnection(mEntityManager);
 		}
@@ -151,6 +155,7 @@ public class CallDbBuilder<ListItem> {
 	
 	/**
 	 * @return false if it already exists
+	 * @throws RuntimeException if there was an error adding
 	 */
 	public boolean addIfDoesntExist(String listNamedQuery, ListItem instance) {
 		namedQuery(listNamedQuery);
@@ -190,7 +195,7 @@ public class CallDbBuilder<ListItem> {
 	
 	/**
 	 * RunnableWith run in the add method.
-	 * Any query parameters are cleared before this is called
+	 * Any query parameters are cleared when this is called
 	 */
 	public CallDbBuilder<ListItem> ifFirstItem(String countNamedQuery, RunnableWith<ListItem> runnableWith) {
 		mCountNamedQueryForFirstItemMethod = countNamedQuery;
