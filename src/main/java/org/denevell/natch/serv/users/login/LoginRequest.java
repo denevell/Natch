@@ -15,7 +15,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.serv.users.login.LoginModel.LoginResult;
+import org.denevell.natch.serv.users.login.LoginModel.UserEntityAuthKey;
 import org.denevell.natch.utils.Strings;
 
 
@@ -50,12 +50,12 @@ public class LoginRequest {
 			LoginResourceReturnData returnResult = new LoginResourceReturnData();
 			String username = loginInput.getUsername();
 			String password = loginInput.getPassword();
-			LoginResult loginResult = mLoginModel.login(username, password);
-			if(loginResult.getResult().equals(LoginModel.LOGGED_IN)) {
+			UserEntityAuthKey loginResult = mLoginModel.login(username, password);
+			if(loginResult!=null) {
 				returnResult.setSuccessful(true);
-				returnResult.setAdmin(loginResult.isAdmin());
-				returnResult.setAuthKey(loginResult.getAuthKey());
-			} else if(loginResult.getResult().equals(LoginModel.CREDENTIALS_INCORRECT)){
+				returnResult.setAdmin(loginResult.ue.isAdmin());
+				returnResult.setAuthKey(loginResult.authKey);
+			} else {
 				returnResult.setSuccessful(false);
 				returnResult.setError(rb.getString(Strings.incorrect_username_or_password));
 			} 

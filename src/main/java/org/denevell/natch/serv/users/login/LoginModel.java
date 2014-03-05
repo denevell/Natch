@@ -16,39 +16,6 @@ public class LoginModel {
 	private UserEntityQueries mUserEntityQueries;
 	private LoginAuthKeysSingleton mAuthDataGenerator;
 	private EntityManager mEntityManager;
-	public static String LOGGED_IN = "loggedIn";
-	public static String CREDENTIALS_INCORRECT = "credIncorect";
-	public static class LoginResult {
-		private String authKey = "";
-		private String result;
-		private boolean admin;
-		public LoginResult(String result) {
-			this.result = result;
-		}
-		public LoginResult(String result, String authKey, boolean admin) {
-			this.result = result;
-			this.authKey = authKey;
-			this.setAdmin(admin);
-		}
-		public String getAuthKey() {
-			return authKey;
-		}
-		public void setAuthKey(String authKey) {
-			this.authKey = authKey;
-		}
-		public String getResult() {
-			return result;
-		}
-		public void setResult(String result) {
-			this.result = result;
-		}
-		public boolean isAdmin() {
-			return admin;
-		}
-		public void setAdmin(boolean admin) {
-			this.admin = admin;
-		}
-	}
 	
 	/**
 	 * For DI testing
@@ -75,14 +42,23 @@ public class LoginModel {
 		EntityUtils.closeEntityConnection(mEntityManager);
 	}		
 	
-	public LoginResult login(String username, String password) {
+	public static class UserEntityAuthKey {
+		public UserEntity ue;
+		public String authKey;
+		public UserEntityAuthKey(UserEntity ue, String authKey) {
+			this.ue = ue;
+			this.authKey = authKey;
+		}
+	}
+	
+	public UserEntityAuthKey login(String username, String password) {
 		try {
 			UserEntity res = mUserEntityQueries.areCredentialsCorrect(username, password, mEntityManager);
 			if(res!=null) {
 				String authKey = mAuthDataGenerator.generate(res);
-				return new LoginResult(LOGGED_IN, authKey, res.isAdmin());
+				return new UserEntityAuthKey(res, authKey);
 			} else {
-				return new LoginResult(CREDENTIALS_INCORRECT);
+				return null;
 			}
 		} catch(Exception e) {
 			Log.info(this.getClass(), e.toString());
