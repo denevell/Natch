@@ -52,6 +52,10 @@ public class UserAdminToggleFunctional {
         assertTrue("Is successful", result.isSuccessful());
 		users = UsersListFunctional.listUsers(service, loginResult.getAuthKey());
 		User user = users.getUsers().get(1);
+		if(!user.getUsername().equals("other1")) {
+			user = users.getUsers().get(0);
+			assertEquals("aaron", users.getUsers().get(1).getUsername());
+		}
 		assertEquals("other1", user.getUsername());
 		assertEquals(true, user.isAdmin());
 
