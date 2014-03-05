@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ResourceBundle;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.WebTarget;
 
@@ -56,53 +57,60 @@ public class LoginFunctional {
 		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
 	}
 	
+
 	@Test
 	public void login_shouldSeeJsonErrorOnBlanksPassed() {
-		// Arrange 
-		LoginResourceReturnData loginResult = new LoginPO(service).login(" ", " ");
-		
-		// Assert
-		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
-		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
+		try{
+			new LoginPO(service).login(" ", " ");
+		} catch(BadRequestException e) {
+			assertEquals(400, e.getResponse().getStatus());
+			return;
+		}
+		assertFalse("Excepted a 400", true);	
 	}
 	
 	@Test
 	public void login_shouldSeeJsonErrorOnBlankUsername() {
-		// Arrange 
-		LoginResourceReturnData loginResult = new LoginPO(service).login(" ", "password");
-		
-		// Assert
-		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
-		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
+		try{
+			new LoginPO(service).login(" ", "password");
+		} catch(BadRequestException e) {
+			assertEquals(400, e.getResponse().getStatus());
+			return;
+		}
+		assertFalse("Excepted a 400", true);	
 	}
 	
 	@Test
 	public void login_shouldSeeJsonErrorOnBlankPassword() {
-		// Arrange 
-		LoginResourceReturnData loginResult = new LoginPO(service).login("username", " ");
-		
-		// Assert
-		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
-		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
+		try{
+			new LoginPO(service).login("username", " ");
+		} catch(BadRequestException e) {
+			assertEquals(400, e.getResponse().getStatus());
+			return;
+		}
+		assertFalse("Excepted a 400", true);	
 	}
 	
 	@Test
 	public void login_shouldSeeJsonErrorOnNullUsername() {
-		// Arrange 
-		LoginResourceReturnData loginResult = new LoginPO(service).login(null, "password");
-		
-		// Assert
-		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
-		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
+		try{
+			new LoginPO(service).login(null, "password");
+		} catch(BadRequestException e) {
+			assertEquals(400, e.getResponse().getStatus());
+			return;
+		}
+		assertFalse("Excepted a 400", true);	
 	}
 	
 	@Test
 	public void login_shouldSeeJsonErrorOnNullPassword() {
-		// Arrange 
-		LoginResourceReturnData loginResult = new LoginPO(service).login("username", null);
-		
-		// Assert
-		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
+		try{
+			new LoginPO(service).login("username", null);
+		} catch(BadRequestException e) {
+			assertEquals(400, e.getResponse().getStatus());
+			return;
+		}
+		assertFalse("Excepted a 400", true);	
 	}
 	
 	@Test

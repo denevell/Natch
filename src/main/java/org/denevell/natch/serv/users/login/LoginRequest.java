@@ -4,6 +4,7 @@ import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -43,15 +44,10 @@ public class LoginRequest {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public LoginResourceReturnData login(LoginResourceInput loginInput) {
+	public LoginResourceReturnData login(@Valid LoginResourceInput loginInput) {
 		try {
 			mLoginModel.init();
 			LoginResourceReturnData returnResult = new LoginResourceReturnData();
-			if(loginInput==null) {
-				returnResult.setSuccessful(false);
-				returnResult.setError(rb.getString(Strings.incorrect_username_or_password));
-				return returnResult;
-			}
 			String username = loginInput.getUsername();
 			String password = loginInput.getPassword();
 			LoginResult loginResult = mLoginModel.login(username, password);
@@ -59,14 +55,10 @@ public class LoginRequest {
 				returnResult.setSuccessful(true);
 				returnResult.setAdmin(loginResult.isAdmin());
 				returnResult.setAuthKey(loginResult.getAuthKey());
-			} else if(loginResult.getResult().equals(LoginModel.CREDENTIALS_INCORRECT)
-					|| loginResult.getResult().equals(LoginModel.USER_INPUT_ERROR)){
+			} else if(loginResult.getResult().equals(LoginModel.CREDENTIALS_INCORRECT)){
 				returnResult.setSuccessful(false);
 				returnResult.setError(rb.getString(Strings.incorrect_username_or_password));
-			} else {
-				returnResult.setSuccessful(false);
-				returnResult.setError(rb.getString(Strings.unknown_error));
-			}
+			} 
 			return returnResult;
 		} finally {
 			mLoginModel.close();

@@ -77,32 +77,6 @@ public class LoginResourceTests {
 	}
 	
 	@Test
-	public void shouldntLoginBadJsonInput() {
-		// Arrange
-		LoginResourceInput loginInput = new LoginResourceInput("username", "password");
-		when(userModel.login("username", "password")).thenReturn(new LoginResult(LogoutModel.USER_INPUT_ERROR));
-		
-		// Act
-		LoginResourceReturnData result = resource.login(loginInput);
-		
-		// Assert
-		assertFalse("Fail to register", result.isSuccessful());
-		assertEquals("Json error message", rb.getString(Strings.incorrect_username_or_password), result.getError());
-	}
-	
-	@Test
-	public void shouldntLoginWithNullInputObject() {
-		// Arrange
-		
-		// Act
-		LoginResourceReturnData result = resource.login(null);
-		
-		// Assert
-		assertFalse("Fail to register", result.isSuccessful());
-		assertEquals("Json error message", rb.getString(Strings.incorrect_username_or_password), result.getError());
-	}	
-	
-	@Test
 	public void shouldReturnLoginAuthKey() {
 		// Arrange
 		LoginResourceInput loginInput = new LoginResourceInput("username", "password");

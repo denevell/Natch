@@ -17,8 +17,6 @@ public class LoginModel {
 	private LoginAuthKeysSingleton mAuthDataGenerator;
 	private EntityManager mEntityManager;
 	public static String LOGGED_IN = "loggedIn";
-	public static String USER_INPUT_ERROR = "inputError";
-	public static String UNKNOWN_ERROR = "unknownError";
 	public static String CREDENTIALS_INCORRECT = "credIncorect";
 	public static class LoginResult {
 		private String authKey = "";
@@ -79,9 +77,6 @@ public class LoginModel {
 	
 	public LoginResult login(String username, String password) {
 		try {
-			if(password==null || password.trim().length()==0 || username==null || username.trim().length()==0) {
-				return new LoginResult(USER_INPUT_ERROR);
-			}
 			UserEntity res = mUserEntityQueries.areCredentialsCorrect(username, password, mEntityManager);
 			if(res!=null) {
 				String authKey = mAuthDataGenerator.generate(res);
@@ -92,7 +87,7 @@ public class LoginModel {
 		} catch(Exception e) {
 			Log.info(this.getClass(), e.toString());
 			e.printStackTrace();
-			return new LoginResult(UNKNOWN_ERROR);
+			throw new RuntimeException(e); 
 		} 
 	}
 	

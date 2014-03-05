@@ -83,7 +83,7 @@ public class RegisterFunctional {
 	@Test
 	public void shouldSeeErrorJsonOnBlanksPassed() {
 		try{
-			registerPo.register("", "");
+			registerPo.register(" ", " ");
 		} catch(BadRequestException e) {
 			assertEquals(400, e.getResponse().getStatus());
 			return;
@@ -94,7 +94,7 @@ public class RegisterFunctional {
 	@Test
 	public void shouldSeeErrorJsonOnBlankUsername() {
 		try{
-			registerPo.register("", "passy");
+			registerPo.register(" ", "passy");
 		} catch(BadRequestException e) {
 			assertEquals(400, e.getResponse().getStatus());
 			return;
@@ -105,7 +105,7 @@ public class RegisterFunctional {
 	@Test
 	public void shouldSeeErrorJsonOnBlankPassword() {
 		try{
-			registerPo.register("aaron@aaron.com", "");
+			registerPo.register("aaron@aaron.com", " ");
 		} catch(BadRequestException e) {
 			assertEquals(400, e.getResponse().getStatus());
 			return;
