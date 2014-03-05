@@ -1,17 +1,17 @@
 package org.denevell.natch.tests.functional.pageobjects;
 
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.io.users.RegisterResourceInput;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
 
-import com.sun.jersey.api.client.WebResource;
-
 public class RegisterPO {
 	
-	private WebResource mService;
+	private WebTarget mService;
 
-	public RegisterPO(WebResource service) {
+	public RegisterPO(WebTarget service) {
 		mService = service;
 	}
 
@@ -20,9 +20,9 @@ public class RegisterPO {
 		registerInput.setUsername(username);
 		registerInput.setPassword(password);
 		RegisterResourceReturnData result = mService 
-	    		.path("rest").path("user")
-				.type(MediaType.APPLICATION_JSON)
-	    		.put(RegisterResourceReturnData.class, registerInput);
+	    		.path("rest").path("user").request()
+	    		.put(Entity.entity(registerInput, MediaType.APPLICATION_JSON), 
+	    				RegisterResourceReturnData.class);
 		return result;
 	}	
 	

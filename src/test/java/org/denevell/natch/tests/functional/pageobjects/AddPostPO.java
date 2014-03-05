@@ -1,18 +1,19 @@
 package org.denevell.natch.tests.functional.pageobjects;
 
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+
+import jersey.repackaged.com.google.common.collect.Lists;
 
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 
-import com.google.common.collect.Lists;
-import com.sun.jersey.api.client.WebResource;
-
 public class AddPostPO {
 	
-	private WebResource mService;
+	private WebTarget mService;
 
-	public AddPostPO(WebResource service) {
+	public AddPostPO(WebTarget service) {
 		mService = service;
 	}
 
@@ -43,10 +44,9 @@ public class AddPostPO {
 		}
 		AddPostResourceReturnData returnData = 
         mService
-		.path("rest").path("post").path("add")
+		.path("rest").path("post").path("add").request()
 		.header("AuthKey", authKey)
-		.type(MediaType.APPLICATION_JSON)
-		.put(AddPostResourceReturnData.class, input);
+		.put(Entity.entity(input, MediaType.APPLICATION_JSON), AddPostResourceReturnData.class);
         return returnData;
 	}	
 	

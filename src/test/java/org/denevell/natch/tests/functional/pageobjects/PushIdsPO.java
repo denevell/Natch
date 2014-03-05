@@ -1,17 +1,16 @@
 package org.denevell.natch.tests.functional.pageobjects;
 
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 
 import org.denevell.natch.serv.push.PushInput;
 import org.denevell.natch.serv.push.PushResource;
 
-import com.sun.jersey.api.client.WebResource;
-
 public class PushIdsPO {
 	
-	private WebResource mService;
+	private WebTarget mService;
 
-	public PushIdsPO(WebResource service) {
+	public PushIdsPO(WebTarget service) {
 		mService = service;
 	}
 
@@ -19,15 +18,14 @@ public class PushIdsPO {
 		PushInput entity = new PushInput();
 		entity.setId(id);
         	mService
-        	.path("rest").path("push").path("add")
-        	.type(MediaType.APPLICATION_JSON)
-        	.put(entity);
+        	.path("rest").path("push").path("add").request()
+        	.put(Entity.json(entity));
 		return;
 	}	
 
 	public PushResource list() {
        return mService
-        	.path("rest").path("push")
+        	.path("rest").path("push").request()
         	.get(PushResource.class);
 	}	
 	

@@ -17,13 +17,8 @@ import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.serv.users.login.LoginModel.LoginResult;
 import org.denevell.natch.utils.Strings;
 
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-
 
 @Path("user/login")
-@Api(value="/user", description="Register, login, logout and see if a user is logged in.")
 public class LoginRequest {
 	
 	@Context UriInfo info;
@@ -48,9 +43,7 @@ public class LoginRequest {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Login",  notes="You use the return AuthKey for the future requests which require a AuthKey header",
-		responseClass="org.denevell.natch.serv.users.resources.LoginResourceReturnData")
-	public LoginResourceReturnData login(@ApiParam(name="loginInput") LoginResourceInput loginInput) {
+	public LoginResourceReturnData login(LoginResourceInput loginInput) {
 		try {
 			mLoginModel.init();
 			LoginResourceReturnData returnResult = new LoginResourceReturnData();

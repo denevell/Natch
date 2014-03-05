@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -23,8 +24,6 @@ import org.denevell.natch.serv.thread.ListThreadRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
-
-import scala.actors.threadpool.Arrays;
 
 public class ListPostsResourceTests {
 	
@@ -51,7 +50,7 @@ public class ListPostsResourceTests {
 		// Arrange
 		List<PostEntity> posts = new ArrayList<PostEntity>();
 		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", null);
-		@SuppressWarnings("unchecked") List<String> asList = Arrays.asList(new String[] {"tag1"});
+		List<String> asList = Arrays.asList(new String[] {"tag1"});
 		postEntity.setTags(asList);
 		postEntity.setId(400);
 		posts.add(postEntity);

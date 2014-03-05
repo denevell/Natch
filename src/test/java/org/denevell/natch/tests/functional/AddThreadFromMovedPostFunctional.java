@@ -6,6 +6,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ResourceBundle;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.WebTarget;
+
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.users.LoginResourceReturnData;
@@ -18,12 +21,9 @@ import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-
 public class AddThreadFromMovedPostFunctional {
 	
-	private WebResource service;
+	private WebTarget service;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private LoginResourceReturnData adminLoginResult;
 	private RegisterPO registerPo;
@@ -90,7 +90,7 @@ public class AddThreadFromMovedPostFunctional {
 						posts.getPosts().get(0).getId(),
 						"other",
 						loginResult.getAuthKey()); 
-        } catch (UniformInterfaceException e) {
+        } catch (WebApplicationException e) {
             assertTrue(e.getResponse().getStatus()==401);
             return;
         }

@@ -7,7 +7,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
@@ -24,12 +25,10 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.sun.jersey.api.client.WebResource;
-
 public class ListThreadsFunctional {
 	
 	private LoginResourceReturnData loginResult;
-	private WebResource service;
+	private WebTarget service;
 
 	@Before
 	public void setup() throws Exception {
@@ -140,7 +139,7 @@ public class ListThreadsFunctional {
 		
 		// Act
 		ListThreadsResource returnData = service
-		.path("rest").path("threads").path("1").path("1")
+		.path("rest").path("threads").path("1").path("1").request()
     	.get(ListThreadsResource.class); 
 		
 		// Assert)
@@ -169,7 +168,7 @@ public class ListThreadsFunctional {
 		
 		// Act
 		ListThreadsResource returnData = service
-		.path("rest").path("threads").path("onetag").path("0").path("10")
+		.path("rest").path("threads").path("onetag").path("0").path("10").request()
     	.get(ListThreadsResource.class); 
 		
 		// Assert
@@ -203,7 +202,7 @@ public class ListThreadsFunctional {
 		
 		// Act
 		ListThreadsResource returnData = service
-		.path("rest").path("threads").path("onetag").path("1").path("1")
+		.path("rest").path("threads").path("onetag").path("1").path("1").request()
     	.get(ListThreadsResource.class); 
 		
 		// Assert
@@ -224,7 +223,7 @@ public class ListThreadsFunctional {
 		// Note: input2 was added last so should be first in the list
 		// Arrange - list them
 		ListPostsResource listedPosts = service
-		.path("rest").path("post").path("0").path("10")
+		.path("rest").path("post").path("0").path("10").request()
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 				
 		// Assert - we've got input2 first
@@ -236,15 +235,14 @@ public class ListThreadsFunctional {
 		editedInput.setSubject("blar2");
 		EditPostResourceReturnData editReturnData = service
 		.path("rest").path("post").path("editthread")
-		.path(String.valueOf(listedPosts.getPosts().get(1).getId()))
-	    .type(MediaType.APPLICATION_JSON)
+		.path(String.valueOf(listedPosts.getPosts().get(1).getId())).request()
 		.header("AuthKey", loginResult.getAuthKey())
-    	.post(EditPostResourceReturnData.class, editedInput); 			
+    	.post(Entity.json(editedInput), EditPostResourceReturnData.class); 			
 		assertTrue(editReturnData.isSuccessful());
 		
 		// Assert - we've now got input1 first
 		ListThreadsResource listedThreads = service
-		.path("rest").path("threads").path("0").path("10")
+		.path("rest").path("threads").path("0").path("10").request()
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListThreadsResource.class); 				
 		// Assert - we've got input2 first
@@ -265,7 +263,7 @@ public class ListThreadsFunctional {
 		// Note: input2 was added last so should be first in the list
 		// Arrange - list them
 		ListThreadsResource listedPosts = service
-		.path("rest").path("threads").path("a").path("0").path("10")
+		.path("rest").path("threads").path("a").path("0").path("10").request()
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListThreadsResource.class); 				
 		// Assert - we've got input2 first
@@ -278,15 +276,14 @@ public class ListThreadsFunctional {
 		editedInput.setTags(new ArrayList<String>(){{add("a");add("b");}});
 		EditPostResourceReturnData editReturnData = service
 		.path("rest").path("post").path("editthread")
-		.path(String.valueOf(listedPosts.getThreads().get(1).getId()))
-	    .type(MediaType.APPLICATION_JSON)
+		.path(String.valueOf(listedPosts.getThreads().get(1).getId())).request()
 		.header("AuthKey", loginResult.getAuthKey())
-    	.post(EditPostResourceReturnData.class, editedInput); 			
+    	.post(Entity.json(editedInput), EditPostResourceReturnData.class) ; 			
 		assertTrue(editReturnData.isSuccessful());
 		
 		// Assert - we've now got input1 first
 		listedPosts = service
-		.path("rest").path("threads").path("a").path("0").path("10")
+		.path("rest").path("threads").path("a").path("0").path("10").request()
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListThreadsResource.class); 				
 		// Assert - we've got input2 first
@@ -295,32 +292,30 @@ public class ListThreadsFunctional {
 
 	public void addPost(AddPostResourceInput input2) {
 		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
+		.path("rest").path("post").path("add").request()
 		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input2);
+    	.put(Entity.json(input2), AddPostResourceReturnData.class);
 	}		
 
 	public AddPostResourceReturnData addThread(AddPostResourceInput input2) {
 		AddPostResourceReturnData res = service
-		.path("rest").path("post").path("addthread")
-	    .type(MediaType.APPLICATION_JSON)
+		.path("rest").path("post").path("addthread").request()
 		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input2);
+    	.put(Entity.json(input2), AddPostResourceReturnData.class);
 		assertTrue("Added thraed", res.isSuccessful());
 		return res;
 	}		
 	
 	public ThreadResource listThreadById(String id) {
 		ThreadResource thread = service
-		.path("rest").path("post").path("thread").path(id).path("0").path("10")
+		.path("rest").path("post").path("thread").path(id).path("0").path("10").request()
 		.get(ThreadResource.class);
 		return thread;
 	}		
 	
 	public ListThreadsResource listThreads() {
 		ListThreadsResource threads = service
-		.path("rest").path("threads").path("0").path("10")
+		.path("rest").path("threads").path("0").path("10").request()
     	.get(ListThreadsResource.class);
 		return threads;
 	}	

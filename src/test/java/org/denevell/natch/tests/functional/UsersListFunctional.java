@@ -5,6 +5,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ResourceBundle;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.WebTarget;
+
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.UserList;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
@@ -14,12 +17,9 @@ import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-
 public class UsersListFunctional {
 	
-	private WebResource service;
+	private WebTarget service;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private RegisterPO registerPo;
 
@@ -48,9 +48,9 @@ public class UsersListFunctional {
 		assertEquals(true, thread.getUsers().get(0).isAdmin());
 	}
 
-    public static UserList listUsers(WebResource s, String authKey) {
+    public static UserList listUsers(WebTarget s, String authKey) {
         UserList thread = s
-        .path("rest").path("user").path("list")
+        .path("rest").path("user").path("list").request()
         .header("AuthKey", authKey)
         .get(UserList.class);
         return thread;
@@ -66,10 +66,10 @@ public class UsersListFunctional {
         // Act
         try {
             service
-            .path("rest").path("user").path("list")
+            .path("rest").path("user").path("list").request()
             .header("AuthKey", loginResult.getAuthKey())
             .get(UserList.class);   
-        } catch (UniformInterfaceException e) {
+        } catch (WebApplicationException e) {
             assertEquals(401, e.getResponse().getStatus());
             return;
         }

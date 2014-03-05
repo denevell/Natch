@@ -6,6 +6,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ResourceBundle;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+
 import org.denevell.natch.io.base.SuccessOrError;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.User;
@@ -17,12 +22,9 @@ import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-
 public class UserAdminToggleFunctional {
 	
-	private WebResource service;
+	private WebTarget service;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private RegisterPO registerPo;
 
@@ -88,7 +90,7 @@ public class UserAdminToggleFunctional {
 	    // Act
 		try {
 		    toggleAdmin(loginResultUser);   
-        } catch (UniformInterfaceException e) {
+        } catch (WebApplicationException e) {
             assertTrue("Get a 401 when not an admin", e.getResponse().getStatus()==401);
             return;
         }
@@ -105,7 +107,7 @@ public class UserAdminToggleFunctional {
 	    // Act
 		try {
 		    toggleAdmin(loginResult);   
-        } catch (UniformInterfaceException e) {
+        } catch (WebApplicationException e) {
             assertTrue("Get a 401 when not an admin", e.getResponse().getStatus()==401);
             return;
         }
@@ -114,9 +116,9 @@ public class UserAdminToggleFunctional {
 
     public SuccessOrError toggleAdmin(LoginResourceReturnData loginResult) {
         SuccessOrError result = service
-            .path("rest").path("user").path("admin").path("toggle").path("other1")
+            .path("rest").path("user").path("admin").path("toggle").path("other1").request()
             .header("AuthKey", loginResult.getAuthKey())
-            .post(SuccessOrError.class);
+            .post(Entity.entity(null, MediaType.APPLICATION_JSON), SuccessOrError.class);
         return result;
     }
 	

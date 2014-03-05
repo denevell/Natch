@@ -27,10 +27,6 @@ import org.denevell.natch.serv.post.edit.EditPostModel;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
-import com.wordnik.swagger.annotations.ApiError;
-import com.wordnik.swagger.annotations.ApiErrors;
-import com.wordnik.swagger.annotations.ApiOperation;
-
 @Path("post/add")
 public class AddPostRequest {
 	
@@ -60,11 +56,6 @@ public class AddPostRequest {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Add a post",	notes="Must contain the AuthKey header.",
-		responseClass="org.denevell.natch.serv.posts.resources.AddPostResourceReturnData")
-	@ApiErrors({
-		@ApiError(code=401, reason="Incorrect AuthKey header.")
-	})	
 	public AddPostResourceReturnData addPost(AddPostResourceInput input) {
 		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
 		if(EditPostModel.isBadInputParams(userEntity, 

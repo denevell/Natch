@@ -15,12 +15,12 @@ import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.jersey.api.client.WebResource;
+import javax.ws.rs.client.WebTarget;
 
 public class RegisterFunctional {
 	
     ResourceBundle rb = Strings.getMainResourceBundle();
-	private WebResource service;
+	private WebTarget service;
 	private RegisterPO registerPo;
 
 	@Before

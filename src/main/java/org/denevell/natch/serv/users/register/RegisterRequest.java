@@ -4,6 +4,7 @@ import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -16,9 +17,6 @@ import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.users.RegisterResourceInput;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
 import org.denevell.natch.utils.Strings;
-
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
 
 
 @Path("user")
@@ -46,9 +44,8 @@ public class RegisterRequest {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Registers a user", responseClass="org.denevell.natch.serv.users.resources.RegisterResourceReturnData")
 	public RegisterResourceReturnData register(
-			@ApiParam(name="registerInput") RegisterResourceInput registerInput) {
+			@Valid RegisterResourceInput registerInput) {
 		RegisterResourceReturnData regReturnData = new RegisterResourceReturnData();
 		if (registerInput == null) {
 			regReturnData.setSuccessful(false);

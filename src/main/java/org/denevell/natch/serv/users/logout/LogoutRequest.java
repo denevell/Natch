@@ -15,10 +15,7 @@ import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.io.users.LogoutResourceReturnData;
 import org.denevell.natch.utils.Strings;
 
-import com.wordnik.swagger.annotations.Api;
-
 @Path("user/logout")
-@Api(value="/user", description="Register, login, logout and see if a user is logged in.")
 public class LogoutRequest {
 	
 	@Context UriInfo info;

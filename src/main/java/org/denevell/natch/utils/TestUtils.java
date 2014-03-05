@@ -6,22 +6,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.WebTarget;
 
 import org.denevell.natch.db.entities.PersistenceInfo;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.PushEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.io.users.LoginResourceInput;
-import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.io.users.RegisterResourceInput;
-import org.denevell.natch.io.users.RegisterResourceReturnData;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
+import org.glassfish.jersey.client.JerseyClientBuilder;
+import org.glassfish.jersey.jackson.JacksonFeature;
 
 public class TestUtils {
 	
@@ -63,76 +57,74 @@ public class TestUtils {
 		}
 	}	
 
-	public static WebResource getRESTClient() {
-		String baseUrl = getHost() + NATCH_FUNCTIONAL;
-	    ClientConfig config = new DefaultClientConfig();
-	    Client client = Client.create(config);
-	    return client.resource(baseUrl);		
+	private static Client getClient() {
+		Client client = JerseyClientBuilder.createClient();
+		client.register(JacksonFeature.class);
+		return client;
 	}
 
-	public static WebResource getRESTRegisterClient() {
+	public static WebTarget getRESTClient() {
 		String baseUrl = getHost() + NATCH_FUNCTIONAL;
-	    ClientConfig config = new DefaultClientConfig();
-	    Client client = Client.create(config);
-	    return client.resource(baseUrl).path("rest").path("user");		
+	    Client client = getClient();
+	    return client.target(baseUrl);		
 	}
 
-	public static WebResource getLoginClient() {
+	public static WebTarget getRESTRegisterClient() {
 		String baseUrl = getHost() + NATCH_FUNCTIONAL;
-	    ClientConfig config = new DefaultClientConfig();
-	    Client client = Client.create(config);
-	    return client.resource(baseUrl).path("rest").path("user").path("login");
+	    Client client = getClient();
+	    return client.target(baseUrl).path("rest").path("user");		
 	}
 
-	public static WebResource getRegisterClient() {
+	public static WebTarget getLoginClient() {
 		String baseUrl = getHost() + NATCH_FUNCTIONAL;
-	    ClientConfig config = new DefaultClientConfig();
-	    Client client = Client.create(config);
-	    return client.resource(baseUrl).path("rest").path("user");		
+	    Client client = getClient();
+	    return client.target(baseUrl).path("rest").path("user").path("login");
 	}
 
-	public static WebResource getDeletePostClient() {
+	public static WebTarget getRegisterClient() {
 		String baseUrl = getHost() + NATCH_FUNCTIONAL;
-		ClientConfig config = new DefaultClientConfig();
-		Client client = Client.create(config);
-		return client.resource(baseUrl).path("rest").path("post").path("del");		
+	    Client client = getClient();
+	    return client.target(baseUrl).path("rest").path("user");		
 	}
 
-	public static WebResource getEditPostClient() {
+	public static WebTarget getDeletePostClient() {
 		String baseUrl = getHost() + NATCH_FUNCTIONAL;
-		ClientConfig config = new DefaultClientConfig();
-		Client client = Client.create(config);
-		return client.resource(baseUrl).path("rest").path("post").path("edit");		
+	    Client client = getClient();
+		return client.target(baseUrl).path("rest").path("post").path("del");		
 	}
 
-	public static WebResource getListPostsClient() {
+	public static WebTarget getEditPostClient() {
 		String baseUrl = getHost() + NATCH_FUNCTIONAL;
-		ClientConfig config = new DefaultClientConfig();
-		Client client = Client.create(config);
-		return client.resource(baseUrl).path("rest").path("post");		
+	    Client client = getClient();
+		return client.target(baseUrl).path("rest").path("post").path("edit");		
 	}
 
-	public static WebResource getListPostThreadsPostClient() {
+	public static WebTarget getListPostsClient() {
 		String baseUrl = getHost() + NATCH_FUNCTIONAL;
-		ClientConfig config = new DefaultClientConfig();
-		Client client = Client.create(config);
-		return client.resource(baseUrl).path("rest").path("threads");		
+	    Client client = getClient();
+		return client.target(baseUrl).path("rest").path("post");		
 	}
 
-	public static void addUser(String username, String password) {
-	    RegisterResourceInput registerInput = new RegisterResourceInput(username, password);
-		TestUtils.getRegisterClient()
-		.type(MediaType.APPLICATION_JSON)
-	    	.put(RegisterResourceReturnData.class, registerInput);		
+	public static WebTarget getListPostThreadsPostClient() {
+		String baseUrl = getHost() + NATCH_FUNCTIONAL;
+	    Client client = getClient();
+		return client.target(baseUrl).path("rest").path("threads");		
 	}
-	
-	public static String loginUser(String username, String password) {
-	    LoginResourceInput input = new LoginResourceInput(username, password);
-		LoginResourceReturnData ret = TestUtils.getLoginClient()
-		.type(MediaType.APPLICATION_JSON)
-	    .post(LoginResourceReturnData.class, input);		
-		return ret.getAuthKey();
-	}
+
+//	public static void addUser(String username, String password) {
+//	    RegisterResourceInput registerInput = new RegisterResourceInput(username, password);
+//		TestUtils.getRegisterClient()
+//		.type(MediaType.APPLICATION_JSON)
+//	    	.put(RegisterResourceReturnData.class, registerInput);		
+//	}
+//	
+//	public static String loginUser(String username, String password) {
+//	    LoginResourceInput input = new LoginResourceInput(username, password);
+//		LoginResourceReturnData ret = TestUtils.getLoginClient()
+//		.type(MediaType.APPLICATION_JSON)
+//	    .post(LoginResourceReturnData.class, input);		
+//		return ret.getAuthKey();
+//	}
 	
 
 }

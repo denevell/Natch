@@ -7,6 +7,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ResourceBundle;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.WebTarget;
+
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.tests.functional.pageobjects.AddPostPO;
@@ -17,14 +20,11 @@ import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-
 public class AddPostFunctional {
 	
     private ResourceBundle rb = Strings.getMainResourceBundle();
 	private LoginResourceReturnData loginResult;
-    private WebResource service;
+    private WebTarget service;
     private String authKey;
 	private AddPostPO addPostPo;
 	
@@ -96,9 +96,9 @@ public class AddPostFunctional {
 	public void shouldSeeErrorOnUnAuthorised() {
 		try {
 			addPostPo.add("sub", "cont", new String[] {"tag1", "tag2"}, authKey+"BAD");
-		} catch(UniformInterfaceException e) {
+		} catch(WebApplicationException e) {
 			// Assert
-			assertEquals(401, e.getResponse().getClientResponseStatus().getStatusCode());
+			assertEquals(401, e.getResponse().getStatus());
 			return;
 		}
 		assertFalse("Was excepting a 401 response", true);		

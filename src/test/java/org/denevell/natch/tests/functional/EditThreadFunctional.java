@@ -6,6 +6,8 @@ import static org.junit.Assert.assertFalse;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.io.posts.AddPostResourceInput;
@@ -21,11 +23,9 @@ import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.jersey.api.client.WebResource;
-
 public class EditThreadFunctional {
     
-	private WebResource service;
+	private WebTarget service;
     private String authKey;
     ResourceBundle rb = Strings.getMainResourceBundle();
 
@@ -106,13 +106,12 @@ public class EditThreadFunctional {
 		assertEquals(thread.getSubject(), newListedPosts.getPosts().get(0).getSubject());
 	}
 
-    public static EditPostResourceReturnData editThread(WebResource service, String authKey, long postId, EditPostResource editedInput) {
+    public static EditPostResourceReturnData editThread(WebTarget service, String authKey, long postId, EditPostResource editedInput) {
         return service
 		.path("rest").path("post").path("editthread")
-		.path(String.valueOf(postId))
-	    .type(MediaType.APPLICATION_JSON)
+		.path(String.valueOf(postId)).request()
 		.header("AuthKey", authKey)
-    	.post(EditPostResourceReturnData.class, editedInput);
+    	.post(Entity.entity(editedInput, MediaType.APPLICATION_JSON),EditPostResourceReturnData.class);
     }
 
 }

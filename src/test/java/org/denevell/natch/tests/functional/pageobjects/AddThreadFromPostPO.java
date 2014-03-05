@@ -1,17 +1,17 @@
 package org.denevell.natch.tests.functional.pageobjects;
 
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.threads.AddThreadFromPostResourceInput;
 
-import com.sun.jersey.api.client.WebResource;
-
 public class AddThreadFromPostPO {
 	
-	private WebResource mService;
+	private WebTarget mService;
 
-	public AddThreadFromPostPO(WebResource service) {
+	public AddThreadFromPostPO(WebTarget service) {
 		mService = service;
 	}
 
@@ -31,10 +31,9 @@ public class AddThreadFromPostPO {
 
 		AddPostResourceReturnData returnData = 
 		mService 
-        .path("rest").path("thread").path("frompost")
+        .path("rest").path("thread").path("frompost").request()
         .header("AuthKey", authKey)
-        .type(MediaType.APPLICATION_JSON)
-        .put(AddPostResourceReturnData.class, input);
+        .put(Entity.entity(input, MediaType.APPLICATION_JSON), AddPostResourceReturnData.class);
         return returnData;
     }	
 	

@@ -33,9 +33,6 @@ import org.denevell.natch.utils.Strings;
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
-import com.wordnik.swagger.annotations.ApiError;
-import com.wordnik.swagger.annotations.ApiErrors;
-import com.wordnik.swagger.annotations.ApiOperation;
 
 @Path("post/addthread")
 public class AddThreadRequest {
@@ -67,11 +64,6 @@ public class AddThreadRequest {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Add a post",	notes="Must contain the AuthKey header.",
-		responseClass="org.denevell.natch.serv.posts.resources.AddPostResourceReturnData")
-	@ApiErrors({
-		@ApiError(code=401, reason="Incorrect AuthKey header.")
-	})	
 	public AddPostResourceReturnData addThread(AddPostResourceInput input) {
 		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
 		if(EditPostModel.isBadInputParams(userEntity, 

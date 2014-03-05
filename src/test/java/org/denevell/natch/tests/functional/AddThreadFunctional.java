@@ -10,6 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.io.posts.AddPostResourceInput;
@@ -22,12 +25,9 @@ import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-
 public class AddThreadFunctional {
 	
-	private WebResource service;
+	private WebTarget service;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private LoginResourceReturnData loginResult;
 	
@@ -107,21 +107,20 @@ public class AddThreadFunctional {
 		// Act
 		try {
 		    addThread(service, loginResult.getAuthKey()+"BAD", input);
-		} catch(UniformInterfaceException e) {
+		} catch(WebApplicationException e) {
 			// Assert
-			assertEquals(401, e.getResponse().getClientResponseStatus().getStatusCode());
+			assertEquals(401, e.getResponse().getStatus());
 			return;
 		}
 		assertFalse("Was excepting a 401 response", true);		
 	}	
 
-    public static AddPostResourceReturnData addThread(WebResource service, Object authKey, AddPostResourceInput input) {
+    public static AddPostResourceReturnData addThread(WebTarget service, Object authKey, AddPostResourceInput input) {
         AddPostResourceReturnData returnData = 
         service
-        .path("rest").path("post").path("addthread")
+        .path("rest").path("post").path("addthread").request()
 		.header("AuthKey", authKey)
-		.type(MediaType.APPLICATION_JSON)
-		.put(AddPostResourceReturnData.class, input);
+		.put(Entity.entity(input, MediaType.APPLICATION_JSON), AddPostResourceReturnData.class);
         return returnData;
     }
 	

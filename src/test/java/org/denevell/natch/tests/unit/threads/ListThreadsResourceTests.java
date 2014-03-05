@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -21,8 +22,6 @@ import org.denevell.natch.serv.thread.ListThreadsRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
-
-import scala.actors.threadpool.Arrays;
 
 public class ListThreadsResourceTests {
 	
@@ -49,7 +48,6 @@ public class ListThreadsResourceTests {
 		resource = new ListThreadsRequest(threadModel, request, response);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldListThreads() throws IOException {
 		// Arrange
@@ -78,7 +76,6 @@ public class ListThreadsResourceTests {
 		assertEquals("s2", result.getThreads().get(1).getSubject());
 	}	
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldntListThreadsWhenWithAnInitialPostAsNull() throws IOException {
 		// Arrange
@@ -96,7 +93,6 @@ public class ListThreadsResourceTests {
 		assertEquals(1, result.getThreads().size());
 	}		
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldListThreadsByTag() throws IOException {
 		// Arrange

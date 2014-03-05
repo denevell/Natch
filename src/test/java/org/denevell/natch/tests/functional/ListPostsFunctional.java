@@ -4,6 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.WebTarget;
+
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.threads.ThreadResource;
 import org.denevell.natch.io.users.LoginResourceReturnData;
@@ -14,14 +17,11 @@ import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-
 public class ListPostsFunctional {
 	
 	private LoginResourceReturnData loginResult;
-	private WebResource service;
-	private WebResource listThread;
+	private WebTarget service;
+	private WebTarget listThread;
 	private AddPostPO addPostPo;
 
 	@Before
@@ -68,7 +68,7 @@ public class ListPostsFunctional {
 		
 		// Act
 		ListPostsResource returnData = service
-		.path("rest").path("post").path("1").path("1")
+		.path("rest").path("post").path("1").path("1").request()
     	.get(ListPostsResource.class); 
 		
 		// Assert
@@ -122,7 +122,7 @@ public class ListPostsFunctional {
 		addPostPo.add("sub2", "cont2", loginResult.getAuthKey(), "t");
 		
 		// Act
-		ThreadResource returnData = listThread.path("t").path("0").path("20")
+		ThreadResource returnData = listThread.path("t").path("0").path("20").request()
     	.get(ThreadResource.class); 
 		
 		// Assert
@@ -146,7 +146,7 @@ public class ListPostsFunctional {
 		addPostPo.add("rubbish", "cont2", loginResult.getAuthKey(), "t");
 		
 		// Act
-		ThreadResource returnData = listThread.path("t").path("1").path("1")
+		ThreadResource returnData = listThread.path("t").path("1").path("1").request()
     	.get(ThreadResource.class); 
 		
 		// Assert
@@ -166,9 +166,9 @@ public class ListPostsFunctional {
 		// Act
 		try {
 			service
-			.path("rest").path("post").path("xxxxxxxxxxx").path("0").path("20")
+			.path("rest").path("post").path("xxxxxxxxxxx").path("0").path("20").request()
 	    	.get(ThreadResource.class); 
-		} catch (UniformInterfaceException e) {
+		} catch (WebApplicationException e) {
 			assertEquals(404, e.getResponse().getStatus());
 			return;
 		} catch(Exception e) {
@@ -180,9 +180,9 @@ public class ListPostsFunctional {
 		assertTrue("Expected 404", false);
 	}	
 
-    public static ListPostsResource listRecentPostsThreads(WebResource service) {
+    public static ListPostsResource listRecentPostsThreads(WebTarget service) {
         ListPostsResource returnData = service
-		.path("rest").path("post").path("0").path("10")
+		.path("rest").path("post").path("0").path("10").request()
     	.get(ListPostsResource.class);
         return returnData;
     }

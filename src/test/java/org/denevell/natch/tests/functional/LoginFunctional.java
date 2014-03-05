@@ -6,7 +6,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ResourceBundle;
 
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.WebTarget;
 
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.users.LoginResourceLoggedInReturnData;
@@ -19,12 +20,9 @@ import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-
 public class LoginFunctional {
 	
-	private WebResource service;
+	private WebTarget service;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private RegisterPO registerPo;
 
@@ -171,13 +169,12 @@ public class LoginFunctional {
 	    // Act
 		try {
 		service
-	    	.path("rest").path("user").path("is")
-	    	.type(MediaType.APPLICATION_JSON)
+	    	.path("rest").path("user").path("is").request()
 			.header("AuthKey", loginResult.getAuthKey()+"INCORRECT")
 	    	.get(LoginResourceLoggedInReturnData.class);
-		} catch(UniformInterfaceException e) {
+		} catch(WebApplicationException e) {
 			// Assert
-			assertEquals("Should get 401", 401, e.getResponse().getClientResponseStatus().getStatusCode()); 
+			assertEquals("Should get 401", 401, e.getResponse().getStatus()); 
 			return;
 		}
 		assertTrue("Wanted to see a 401", false);
@@ -194,13 +191,12 @@ public class LoginFunctional {
 
 		try {
 			service
-		    	.path("rest").path("user").path("is")
-		    	.type(MediaType.APPLICATION_JSON)
+		    	.path("rest").path("user").path("is").request()
 				.header("AuthKey", loginResult.getAuthKey())
 		    	.get(LoginResourceLoggedInReturnData.class);
-		} catch(UniformInterfaceException e) {
+		} catch(WebApplicationException e) {
 			// Assert
-			assertEquals("Should get 401", 401, e.getResponse().getClientResponseStatus().getStatusCode()); 
+			assertEquals("Should get 401", 401, e.getResponse().getStatus()); 
 			return;
 		}
 		assertTrue("Wanted to see a 401", false);		

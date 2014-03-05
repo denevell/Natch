@@ -4,6 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.io.posts.AddPostResourceInput;
@@ -17,13 +20,10 @@ import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-
 public class ListSinglePostFunctional {
 	
 	private LoginResourceReturnData loginResult;
-	private WebResource service;
+	private WebTarget service;
 
 	@Before
 	public void setup() throws Exception {
@@ -45,18 +45,17 @@ public class ListSinglePostFunctional {
 		input = new AddPostResourceInput("subpost", "contpost");
 		input.setThreadId(newThreads.getThread().getId());
 		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
+		.path("rest").path("post").path("add").request()
 		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
+    	.put(Entity.entity(input, MediaType.APPLICATION_JSON), AddPostResourceReturnData.class); 
 		// Arrange list posts 
 		ListPostsResource postsList = service
-		.path("rest").path("post").path("0").path("10")
+		.path("rest").path("post").path("0").path("10").request()
     	.get(ListPostsResource.class); 	
 		
 		// Act
 		PostResource returnData = service
-		.path("rest").path("post").path("single").path(postsList.getPosts().get(0).getId()+"")
+		.path("rest").path("post").path("single").path(postsList.getPosts().get(0).getId()+"").request()
     	.get(PostResource.class); 
 		
 		// Assert
@@ -73,15 +72,16 @@ public class ListSinglePostFunctional {
 		AddThreadFunctional.addThread(service, loginResult.getAuthKey(), input);
 		// Arrange list posts 
 		ListPostsResource postsList = service
-		.path("rest").path("post").path("0").path("10")
+		.path("rest").path("post").path("0").path("10").request()
     	.get(ListPostsResource.class); 	
 		
 		// Act
 		try {
 			service
-			.path("rest").path("post").path("single").path(postsList.getPosts().get(0).getId()+"blarblar")
+			.path("rest").path("post").path("single")
+			.path(postsList.getPosts().get(0).getId()+"blarblar").request()
 	    	.get(PostResource.class); 		
-		} catch (UniformInterfaceException e) {
+		} catch (WebApplicationException e) {
 			assertEquals(404, e.getResponse().getStatus());
 			return;
 		} catch(Exception e) {

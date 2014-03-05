@@ -19,11 +19,6 @@ import org.denevell.natch.io.posts.DeletePostResourceReturnData;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
-import com.wordnik.swagger.annotations.ApiError;
-import com.wordnik.swagger.annotations.ApiErrors;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-
 @Path("post/del")
 public class DeletePostRequest {
 	
@@ -60,13 +55,8 @@ public class DeletePostRequest {
 	@DELETE
 	@Path("{postId}") // Explicit for the servlet filter
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Delete a post", 	notes="Must contain the AuthKey header.",
-		responseClass="org.denevell.natch.serv.posts.resources.DeletePostResourceReturnData")
-	@ApiErrors({
-		@ApiError(code=401, reason="Incorrect AuthKey header.")
-	})	
 	public DeletePostResourceReturnData delete(
-			@ApiParam(name="postId") @PathParam("postId") long number) {
+			@PathParam("postId") long number) {
 		DeletePostResourceReturnData ret = new DeletePostResourceReturnData();
 		ret.setSuccessful(false);
 		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);

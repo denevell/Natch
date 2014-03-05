@@ -6,7 +6,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ResourceBundle;
 
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
@@ -20,11 +21,9 @@ import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.jersey.api.client.WebResource;
-
 public class DeletePostsFunctional {
 	
-	private WebResource service;
+	private WebTarget service;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private LoginResourceReturnData loginResult;
 	private RegisterPO registerPo;
@@ -45,32 +44,29 @@ public class DeletePostsFunctional {
 		AddPostResourceInput input2 = new AddPostResourceInput("d", "e", "thread");	
 
 		AddPostResourceReturnData res = service
-		.path("rest").path("post").path("addthread")
-	    .type(MediaType.APPLICATION_JSON)
+		.path("rest").path("post").path("addthread").request()
 		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input);
+    	.put(Entity.json(input), AddPostResourceReturnData.class);
 		assertTrue("Added thraed", res.isSuccessful());				
 
 		res = service
-		.path("rest").path("post").path("addthread")
-	    .type(MediaType.APPLICATION_JSON)
+		.path("rest").path("post").path("addthread").request()
 		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input2);
+    	.put(Entity.json(input2), AddPostResourceReturnData.class);
 		assertTrue("Added thraed", res.isSuccessful());				
 
 		ListPostsResource listPostsBefore = 
-		service.path("rest").path("post").path("0").path("10")
+		service.path("rest").path("post").path("0").path("10").request()
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 		
 		
 		// Act
 		DeletePostResourceReturnData ret = service.path("rest").path("post").path("del")
-		.path(String.valueOf(listPostsBefore.getPosts().get(0).getId()))
+		.path(String.valueOf(listPostsBefore.getPosts().get(0).getId())).request()
 		.header("AuthKey", loginResult.getAuthKey())
-		.entity(null)
 		.delete(DeletePostResourceReturnData.class);
 		ListPostsResource listPostsAfter = service
-		.path("rest").path("post").path("0").path("10")
+		.path("rest").path("post").path("0").path("10").request()
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 		
 		
@@ -91,23 +87,21 @@ public class DeletePostsFunctional {
 		// Make post with user one 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
 		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
+		.path("rest").path("post").path("add").request()
 		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
+    	.put(Entity.json(input), AddPostResourceReturnData.class); 
 		ListPostsResource listPosts = service
-		.path("rest").path("post").path("0").path("10")
+		.path("rest").path("post").path("0").path("10").request()
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 		
 		
 		// Act - delete with second user
 		DeletePostResourceReturnData ret = service.path("rest").path("post").path("del")
-		.path(String.valueOf(listPosts.getPosts().get(0).getId()))
+		.path(String.valueOf(listPosts.getPosts().get(0).getId())).request()
 		.header("AuthKey", loginResult1.getAuthKey())
-		.entity(null)
 		.delete(DeletePostResourceReturnData.class);
 		ListPostsResource listPostsAfter = service
-		.path("rest").path("post").path("0").path("10")
+		.path("rest").path("post").path("0").path("10").request()
 		.header("AuthKey", loginResult1.getAuthKey())
     	.get(ListPostsResource.class); 		
 		
@@ -128,23 +122,21 @@ public class DeletePostsFunctional {
         // Make post with user two
         AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
         service
-        .path("rest").path("post").path("add")
-        .type(MediaType.APPLICATION_JSON)
+        .path("rest").path("post").path("add").request()
         .header("AuthKey", loginResult1.getAuthKey())
-        .put(AddPostResourceReturnData.class, input); 
+        .put(Entity.json(input), AddPostResourceReturnData.class); 
         ListPostsResource listPosts = service
-        .path("rest").path("post").path("0").path("10")
+        .path("rest").path("post").path("0").path("10").request() 
         .header("AuthKey", loginResult1.getAuthKey())
         .get(ListPostsResource.class);      
         
         // Act - delete with first user, admin user
         DeletePostResourceReturnData ret = service.path("rest").path("post").path("del")
-        .path(String.valueOf(listPosts.getPosts().get(0).getId()))
+        .path(String.valueOf(listPosts.getPosts().get(0).getId())).request()
         .header("AuthKey", loginResult.getAuthKey())
-        .entity(null)
         .delete(DeletePostResourceReturnData.class);
         ListPostsResource listPostsAfter = service
-        .path("rest").path("post").path("0").path("10")
+        .path("rest").path("post").path("0").path("10").request()
         .header("AuthKey", loginResult.getAuthKey())
         .get(ListPostsResource.class);      
         
@@ -160,23 +152,21 @@ public class DeletePostsFunctional {
 		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
 		service
-		.path("rest").path("post").path("add")
-	    .type(MediaType.APPLICATION_JSON)
+		.path("rest").path("post").path("add").request()
 		.header("AuthKey", loginResult.getAuthKey())
-    	.put(AddPostResourceReturnData.class, input); 
+    	.put(Entity.json(input), AddPostResourceReturnData.class); 
 		ListPostsResource listPosts = service
-		.path("rest").path("post").path("0").path("10")
+		.path("rest").path("post").path("0").path("10").request()
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 		
 		
 		// Act
 		DeletePostResourceReturnData ret = service.path("rest").path("post").path("del")
-		.path(String.valueOf(listPosts.getPosts().get(0).getId()+1))
+		.path(String.valueOf(listPosts.getPosts().get(0).getId()+1)).request()
 		.header("AuthKey", loginResult.getAuthKey())
-		.entity(null)
 		.delete(DeletePostResourceReturnData.class);
 		ListPostsResource listPostsAfter = service
-		.path("rest").path("post").path("0").path("10")
+		.path("rest").path("post").path("0").path("10").request()
 		.header("AuthKey", loginResult.getAuthKey())
     	.get(ListPostsResource.class); 		
 		
@@ -187,11 +177,10 @@ public class DeletePostsFunctional {
 		assertEquals(1, listPostsAfter.getPosts().size());				
 	}
 	
-	public static DeletePostResourceReturnData deletePost(WebResource service, long postId, String authKey) {
+	public static DeletePostResourceReturnData deletePost(WebTarget service, long postId, String authKey) {
 		DeletePostResourceReturnData ret = service.path("rest").path("post").path("del")
-		.path(String.valueOf(postId))
+		.path(String.valueOf(postId)).request()
 		.header("AuthKey", authKey)
-		.entity(null)
 		.delete(DeletePostResourceReturnData.class);	
 		return ret;
 	}
