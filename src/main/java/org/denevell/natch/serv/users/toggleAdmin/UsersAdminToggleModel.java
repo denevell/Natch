@@ -31,7 +31,7 @@ public class UsersAdminToggleModel {
 	}
 	
 	public UsersAdminToggleModel() {
-	    mUserEntityQueries = new UserEntityQueries(null);
+	    mUserEntityQueries = new UserEntityQueries();
         mAuthDataGenerator = LoginAuthKeysSingleton.getInstance();
 	}
 	

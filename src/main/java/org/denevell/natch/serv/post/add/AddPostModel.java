@@ -27,7 +27,7 @@ public class AddPostModel {
 	
 	public AddPostModel() {
 		mThreadFactory = new ThreadFactory();
-		mUserEntityQueries = new UserEntityQueries(null);
+		mUserEntityQueries = new UserEntityQueries();
 	}
 	
 	public void init() {

@@ -47,14 +47,15 @@ public class LoginFunctional {
 
 	
 	@Test
-	public void shouldSeeJsonErrorOnBadCredentials() {
-		// Arrange 
+	public void shouldSee403OnBadCredentials() {
 	    registerPo.register("aaron@aaron.com", "passy");
-		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron@aaron.com", "passyWRONG");
-		
-		// Assert
-		assertEquals(rb.getString(Strings.incorrect_username_or_password), loginResult.getError());
-		assertFalse("Should return false as 'successful' field", loginResult.isSuccessful());
+		try{
+			new LoginPO(service).login("aaron@aaron.com", "passyWRONG");
+		} catch(WebApplicationException e) {
+			assertEquals(403, e.getResponse().getStatus());
+			return;
+		}
+		assertFalse("Excepted a 403", true);	
 	}
 	
 

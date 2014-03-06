@@ -1,4 +1,4 @@
-package org.denevell.natch.serv.users.logout;
+package org.denevell.natch.serv.users;
 
 import java.util.ResourceBundle;
 
@@ -11,7 +11,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
+import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.auth.LoginHeadersFilter;
+import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.users.LogoutResourceReturnData;
 import org.denevell.natch.utils.Strings;
 
@@ -21,19 +23,19 @@ public class LogoutRequest {
 	@Context UriInfo info;
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
-	private LogoutModel mLoginModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
+	private LoginAuthKeysSingleton mAuthDataGenerator;
 	
 	public LogoutRequest() {
-		mLoginModel = new LogoutModel();
+		mAuthDataGenerator = LoginAuthKeysSingleton.getInstance();
 	}
 	
 	/**
 	 * For DI testing.
 	 * @param request 
 	 */
-	public LogoutRequest(LogoutModel userModel, HttpServletRequest request) {
-		mLoginModel = userModel;
+	public LogoutRequest(LoginAuthKeysSingleton loginAuth, HttpServletRequest request) {
+		mAuthDataGenerator = loginAuth;
 		mRequest = request;
 	}
 		
@@ -42,11 +44,12 @@ public class LogoutRequest {
 	public LogoutResourceReturnData logout() {
 		LogoutResourceReturnData returnResult = new LogoutResourceReturnData();
 		String authKey = mRequest.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_AUTHKEY).toString();
-		if(mLoginModel.logout(authKey)) {
-			returnResult.setSuccessful(true);
-		} else {
-			returnResult.setSuccessful(false);
-			returnResult.setError(rb.getString(Strings.unknown_error));
+		if(authKey!=null && authKey.trim().length()!=0) {
+			mAuthDataGenerator.remove(authKey);
+			UserEntity username = mAuthDataGenerator.retrieveUserEntity(authKey);
+			if(username == null) {
+				returnResult.setSuccessful(true);
+			} 
 		}
 		return returnResult;
 	}	

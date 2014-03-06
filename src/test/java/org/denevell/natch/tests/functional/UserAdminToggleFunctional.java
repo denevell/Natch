@@ -42,7 +42,12 @@ public class UserAdminToggleFunctional {
 	    registerPo.register("other1", "other1");
 		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron", "aaron");
 		UserList users = UsersListFunctional.listUsers(service, loginResult.getAuthKey());
-		assertEquals("other1", users.getUsers().get(1).getUsername());
+		User user = users.getUsers().get(1);
+		if(!user.getUsername().equals("other1")) {
+			user = users.getUsers().get(0);
+			assertEquals("aaron", users.getUsers().get(1).getUsername());
+		}
+		assertEquals("other1", user.getUsername());
 		assertEquals(false, users.getUsers().get(1).isAdmin());
 
 	    // Act
@@ -51,7 +56,7 @@ public class UserAdminToggleFunctional {
 		// Assert
         assertTrue("Is successful", result.isSuccessful());
 		users = UsersListFunctional.listUsers(service, loginResult.getAuthKey());
-		User user = users.getUsers().get(1);
+		user = users.getUsers().get(1);
 		if(!user.getUsername().equals("other1")) {
 			user = users.getUsers().get(0);
 			assertEquals("aaron", users.getUsers().get(1).getUsername());
@@ -82,8 +87,13 @@ public class UserAdminToggleFunctional {
 		LoginResourceReturnData loginResultAdmin = new LoginPO(service).login("aaron", "aaron");
 		LoginResourceReturnData loginResultUser = new LoginPO(service).login("other1", "other1");
 		UserList users = UsersListFunctional.listUsers(service, loginResultAdmin.getAuthKey());
-		assertEquals("other1", users.getUsers().get(1).getUsername());
-		assertEquals(false, users.getUsers().get(1).isAdmin());
+		User user = users.getUsers().get(1);
+		if(!user.getUsername().equals("other1")) {
+			user = users.getUsers().get(0);
+			assertEquals("aaron", user.getUsername());
+		}
+		assertEquals("other1", user.getUsername());
+		assertEquals(false, user.isAdmin());
 
 	    // Act - make normal user an admin
         toggleAdmin(loginResultAdmin);   
