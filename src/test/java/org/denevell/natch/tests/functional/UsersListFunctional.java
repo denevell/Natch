@@ -3,12 +3,14 @@ package org.denevell.natch.tests.functional;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.WebTarget;
 
 import org.denevell.natch.io.users.LoginResourceReturnData;
+import org.denevell.natch.io.users.User;
 import org.denevell.natch.io.users.UserList;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
@@ -41,11 +43,18 @@ public class UsersListFunctional {
 		UserList thread = listUsers(service, loginResult.getAuthKey());	
 		
 		// Assert
-		assertEquals(2, thread.getUsers().size());
-		assertEquals("other1", thread.getUsers().get(1).getUsername());
-		assertEquals(false, thread.getUsers().get(1).isAdmin());
-		assertEquals("aaron", thread.getUsers().get(0).getUsername());
-		assertEquals(true, thread.getUsers().get(0).isAdmin());
+		List<User> users = thread.getUsers();
+		User user0 = users.get(0);
+		User user1 = users.get(1);
+		if(!user0.getUsername().equals("aaron")) {
+			user0 = user1; 
+			user1 = user0; 
+			assertTrue(user0.getUsername().equals("aaron"));
+			assertTrue(user1.getUsername().equals("other1"));
+		}
+		assertEquals(2, users.size());
+		assertEquals(true, user0.isAdmin());
+		assertEquals(false, user1.isAdmin());
 	}
 
     public static UserList listUsers(WebTarget s, String authKey) {

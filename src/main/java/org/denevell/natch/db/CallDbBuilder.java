@@ -154,6 +154,42 @@ public class CallDbBuilder<ListItem> {
 	}
 	
 	/**
+	 * @throws RuntimeException if there was an error
+	 */
+	public void update(ListItem instance) {
+		EntityTransaction trans = null;
+		try {
+			EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
+			mEntityManager = factory.createEntityManager();   		
+			trans = mEntityManager.getTransaction();
+			trans.begin();
+			mEntityManager.merge(instance);
+			trans.commit();
+		} catch(Exception e){
+			Log.info(this.getClass(), e.toString());
+			if(trans!=null && trans.isActive()) trans.rollback();
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} finally {
+			EntityUtils.closeEntityConnection(mEntityManager);
+		}
+	}	
+	
+	/**
+	 * Ensure you've set query parameters before calling this
+	 * @throws RuntimeException if error updating
+	 * @return false if it couldn't find the item to update
+	 */
+	public boolean findAndUpdate(String namedQuery, RunnableWith<ListItem> runnableWith, Class<ListItem> clazz) {
+		ListItem toBeUpdated  = namedQuery(namedQuery).single(clazz);
+		if(toBeUpdated==null) return false;
+		runnableWith.item(toBeUpdated);
+		update(toBeUpdated);
+		return true;
+		
+	}
+	
+	/**
 	 * @return false if it already exists
 	 * @throws RuntimeException if there was an error adding
 	 */
