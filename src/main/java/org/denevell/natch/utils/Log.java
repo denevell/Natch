@@ -28,4 +28,8 @@ public class Log {
 	public static void error(@SuppressWarnings("rawtypes") Class c, String s, Exception e) {
 		Logger.getLogger(c).error(s, e);
 	}
+
+	public static void error(@SuppressWarnings("rawtypes") Class c, String s) {
+		Logger.getLogger(c).error(s);
+	}
 }

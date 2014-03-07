@@ -60,13 +60,20 @@ task migrateProd() << {
 	migrationScript(connStr)
 }
 
+task lookForGcmKey () {
+	def key = System.env['GCM_KEY']
+	if(!key?.trim()) {
+		throw new GradleException("Couldn't find gcm key.")
+	}
+}
+
 // PROD
 
 task createProd (type: War, dependsOn: [migrateProd]) << {} 
 createProd.classifier = 'Production'
-createProd.manifest = manifest { attributes  "ISPROD": "TRUE"  }
+createProd.manifest = manifest { attributes  "ISPROD": "TRUE","GCM_KEY":System.env['GCM_KEY']  }
 
-task deployProd (dependsOn: [createProd]) << {
+task deployProd (dependsOn: [lookForGcmKey,createProd]) << {
 	undeployDeployWar(project.name+'-Production', ''+file('.')+'/build/libs/')
 }
 
@@ -74,13 +81,16 @@ task deployProd (dependsOn: [createProd]) << {
 
 task createTest (type: War, dependsOn: [migrate]) << {}
 createTest.classifier = 'ForAutomatedTests'
-createTest.manifest = manifest { attributes  "ISPROD": "FALSE"  }
+createTest.manifest = manifest { attributes  "ISPROD": "FALSE","GCM_KEY":System.env['GCM_KEY']  }
 
-task deployTest (dependsOn: [createTest]) << {
+task deployTest (dependsOn: [lookForGcmKey,createTest]) << {
 	undeployDeployWar(project.name+'-ForAutomatedTests', ''+file('.')+'/build/libs/')
 }
 
 task doTest (type: Test, dependsOn: [deployTest]) {}
+
+
+
 
 
 

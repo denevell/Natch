@@ -1,5 +1,6 @@
 package org.denevell.natch.serv.thread;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -28,6 +29,7 @@ import org.denevell.natch.serv.post.add.AddPostModel;
 import org.denevell.natch.serv.post.add.AddPostRequest;
 import org.denevell.natch.serv.post.edit.EditPostModel;
 import org.denevell.natch.utils.Log;
+import org.denevell.natch.utils.ManifestUtils;
 import org.denevell.natch.utils.Strings;
 
 import com.google.android.gcm.server.Message;
@@ -107,7 +109,18 @@ public class AddThreadRequest {
 			@Override
 			public void run() {
 				Log.info(AddThreadRequest.class, "Starting to send push notifications");
-				String key = "AIzaSyDa1_2hWr2uH7VTEUf95rN7uev3Z5AJGi0";
+				String key = null;
+				try {
+					key = ManifestUtils.getManifest(mRequest.getServletContext()).getValue("GCM_KEY");
+					if (key != null && !key.trim().isEmpty()) {
+						Log.info(AddThreadRequest.class, "GCM key looks alright -- not empty");
+					} else {
+						Log.error(AddThreadRequest.class, "GCM key looks bad -- empty");
+					}
+				} catch (IOException e1) {
+					Log.error(AddThreadRequest.class, "GCM key looks bad -- empty");
+					e1.printStackTrace();
+				}
 				Sender sender = new Sender(key);
 				List<PushEntity> list = new CallDbBuilder<PushEntity>()
 						.namedQuery(PushEntity.NAMED_QUERY_LIST_IDS)
