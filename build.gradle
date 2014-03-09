@@ -15,13 +15,7 @@ compileJava {
   targetCompatibility = 1.6
 }
 
-configurations {
-	jettyJars
-}
-
 dependencies {
-        jettyJars 'org.eclipse.jetty:jetty-jsp:9.1.0.M0'
-        jettyJars 'org.eclipse.jetty:jetty-webapp:9.1.0.M0'
         providedCompile 'org.eclipse.jetty:jetty-jsp:9.1.0.M0'
         providedCompile 'org.eclipse.jetty:jetty-webapp:9.1.0.M0'
 
@@ -79,17 +73,7 @@ task lookForGcmKey () {
 
 task createTest (type: War, dependsOn: [migrate]) << {}
 createTest.classifier = 'ForAutomatedTests'
-createTest.manifest = manifest { attributes  "ISPROD": "FALSE","GCM_KEY":System.env['GCM_KEY'], "main-class":"org.denevell.natch.utils.JettyApplication"  }
-
-// Jar that runs the jetty web server
-
-task full_jar(type: Jar, dependsOn: classes) {
-	from configurations.jettyJars.collect {it.directory ? it : zipTree(it)}
-	from files(compileJava)
-	baseName = "${project.archivesBaseName}-full"
-	exclude('META-INF/*.RSA','META-INF/*.SF')
-}
-full_jar.manifest = manifest { attributes  "ISPROD": "FALSE","GCM_KEY":System.env['GCM_KEY']  }
+createTest.manifest = manifest { attributes  "ISPROD": "FALSE","GCM_KEY":System.env['GCM_KEY'] }
 
 // Db stuff
 
