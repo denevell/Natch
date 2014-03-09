@@ -15,9 +15,15 @@ compileJava {
   targetCompatibility = 1.6
 }
 
+configurations {
+	jettyJars
+}
+
 dependencies {
-        compile 'org.eclipse.jetty:jetty-jsp:9.1.0.M0'
-        compile 'org.eclipse.jetty:jetty-webapp:9.1.0.M0'
+        jettyJars 'org.eclipse.jetty:jetty-jsp:9.1.0.M0'
+        jettyJars 'org.eclipse.jetty:jetty-webapp:9.1.0.M0'
+        providedCompile 'org.eclipse.jetty:jetty-jsp:9.1.0.M0'
+        providedCompile 'org.eclipse.jetty:jetty-webapp:9.1.0.M0'
 
 	testCompile 'junit:junit:4.11'
 	testCompile 'org.mockito:mockito-all:1.9.5'
@@ -78,7 +84,7 @@ createTest.manifest = manifest { attributes  "ISPROD": "FALSE","GCM_KEY":System.
 // Jar that runs the jetty web server
 
 task full_jar(type: Jar, dependsOn: classes) {
-	from configurations.compile.collect {it.directory ? it : zipTree(it)}
+	from configurations.jettyJars.collect {it.directory ? it : zipTree(it)}
 	from files(compileJava)
 	baseName = "${project.archivesBaseName}-full"
 	exclude('META-INF/*.RSA','META-INF/*.SF')
