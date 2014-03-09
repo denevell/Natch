@@ -14,14 +14,14 @@ public class JettyApplication {
 	        WebAppContext webContext = new WebAppContext();
 	        webContext.setContextPath("/rest");
 	        webContext.setServer(server);
-	        webContext.setWar("/home/user/workspace/Natch-Jsp/Natch-REST/build/libs/Natch-REST-ForAutomatedTests.war");
+	        webContext.setWar("/home/user/workspace/Natch-Jsp/Natch-REST/Natch-REST-ForAutomatedTests.war");
 	        
 	        hc.addHandler(webContext);
 
 	        WebAppContext webContext1 = new WebAppContext();
 	        webContext1.setContextPath("/jsp/");
 	        webContext1.setServer(server);
-	        webContext1.setWar("/home/user/workspace/Natch-Jsp/build/libs/Natch-Jsp-ForAutomatedTests.war");
+	        webContext1.setWar("/home/user/workspace/Natch-Jsp/Natch-Jsp-ForAutomatedTests.war");
 
 	        hc.addHandler(webContext1);
 
