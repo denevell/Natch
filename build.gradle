@@ -73,6 +73,7 @@ task lookForGcmKey () {
 
 task createTest (type: War, dependsOn: [migrate]) << {}
 createTest.classifier = 'ForAutomatedTests'
+createTest.destinationDir = new File(".")
 createTest.manifest = manifest { attributes  "ISPROD": "FALSE","GCM_KEY":System.env['GCM_KEY'] }
 
 // Db stuff
