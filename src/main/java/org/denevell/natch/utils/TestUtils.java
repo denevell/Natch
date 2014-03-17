@@ -19,10 +19,10 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 
 public class TestUtils {
 	
-	private static final String NATCH_FUNCTIONAL = "/rest/";
+	private static final String NATCH_FUNCTIONAL = "/Natch-REST-ForAutomatedTests/";
 
 	private static String getHost() {
-		return "http://localhost:8085";
+		return "http://localhost:8080";
 	}
 
 	public static void deleteTestDb() throws Exception {
