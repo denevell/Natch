@@ -52,6 +52,7 @@ public class AddThreadFunctional {
 		// Assert
 		assertEquals("", returnData.getError());
 		assertNotNull(returnData.getThread().getSubject());
+		assertTrue("Has tags in returned value",  returnData.getThread().getTags()!=null && returnData.getThread().getTags().contains("tag2"));
 		assertTrue(returnData.isSuccessful());
 	}
 	

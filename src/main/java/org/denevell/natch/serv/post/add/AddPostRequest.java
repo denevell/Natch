@@ -117,6 +117,7 @@ public class AddPostRequest {
 		if(postsResources.size()>0) {
 			tr.setSubject(postsResources.get(0).getSubject());
 			tr.setAuthor(thread.getRootPost().getUser().getUsername());
+			tr.setTags(postsResources.get(0).getTags());
 		}
 		tr.setPosts(postsResources);
 		tr.setNumPosts((int) thread.getNumPosts());
