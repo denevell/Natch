@@ -118,6 +118,7 @@ public class ListThreadsFunctional {
 		ThreadResource thread = listThreadById("t"); 		
 		
 		// Assert
+		assertTrue("Thread id shouldn't be blank", thread.getId()!=null && thread.getId().trim().length()>0);
 		assertEquals("Has latest post's modificaton date", 
 				threads.getThreads().get(0).getModification(), 
 				thread.getPosts().get(1).getModification());
