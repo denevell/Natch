@@ -111,7 +111,7 @@ public class AddThreadRequest {
 				Log.info(AddThreadRequest.class, "Starting to send push notifications");
 				String key = null;
 				try {
-					key = ManifestUtils.getManifest(mRequest.getServletContext()).getValue("GCM_KEY");
+					key = ManifestUtils.getManifest(context).getValue("GCM_KEY");
 					if (key != null && !key.trim().isEmpty()) {
 						Log.info(AddThreadRequest.class, "GCM key looks alright -- not empty");
 					} else {

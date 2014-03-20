@@ -76,6 +76,11 @@ createTest.classifier = 'ForAutomatedTests'
 createTest.destinationDir = new File(".")
 createTest.manifest = manifest { attributes  "ISPROD": "FALSE","GCM_KEY":System.env['GCM_KEY'] }
 
+task createProd (type: War, dependsOn: [migrateProd]) << {}
+createProd.classifier = 'Production'
+createProd.destinationDir = new File(".")
+createProd.manifest = manifest { attributes  "ISPROD": "TRUE","GCM_KEY":System.env['GCM_KEY'] }
+
 // Db stuff
 
 def migrationScript(connStr) {
