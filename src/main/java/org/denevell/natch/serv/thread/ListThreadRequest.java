@@ -112,6 +112,7 @@ public class ListThreadRequest {
 		tr.setAuthor(thread.getRootPost().getUser().getUsername());
 		tr.setPosts(postsResources);
 		tr.setNumPosts((int) thread.getNumPosts());
+		tr.setId(thread.getId());
 		return tr;
 	}	
 
