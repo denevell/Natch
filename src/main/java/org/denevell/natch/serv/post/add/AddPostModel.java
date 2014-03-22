@@ -51,11 +51,11 @@ public class AddPostModel {
 
 	public ThreadEntity addPostAsDifferntUser(String userId, AddPostResourceInput input) {
 	    List<UserEntity> user = mUserEntityQueries.getUserByUsername(userId, mEntityManager);
-	    return addPost(new AddPostRequestToPostEntity(input, true, user.get(0)));
+	    return addPost(AddPostRequestToPostEntity.adapt(input, true, user.get(0)));
 	}
 
 	public ThreadEntity addPost(UserEntity user, AddPostResourceInput input) {
-	    return addPost(new AddPostRequestToPostEntity(input, false, user));
+	    return addPost(AddPostRequestToPostEntity.adapt(input, false, user));
 	}
 	
 	public ThreadEntity addPost(PostEntity post) {

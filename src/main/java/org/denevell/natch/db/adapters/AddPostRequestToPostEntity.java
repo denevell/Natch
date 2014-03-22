@@ -6,23 +6,25 @@ import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 
-public class AddPostRequestToPostEntity extends PostEntity {
+public class AddPostRequestToPostEntity {
 
-	public AddPostRequestToPostEntity(
+	public static PostEntity adapt(
 			AddPostResourceInput input,
 			boolean adminEdited, 
 			UserEntity entityUser) {
+		PostEntity pe = new PostEntity();
 		long created = new Date().getTime();
-		setContent(input.getContent());
-		setSubject(input.getSubject());
-		setThreadId(input.getThreadId());
-		setTags(input.getTags());
-		setUser(entityUser);
-		setCreated(created);
-		setModified(created);
+		pe.setContent(input.getContent());
+		pe.setSubject(input.getSubject());
+		pe.setThreadId(input.getThreadId());
+		pe.setTags(input.getTags());
+		pe.setUser(entityUser);
+		pe.setCreated(created);
+		pe.setModified(created);
 		if (adminEdited) {
-			adminEdited();
+			pe.adminEdited();
 		}
+		return pe;
 	}
 
 }
