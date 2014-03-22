@@ -1,6 +1,5 @@
 package org.denevell.natch.serv.post.add;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -8,6 +7,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.LockModeType;
 
+import org.denevell.natch.db.adapters.AddPostRequestToPostEntity;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
@@ -51,35 +51,23 @@ public class AddPostModel {
 
 	public ThreadEntity addPostAsDifferntUser(String userId, AddPostResourceInput input) {
 	    List<UserEntity> user = mUserEntityQueries.getUserByUsername(userId, mEntityManager);
-	    return addPost(user.get(0), input, true);
+	    return addPost(new AddPostRequestToPostEntity(input, true, user.get(0)));
 	}
 
 	public ThreadEntity addPost(UserEntity user, AddPostResourceInput input) {
-	    return addPost(user, input, false);
+	    return addPost(new AddPostRequestToPostEntity(input, false, user));
 	}
 	
-	public ThreadEntity addPost(UserEntity user, AddPostResourceInput input, boolean adminEdited) {
+	public ThreadEntity addPost(PostEntity post) {
 		EntityTransaction trans = null;
 		try {
-			long created = new Date().getTime();
-			PostEntity mPost = new PostEntity();
-			mPost.setContent(input.getContent());
-			mPost.setSubject(input.getSubject());
-			mPost.setThreadId(input.getThreadId());
-			mPost.setTags(input.getTags());			
-			mPost.setUser(user);
-			mPost.setCreated(created);
-			mPost.setModified(created);			
-			if(adminEdited) {
-			    mPost.adminEdited();
-			}
 			trans = mEntityManager.getTransaction();
 			trans.begin();
-			ThreadEntity thread = findThreadById(mPost.getThreadId());
+			ThreadEntity thread = findThreadById(post.getThreadId());
 			if(thread==null) {
-				thread = mThreadFactory.makeThread(mPost);
+				thread = mThreadFactory.makeThread(post);
 			} else {
-				thread = mThreadFactory.makeThread(thread, mPost);
+				thread = mThreadFactory.makeThread(thread, post);
 			}
 			mEntityManager.persist(thread);
 			trans.commit();
