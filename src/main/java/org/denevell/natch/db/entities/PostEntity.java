@@ -1,8 +1,12 @@
 package org.denevell.natch.db.entities;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.denevell.natch.utils.Log;
 
 public class PostEntity {
 	
@@ -91,6 +95,10 @@ public class PostEntity {
 	}
 
 	public void setThreadId(String threadId) {
+		long created = new Date().getTime();
+		if(threadId==null) {
+			threadId = getThreadId(subject, threadId, created);
+		}
 		this.threadId = threadId;
 	}
 
@@ -130,4 +138,24 @@ public class PostEntity {
     public boolean isAdminEdited() {
         return adminEdited;
     }
+	
+	private String getThreadId(String subject, String threadId, long time) {
+		if(threadId==null || threadId.trim().length()==0) {
+			try {
+				MessageDigest md5Algor = MessageDigest.getInstance("MD5");
+				StringBuffer sb = new StringBuffer();
+				byte[] digest = md5Algor.digest(subject.getBytes());
+				for (byte b : digest) {
+					sb.append(Integer.toHexString((int) (b & 0xff)));
+				}				
+				threadId = sb.toString();
+			} catch (NoSuchAlgorithmException e) {
+				Log.info(getClass(), "Couldn't get an MD5 hash. I guess we'll just use hashCode() then.");
+				e.printStackTrace();
+				threadId = String.valueOf(subject.hashCode());
+			}
+			threadId = threadId+String.valueOf(time);
+		}
+		return threadId;
+	}		
 }
