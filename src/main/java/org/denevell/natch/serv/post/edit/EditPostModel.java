@@ -1,13 +1,12 @@
 package org.denevell.natch.serv.post.edit;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.TypedQuery;
 
+import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.utils.EntityUtils;
@@ -24,8 +23,10 @@ public class EditPostModel {
 	public final static String BAD_USER_INPUT = "baduserinput";
 	public final static String NOT_YOURS_TO_DELETE = "notyourtodelete";	
 	private EntityManager mEntityManager;
+	private CallDbBuilder<PostEntity> mPostModel;
 	
 	public EditPostModel() {
+		mPostModel = new CallDbBuilder<PostEntity>();
 	}
 	
 	public void init() {
@@ -46,37 +47,37 @@ public class EditPostModel {
 	
 	public String edit(UserEntity userEntity, 
 			long postEntityId, 
-			PostEntity mPe,
+			PostEntity postToEdit,
 			boolean isEditingThread) {
 		EntityTransaction trans = mEntityManager.getTransaction();
 		try {
-			if(userEntity==null || mPe==null) {
+			if(userEntity==null || postToEdit==null) {
 				Log.info(getClass(), "No user or postadapter passed to edit method");
 				return UNKNOWN_ERROR;
 			}
-			PostEntity pe = findPostById(postEntityId);
+			PostEntity pe = mPostModel.find(postEntityId, false, mEntityManager, PostEntity.class);
 			if(pe==null) {
 				return DOESNT_EXIST;
 			} else if(!userEntity.isAdmin() && !pe.getUser().getUsername().equals(userEntity.getUsername())) {
 				return NOT_YOURS_TO_DELETE;
 			}
-			mPe.setCreated(pe.getCreated());
-			mPe.setId(pe.getId());
-			mPe.setThreadId(pe.getThreadId());
-			mPe.setModified(new Date().getTime());
+			postToEdit.setCreated(pe.getCreated());
+			postToEdit.setId(pe.getId());
+			postToEdit.setThreadId(pe.getThreadId());
+			postToEdit.setModified(new Date().getTime());
 			if(!userEntity.getUsername().equals(pe.getUser().getUsername()) && userEntity.isAdmin()) {
-			   mPe.adminEdited();
-			   mPe.setUser(pe.getUser()); 
+			   postToEdit.adminEdited();
+			   postToEdit.setUser(pe.getUser()); 
 			} else {
-			    mPe.setUser(userEntity);			
+			    postToEdit.setUser(userEntity);			
 			}
-			if(!isEditingThread)  mPe.setSubject("-");
-			if(isBadInputParams(userEntity, mPe.getSubject(), mPe.getContent(), isEditingThread)) {
+			if(!isEditingThread)  postToEdit.setSubject("-");
+			if(isBadInputParams(userEntity, postToEdit.getSubject(), postToEdit.getContent(), isEditingThread)) {
 				Log.info(this.getClass(), "Edit user: Bad user input");
 				return BAD_USER_INPUT;
 			}
 			trans.begin();
-			mEntityManager.merge(mPe);
+			mEntityManager.merge(postToEdit);
 			trans.commit();
 			return EDITED;
 		} catch(Exception e) {
@@ -91,21 +92,6 @@ public class EditPostModel {
 			return UNKNOWN_ERROR;
 		} 
 	}
-	
-	public PostEntity findPostById(long id) {
-		try {
-			TypedQuery<PostEntity> q = mEntityManager
-					.createNamedQuery(PostEntity.NAMED_QUERY_FIND_BY_ID, PostEntity.class);
-			q.setParameter(PostEntity.NAMED_QUERY_PARAM_ID, id);
-			List<PostEntity> resultList = q.getResultList();		
-			if(resultList==null || resultList.size()==0) return null;
-			else return resultList.get(0);
-		} catch(Exception e) {
-			Log.info(getClass(), "Error finding post by id: " + e.toString());
-			return null;
-		}
-	}	
-	
 	
 	public static boolean isBadInputParams(UserEntity user, String subject, String content, boolean isEditingThread) {
 		return  user==null || 

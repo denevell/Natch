@@ -1,9 +1,6 @@
 package org.denevell.natch.tests.unit.posts;
 
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import javax.persistence.EntityManager;
@@ -16,7 +13,9 @@ import org.denevell.natch.serv.post.edit.EditPostModel;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mockito;
 
+@SuppressWarnings("unused")
 public class EditPostModelTests {
 	
 	private EditPostModel model;
@@ -30,7 +29,7 @@ public class EditPostModelTests {
 		factory = mock(EntityManagerFactory.class);
 		trans = mock(EntityTransaction.class);
 		when(entityManager.getTransaction()).thenReturn(trans);
-		model = spy(new EditPostModel(factory, entityManager));
+		model = Mockito.spy(new EditPostModel(factory, entityManager));
 	}
 	
 	@Ignore
@@ -40,7 +39,7 @@ public class EditPostModelTests {
 		long num = 1;
 		PostEntity post = new PostEntity(null, 1, 1, "df", "sdf", null);
 		post.setUser(new UserEntity("this_person", null));
-		doReturn(post).when(model).findPostById(num);
+		//doReturn(post).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");
 		//PostEntity postToBeEdited = new PostEntity(null, 1, 1, "xxx", "xxx", null);
@@ -60,7 +59,7 @@ public class EditPostModelTests {
 		long num = 1;
 		PostEntity post = new PostEntity();
 		post.setUser(new UserEntity("this_person", null));
-		doReturn(post).when(model).findPostById(num);
+		//doReturn(post).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("that_person");
 //		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(post);
@@ -79,7 +78,7 @@ public class EditPostModelTests {
 		long num = 1;
 		PostEntity post = new PostEntity();
 		post.setUser(new UserEntity("this_person", null));
-		doReturn(post).when(model).findPostById(num+1);
+		//doReturn(post).when(model).findPostById(num+1);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("that_person");
 //		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(post);
@@ -98,7 +97,7 @@ public class EditPostModelTests {
 		long num = 1;
 		PostEntity post = new PostEntity();
 		post.setUser(new UserEntity("this_person", null));
-		doThrow(new RuntimeException()).when(model).findPostById(num);
+		//doThrow(new RuntimeException()).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");
 //		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(post);
@@ -117,7 +116,7 @@ public class EditPostModelTests {
 		long num = 1;
 		PostEntity post = new PostEntity();
 		post.setUser(new UserEntity("this_person", null));
-		doReturn(post).when(model).findPostById(num);
+		//doReturn(post).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");
 //		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(post);
@@ -136,7 +135,7 @@ public class EditPostModelTests {
 		long num = 1;
 		PostEntity post = new PostEntity();
 		post.setUser(new UserEntity("this_person", null));
-		doReturn(post).when(model).findPostById(num);
+		//doReturn(post).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");
 		
@@ -154,7 +153,7 @@ public class EditPostModelTests {
 		long num = 1;
 		PostEntity post = new PostEntity();
 		post.setUser(new UserEntity("this_person", null));
-		doReturn(post).when(model).findPostById(num);
+		//doReturn(post).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");
 		//PostEntity postToEdit = new PostEntity(null, 1, 1, " ", " ", null);
@@ -174,7 +173,7 @@ public class EditPostModelTests {
 		long num = 1;
 		PostEntity post = new PostEntity();
 		post.setUser(new UserEntity("this_person", null));
-		doReturn(post).when(model).findPostById(num);
+		//doReturn(post).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");
 		//PostEntity postToEdit = new PostEntity(null, 1, 1, null, null, null);
@@ -194,7 +193,7 @@ public class EditPostModelTests {
 		long num = 1;
 		PostEntity post = new PostEntity();
 		post.setUser(new UserEntity("this_person", null));
-		doReturn(post).when(model).findPostById(num);
+		//doReturn(post).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");
 		//PostEntity postToEdit = new PostEntity(null, 1, 1, " ", "sdfsdf", null);
@@ -214,7 +213,7 @@ public class EditPostModelTests {
 		long num = 1;
 		PostEntity post = new PostEntity();
 		post.setUser(new UserEntity("this_person", null));
-		doReturn(post).when(model).findPostById(num);
+		//doReturn(post).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");
 //		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(null);
