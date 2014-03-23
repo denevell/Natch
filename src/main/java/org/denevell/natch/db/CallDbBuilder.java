@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.LockModeType;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -32,7 +33,7 @@ public class CallDbBuilder<ListItem> {
 	
 	public CallDbBuilder() {
 	}
-
+	
 	public CallDbBuilder<ListItem> namedQuery(String nq) {
 		mNamedQuery = nq;
 		return this;
@@ -93,6 +94,24 @@ public class CallDbBuilder<ListItem> {
 		} finally {
 			EntityUtils.closeEntityConnection(mEntityManager);
 		}
+	}
+
+	/**
+	 * 
+	 * @param primaryKey
+	 * @param pessimisticRead
+	 * @param entityManager Only passed for a speed hack that we should be able to remove soon
+	 * @param clazz
+	 * @return
+	 */
+	public ListItem find(Object primaryKey, boolean pessimisticRead, EntityManager entityManager, Class<ListItem> clazz) {
+		ListItem item = null;
+		if(pessimisticRead) {
+			item = entityManager.find(clazz, primaryKey, LockModeType.PESSIMISTIC_READ);
+		} else {
+			item = entityManager.find(clazz, primaryKey);
+		}
+		return item;
 	}
 	
 	/**

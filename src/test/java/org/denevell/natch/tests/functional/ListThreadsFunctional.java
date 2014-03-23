@@ -303,7 +303,7 @@ public class ListThreadsFunctional {
 		.path("rest").path("post").path("addthread").request()
 		.header("AuthKey", loginResult.getAuthKey())
     	.put(Entity.json(input2), AddPostResourceReturnData.class);
-		assertTrue("Added thraed", res.isSuccessful());
+		assertTrue("Should have added thread", res.isSuccessful());
 		return res;
 	}		
 	

@@ -3,7 +3,6 @@ package org.denevell.natch.serv.post.add;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.LockModeType;
 
 import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.db.adapters.AddPostRequestToPostEntity;
@@ -19,9 +18,15 @@ public class AddPostModel {
 
 	private EntityManager mEntityManager;
 	private ThreadFactory mThreadFactory;
+	private CallDbBuilder<ThreadEntity> mThreadModel;
+	private CallDbBuilder<UserEntity> mUserModel;
 	
 	public AddPostModel() {
 		mThreadFactory = new ThreadFactory();
+		mThreadModel = new CallDbBuilder<ThreadEntity>() 
+				.namedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID);
+		mUserModel = new CallDbBuilder<UserEntity>()  
+				.namedQuery(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME);
 	}
 	
 	public void init() {
@@ -44,8 +49,7 @@ public class AddPostModel {
 	}
 
 	public ThreadEntity addPostAsDifferntUser(String userId, AddPostResourceInput input) {
-		UserEntity user = new CallDbBuilder<UserEntity>()  
-				.namedQuery(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME)
+		UserEntity user = mUserModel
 				.queryParam("username", userId)
 				.single(UserEntity.class);		
 	    return addPost(AddPostRequestToPostEntity.adapt(input, true, user));
@@ -60,13 +64,15 @@ public class AddPostModel {
 		try {
 			trans = mEntityManager.getTransaction();
 			trans.begin();
-			ThreadEntity thread = findThreadById(post.getThreadId());
+			ThreadEntity thread = mThreadModel
+					.find(post.getThreadId(), true, mEntityManager, ThreadEntity.class);
 			if(thread==null) {
 				thread = mThreadFactory.makeThread(post);
+				mEntityManager.persist(thread);
 			} else {
 				thread = mThreadFactory.makeThread(thread, post);
+				mEntityManager.merge(thread);
 			}
-			mEntityManager.persist(thread);
 			trans.commit();
 			return thread;
 		} catch(Exception e) {
@@ -76,15 +82,6 @@ public class AddPostModel {
 			return null;
 		} 
 	}
-	
-	public ThreadEntity findThreadById(String id) {
-		try {
-		    ThreadEntity thread = mEntityManager.find(ThreadEntity.class, id, LockModeType.PESSIMISTIC_READ);
-			return thread;
-		} catch(Exception e) {
-			Log.info(getClass(), "Error finding thread by id: " + e.toString());
-			return null;
-		} 
-	}		
 
+	
 }
