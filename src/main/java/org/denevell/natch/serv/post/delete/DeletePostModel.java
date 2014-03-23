@@ -1,13 +1,10 @@
 package org.denevell.natch.serv.post.delete;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.LockModeType;
-import javax.persistence.TypedQuery;
 
+import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
@@ -22,8 +19,12 @@ public class DeletePostModel {
 	public final static String UNKNOWN_ERROR = "unknownerror";
 	public final static String NOT_YOURS_TO_DELETE = "notyourtodelete";
 	private EntityManager mEntityManager;
+	private CallDbBuilder<ThreadEntity> mThreadModel;
+	private CallDbBuilder<PostEntity> mPostModel;
 	
 	public DeletePostModel() {
+		mThreadModel = new CallDbBuilder<ThreadEntity>();
+		mPostModel = new CallDbBuilder<PostEntity>();
 	}
 	
 	public void init() {
@@ -42,42 +43,17 @@ public class DeletePostModel {
 		mEntityManager = entityManager;
 	}
 
-	
-	public PostEntity findPostById(long id) {
-		try {
-			TypedQuery<PostEntity> q = mEntityManager
-					.createNamedQuery(PostEntity.NAMED_QUERY_FIND_BY_ID, PostEntity.class);
-			q.setParameter(PostEntity.NAMED_QUERY_PARAM_ID, id);
-			List<PostEntity> resultList = q.getResultList();		
-			if(resultList==null || resultList.size()==0) return null;
-			else return resultList.get(0);
-		} catch(Exception e) {
-			Log.info(getClass(), "Error finding post by id: " + e.toString());
-			return null;
-		}
-	}
-	
-    public ThreadEntity findThreadById(String id) {
-        try {
-            ThreadEntity thread = mEntityManager.find(ThreadEntity.class, id, LockModeType.PESSIMISTIC_READ);
-            return thread;
-        } catch(Exception e) {
-            Log.info(getClass(), "Error finding thread by id: " + e.toString());
-            return null;
-        } 
-    }       
-	
 	public String delete(UserEntity userEntity, long postEntityId) {
 		EntityTransaction trans = mEntityManager.getTransaction();
 		try {
-			PostEntity pe = findPostById(postEntityId);
+			PostEntity pe = mPostModel.find(postEntityId, false, mEntityManager, PostEntity.class);
 			if(pe==null) {
 				return DOESNT_EXIST;
 			} else if(!userEntity.isAdmin() && !pe.getUser().getUsername().equals(userEntity.getUsername())) {
 				return NOT_YOURS_TO_DELETE;
 			}
 			trans.begin();
-			ThreadEntity th = findThreadById(pe.getThreadId());
+			ThreadEntity th = mThreadModel.find(pe.getThreadId(), true, mEntityManager, ThreadEntity.class);
 			th = updateThreadToRemovePost(th, pe);
 			// Remote thread if needs be
 			if(th.getPosts()==null || th.getPosts().size()==0) {
