@@ -1,17 +1,15 @@
 package org.denevell.natch.serv.post.add;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.LockModeType;
 
+import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.db.adapters.AddPostRequestToPostEntity;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.db.entities.UserEntityQueries;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.utils.EntityUtils;
 import org.denevell.natch.utils.JPAFactoryContextListener;
@@ -21,11 +19,9 @@ public class AddPostModel {
 
 	private EntityManager mEntityManager;
 	private ThreadFactory mThreadFactory;
-    private UserEntityQueries mUserEntityQueries;
 	
 	public AddPostModel() {
 		mThreadFactory = new ThreadFactory();
-		mUserEntityQueries = new UserEntityQueries();
 	}
 	
 	public void init() {
@@ -42,16 +38,17 @@ public class AddPostModel {
 	 */
 	public AddPostModel(EntityManagerFactory factory, 
 	        EntityManager entityManager, 
-	        ThreadFactory threadFactory, 
-	        UserEntityQueries userQueries) {
+	        ThreadFactory threadFactory) {
 		mEntityManager = entityManager;
 		mThreadFactory = threadFactory;
-		mUserEntityQueries = userQueries;
 	}
 
 	public ThreadEntity addPostAsDifferntUser(String userId, AddPostResourceInput input) {
-	    List<UserEntity> user = mUserEntityQueries.getUserByUsername(userId, mEntityManager);
-	    return addPost(AddPostRequestToPostEntity.adapt(input, true, user.get(0)));
+		UserEntity user = new CallDbBuilder<UserEntity>()  
+				.namedQuery(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME)
+				.queryParam("username", userId)
+				.single(UserEntity.class);		
+	    return addPost(AddPostRequestToPostEntity.adapt(input, true, user));
 	}
 
 	public ThreadEntity addPost(UserEntity user, AddPostResourceInput input) {
