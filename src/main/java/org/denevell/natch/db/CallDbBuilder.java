@@ -23,6 +23,14 @@ public class CallDbBuilder<ListItem> {
 		public void item(ListItem item);
 	}
 
+	public static interface UpdateItem<ListItem> {
+		public ListItem update(ListItem item);
+	}
+
+	public static interface NewItem<ListItem> {
+		public ListItem newItem();
+	}
+
 	private EntityManager mEntityManager;
 	private String mNamedQuery;
 	private int mFirstResult;
@@ -256,6 +264,37 @@ public class CallDbBuilder<ListItem> {
 		mCountNamedQueryForFirstItemMethod = countNamedQuery;
 		mMethodIfFirstItem = runnableWith;
 		return this;
+	}
+
+	public ListItem createOrUpdate(
+			String threadId,
+			UpdateItem<ListItem> updateItem, 
+			NewItem<ListItem> newItem,
+			Class<ListItem> listItemClass) {
+		EntityTransaction trans = null;
+		try {
+			EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
+			mEntityManager = factory.createEntityManager();   		
+			trans = mEntityManager.getTransaction();
+			trans.begin();
+			ListItem foundItem = find(threadId, true, mEntityManager, listItemClass);
+			if(foundItem==null) {
+				foundItem = newItem.newItem();
+				mEntityManager.persist(foundItem);
+			} else {
+				foundItem = updateItem.update(foundItem);
+				mEntityManager.merge(foundItem);
+			}
+			trans.commit();
+			return foundItem;
+		} catch(Exception e){
+			Log.info(this.getClass(), e.toString());
+			if(trans!=null && trans.isActive()) trans.rollback();
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} finally {
+			EntityUtils.closeEntityConnection(mEntityManager);
+		}
 	}
 
 }

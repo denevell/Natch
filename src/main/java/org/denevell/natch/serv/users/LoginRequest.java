@@ -23,7 +23,6 @@ import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.utils.PasswordSaltUtils;
 import org.denevell.natch.utils.Strings;
 
-
 @Path("user/login")
 public class LoginRequest {
 	

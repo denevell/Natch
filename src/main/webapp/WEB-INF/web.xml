@@ -13,6 +13,7 @@
 	<filter-mapping>
 	  <filter-name>Auth Filter</filter-name>
 	  <url-pattern>/rest/user/logout</url-pattern>
+	  <url-pattern>/rest/user/password</url-pattern>
 	  <url-pattern>/rest/user/is</url-pattern>
 	  <url-pattern>/rest/user/admin/toggle/*</url-pattern>
 	  <url-pattern>/rest/post/add</url-pattern>
@@ -42,7 +43,7 @@
 	    </init-param>		
 	    <init-param>
 	    	<param-name>jersey.config.server.provider.packages</param-name>
-			<param-value>org.denevell.natch.serv.push;org.denevell.natch.serv.post.edit;org.denevell.natch.serv.thread;org.denevell.natch.serv.post.delete;org.denevell.natch.serv.post.add;org.denevell.natch.serv.testutils;org.denevell.natch.serv.post;org.denevell.natch.serv.thread;org.denevell.natch.serv.post;org.denevell.natch.serv.users;org.denevell.natch.serv.thread;org.denevell.natch.serv.posts;org.denevell.natch.utils</param-value>
+			<param-value>org.denevell.natch.serv.push;org.denevell.natch.serv.post.edit;org.denevell.natch.serv.thread;org.denevell.natch.serv.post.delete;org.denevell.natch.serv.testutils;org.denevell.natch.serv.post;org.denevell.natch.serv.thread;org.denevell.natch.serv.post;org.denevell.natch.serv.users;org.denevell.natch.serv.thread;org.denevell.natch.serv.posts;org.denevell.natch.utils</param-value>
 	    </init-param>
 	    <load-on-startup>1</load-on-startup>
 	</servlet>

@@ -1,4 +1,4 @@
-package org.denevell.natch.serv.post.add;
+package org.denevell.natch.serv.post;
 
 import java.util.Arrays;
 import java.util.List;

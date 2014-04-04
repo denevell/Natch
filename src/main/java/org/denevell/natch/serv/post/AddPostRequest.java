@@ -1,7 +1,5 @@
-package org.denevell.natch.serv.post.add;
+package org.denevell.natch.serv.post;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
@@ -16,12 +14,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
+import org.denevell.natch.db.CallDbBuilder;
+import org.denevell.natch.db.adapters.AddPostRequestToPostEntity;
+import org.denevell.natch.db.adapters.ThreadEntityToThreadResource;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
-import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.io.threads.ThreadResource;
 import org.denevell.natch.serv.post.edit.EditPostModel;
 import org.denevell.natch.utils.Log;
@@ -34,21 +34,19 @@ public class AddPostRequest {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-	private AddPostModel mModel;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
+	private ThreadFactory mThreadFactory;
 	
 	public AddPostRequest() {
-		mModel = new AddPostModel();
+		mThreadFactory = new ThreadFactory();
 	}
 	
 	/**
 	 * For DI testing.
 	 */
-	public AddPostRequest(AddPostModel postModel, 
+	public AddPostRequest(
 			HttpServletRequest request, 
-			HttpServletResponse response
-			) {
-		mModel = postModel;
+			HttpServletResponse response) {
 		mRequest = request;
 		mResponse = response;
 	}
@@ -71,22 +69,29 @@ public class AddPostRequest {
 	}
 	
 	private AddPostResourceReturnData addPost(AddPostResourceInput input, UserEntity userEntity) {
-		try {
-			mModel.init();
-			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
-			regReturnData.setSuccessful(false);
-			ThreadEntity okay = mModel.addPost(userEntity, input);
-			generateAddPostReturnResource(regReturnData, okay, input);
-			return regReturnData;
-		} finally {
-			mModel.close();
-		}
+		AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
+		regReturnData.setSuccessful(false);
+	    final PostEntity post = AddPostRequestToPostEntity.adapt(input, false, userEntity);
+		ThreadEntity okay = new CallDbBuilder<ThreadEntity>().createOrUpdate(
+				post.getThreadId(),
+				new CallDbBuilder.UpdateItem<ThreadEntity>() {
+					@Override public ThreadEntity update(ThreadEntity item) {
+						return mThreadFactory.makeThread(item, post);
+					}
+				}, new CallDbBuilder.NewItem<ThreadEntity>() {
+					@Override public ThreadEntity newItem() {
+						return mThreadFactory.makeThread(post);
+					}
+				}, 
+				ThreadEntity.class);		
+		generateAddPostReturnResource(regReturnData, okay, input);
+		return regReturnData;
 	}	
 	
 	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, ThreadEntity thread, AddPostResourceInput input) {
 		if(thread!=null) {
 			if(input !=null) {
-				ThreadResource threadResource = adaptThread(thread);
+				ThreadResource threadResource = ThreadEntityToThreadResource.adapt(thread);
 				threadResource.setPosts(null);
 				regReturnData.setThread(threadResource);
 			} else {
@@ -99,31 +104,4 @@ public class AddPostRequest {
 		}
 	}
 
-	public static ThreadResource adaptThread(ThreadEntity thread) {
-		ThreadResource tr = new ThreadResource();
-		List<PostResource> postsResources = new ArrayList<PostResource>();
-		for (PostEntity p: thread.getPosts()) {
-			PostResource postResource = new PostResource(p.getUser().getUsername(), 
-					p.getCreated(), 
-					p.getModified(), 
-					p.getSubject(), 
-					p.getContent(),
-					p.getTags(), 
-					p.isAdminEdited());
-			postResource.setId(p.getId());
-			postResource.setThreadId(p.getThreadId());
-			postsResources.add(postResource);
-		}
-		if(postsResources.size()>0) {
-			tr.setSubject(postsResources.get(0).getSubject());
-			tr.setAuthor(thread.getRootPost().getUser().getUsername());
-			tr.setTags(postsResources.get(0).getTags());
-			tr.setModification(postsResources.get(0).getModification());
-		}
-		tr.setPosts(postsResources);
-		tr.setNumPosts((int) thread.getNumPosts());
-		tr.setId(thread.getId());
-		return tr;
-	}	
-	
 }
