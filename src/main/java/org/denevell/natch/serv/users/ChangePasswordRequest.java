@@ -5,9 +5,11 @@ import java.util.ResourceBundle;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
@@ -44,10 +46,33 @@ public class ChangePasswordRequest {
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void changePassword(final ChangePasswordInput changePass) throws Exception {
+	public void changePassword(@Valid final ChangePasswordInput changePass) throws Exception {
 		final UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
 		boolean found = mModel
 			.queryParam("username", userEntity.getUsername())
+			.findAndUpdate(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME,
+				new RunnableWith<UserEntity>() {
+					@Override
+					public void item(UserEntity item) {
+						item.generatePassword(changePass.getPassword());
+					}
+				}, 
+				UserEntity.class);
+		if(!found) mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); 
+	}
+
+	@POST
+	@Path("/{username}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void changePasswordAsAdmin(
+			@PathParam("username") String username,
+			@Valid final ChangePasswordInput changePass) throws Exception {
+		final UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+		if(userEntity.isAdmin()) {
+			return;
+		}
+		boolean found = mModel
+			.queryParam("username", username)
 			.findAndUpdate(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME,
 				new RunnableWith<UserEntity>() {
 					@Override

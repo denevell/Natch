@@ -1,6 +1,5 @@
 package org.denevell.natch.tests.unit.posts;
 
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -10,7 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 import org.denevell.natch.db.entities.ThreadEntity;
-import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -27,14 +25,14 @@ public class AddPostModelTests {
 	private EntityTransaction trans;
 	private EntityManager entityManager;
 	private AddPostResourceInput genericPost;
-	private UserEntity userEntity;
+	//private UserEntity userEntity;
 	private ThreadEntity genericThread;
 
 	@Before
 	public void setup() {
 		entityManager = mock(EntityManager.class);
 		trans = mock(EntityTransaction.class);
-		userEntity = new UserEntity("user", "pass");
+		//userEntity = new UserEntity("user", "pass");
 		genericPost = new AddPostResourceInput();
 		genericThread = mock(ThreadEntity.class);
 		when(entityManager.getTransaction()).thenReturn(trans);

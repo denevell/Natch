@@ -69,6 +69,8 @@ public class AddThreadFromMovedPostFunctional {
 		posts = ListPostsFunctional.listRecentPostsThreads(service);
 		assertEquals("New thread has right subject", posts.getPosts().get(0).getSubject(), "New subject");
 		assertEquals("New thread has right content", posts.getPosts().get(0).getContent(), "b");
+		assertEquals("New thread has old user id", posts.getPosts().get(0).getUsername(), "other");
+		assertTrue("New thread is marked edited by admin", posts.getPosts().get(0).isAdminEdited());
 		assertTrue("Still just have two posts, since one's been moved", posts.getPosts().size()==2);
 	}
 

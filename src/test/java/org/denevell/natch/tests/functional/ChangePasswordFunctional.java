@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.tests.functional.pageobjects.ChangePasswordPO;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
+import org.denevell.natch.tests.functional.pageobjects.LogoutPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
@@ -58,6 +59,37 @@ public class ChangePasswordFunctional {
         }
 	}
 
-	// Tests can't when not logged in
+	@Test
+	public void shouldntChangePasswordWhenNotLoggedIn() {
+		// Arrange 
+	    registerPo.register("aaron", "aaron");
+	    LoginResourceReturnData login = loginPo.login("aaron", "aaron");
+	    new LogoutPO(service).logout(login.getAuthKey());
+
+        Response r = changePwPo.change("newpass", login.getAuthKey());
+       	assertTrue("Wasnt able to login with old creds", r.getStatus()==401);
+	}
+
+	@Test
+	public void shouldntChangePasswordToBlanks() {
+		// Arrange 
+	    registerPo.register("aaron", "aaron");
+	    LoginResourceReturnData login = loginPo.login("aaron", "aaron");
+
+	    // Act
+        Response r = changePwPo.change("      ", login.getAuthKey());
+       	assertTrue("Wasnt able to login with old creds", r.getStatus()==400);
+	}
+
+	@Test
+	public void shouldntChangePasswordToBlank() {
+		// Arrange 
+	    registerPo.register("aaron", "aaron");
+	    LoginResourceReturnData login = loginPo.login("aaron", "aaron");
+
+	    // Act
+        Response r = changePwPo.change("", login.getAuthKey());
+       	assertTrue("Wasnt able to login with old creds", r.getStatus()==400);
+	}
 	
 }

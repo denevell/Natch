@@ -39,10 +39,13 @@ public class ThreadFromPostRequest {
 	private ResourceBundle rb = Strings.getMainResourceBundle();
     private DeletePostModel mDeletePostModel;
 	private ThreadFactory mThreadFactory;
+	private CallDbBuilder<UserEntity> mUserModel;
 	
 	public ThreadFromPostRequest() {
 		mDeletePostModel = new DeletePostModel();
 		mThreadFactory = new ThreadFactory();
+		mUserModel = new CallDbBuilder<UserEntity>()
+		 .namedQuery(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME);
 	}
 	
 	/**
@@ -79,7 +82,8 @@ public class ThreadFromPostRequest {
 		        mResponse.sendError(HttpServletResponse.SC_BAD_REQUEST);
 	        return null;
 	    }
-	    final PostEntity post = AddPostRequestToPostEntity.adapt(input, false, userEntity);
+	    UserEntity user = mUserModel.queryParam("username", input.getUserId()).single(UserEntity.class);  	    
+	    final PostEntity post = AddPostRequestToPostEntity.adapt(input, true, user);
 		ThreadEntity thread = new CallDbBuilder<ThreadEntity>().createOrUpdate(
 				post.getThreadId(),
 				new CallDbBuilder.UpdateItem<ThreadEntity>() {
