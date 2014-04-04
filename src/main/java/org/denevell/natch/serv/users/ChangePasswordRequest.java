@@ -68,7 +68,8 @@ public class ChangePasswordRequest {
 			@PathParam("username") String username,
 			@Valid final ChangePasswordInput changePass) throws Exception {
 		final UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-		if(userEntity.isAdmin()) {
+		if(!userEntity.isAdmin()) {
+			mResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED); 
 			return;
 		}
 		boolean found = mModel
@@ -81,6 +82,6 @@ public class ChangePasswordRequest {
 					}
 				}, 
 				UserEntity.class);
-		if(!found) mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); 
+		if(!found) mResponse.sendError(HttpServletResponse.SC_NOT_FOUND); 
 	}
 }

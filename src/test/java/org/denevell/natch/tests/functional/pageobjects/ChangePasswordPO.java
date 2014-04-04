@@ -23,7 +23,16 @@ public class ChangePasswordPO {
 	    	.header("AuthKey", authKey)
 	    	.post(Entity.entity(changePassword, MediaType.APPLICATION_JSON));
 		return res;
-		
+	}
+
+	public Response changeAsAdmin(String username, String pass, String authKey) {
+		ChangePasswordInput changePassword = new ChangePasswordInput();
+		changePassword.setPassword(pass);
+		Response res = mService 
+	    	.path("rest").path("user").path("password").path(username).request()
+	    	.header("AuthKey", authKey)
+	    	.post(Entity.entity(changePassword, MediaType.APPLICATION_JSON));
+		return res;
 	}
 
 }
