@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.tests.functional.pageobjects.ChangePasswordPO;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
+import org.denevell.natch.tests.functional.pageobjects.LogoutPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
@@ -61,5 +62,44 @@ public class ChangePasswordAsAdminFunctional {
         	assertTrue("Unable to login with old creds", e.getResponse().getStatus()==403);
         }
 	}
+
+	@Test
+	public void shouldntChangePasswordWithBlanks() {
+		// Arrange 
+	    registerPo.register("aaron", "aaron");
+	    registerPo.register("aaron1", "aaron1");
+	    LoginResourceReturnData login = loginPo.login("aaron", "aaron");
+
+	    // Act
+	    Response response = changePwPo.changeAsAdmin("aaron1", "       ", login.getAuthKey());
+       	assertTrue("Unable to set password with blanks", response.getStatus()==400);
+	}
+
+	@Test
+	public void shouldntChangePasswordWithBlank() {
+		// Arrange 
+	    registerPo.register("aaron", "aaron");
+	    registerPo.register("aaron1", "aaron1");
+	    LoginResourceReturnData login = loginPo.login("aaron", "aaron");
+
+	    // Act
+	    Response response = changePwPo.changeAsAdmin("aaron1", "", login.getAuthKey());
+       	assertTrue("Unable to set password with blanks", response.getStatus()==400);
+	}
+
+	@Test
+	public void shouldChangePasswordWhenLoggedOut() {
+		// Arrange 
+	    registerPo.register("aaron", "aaron");
+	    registerPo.register("aaron1", "aaron1");
+	    LoginResourceReturnData login = loginPo.login("aaron", "aaron");
+	    new LogoutPO(service).logout(login.getAuthKey());
+
+	    // Act
+	    Response response = changePwPo.changeAsAdmin("aaron1", "newpass", login.getAuthKey());
+       	assertTrue("Unable to set password with blanks", response.getStatus()==401);
+	}
+	
+	// Not logged in
 
 }
