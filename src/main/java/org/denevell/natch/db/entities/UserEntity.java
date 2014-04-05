@@ -19,6 +19,7 @@ public class UserEntity {
 	@Transient
 	private String originalPassword;
 	private boolean admin;
+	private boolean passwordResetRequest;
 	
 	// For testing only
 	public UserEntity(String username, String pass) {
@@ -72,4 +73,13 @@ public class UserEntity {
 	public void setOriginalPassword(String originalPassword) {
 		this.originalPassword = originalPassword;
 	}
+
+	public boolean isPasswordResetRequest() {
+		return passwordResetRequest;
+	}
+
+	public void setPasswordResetRequest(boolean passwordResetRequest) {
+		this.passwordResetRequest = passwordResetRequest;
+	}
+
 }

@@ -154,3 +154,10 @@ func (m migration) Migration_4() {
 		panic(err)
 	}
 }
+
+func (m migration) Migration_5() {
+	_, err := m.Tx.Exec("alter table userentity add request_pw_reset bool")
+	if err != nil {
+		panic(err)
+	}
+}

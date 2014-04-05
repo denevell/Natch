@@ -43,6 +43,14 @@ public class DeletePostModel {
 		mEntityManager = entityManager;
 	}
 
+	/**
+	 * 1. Check if the posts exists
+	 * 2. Check if it's the users or the user is an admin
+	 * 3. Find the thread and update to remove post
+	 * 4. Either update the thread or remove it
+	 * 5. Remove the post
+	 * @return
+	 */
 	public String delete(UserEntity userEntity, long postEntityId) {
 		EntityTransaction trans = mEntityManager.getTransaction();
 		try {
