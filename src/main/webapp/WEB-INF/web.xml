@@ -16,6 +16,7 @@
 	  <url-pattern>/rest/user/password</url-pattern>
 	  <url-pattern>/rest/user/password/*</url-pattern>
 	  <url-pattern>/rest/user/password/reset</url-pattern>
+	  <url-pattern>/rest/user/password/reset/*</url-pattern>
 	  <url-pattern>/rest/user/is</url-pattern>
 	  <url-pattern>/rest/user/admin/toggle/*</url-pattern>
 	  <url-pattern>/rest/post/add</url-pattern>

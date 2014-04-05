@@ -21,9 +21,9 @@ public class SetResetPasswordPO {
 		return res;
 	}
 
-	public Response unsetAsUser(String authKey) {
+	public Response unsetAsAdmin(String user, String authKey) {
 		Response res = mService 
-	    	.path("rest").path("user").path("password").path("reset").request()
+	    	.path("rest").path("user").path("password").path("reset").path(user).request()
 	    	.header("AuthKey", authKey)
 	    	.delete();
 		return res;
