@@ -21,6 +21,7 @@ import org.denevell.natch.serv.post.SinglePostRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class ShowPostRequestTests {
 	
@@ -51,12 +52,14 @@ public class ShowPostRequestTests {
 		postEntity.setTags(asList);
 		postEntity.setId(400);
 		postEntity.setThreadId("1234");
+		when(showPostsModel.startTransaction()).thenReturn(showPostsModel);
 		when(showPostsModel.queryParam("id", 0l)).thenReturn(showPostsModel);
 		when(showPostsModel.single(PostEntity.class)).thenReturn(postEntity);
 		when(listThreadsModel.queryParam("id", "1234")).thenReturn(listThreadsModel);
 		PostEntity threadRootPost = new PostEntity();
 		threadRootPost.setSubject("thread_subject");
 		ThreadEntity thread = new ThreadEntity(threadRootPost, null);
+		when(listThreadsModel.useTransaction(showPostsModel.getEntityManager())).thenReturn(listThreadsModel);
 		when(listThreadsModel.single(ThreadEntity.class)).thenReturn(thread);
 		SinglePostRequest resourceShow = new SinglePostRequest(
 				showPostsModel, 

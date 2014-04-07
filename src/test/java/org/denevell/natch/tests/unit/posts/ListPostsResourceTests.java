@@ -38,6 +38,7 @@ public class ListPostsResourceTests {
 	public void setup() {
 		postsModel = mock(CallDbBuilder.class);
 		when(postsModel.max(0)).thenReturn(postsModel);
+		when(postsModel.startTransaction()).thenReturn(postsModel);
 		when(postsModel.start(0)).thenReturn(postsModel);
 		when(postsModel.namedQuery(PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE)).thenReturn(postsModel);
 		response = mock(HttpServletResponse.class);
@@ -121,6 +122,7 @@ public class ListPostsResourceTests {
 		CallDbBuilder<ThreadEntity> threadModel = mock(CallDbBuilder.class);
 		when(threadModel.max(0)).thenReturn(threadModel);
 		when(threadModel.start(0)).thenReturn(threadModel);
+		when(threadModel.useTransaction(postsModel.getEntityManager())).thenReturn(threadModel);
 		when(threadModel.queryParam("id", "t")).thenReturn(threadModel);
 		when(threadModel.namedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID)).thenReturn(threadModel);
 		when(threadModel.single(ThreadEntity.class)).thenReturn(thread);
@@ -128,6 +130,7 @@ public class ListPostsResourceTests {
 		@SuppressWarnings("unchecked")
 		CallDbBuilder<PostEntity> newPostsModel = mock(CallDbBuilder.class);
 		when(newPostsModel.max(0)).thenReturn(newPostsModel);
+		when(newPostsModel.startTransaction()).thenReturn(newPostsModel);
 		when(newPostsModel.start(0)).thenReturn(newPostsModel);
 		when(newPostsModel.queryParam("threadId", "t")).thenReturn(newPostsModel);
 		when(newPostsModel.namedQuery(PostEntity.NAMED_QUERY_FIND_BY_THREADID)).thenReturn(newPostsModel);
