@@ -63,7 +63,8 @@ public class PasswordResetRequest {
 		user.setPasswordResetRequest(true);
 		mModel
 			.startTransaction()
-			.update(user);
+			.update(user)
+			.commitAndCloseEntityManager();
 	}	
 
 	@DELETE
@@ -80,7 +81,8 @@ public class PasswordResetRequest {
 		user.setPasswordResetRequest(false);
 		mModel
 			.startTransaction()
-			.update(user);
+			.update(user)
+			.commitAndCloseEntityManager();
 	}	
 	
 }

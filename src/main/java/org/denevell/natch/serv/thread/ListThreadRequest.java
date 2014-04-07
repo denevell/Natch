@@ -72,13 +72,13 @@ public class ListThreadRequest {
 
 			if(posts!=null)  {
 				thread = mThreadModel 
-					.startTransaction()
+					.useTransaction(mModel.getEntityManager())
 					.namedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID)
 					.queryParam("id", threadId)
 					.single(ThreadEntity.class);
 			}
 			if(thread!=null) username = thread.getRootPost().getUser().getUsername();
-			if(thread!=null) tags= thread.getRootPost().getTags();
+			if(thread!=null) tags = thread.getRootPost().getTags();
 			if(thread==null) {
 				mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
 				return null;

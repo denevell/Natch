@@ -55,6 +55,7 @@ public class PushIdRequests {
 			.startTransaction()
 			.queryParam("id", pushId.getId())
 			.addIfDoesntExist(PushEntity.NAMED_QUERY_FIND_ID, pushEntity);
+		mModel.commitAndCloseEntityManager();
 		SuccessOrError successOrError = new SuccessOrError();
 		successOrError.setSuccessful(true); // Oh well
 		return successOrError;

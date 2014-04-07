@@ -72,6 +72,7 @@ public class UsersAdminToggleRequest {
 	        				}
 	        			}
 	        		}, UserEntity.class);
+			mModel.commitAndCloseEntityManager();
 			if(!found) {
 				mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
 				return null;

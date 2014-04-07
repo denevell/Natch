@@ -59,6 +59,7 @@ public class ChangePasswordRequest {
 					}
 				}, 
 				UserEntity.class);
+		mModel.commitAndCloseEntityManager();
 		if(!found) mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); 
 	}
 
@@ -84,6 +85,7 @@ public class ChangePasswordRequest {
 					}
 				}, 
 				UserEntity.class);
+		mModel.commitAndCloseEntityManager();
 		if(!found) mResponse.sendError(HttpServletResponse.SC_NOT_FOUND); 
 	}
 }

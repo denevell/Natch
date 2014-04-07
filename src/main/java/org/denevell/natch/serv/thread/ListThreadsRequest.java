@@ -94,9 +94,10 @@ public class ListThreadsRequest {
 					.namedQuery(listQuery)
 					.list(ThreadEntity.class);
 			num = mModel
-					.startTransaction()
+					.useTransaction(mModel.getEntityManager())
 					.namedQuery(countQuery)
 					.count();
+			mModel.closeEntityManager();
 		} catch(Exception e) {
 			Log.info(getClass(), "Couldn't list posts: " + e.toString());
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");

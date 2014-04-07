@@ -36,6 +36,7 @@ public class AddPostRequest {
 	@Context HttpServletResponse mResponse;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
 	private ThreadFactory mThreadFactory;
+	private CallDbBuilder<ThreadEntity> mModel = new CallDbBuilder<ThreadEntity>();
 	
 	public AddPostRequest() {
 		mThreadFactory = new ThreadFactory();
@@ -72,7 +73,7 @@ public class AddPostRequest {
 		AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 		regReturnData.setSuccessful(false);
 	    final PostEntity post = AddPostRequestToPostEntity.adapt(input, false, userEntity);
-		ThreadEntity okay = new CallDbBuilder<ThreadEntity>()
+		ThreadEntity okay = mModel
 			.startTransaction()
 			.createOrUpdate(
 				post.getThreadId(),
@@ -86,6 +87,7 @@ public class AddPostRequest {
 					}
 				}, 
 				ThreadEntity.class);		
+		mModel.commitAndCloseEntityManager();
 		generateAddPostReturnResource(regReturnData, okay, input);
 		return regReturnData;
 	}	

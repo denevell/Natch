@@ -66,10 +66,11 @@ public class SinglePostRequest {
 				return null;
 			} else {
 				thread = mListThreadModel
-						.startTransaction()
+						.useTransaction(mModel.getEntityManager())
 						.namedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID)
 						.queryParam("id", post.getThreadId())
 						.single(ThreadEntity.class);		
+				mListThreadModel.closeEntityManager();
 				PostResource postResource = new PostResource(post.getUser().getUsername(), 
 						post.getCreated(), 
 						post.getModified(), 

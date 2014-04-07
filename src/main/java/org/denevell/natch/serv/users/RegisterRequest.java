@@ -57,7 +57,7 @@ public class RegisterRequest {
 					})
 			.queryParam("username", u.getUsername())
 			.addIfDoesntExist(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME, u);
-
+		mModel.commitAndCloseEntityManager();
 		RegisterResourceReturnData regReturnData = new RegisterResourceReturnData();
 		if (added) {
 			regReturnData.setSuccessful(true);

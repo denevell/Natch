@@ -40,6 +40,7 @@ public class ThreadFromPostRequest {
     private DeletePostModel mDeletePostModel;
 	private ThreadFactory mThreadFactory;
 	private CallDbBuilder<UserEntity> mUserModel;
+	private CallDbBuilder<ThreadEntity> mModel = new CallDbBuilder<ThreadEntity>();
 	
 	public ThreadFromPostRequest() {
 		mDeletePostModel = new DeletePostModel();
@@ -86,7 +87,7 @@ public class ThreadFromPostRequest {
 	    		.startTransaction()
 	    		.queryParam("username", input.getUserId()).single(UserEntity.class);  	    
 	    final PostEntity post = AddPostRequestToPostEntity.adapt(input, true, user);
-		ThreadEntity thread = new CallDbBuilder<ThreadEntity>()
+		ThreadEntity thread = mModel
 			.startTransaction()
 			.createOrUpdate(
 				post.getThreadId(),
@@ -100,6 +101,7 @@ public class ThreadFromPostRequest {
 					}
 				}, 
 				ThreadEntity.class);		
+		mModel.commitAndCloseEntityManager();
 		generateAddPostReturnResource(regReturnData, thread);
 
 		try {

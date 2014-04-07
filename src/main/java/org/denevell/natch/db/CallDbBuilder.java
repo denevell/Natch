@@ -42,7 +42,7 @@ public class CallDbBuilder<ListItem> {
 	
 	public CallDbBuilder() {
 	}
-	
+
 	/**
 	 * Must be called before any thing else
 	 */
@@ -51,6 +51,35 @@ public class CallDbBuilder<ListItem> {
 		mEntityManager = factory.createEntityManager();   		
 		mTransaction = mEntityManager.getTransaction();
 		mTransaction.begin();
+		return this;
+	}
+	
+	public EntityManager getEntityManager() {
+		return mEntityManager;
+	}
+	
+	public CallDbBuilder<ListItem> closeEntityManager() {
+		EntityUtils.closeEntityConnection(mEntityManager);
+		return this;
+	}
+	
+	public CallDbBuilder<ListItem> commitAndCloseEntityManager() {
+		try {
+			mTransaction.commit();
+			return this;
+		} catch(Exception e){
+			Log.info(this.getClass(), e.toString());
+			if(mTransaction!=null && mTransaction.isActive()) mTransaction.rollback();
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} finally {
+			EntityUtils.closeEntityConnection(mEntityManager);
+		}
+	}
+
+	public CallDbBuilder<ListItem> useTransaction(EntityManager entityManager) {
+		mEntityManager = entityManager;
+		mTransaction = entityManager.getTransaction();
 		return this;
 	}
 	
@@ -75,25 +104,21 @@ public class CallDbBuilder<ListItem> {
 	}
 	
 	public List<ListItem> list(Class<ListItem> clazz) {
-		try {
-			TypedQuery<ListItem> nq = mEntityManager.createNamedQuery(mNamedQuery, clazz);
-			for (Entry<String, Object> qp: mQueryParams.entrySet()) {
-				nq.setParameter(qp.getKey(), qp.getValue());
-			}
-			if(mFirstResult<0) mFirstResult=0; if(mMaxResults<0) mMaxResults=0;
-			if(mFirstResult!=-1) {
-				nq.setFirstResult(mFirstResult);
-			}
-			if(mMaxResults!=-1) {
-				nq.setMaxResults(mMaxResults);
-			}
-			List<ListItem> rl = nq.getResultList();
-			if(rl==null) return new ArrayList<ListItem>();
-			return rl;
-			//if(limit < resultList.size() && resultList.size()>0) resultList.remove(resultList.size()-1); // For some reason we're returning two records on 1 as max results.
-		} finally {
-			EntityUtils.closeEntityConnection(mEntityManager);
+		TypedQuery<ListItem> nq = mEntityManager.createNamedQuery(mNamedQuery, clazz);
+		for (Entry<String, Object> qp: mQueryParams.entrySet()) {
+			nq.setParameter(qp.getKey(), qp.getValue());
 		}
+		if(mFirstResult<0) mFirstResult=0; if(mMaxResults<0) mMaxResults=0;
+		if(mFirstResult!=-1) {
+			nq.setFirstResult(mFirstResult);
+		}
+		if(mMaxResults!=-1) {
+			nq.setMaxResults(mMaxResults);
+		}
+		List<ListItem> rl = nq.getResultList();
+		if(rl==null) return new ArrayList<ListItem>();
+		return rl;
+		//if(limit < resultList.size() && resultList.size()>0) resultList.remove(resultList.size()-1); // For some reason we're returning two records on 1 as max results.
 	}
 
 	public ListItem single(Class<ListItem> clazz) {
@@ -150,40 +175,18 @@ public class CallDbBuilder<ListItem> {
 	 * @throws RuntimeException if there was an error adding
 	 */
 	public void add(ListItem instance) {
-		try {
-			mQueryParams = new HashMap<String, Object>(); // So as not to use ones for addIfDoesntExist
-			if(mCountNamedQueryForFirstItemMethod!=null &&
-					mMethodIfFirstItem!=null &&
-					namedQuery(mCountNamedQueryForFirstItemMethod).isFirst()) {
-				mMethodIfFirstItem.item(instance);
-			}
-			mEntityManager.persist(instance);
-			mTransaction.commit();
-		} catch(Exception e){
-			Log.info(this.getClass(), e.toString());
-			if(mTransaction!=null && mTransaction.isActive()) mTransaction.rollback();
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		} finally {
-			EntityUtils.closeEntityConnection(mEntityManager);
+		mQueryParams = new HashMap<String, Object>(); // So as not to use ones for addIfDoesntExist
+		if(mCountNamedQueryForFirstItemMethod!=null &&
+				mMethodIfFirstItem!=null &&
+				namedQuery(mCountNamedQueryForFirstItemMethod).isFirst()) {
+			mMethodIfFirstItem.item(instance);
 		}
+		mEntityManager.persist(instance);
 	}
 	
-	/**
-	 * @throws RuntimeException if there was an error
-	 */
-	public void update(ListItem instance) {
-		try {
-			mEntityManager.merge(instance);
-			mTransaction.commit();
-		} catch(Exception e){
-			Log.info(this.getClass(), e.toString());
-			if(mTransaction!=null && mTransaction.isActive()) mTransaction.rollback();
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		} finally {
-			EntityUtils.closeEntityConnection(mEntityManager);
-		}
+	public CallDbBuilder<ListItem> update(ListItem instance) {
+		mEntityManager.merge(instance);
+		return this;
 	}	
 	
 	/**
@@ -247,25 +250,15 @@ public class CallDbBuilder<ListItem> {
 			UpdateItem<ListItem> updateItem, 
 			NewItem<ListItem> newItem,
 			Class<ListItem> listItemClass) {
-		try {
-			ListItem foundItem = find(threadId, true, mEntityManager, listItemClass);
-			if(foundItem==null) {
-				foundItem = newItem.newItem();
-				mEntityManager.persist(foundItem);
-			} else {
-				foundItem = updateItem.update(foundItem);
-				mEntityManager.merge(foundItem);
-			}
-			mTransaction.commit();
-			return foundItem;
-		} catch(Exception e){
-			Log.info(this.getClass(), e.toString());
-			if(mTransaction!=null && mTransaction.isActive()) mTransaction.rollback();
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		} finally {
-			EntityUtils.closeEntityConnection(mEntityManager);
+		ListItem foundItem = find(threadId, true, mEntityManager, listItemClass);
+		if(foundItem==null) {
+			foundItem = newItem.newItem();
+			mEntityManager.persist(foundItem);
+		} else {
+			foundItem = updateItem.update(foundItem);
+			mEntityManager.merge(foundItem);
 		}
+		return foundItem;
 	}
 
 }
