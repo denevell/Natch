@@ -65,4 +65,16 @@ public class ThreadEntity {
 	public void setNumPosts(long numPosts) {
 		this.numPosts = numPosts;
 	}
+
+	public void updateThreadToRemovePost(PostEntity pe) {
+		getPosts().remove(pe);
+		if(getRootPost()!=null && getRootPost().getId()==pe.getId()) {
+			setRootPost(null);
+		}
+		if(getLatestPost()!=null && getLatestPost().getId()==pe.getId() && getPosts()!=null && getPosts().size()>=1) {
+			setLatestPost(getPosts().get(getPosts().size()-1));
+		}
+		setNumPosts(getNumPosts()-1);
+	}	
+
 }
