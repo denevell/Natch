@@ -119,12 +119,10 @@ public class AddThreadRequest {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				Log.info(AddThreadRequest.class, "Starting to send push notifications");
 				String key = null;
 				try {
 					key = ManifestUtils.getManifest(context).getValue("GCM_KEY");
 					if (key != null && !key.trim().isEmpty()) {
-						Log.info(AddThreadRequest.class, "GCM key looks alright -- not empty");
 					} else {
 						Log.error(AddThreadRequest.class, "GCM key looks bad -- empty");
 					}
@@ -142,7 +140,6 @@ public class AddThreadRequest {
 						String registrationId = pushEntity.getClientId();
 						String s = new ObjectMapper().writeValueAsString(new CutDownThreadResource(thread.getThread()));
 						Message message = new Message.Builder().addData("thread", s).build();
-						Log.info(AddThreadRequest.class, "Sending to push client id: " + registrationId);
 						Result result = sender.send(message, registrationId, 5);
 						Log.info(AddThreadRequest.class, "Push send result: " + result);
 					} catch (Exception e) {

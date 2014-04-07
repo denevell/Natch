@@ -27,6 +27,10 @@ public class CallDbBuilder<ListItem> {
 		public ListItem update(ListItem item);
 	}
 
+	public static interface DeleteOrMerge<ListItem> {
+		public boolean shouldDelete(ListItem item);
+	}
+
 	public static interface NewItem<ListItem> {
 		public ListItem newItem();
 	}
@@ -183,6 +187,21 @@ public class CallDbBuilder<ListItem> {
 		}
 		mEntityManager.persist(instance);
 	}
+
+	/**
+	 * @return false if it already exists
+	 * @throws RuntimeException if there was an error adding
+	 */
+	public boolean addIfDoesntExist(String listNamedQuery, ListItem instance) {
+		namedQuery(listNamedQuery);
+		if(!exists()) {
+			add(instance);
+			return true;
+		} else {
+			Log.info(getClass(), "Can't add, already exists");
+			return false;
+		}
+	}
 	
 	public CallDbBuilder<ListItem> update(ListItem instance) {
 		mEntityManager.merge(instance);
@@ -201,22 +220,20 @@ public class CallDbBuilder<ListItem> {
 		update(toBeUpdated);
 		return true;
 	}
-	
-	/**
-	 * @return false if it already exists
-	 * @throws RuntimeException if there was an error adding
-	 */
-	public boolean addIfDoesntExist(String listNamedQuery, ListItem instance) {
-		namedQuery(listNamedQuery);
-		if(!exists()) {
-			add(instance);
-			return true;
-		} else {
-			Log.info(getClass(), "Can't add, already exists");
-			return false;
-		}
-	}
 
+	public CallDbBuilder<ListItem> findAndUpdateOrDelete(Object primaryKey, 
+			DeleteOrMerge<ListItem> deleteOrMerge,
+			Class<ListItem> clazz) {
+		ListItem toBeUpdated  = find(primaryKey, true, mEntityManager, clazz);
+		boolean shouldDelete = deleteOrMerge.shouldDelete(toBeUpdated);
+		if(shouldDelete) {
+			mEntityManager.remove(toBeUpdated);
+		} else {
+			mEntityManager.merge(toBeUpdated);
+		}
+		return this;
+	}
+	
 	/**
 	 * Needs a named query set which returns a list
 	 */

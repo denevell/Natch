@@ -2,15 +2,14 @@ package org.denevell.natch.serv.post.delete;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 
 import org.denevell.natch.db.CallDbBuilder;
+import org.denevell.natch.db.CallDbBuilder.DeleteOrMerge;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.utils.EntityUtils;
 import org.denevell.natch.utils.JPAFactoryContextListener;
-import org.denevell.natch.utils.Log;
 
 public class DeletePostModel {
 
@@ -43,45 +42,28 @@ public class DeletePostModel {
 		mEntityManager = entityManager;
 	}
 
-	/**
-	 * 1. Check if the posts exists
-	 * 2. Check if it's the users or the user is an admin
-	 * 3. Find the thread and update to remove post
-	 * 4. Either update the thread or remove it
-	 * 5. Remove the post
-	 * @return
-	 */
 	public String delete(UserEntity userEntity, long postEntityId) {
-		EntityTransaction trans = mEntityManager.getTransaction();
-		try {
-			PostEntity pe = mPostModel.find(postEntityId, false, mEntityManager, PostEntity.class);
+			final PostEntity pe = mPostModel.find(postEntityId, false, mEntityManager, PostEntity.class);
 			if(pe==null) {
 				return DOESNT_EXIST;
 			} else if(!userEntity.isAdmin() && !pe.getUser().getUsername().equals(userEntity.getUsername())) {
 				return NOT_YOURS_TO_DELETE;
 			}
-			trans.begin();
-			ThreadEntity th = mThreadModel.find(pe.getThreadId(), true, mEntityManager, ThreadEntity.class);
-			th.updateThreadToRemovePost(pe);
-			if(th.getPosts()==null || th.getPosts().size()==0) {
-				mEntityManager.remove(th);
-			} else {
-				mEntityManager.merge(th);
-			}
+			mEntityManager.getTransaction().begin();
+			mThreadModel
+				.useTransaction(mEntityManager)
+				.findAndUpdateOrDelete(
+						pe.getThreadId(), 
+						new DeleteOrMerge<ThreadEntity>() {
+							@Override public boolean shouldDelete(ThreadEntity item) {
+								item.updateThreadToRemovePost(pe);
+								return item.getPosts()==null || item.getPosts().size()==0;
+							}
+						}, 
+						ThreadEntity.class);
 			mEntityManager.remove(pe);
-			trans.commit();
+			mThreadModel.commitAndCloseEntityManager();
 			return DELETED;
-		} catch(Exception e) {
-			Log.info(getClass(), "Error deleting: " + e.toString());
-			e.printStackTrace();
-			try {
-				trans.rollback();
-			} catch(Exception e1) {
-				Log.info(getClass(), "Error rolling back: " + e.toString());
-				e1.printStackTrace();
-			}
-			return UNKNOWN_ERROR;
-		} 
 	}
 	
 }
