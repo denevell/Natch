@@ -53,13 +53,17 @@ public class PasswordResetRequest {
 	@POST
 	@Path("/{recoveryEmail}")
 	public void requestReset(@PathParam("recoveryEmail") @NotEmpty @NotBlank String recoveryEmail) throws IOException {
-	    UserEntity user = mUserListByEmailModel.queryParam("recoveryEmail", recoveryEmail).single(UserEntity.class);  	    
+	    UserEntity user = mUserListByEmailModel
+	    		.startTransaction()
+	    		.queryParam("recoveryEmail", recoveryEmail).single(UserEntity.class);  	    
 	    if(user==null) {
 	    	mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
 	    	return;
 	    }
 		user.setPasswordResetRequest(true);
-		mModel.update(user);
+		mModel
+			.startTransaction()
+			.update(user);
 	}	
 
 	@DELETE
@@ -70,9 +74,13 @@ public class PasswordResetRequest {
 			mResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 			return;
 		}
-	    UserEntity user = mUserListModel.queryParam("username", username).single(UserEntity.class);  	    
+	    UserEntity user = mUserListModel
+	    		.startTransaction()
+	    		.queryParam("username", username).single(UserEntity.class);  	    
 		user.setPasswordResetRequest(false);
-		mModel.update(user);
+		mModel
+			.startTransaction()
+			.update(user);
 	}	
 	
 }

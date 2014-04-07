@@ -56,6 +56,7 @@ public class LoginRequest {
 	public LoginResourceReturnData login(@Valid LoginResourceInput loginInput) throws IOException {
 		LoginResourceReturnData returnResult = new LoginResourceReturnData();
 		UserEntity res = mLoginModel
+				.startTransaction()
 				.namedQuery(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME)
 				.queryParam("username", loginInput.getUsername())
 				.single(UserEntity.class);

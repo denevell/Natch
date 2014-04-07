@@ -72,7 +72,9 @@ public class AddPostRequest {
 		AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 		regReturnData.setSuccessful(false);
 	    final PostEntity post = AddPostRequestToPostEntity.adapt(input, false, userEntity);
-		ThreadEntity okay = new CallDbBuilder<ThreadEntity>().createOrUpdate(
+		ThreadEntity okay = new CallDbBuilder<ThreadEntity>()
+			.startTransaction()
+			.createOrUpdate(
 				post.getThreadId(),
 				new CallDbBuilder.UpdateItem<ThreadEntity>() {
 					@Override public ThreadEntity update(ThreadEntity item) {

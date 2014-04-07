@@ -88,11 +88,13 @@ public class ListThreadsRequest {
 				mModel = mModel.queryParam("tag", tag);
 			}
 			threads = mModel
+					.startTransaction()
 					.start(start)
 					.max(limit)
 					.namedQuery(listQuery)
 					.list(ThreadEntity.class);
 			num = mModel
+					.startTransaction()
 					.namedQuery(countQuery)
 					.count();
 		} catch(Exception e) {

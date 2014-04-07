@@ -60,6 +60,7 @@ public class UsersAdminToggleRequest {
 			return null;
 		} else {
 			boolean found = mModel
+					.startTransaction()
 	        		.queryParam("username", userId)
 	        		.findAndUpdate(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME, new RunnableWith<UserEntity>() {
 	        			@Override public void item(UserEntity item) {

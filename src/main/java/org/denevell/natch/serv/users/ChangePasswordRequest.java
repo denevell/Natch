@@ -49,6 +49,7 @@ public class ChangePasswordRequest {
 	public void changePassword(@Valid final ChangePasswordInput changePass) throws Exception {
 		final UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
 		boolean found = mModel
+			.startTransaction()
 			.queryParam("username", userEntity.getUsername())
 			.findAndUpdate(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME,
 				new RunnableWith<UserEntity>() {
@@ -73,6 +74,7 @@ public class ChangePasswordRequest {
 			return;
 		}
 		boolean found = mModel
+			.startTransaction()
 			.queryParam("username", username)
 			.findAndUpdate(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME,
 				new RunnableWith<UserEntity>() {

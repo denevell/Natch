@@ -52,6 +52,7 @@ public class PushIdRequests {
 		PushEntity pushEntity = new PushEntity();
 		pushEntity.setClientId(pushId.getId());
 		mModel
+			.startTransaction()
 			.queryParam("id", pushId.getId())
 			.addIfDoesntExist(PushEntity.NAMED_QUERY_FIND_ID, pushEntity);
 		SuccessOrError successOrError = new SuccessOrError();
@@ -63,6 +64,7 @@ public class PushIdRequests {
 	@Produces(MediaType.APPLICATION_JSON)
 	public PushResource list() {
 		List<PushEntity> list = mModel
+		    .startTransaction()
 			.namedQuery(PushEntity.NAMED_QUERY_LIST_IDS)
 			.list(PushEntity.class);
 		PushResource pr = new PushResource();

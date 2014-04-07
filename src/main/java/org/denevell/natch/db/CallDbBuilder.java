@@ -38,8 +38,20 @@ public class CallDbBuilder<ListItem> {
 	private HashMap<String, Object> mQueryParams = new HashMap<String, Object>();
 	private RunnableWith<ListItem> mMethodIfFirstItem;
 	private String mCountNamedQueryForFirstItemMethod;
+	private EntityTransaction mTransaction;
 	
 	public CallDbBuilder() {
+	}
+	
+	/**
+	 * Must be called before any thing else
+	 */
+	public CallDbBuilder<ListItem> startTransaction() {
+		EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
+		mEntityManager = factory.createEntityManager();   		
+		mTransaction = mEntityManager.getTransaction();
+		mTransaction.begin();
+		return this;
 	}
 	
 	public CallDbBuilder<ListItem> namedQuery(String nq) {
@@ -64,9 +76,6 @@ public class CallDbBuilder<ListItem> {
 	
 	public List<ListItem> list(Class<ListItem> clazz) {
 		try {
-			EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
-			mEntityManager = factory.createEntityManager();   		
-
 			TypedQuery<ListItem> nq = mEntityManager.createNamedQuery(mNamedQuery, clazz);
 			for (Entry<String, Object> qp: mQueryParams.entrySet()) {
 				nq.setParameter(qp.getKey(), qp.getValue());
@@ -88,20 +97,13 @@ public class CallDbBuilder<ListItem> {
 	}
 
 	public ListItem single(Class<ListItem> clazz) {
-		try {
-			EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
-			mEntityManager = factory.createEntityManager();   		
-
-			TypedQuery<ListItem> nq = mEntityManager.createNamedQuery(mNamedQuery, clazz);
-			for (Entry<String, Object> qp: mQueryParams.entrySet()) {
-				nq.setParameter(qp.getKey(), qp.getValue());
-			}
-			List<ListItem> rl = nq.getResultList();
-			if(rl==null || rl.size()==0) return null;
-			else return rl.get(0);
-		} finally {
-			EntityUtils.closeEntityConnection(mEntityManager);
+		TypedQuery<ListItem> nq = mEntityManager.createNamedQuery(mNamedQuery, clazz);
+		for (Entry<String, Object> qp: mQueryParams.entrySet()) {
+			nq.setParameter(qp.getKey(), qp.getValue());
 		}
+		List<ListItem> rl = nq.getResultList();
+		if(rl==null || rl.size()==0) return null;
+		else return rl.get(0);
 	}
 
 	/**
@@ -127,20 +129,13 @@ public class CallDbBuilder<ListItem> {
 	 * @return
 	 */
 	public long count() {
-		try {
-			EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
-			mEntityManager = factory.createEntityManager();   		
-
-			Query q = (Query) mEntityManager.createNamedQuery(mNamedQuery);
-			for (Entry<String, Object> entry : mQueryParams.entrySet()) {
-				q.setParameter(entry.getKey(), entry.getValue());
-			}
-		
-			long countResult= (Long) q.getSingleResult();				
-			return countResult;
-		} finally {
-			EntityUtils.closeEntityConnection(mEntityManager);
+		Query q = (Query) mEntityManager.createNamedQuery(mNamedQuery);
+		for (Entry<String, Object> entry : mQueryParams.entrySet()) {
+			q.setParameter(entry.getKey(), entry.getValue());
 		}
+	
+		long countResult= (Long) q.getSingleResult();				
+		return countResult;
 	}
 
 	/**
@@ -155,7 +150,6 @@ public class CallDbBuilder<ListItem> {
 	 * @throws RuntimeException if there was an error adding
 	 */
 	public void add(ListItem instance) {
-		EntityTransaction trans = null;
 		try {
 			mQueryParams = new HashMap<String, Object>(); // So as not to use ones for addIfDoesntExist
 			if(mCountNamedQueryForFirstItemMethod!=null &&
@@ -163,16 +157,11 @@ public class CallDbBuilder<ListItem> {
 					namedQuery(mCountNamedQueryForFirstItemMethod).isFirst()) {
 				mMethodIfFirstItem.item(instance);
 			}
-
-			EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
-			mEntityManager = factory.createEntityManager();   		
-			trans = mEntityManager.getTransaction();
-			trans.begin();
 			mEntityManager.persist(instance);
-			trans.commit();
+			mTransaction.commit();
 		} catch(Exception e){
 			Log.info(this.getClass(), e.toString());
-			if(trans!=null && trans.isActive()) trans.rollback();
+			if(mTransaction!=null && mTransaction.isActive()) mTransaction.rollback();
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		} finally {
@@ -184,17 +173,12 @@ public class CallDbBuilder<ListItem> {
 	 * @throws RuntimeException if there was an error
 	 */
 	public void update(ListItem instance) {
-		EntityTransaction trans = null;
 		try {
-			EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
-			mEntityManager = factory.createEntityManager();   		
-			trans = mEntityManager.getTransaction();
-			trans.begin();
 			mEntityManager.merge(instance);
-			trans.commit();
+			mTransaction.commit();
 		} catch(Exception e){
 			Log.info(this.getClass(), e.toString());
-			if(trans!=null && trans.isActive()) trans.rollback();
+			if(mTransaction!=null && mTransaction.isActive()) mTransaction.rollback();
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		} finally {
@@ -213,7 +197,6 @@ public class CallDbBuilder<ListItem> {
 		runnableWith.item(toBeUpdated);
 		update(toBeUpdated);
 		return true;
-		
 	}
 	
 	/**
@@ -235,24 +218,17 @@ public class CallDbBuilder<ListItem> {
 	 * Needs a named query set which returns a list
 	 */
 	public boolean exists() {
+		Query q = (Query) mEntityManager.createNamedQuery(mNamedQuery);
+		for (Entry<String, Object> entry : mQueryParams.entrySet()) {
+			q.setParameter(entry.getKey(), entry.getValue());
+		}
 		try {
-			EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
-			mEntityManager = factory.createEntityManager();   		
-
-			Query q = (Query) mEntityManager.createNamedQuery(mNamedQuery);
-			for (Entry<String, Object> entry : mQueryParams.entrySet()) {
-				q.setParameter(entry.getKey(), entry.getValue());
-			}
-			try {
-				@SuppressWarnings("rawtypes")
-				List list = q.getResultList();
-				if(list.size()>0) return true;
-				else return false;
-			} catch(NoResultException e) {
-				return false;
-			}
-		} finally {
-			EntityUtils.closeEntityConnection(mEntityManager);
+			@SuppressWarnings("rawtypes")
+			List list = q.getResultList();
+			if(list.size()>0) return true;
+			else return false;
+		} catch(NoResultException e) {
+			return false;
 		}
 	}
 	
@@ -271,12 +247,7 @@ public class CallDbBuilder<ListItem> {
 			UpdateItem<ListItem> updateItem, 
 			NewItem<ListItem> newItem,
 			Class<ListItem> listItemClass) {
-		EntityTransaction trans = null;
 		try {
-			EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
-			mEntityManager = factory.createEntityManager();   		
-			trans = mEntityManager.getTransaction();
-			trans.begin();
 			ListItem foundItem = find(threadId, true, mEntityManager, listItemClass);
 			if(foundItem==null) {
 				foundItem = newItem.newItem();
@@ -285,11 +256,11 @@ public class CallDbBuilder<ListItem> {
 				foundItem = updateItem.update(foundItem);
 				mEntityManager.merge(foundItem);
 			}
-			trans.commit();
+			mTransaction.commit();
 			return foundItem;
 		} catch(Exception e){
 			Log.info(this.getClass(), e.toString());
-			if(trans!=null && trans.isActive()) trans.rollback();
+			if(mTransaction!=null && mTransaction.isActive()) mTransaction.rollback();
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		} finally {

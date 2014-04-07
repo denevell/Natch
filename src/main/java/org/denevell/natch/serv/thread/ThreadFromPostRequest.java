@@ -82,9 +82,13 @@ public class ThreadFromPostRequest {
 		        mResponse.sendError(HttpServletResponse.SC_BAD_REQUEST);
 	        return null;
 	    }
-	    UserEntity user = mUserModel.queryParam("username", input.getUserId()).single(UserEntity.class);  	    
+	    UserEntity user = mUserModel
+	    		.startTransaction()
+	    		.queryParam("username", input.getUserId()).single(UserEntity.class);  	    
 	    final PostEntity post = AddPostRequestToPostEntity.adapt(input, true, user);
-		ThreadEntity thread = new CallDbBuilder<ThreadEntity>().createOrUpdate(
+		ThreadEntity thread = new CallDbBuilder<ThreadEntity>()
+			.startTransaction()
+			.createOrUpdate(
 				post.getThreadId(),
 				new CallDbBuilder.UpdateItem<ThreadEntity>() {
 					@Override public ThreadEntity update(ThreadEntity item) {

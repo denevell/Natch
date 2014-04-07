@@ -48,6 +48,7 @@ public class UsersListRequest {
 			return null;
 		} else {
 			List<UserEntity> usersFromDb = new CallDbBuilder<UserEntity>()
+					.startTransaction()
 					.namedQuery(UserEntity.NAMED_QUERY_LIST_USERS).list(
 							UserEntity.class);
 			UserList usersList = new UserList();

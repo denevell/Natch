@@ -55,6 +55,7 @@ public class ListPosts {
 		List<PostEntity> posts = null;
 		try {
 			posts = mModel
+				.startTransaction()
 				.start(start)
 				.max(limit)
 				.namedQuery(PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE)

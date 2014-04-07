@@ -63,6 +63,7 @@ public class ListThreadRequest {
 		List<String> tags = null;
 
 			posts = mModel
+					.startTransaction()
 					.start(start)
 					.max(limit)
 					.namedQuery(PostEntity.NAMED_QUERY_FIND_BY_THREADID)
@@ -71,6 +72,7 @@ public class ListThreadRequest {
 
 			if(posts!=null)  {
 				thread = mThreadModel 
+					.startTransaction()
 					.namedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID)
 					.queryParam("id", threadId)
 					.single(ThreadEntity.class);

@@ -49,6 +49,7 @@ public class RegisterRequest {
 	public RegisterResourceReturnData register(@Valid RegisterResourceInput registerInput) {
 		UserEntity u = new UserEntity(registerInput);
 		boolean added = mModel
+			.startTransaction()
 			.ifFirstItem(UserEntity.NAMED_QUERY_COUNT, new RunnableWith<UserEntity>() {
 						@Override public void item(UserEntity item) {
 							item.setAdmin(true);

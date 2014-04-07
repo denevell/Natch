@@ -94,7 +94,9 @@ public class AddThreadRequest {
 		AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 		regReturnData.setSuccessful(false);
 	    final PostEntity post = AddPostRequestToPostEntity.adapt(input, false, userEntity);
-		ThreadEntity thread = new CallDbBuilder<ThreadEntity>().createOrUpdate(
+		ThreadEntity thread = new CallDbBuilder<ThreadEntity>()
+			.startTransaction()
+			.createOrUpdate(
 				post.getThreadId(),
 				new CallDbBuilder.UpdateItem<ThreadEntity>() {
 					@Override public ThreadEntity update(ThreadEntity item) {
@@ -130,6 +132,7 @@ public class AddThreadRequest {
 				}
 				Sender sender = new Sender(key);
 				List<PushEntity> list = new CallDbBuilder<PushEntity>()
+						.startTransaction()
 						.namedQuery(PushEntity.NAMED_QUERY_LIST_IDS)
 						.list(PushEntity.class);
 				for (PushEntity pushEntity : list) {

@@ -57,6 +57,7 @@ public class SinglePostRequest {
 		ThreadEntity thread = null;
 		try {
 			post = mModel
+				.startTransaction()
 				.namedQuery(PostEntity.NAMED_QUERY_FIND_BY_ID)
 				.queryParam("id", postId)
 				.single(PostEntity.class);
@@ -65,6 +66,7 @@ public class SinglePostRequest {
 				return null;
 			} else {
 				thread = mListThreadModel
+						.startTransaction()
 						.namedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID)
 						.queryParam("id", post.getThreadId())
 						.single(ThreadEntity.class);		
