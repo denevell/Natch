@@ -51,10 +51,6 @@ public class EditPostModel {
 			boolean isEditingThread) {
 		EntityTransaction trans = mEntityManager.getTransaction();
 		try {
-			if(userEntity==null || postToEdit==null) {
-				Log.info(getClass(), "No user or postadapter passed to edit method");
-				return UNKNOWN_ERROR;
-			}
 			PostEntity pe = mPostModel.find(postEntityId, false, mEntityManager, PostEntity.class);
 			if(pe==null) {
 				return DOESNT_EXIST;
@@ -71,7 +67,7 @@ public class EditPostModel {
 			} else {
 			    postToEdit.setUser(userEntity);			
 			}
-			if(!isEditingThread)  postToEdit.setSubject("-");
+			if(!isEditingThread) postToEdit.setSubject("-");
 			if(isBadInputParams(userEntity, postToEdit.getSubject(), postToEdit.getContent(), isEditingThread)) {
 				Log.info(this.getClass(), "Edit user: Bad user input");
 				return BAD_USER_INPUT;

@@ -16,7 +16,6 @@ import javax.ws.rs.core.UriInfo;
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.DeletePostResourceReturnData;
-import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
 @Path("post/del")
@@ -45,33 +44,23 @@ public class DeletePostRequest {
 	 */
 	public DeletePostRequest(DeletePostModel postModel, 
 			HttpServletRequest request, 
-			HttpServletResponse response
-			) {
+			HttpServletResponse response) {
 		mModel = postModel;
 		mRequest = request;
 		mResponse = response;
 	}
 		
 	@DELETE
-	@Path("{postId}") // Explicit for the servlet filter
+	@Path("{postId}") 
 	@Produces(MediaType.APPLICATION_JSON)
-	public DeletePostResourceReturnData delete(
-			@PathParam("postId") long number) {
+	public DeletePostResourceReturnData delete(@PathParam("postId") long number) {
 		DeletePostResourceReturnData ret = new DeletePostResourceReturnData();
 		ret.setSuccessful(false);
 		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
 		try {
 			mModel.init();
-			if(userEntity==null) {
-				ret.setError(rb.getString(Strings.unknown_error)); // Unknown as this shouldn't happen
-				return ret;
-			}	
 			String result = mModel.delete(userEntity, number);
 			generateDeleteReturnResource(result, ret, userEntity);
-			return ret;
-		} catch(Exception e) {
-			Log.info(getClass(), "Couldn't delete post: " + e.toString());
-			ret.setError(rb.getString(Strings.unknown_error));
 			return ret;
 		} finally {
 			mModel.close();

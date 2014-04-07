@@ -31,6 +31,7 @@ public class UserEntity {
 		this.username = register.getUsername();
 		this.originalPassword = register.getPassword();
 		generatePassword(originalPassword);
+		this.recoveryEmail = register.getRecoveryEmail();
 	}
 	
 	public UserEntity() {

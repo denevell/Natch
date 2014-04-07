@@ -1,15 +1,15 @@
 package org.denevell.natch.tests.functional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
 import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.io.users.User;
 import org.denevell.natch.tests.functional.pageobjects.ListUsersPO;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
@@ -50,7 +50,7 @@ public class ResetPasswordRequestFunctional {
 	    
 	    // Assert
 	    assertEquals("204 response after request reset", 204, response.getStatus());
-	    assertTrue("Reset pw set", getUserByName("aaron1", listUsersPo.listUsers(adminLogin.getAuthKey()).getUsers()).isResetPasswordRequest());
+	    assertTrue("Reset pw set", listUsersPo.findUser("aaron1", adminLogin.getAuthKey()).isResetPasswordRequest());
 	    
 	    // Now deny unset since not admin
 	    LoginResourceReturnData login = loginPo.login("aaron1", "aaron1");
@@ -58,7 +58,7 @@ public class ResetPasswordRequestFunctional {
 	    
 	    // Assert
 	    assertEquals("401 response after request un reset as normal user", 401, response.getStatus());
-	    assertTrue("Reset pw set", getUserByName("aaron1", listUsersPo.listUsers(adminLogin.getAuthKey()).getUsers()).isResetPasswordRequest());
+	    assertTrue("Reset pw set", listUsersPo.findUser("aaron1", adminLogin.getAuthKey()).isResetPasswordRequest());
 	}
 
 	@Test
@@ -66,26 +66,17 @@ public class ResetPasswordRequestFunctional {
 		// Arrange 
 	    registerPo.register("aaron", "aaron");
 	    registerPo.register("aaron1", "aaron1");
-	    LoginResourceReturnData login = loginPo.login("aaron1", "aaron1");
 	    LoginResourceReturnData adminLogin = loginPo.login("aaron", "aaron");
 	    resetPwRequest.setAsUser("aaron1");
-	    assertTrue("Reset pw set", getUserByName("aaron1", listUsersPo.listUsers(adminLogin.getAuthKey()).getUsers()).isResetPasswordRequest());
+	    assertTrue("Reset pw set", listUsersPo.findUser("aaron1", adminLogin.getAuthKey()).isResetPasswordRequest());
 
 	    // Act
 	    Response response = resetPwRequest.unsetAsAdmin("aaron1", adminLogin.getAuthKey());
 	    
 	    // Assert
 	    assertEquals("204 response after request reset", 204, response.getStatus());
-	    assertFalse("Reset pw set", getUserByName("aaron1", listUsersPo.listUsers(adminLogin.getAuthKey()).getUsers()).isResetPasswordRequest());
+	    assertFalse("Reset pw set", listUsersPo.findUser("aaron1", adminLogin.getAuthKey()).isResetPasswordRequest());
 	}
-	
-	public static User getUserByName(String name, List<User> users) {
-		for (User user : users) {
-			if(user.getUsername().equals(name)) {
-				return user;
-			}
-		}
-		return null;
-	}
+
 	
 }

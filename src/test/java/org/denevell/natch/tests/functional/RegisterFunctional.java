@@ -11,6 +11,7 @@ import javax.ws.rs.client.WebTarget;
 
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
+import org.denevell.natch.tests.functional.pageobjects.ListUsersPO;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
@@ -23,20 +24,28 @@ public class RegisterFunctional {
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private WebTarget service;
 	private RegisterPO registerPo;
+	private LoginPO loginPo;
+	private ListUsersPO listUsersPo;
 
 	@Before
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
 		registerPo = new RegisterPO(service);
+	    loginPo = new LoginPO(service);
+	    listUsersPo = new ListUsersPO(service);
 		TestUtils.deleteTestDb();
 	}
 
 	@Test
 	public void shouldRegisterWithUsernameAndPassword() {
-	    RegisterResourceReturnData result = registerPo.register("aaron@aaron.com", "passy");
-		
+		// Act
+	    RegisterResourceReturnData result = 
+	    		registerPo.register("aaron@aaron.com", "passy", "a@recovery.com");
+
 		// Assert
 		assertEquals("", result.getError());
+	    LoginResourceReturnData adminLogin = loginPo.login("aaron@aaron.com", "passy");
+	    assertEquals("Has recovery email set", "a@recovery.com", listUsersPo.findUser("aaron@aaron.com", adminLogin.getAuthKey()).getRecoveryEmail());
 		assertTrue("Should return true as 'successful' field", result.isSuccessful());
 	}
 	

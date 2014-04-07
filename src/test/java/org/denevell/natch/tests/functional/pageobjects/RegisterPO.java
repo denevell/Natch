@@ -16,9 +16,14 @@ public class RegisterPO {
 	}
 
 	public RegisterResourceReturnData register(String username, String password) {
+		return register(username, password, null);
+	}	
+
+	public RegisterResourceReturnData register(String username, String password, String emailRecover) {
 		RegisterResourceInput registerInput = new RegisterResourceInput();
 		registerInput.setUsername(username);
 		registerInput.setPassword(password);
+		registerInput.setRecoveryEmail(emailRecover);
 		RegisterResourceReturnData result = mService 
 	    		.path("rest").path("user").request()
 	    		.put(Entity.entity(registerInput, MediaType.APPLICATION_JSON), 
