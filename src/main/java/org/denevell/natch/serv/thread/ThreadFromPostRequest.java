@@ -104,13 +104,9 @@ public class ThreadFromPostRequest {
 		mModel.commitAndCloseEntityManager();
 		generateAddPostReturnResource(regReturnData, thread);
 
-		try {
-		    userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-			mDeletePostModel.init();
-			mDeletePostModel.delete(userEntity, input.getPostId());
-		} finally {
-			mDeletePostModel.close();
-		}
+		userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+		mDeletePostModel.init();
+		mDeletePostModel.delete(userEntity, input.getPostId());
 
 		return regReturnData;
 	}

@@ -8,7 +8,6 @@ import org.denevell.natch.db.CallDbBuilder.DeleteOrMerge;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.utils.EntityUtils;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 
 public class DeletePostModel {
@@ -29,10 +28,6 @@ public class DeletePostModel {
 	public void init() {
 		EntityManagerFactory factory = JPAFactoryContextListener.sFactory;
 		mEntityManager = factory.createEntityManager(); 
-	}
-	
-	public void close() {
-		EntityUtils.closeEntityConnection(mEntityManager); 
 	}
 	
 	/**

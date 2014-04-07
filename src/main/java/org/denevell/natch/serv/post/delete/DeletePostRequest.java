@@ -57,14 +57,10 @@ public class DeletePostRequest {
 		DeletePostResourceReturnData ret = new DeletePostResourceReturnData();
 		ret.setSuccessful(false);
 		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-		try {
-			mModel.init();
-			String result = mModel.delete(userEntity, number);
-			generateDeleteReturnResource(result, ret, userEntity);
-			return ret;
-		} finally {
-			mModel.close();
-		} 
+		mModel.init();
+		String result = mModel.delete(userEntity, number);
+		generateDeleteReturnResource(result, ret, userEntity);
+		return ret;
 	}
 
 	private void generateDeleteReturnResource(String result, DeletePostResourceReturnData ret, UserEntity userEntity) {

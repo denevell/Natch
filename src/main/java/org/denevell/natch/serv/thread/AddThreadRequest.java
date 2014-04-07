@@ -147,7 +147,6 @@ public class AddThreadRequest {
 						e.printStackTrace();
 					}
 				}
-				Log.info(AddThreadRequest.class, "Finished sending push notifications");
 			}
 		}).start();
 	}
