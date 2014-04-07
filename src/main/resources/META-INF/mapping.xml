@@ -47,6 +47,9 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
             <basic name="passwordResetRequest">
 	           <column name="request_pw_reset" nullable="false"/>
             </basic>
+            <basic name="recoveryEmail">
+	           <column name="recovery_email" nullable="true"/>
+            </basic>
        </attributes>
     </entity>    
     

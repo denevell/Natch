@@ -54,6 +54,7 @@ public class UsersListRequest {
 			for (UserEntity user : usersFromDb) {
 				User u = new User(user.getUsername(), user.isAdmin());
 				u.setResetPasswordRequest(user.isPasswordResetRequest());
+				u.setRecoveryEmail(user.getRecoveryEmail());
 				usersList.getUsers().add(u);
 			}
 			return usersList;

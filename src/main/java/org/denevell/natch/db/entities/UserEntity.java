@@ -16,8 +16,8 @@ public class UserEntity {
 	
 	private String username;
 	private String password;
-	@Transient
-	private String originalPassword;
+	private String recoveryEmail;
+	@Transient private String originalPassword;
 	private boolean admin;
 	private boolean passwordResetRequest;
 	
@@ -80,6 +80,14 @@ public class UserEntity {
 
 	public void setPasswordResetRequest(boolean passwordResetRequest) {
 		this.passwordResetRequest = passwordResetRequest;
+	}
+
+	public String getRecoveryEmail() {
+		return recoveryEmail;
+	}
+
+	public void setRecoveryEmail(String recoveryEmail) {
+		this.recoveryEmail = recoveryEmail;
 	}
 
 }

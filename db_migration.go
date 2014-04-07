@@ -161,3 +161,10 @@ func (m migration) Migration_5() {
 		panic(err)
 	}
 }
+
+func (m migration) Migration_6() {
+	_, err := m.Tx.Exec("alter table userentity add recovery_email varchar(200)")
+	if err != nil {
+		panic(err)
+	}
+}
