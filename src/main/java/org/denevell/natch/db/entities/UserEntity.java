@@ -13,6 +13,7 @@ public class UserEntity {
 	public static final String NAMED_QUERY_LIST_USERS= "listUsers";
 	public static final String NAMED_QUERY_PARAM_PASSWORD = "password";
 	public static final String NAMED_QUERY_PARAM_USERNAME = "username";
+	public static final String NAMED_QUERY_FIND_BY_RECOVERY_EMAIL = "findByEmail";
 	
 	private String username;
 	private String password;

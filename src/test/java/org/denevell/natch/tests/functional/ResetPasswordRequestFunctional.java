@@ -42,11 +42,11 @@ public class ResetPasswordRequestFunctional {
 	public void shouldSetAndUnsetResetPasswordFlag() {
 		// Arrange 
 	    registerPo.register("aaron", "aaron");
-	    registerPo.register("aaron1", "aaron1");
+	    registerPo.register("aaron1", "aaron1", "a@recover.com");
 	    LoginResourceReturnData adminLogin = loginPo.login("aaron", "aaron");
 
 	    // Act
-	    Response response = resetPwRequest.setAsUser("aaron1");
+	    Response response = resetPwRequest.setAsUser("a@recover.com");
 	    
 	    // Assert
 	    assertEquals("204 response after request reset", 204, response.getStatus());
@@ -65,9 +65,9 @@ public class ResetPasswordRequestFunctional {
 	public void shouldUnsetResetPasswordAsAdmin() {
 		// Arrange 
 	    registerPo.register("aaron", "aaron");
-	    registerPo.register("aaron1", "aaron1");
+	    registerPo.register("aaron1", "aaron1", "a@recover.com");
 	    LoginResourceReturnData adminLogin = loginPo.login("aaron", "aaron");
-	    resetPwRequest.setAsUser("aaron1");
+	    resetPwRequest.setAsUser("a@recover.com");
 	    assertTrue("Reset pw set", listUsersPo.findUser("aaron1", adminLogin.getAuthKey()).isResetPasswordRequest());
 
 	    // Act

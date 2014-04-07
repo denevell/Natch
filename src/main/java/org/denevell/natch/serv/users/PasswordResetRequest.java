@@ -30,10 +30,13 @@ public class PasswordResetRequest {
 	@Context HttpServletResponse mResponse;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private CallDbBuilder<UserEntity> mModel;
+	private CallDbBuilder<UserEntity> mUserListByEmailModel;
 	private CallDbBuilder<UserEntity> mUserListModel;
 	
 	public PasswordResetRequest() {
 		mModel = new CallDbBuilder<UserEntity>();
+		mUserListByEmailModel = new CallDbBuilder<UserEntity>()
+		 .namedQuery(UserEntity.NAMED_QUERY_FIND_BY_RECOVERY_EMAIL);
 		mUserListModel = new CallDbBuilder<UserEntity>()
 		 .namedQuery(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME);
 	}
@@ -48,9 +51,9 @@ public class PasswordResetRequest {
 	}
 	
 	@POST
-	@Path("/{username}")
-	public void requestReset(@PathParam("username") @NotEmpty @NotBlank String username) throws IOException {
-	    UserEntity user = mUserListModel.queryParam("username", username).single(UserEntity.class);  	    
+	@Path("/{recoveryEmail}")
+	public void requestReset(@PathParam("recoveryEmail") @NotEmpty @NotBlank String recoveryEmail) throws IOException {
+	    UserEntity user = mUserListByEmailModel.queryParam("recoveryEmail", recoveryEmail).single(UserEntity.class);  	    
 	    if(user==null) {
 	    	mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
 	    	return;

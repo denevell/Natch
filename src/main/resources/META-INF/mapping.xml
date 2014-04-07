@@ -28,6 +28,9 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	   <named-query name="listUsers">
 	       <query>select u from UserEntity u</query>
 	   </named-query>       
+	   <named-query name="findByEmail">
+	       <query>select u from UserEntity u where u.recoveryEmail=:recoveryEmail</query>
+	   </named-query>       
 	   <named-query name="countUsers">
 	       <query>select count(u) from UserEntity u</query>
 	   </named-query>       

@@ -13,9 +13,9 @@ public class SetResetPasswordPO {
 		mService = service;
 	}
 
-	public Response setAsUser(String username) {
+	public Response setAsUser(String recoveryEmail) {
 		Response res = mService 
-	    	.path("rest").path("user").path("password_reset").path(username).request()
+	    	.path("rest").path("user").path("password_reset").path(recoveryEmail).request()
 	    	.post(Entity.entity(null, MediaType.APPLICATION_JSON));
 		return res;
 	}
