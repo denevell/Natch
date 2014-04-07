@@ -13,17 +13,16 @@ public class SetResetPasswordPO {
 		mService = service;
 	}
 
-	public Response setAsUser(String authKey) {
+	public Response setAsUser(String username) {
 		Response res = mService 
-	    	.path("rest").path("user").path("password").path("reset").request()
-	    	.header("AuthKey", authKey)
+	    	.path("rest").path("user").path("password_reset").path(username).request()
 	    	.post(Entity.entity(null, MediaType.APPLICATION_JSON));
 		return res;
 	}
 
 	public Response unsetAsAdmin(String user, String authKey) {
 		Response res = mService 
-	    	.path("rest").path("user").path("password").path("reset").path(user).request()
+	    	.path("rest").path("user").path("password_reset").path("remove").path(user).request()
 	    	.header("AuthKey", authKey)
 	    	.delete();
 		return res;

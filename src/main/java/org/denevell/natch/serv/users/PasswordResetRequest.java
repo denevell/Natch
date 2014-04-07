@@ -21,7 +21,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 
-@Path("user/password/reset")
+@Path("user/password_reset")
 public class PasswordResetRequest {
 	
 	@Context UriInfo info;
@@ -48,14 +48,19 @@ public class PasswordResetRequest {
 	}
 	
 	@POST
-	public void requestReset() {
-		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-		userEntity.setPasswordResetRequest(true);
-		mModel.update(userEntity);
+	@Path("/{username}")
+	public void requestReset(@PathParam("username") @NotEmpty @NotBlank String username) throws IOException {
+	    UserEntity user = mUserListModel.queryParam("username", username).single(UserEntity.class);  	    
+	    if(user==null) {
+	    	mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
+	    	return;
+	    }
+		user.setPasswordResetRequest(true);
+		mModel.update(user);
 	}	
 
 	@DELETE
-	@Path("/{username}")
+	@Path("remove/{username}")
 	public void requestNoReset(@PathParam("username") @NotEmpty @NotBlank String username) throws IOException {
 		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
 		if(!userEntity.isAdmin()) {

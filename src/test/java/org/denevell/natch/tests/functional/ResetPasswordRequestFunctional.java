@@ -43,17 +43,17 @@ public class ResetPasswordRequestFunctional {
 		// Arrange 
 	    registerPo.register("aaron", "aaron");
 	    registerPo.register("aaron1", "aaron1");
-	    LoginResourceReturnData login = loginPo.login("aaron1", "aaron1");
 	    LoginResourceReturnData adminLogin = loginPo.login("aaron", "aaron");
 
 	    // Act
-	    Response response = resetPwRequest.setAsUser(login.getAuthKey());
+	    Response response = resetPwRequest.setAsUser("aaron1");
 	    
 	    // Assert
 	    assertEquals("204 response after request reset", 204, response.getStatus());
 	    assertTrue("Reset pw set", getUserByName("aaron1", listUsersPo.listUsers(adminLogin.getAuthKey()).getUsers()).isResetPasswordRequest());
 	    
 	    // Now deny unset since not admin
+	    LoginResourceReturnData login = loginPo.login("aaron1", "aaron1");
 	    response = resetPwRequest.unsetAsAdmin("aaron1", login.getAuthKey());
 	    
 	    // Assert
@@ -68,7 +68,7 @@ public class ResetPasswordRequestFunctional {
 	    registerPo.register("aaron1", "aaron1");
 	    LoginResourceReturnData login = loginPo.login("aaron1", "aaron1");
 	    LoginResourceReturnData adminLogin = loginPo.login("aaron", "aaron");
-	    resetPwRequest.setAsUser(login.getAuthKey());
+	    resetPwRequest.setAsUser("aaron1");
 	    assertTrue("Reset pw set", getUserByName("aaron1", listUsersPo.listUsers(adminLogin.getAuthKey()).getUsers()).isResetPasswordRequest());
 
 	    // Act

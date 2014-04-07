@@ -1,7 +1,6 @@
 package org.denevell.natch.tests.functional.pageobjects;
 
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
 
 import org.denevell.natch.io.users.UserList;
 
