@@ -67,30 +67,25 @@ public class EditThreadRequest {
 			EditPostResource editPostResource, 
 			boolean isEditingThread) {
 		EditPostResourceReturnData ret = new EditPostResourceReturnData();
-		try {
-			mModel.init();
-			ret.setSuccessful(false);
+		ret.setSuccessful(false);
 
-			if(editPostResource.getTags()!=null && !PostEntity.isTagLengthOkay(editPostResource.getTags())) {
-    		    generateEditReturnResource(ret, TAG_TOO_LARGE, rb);
-    		    return ret;
-			}
-			if(editPostResource.getSubject()!=null && PostEntity.isSubjectTooLarge(editPostResource.getSubject())) {
-    		    generateEditReturnResource(ret, SUBJECT_TOO_LARGE, rb);
-    		    return ret;
-			}
+		if(editPostResource.getTags()!=null && !PostEntity.isTagLengthOkay(editPostResource.getTags())) {
+   		    generateEditReturnResource(ret, TAG_TOO_LARGE, rb);
+   		    return ret;
+		}
+		if(editPostResource.getSubject()!=null && PostEntity.isSubjectTooLarge(editPostResource.getSubject())) {
+   		    generateEditReturnResource(ret, SUBJECT_TOO_LARGE, rb);
+   		    return ret;
+		}
 
-			UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-			PostEntity mPe = new PostEntity();
-			mPe.setContent(editPostResource.getContent());
-			mPe.setSubject(editPostResource.getSubject());
-			mPe.setTags(editPostResource.getTags());
-			String result = mModel.edit(userEntity, postId, mPe, isEditingThread); 
-			generateEditReturnResource(ret, result, rb);
-			return ret;
-		} finally {
-			mModel.close();
-		} 		
+		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+		PostEntity mPe = new PostEntity();
+		mPe.setContent(editPostResource.getContent());
+		mPe.setSubject(editPostResource.getSubject());
+		mPe.setTags(editPostResource.getTags());
+		String result = mModel.edit(userEntity, postId, mPe, isEditingThread); 
+		generateEditReturnResource(ret, result, rb);
+		return ret;
 	}
 	
 	public static void generateEditReturnResource(EditPostResourceReturnData ret,

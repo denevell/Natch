@@ -72,7 +72,7 @@ public class CallDbBuilder<ListItem> {
 			mTransaction.commit();
 			return this;
 		} catch(Exception e){
-			Log.info(this.getClass(), e.toString());
+			Log.error(this.getClass(), e.getMessage(), e);
 			if(mTransaction!=null && mTransaction.isActive()) mTransaction.rollback();
 			e.printStackTrace();
 			throw new RuntimeException(e);
@@ -139,16 +139,15 @@ public class CallDbBuilder<ListItem> {
 	 * 
 	 * @param primaryKey
 	 * @param pessimisticRead
-	 * @param entityManager Only passed for a speed hack that we should be able to remove soon
 	 * @param clazz
 	 * @return
 	 */
-	public ListItem find(Object primaryKey, boolean pessimisticRead, EntityManager entityManager, Class<ListItem> clazz) {
+	public ListItem find(Object primaryKey, boolean pessimisticRead, Class<ListItem> clazz) {
 		ListItem item = null;
 		if(pessimisticRead) {
-			item = entityManager.find(clazz, primaryKey, LockModeType.PESSIMISTIC_READ);
+			item = mEntityManager.find(clazz, primaryKey, LockModeType.PESSIMISTIC_READ);
 		} else {
-			item = entityManager.find(clazz, primaryKey);
+			item = mEntityManager.find(clazz, primaryKey);
 		}
 		return item;
 	}
@@ -224,7 +223,7 @@ public class CallDbBuilder<ListItem> {
 	public CallDbBuilder<ListItem> findAndUpdateOrDelete(Object primaryKey, 
 			DeleteOrMerge<ListItem> deleteOrMerge,
 			Class<ListItem> clazz) {
-		ListItem toBeUpdated  = find(primaryKey, true, mEntityManager, clazz);
+		ListItem toBeUpdated  = find(primaryKey, true, clazz);
 		boolean shouldDelete = deleteOrMerge.shouldDelete(toBeUpdated);
 		if(shouldDelete) {
 			mEntityManager.remove(toBeUpdated);
@@ -267,7 +266,7 @@ public class CallDbBuilder<ListItem> {
 			UpdateItem<ListItem> updateItem, 
 			NewItem<ListItem> newItem,
 			Class<ListItem> listItemClass) {
-		ListItem foundItem = find(threadId, true, mEntityManager, listItemClass);
+		ListItem foundItem = find(threadId, true, listItemClass);
 		if(foundItem==null) {
 			foundItem = newItem.newItem();
 			mEntityManager.persist(foundItem);

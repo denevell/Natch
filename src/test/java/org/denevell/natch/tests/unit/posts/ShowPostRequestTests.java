@@ -21,7 +21,6 @@ import org.denevell.natch.serv.post.SinglePostRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 public class ShowPostRequestTests {
 	

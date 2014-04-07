@@ -23,8 +23,8 @@ import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.threads.AddThreadFromPostResourceInput;
+import org.denevell.natch.serv.post.DeletePostRequest;
 import org.denevell.natch.serv.post.ThreadFactory;
-import org.denevell.natch.serv.post.delete.DeletePostModel;
 import org.denevell.natch.serv.post.edit.EditPostModel;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
@@ -37,13 +37,11 @@ public class ThreadFromPostRequest {
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
-    private DeletePostModel mDeletePostModel;
 	private ThreadFactory mThreadFactory;
 	private CallDbBuilder<UserEntity> mUserModel;
 	private CallDbBuilder<ThreadEntity> mModel = new CallDbBuilder<ThreadEntity>();
 	
 	public ThreadFromPostRequest() {
-		mDeletePostModel = new DeletePostModel();
 		mThreadFactory = new ThreadFactory();
 		mUserModel = new CallDbBuilder<UserEntity>()
 		 .namedQuery(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME);
@@ -53,12 +51,10 @@ public class ThreadFromPostRequest {
 	 * For DI testing.
 	 */
 	public ThreadFromPostRequest(
-	        DeletePostModel deletePostModel,
 			HttpServletRequest request, 
 			HttpServletResponse response) {
 		mRequest = request;
 		mResponse = response;
-		mDeletePostModel = deletePostModel;
 	}
 
 	@PUT
@@ -73,24 +69,14 @@ public class ThreadFromPostRequest {
 	        mResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 	        return null;
 	    }
-	    if(input.getPostId()<=0 
-	               || input.getUserId()==null 
-	               || input.getUserId().trim().isEmpty()
-	               || EditPostModel.isBadInputParams(userEntity, 
-	                       input.getSubject(), 
-	                       input.getContent(), 
-	                       true)) {
-		        mResponse.sendError(HttpServletResponse.SC_BAD_REQUEST);
+		if(isBadRequest(input, userEntity)) {
+		    mResponse.sendError(HttpServletResponse.SC_BAD_REQUEST);
 	        return null;
 	    }
-	    UserEntity user = mUserModel
-	    		.startTransaction()
-	    		.queryParam("username", input.getUserId()).single(UserEntity.class);  	    
+	    UserEntity user = mUserModel .startTransaction().queryParam("username", input.getUserId()).single(UserEntity.class);  	    
 	    final PostEntity post = AddPostRequestToPostEntity.adapt(input, true, user);
-		ThreadEntity thread = mModel
-			.startTransaction()
-			.createOrUpdate(
-				post.getThreadId(),
+		ThreadEntity thread = mModel.startTransaction()
+			.createOrUpdate(post.getThreadId(),
 				new CallDbBuilder.UpdateItem<ThreadEntity>() {
 					@Override public ThreadEntity update(ThreadEntity item) {
 						return mThreadFactory.makeThread(item, post);
@@ -105,9 +91,7 @@ public class ThreadFromPostRequest {
 		generateAddPostReturnResource(regReturnData, thread);
 
 		userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-		mDeletePostModel.init();
-		mDeletePostModel.delete(userEntity, input.getPostId());
-
+		new DeletePostRequest().delete(userEntity, input.getPostId());
 		return regReturnData;
 	}
 
@@ -120,6 +104,16 @@ public class ThreadFromPostRequest {
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.unknown_error));
 		}
+	}
+	
+	private boolean isBadRequest(AddThreadFromPostResourceInput input, UserEntity userEntity) {
+		return input.getPostId()<=0 
+	               || input.getUserId()==null 
+	               || input.getUserId().trim().isEmpty()
+	               || EditPostModel.isBadInputParams(userEntity, 
+	                       input.getSubject(), 
+	                       input.getContent(), 
+	                       true);
 	}
 
 }

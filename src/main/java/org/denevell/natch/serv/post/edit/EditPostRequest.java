@@ -58,17 +58,12 @@ public class EditPostRequest {
 			EditPostResource editPostResource, 
 			boolean isEditingThread) {
 		EditPostResourceReturnData ret = new EditPostResourceReturnData();
-		try {
-			mModel.init();
-			ret.setSuccessful(false);
-			UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-			PostEntity mPe = new PostEntity();
-			mPe.setContent(editPostResource.getContent());
-			String result = mModel.edit(userEntity, postId, mPe, isEditingThread); 
-			EditThreadRequest.generateEditReturnResource(ret, result, rb);
-			return ret;
-		} finally {
-			mModel.close();
-		} 		
+		ret.setSuccessful(false);
+		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+		PostEntity mPe = new PostEntity();
+		mPe.setContent(editPostResource.getContent());
+		String result = mModel.edit(userEntity, postId, mPe, isEditingThread); 
+		EditThreadRequest.generateEditReturnResource(ret, result, rb);
+		return ret;
 	}
 }
