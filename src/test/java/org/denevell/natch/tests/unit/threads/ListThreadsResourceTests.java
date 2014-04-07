@@ -36,6 +36,8 @@ public class ListThreadsResourceTests {
 	public void setup() {
 		threadModel = mock(CallDbBuilder.class);
 		when(threadModel.max(0)).thenReturn(threadModel);
+		when(threadModel.startTransaction()).thenReturn(threadModel);
+		when(threadModel.useTransaction(threadModel.getEntityManager())).thenReturn(threadModel);
 		when(threadModel.start(0)).thenReturn(threadModel);
 		when(threadModel.queryParam("tag", "tagy")).thenReturn(threadModel);
 		when(threadModel.namedQuery(ThreadEntity.NAMED_QUERY_COUNT_THREAD_BY_TAG)).thenReturn(threadModel);
