@@ -131,6 +131,7 @@ public class ListThreadsRequest {
 					postResource.setModification(p.getLatestPost().getModified());
 					postResource.setCreation(p.getRootPost().getCreated());
 					postResource.setId(p.getId());
+					postResource.setLatestPostId(p.getLatestPost().getId());
 					postsResources.add(postResource);
 				}
 			}
