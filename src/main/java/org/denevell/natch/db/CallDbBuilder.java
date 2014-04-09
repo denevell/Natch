@@ -107,6 +107,11 @@ public class CallDbBuilder<ListItem> {
 		return this;
 	}
 	
+	public CallDbBuilder<ListItem> clearQueryParams() {
+		mQueryParams.clear();
+		return this;
+	}
+	
 	public List<ListItem> list(Class<ListItem> clazz) {
 		TypedQuery<ListItem> nq = mEntityManager.createNamedQuery(mNamedQuery, clazz);
 		for (Entry<String, Object> qp: mQueryParams.entrySet()) {

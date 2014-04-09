@@ -48,6 +48,18 @@ public class RegisterFunctional {
 	    assertEquals("Has recovery email set", "a@recovery.com", listUsersPo.findUser("aaron@aaron.com", adminLogin.getAuthKey()).getRecoveryEmail());
 		assertTrue("Should return true as 'successful' field", result.isSuccessful());
 	}
+
+	@Test
+	public void cantRegisterWithSameEmail() {
+		// Act
+	    RegisterResourceReturnData result1 = registerPo.register("aaron", "passy", "a@recovery.com");
+	    RegisterResourceReturnData result2 = registerPo.register("xaron", "passy", "a@recovery.com");
+
+		// Assert
+		assertTrue("Should return true 'successful' field", result1.isSuccessful());
+		assertEquals(rb.getString(Strings.email_already_exists), result2.getError());
+		assertFalse("Should return false 'successful' field", result2.isSuccessful());
+	}
 	
 	@Test
 	public void shouldAdminBitSet() {

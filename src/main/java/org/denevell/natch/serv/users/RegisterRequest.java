@@ -47,9 +47,22 @@ public class RegisterRequest {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public RegisterResourceReturnData register(@Valid RegisterResourceInput registerInput) {
+		RegisterResourceReturnData regReturnData = new RegisterResourceReturnData();
 		UserEntity u = new UserEntity(registerInput);
-		boolean added = mModel
+		boolean exists = mModel
 			.startTransaction()
+			.namedQuery(UserEntity.NAMED_QUERY_FIND_BY_RECOVERY_EMAIL)
+			.queryParam("recoveryEmail", registerInput.getRecoveryEmail())
+			.exists();
+		if(exists) {
+			mModel.closeEntityManager();
+			regReturnData.setSuccessful(false);
+			regReturnData.setError(rb.getString(Strings.email_already_exists));
+			return regReturnData;
+		}
+		boolean added = mModel
+			.clearQueryParams()
+			.useTransaction(mModel.getEntityManager())
 			.ifFirstItem(UserEntity.NAMED_QUERY_COUNT, new RunnableWith<UserEntity>() {
 						@Override public void item(UserEntity item) {
 							item.setAdmin(true);
@@ -58,7 +71,6 @@ public class RegisterRequest {
 			.queryParam("username", u.getUsername())
 			.addIfDoesntExist(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME, u);
 		mModel.commitAndCloseEntityManager();
-		RegisterResourceReturnData regReturnData = new RegisterResourceReturnData();
 		if (added) {
 			regReturnData.setSuccessful(true);
 		} else if (!added) {
