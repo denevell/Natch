@@ -1,7 +1,5 @@
 package org.denevell.natch.serv.post.edit;
 
-import java.util.Date;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -31,6 +29,15 @@ public class EditPostModel {
 	public EditPostModel(EntityManagerFactory factory, EntityManager entityManager) {
 	}
 	
+	/**
+	 * 1. Get the current post for this id
+	 * 2. Return if doesn't exist
+	 * 3. Return if it's not yours to edit
+	 * 4. Set the entity with edited subject and content with fields from database entity
+	 * 5. Return if the newly merged post is badly formatted 
+	 * 6. Merge post
+	 * @return
+	 */
 	public String edit(UserEntity userEntity, 
 			long postEntityId, 
 			PostEntity postToEdit,
@@ -45,17 +52,7 @@ public class EditPostModel {
 			mPostModel.commitAndCloseEntityManager();
 			return NOT_YOURS_TO_DELETE;
 		}
-		postToEdit.setCreated(pe.getCreated());
-		postToEdit.setId(pe.getId());
-		postToEdit.setThreadId(pe.getThreadId());
-		postToEdit.setModified(new Date().getTime());
-		if(!userEntity.getUsername().equals(pe.getUser().getUsername()) && userEntity.isAdmin()) {
-		   postToEdit.adminEdited();
-		   postToEdit.setUser(pe.getUser()); 
-		} else {
-		    postToEdit.setUser(userEntity);			
-		}
-		if(!isEditingThread) postToEdit.setSubject("-");
+		postToEdit.setFieldsFromOtherEntity(pe, isEditingThread, userEntity);
 		if(isBadInputParams(userEntity, postToEdit.getSubject(), postToEdit.getContent(), isEditingThread)) {
 			Log.info(this.getClass(), "Edit user: Bad user input");
 			mPostModel.commitAndCloseEntityManager();
