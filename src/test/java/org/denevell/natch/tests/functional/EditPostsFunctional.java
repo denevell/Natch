@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
@@ -65,8 +66,6 @@ public class EditPostsFunctional {
 		// Arrange
 		EditPostResource editedInput = new EditPostResource();
 		editedInput.setContent("sup");
-		editedInput.setSubject("sup two?");
-		editedInput.setTags(Arrays.asList(new String[] {"tagx", "tagy"}));
 		
 		// Act - edit then list
 		EditPostResourceReturnData editReturnData = editPost(service, authKey, initialPost.getId(), editedInput); 		
@@ -98,7 +97,6 @@ public class EditPostsFunctional {
 		// Arrange
 		EditPostResource editedInput = new EditPostResource();
 		editedInput.setContent("sup");
-		editedInput.setSubject("sup two?");
 		// Login with another user
 	    registerPo.register("aaron1@aaron.com", "passy");
 		LoginResourceReturnData loginResult1 = new LoginPO(service).login("aaron1@aaron.com", "passy");
@@ -129,7 +127,6 @@ public class EditPostsFunctional {
 		// Act - edit with first, admin, user
 		EditPostResource editedInput = new EditPostResource();
 		editedInput.setContent("supadmineditedcontent");
-		editedInput.setSubject("supadminedited");
 		EditPostResourceReturnData editReturnData = editPost(service, loginResult.getAuthKey(), addedPost.getId(), editedInput); 		
 		ListPostsResource newListedPosts = ListPostsFunctional.listRecentPostsThreads(service);
 		PostResource editPost = newListedPosts.getPosts().get(0);
@@ -145,35 +142,19 @@ public class EditPostsFunctional {
 	
 	@Test
 	public void shouldSeeErrorOnBlankContent() {
-		// Arrange
-		EditPostResource editedInput = new EditPostResource();
-		editedInput.setContent(" ");
-		editedInput.setSubject("dsfsdf");
+		try {
+			EditPostResource editedInput = new EditPostResource();
+			editedInput.setContent(" ");
+			editPost(service, loginResult.getAuthKey(), initialPost.getId(), editedInput); 		
+			assertFalse("Excepted 400 error", true);
+		} catch(WebApplicationException e) {
+			assertEquals(400, e.getResponse().getStatus());
+			return;
+		}	
 		
-		EditPostResourceReturnData editReturnData = editPost(service, loginResult.getAuthKey(), initialPost.getId(), editedInput); 		
 		ListPostsResource newListedPosts = ListPostsFunctional.listRecentPostsThreads(service);
-		
-		// Assert
-		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), editReturnData.getError());
-		assertFalse(editReturnData.isSuccessful());		
 		assertEquals(initalInput.getContent(), newListedPosts.getPosts().get(0).getContent());
 		assertEquals(initalInput.getSubject(), newListedPosts.getPosts().get(0).getSubject());
 	}
 	
-	@Test
-	public void shouldSeeErrorOnBlanks() {
-		// Arrange
-		EditPostResource editedInput = new EditPostResource();
-		editedInput.setContent(" ");
-		editedInput.setSubject(" ");
-		
-		EditPostResourceReturnData editReturnData = editPost(service, loginResult.getAuthKey(), initialPost.getId(), editedInput); 		
-		ListPostsResource newListedPosts = ListPostsFunctional.listRecentPostsThreads(service);
-		
-		// Assert
-		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), editReturnData.getError());
-		assertFalse(editReturnData.isSuccessful());		
-		assertEquals(initalInput.getContent(), newListedPosts.getPosts().get(0).getContent());
-		assertEquals(initalInput.getSubject(), newListedPosts.getPosts().get(0).getSubject());
-	}
 }

@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -25,7 +26,6 @@ import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.threads.AddThreadFromPostResourceInput;
 import org.denevell.natch.serv.post.DeletePostRequest;
 import org.denevell.natch.serv.post.ThreadFactory;
-import org.denevell.natch.serv.post.edit.EditPostModel;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
@@ -60,17 +60,13 @@ public class ThreadFromPostRequest {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public AddPostResourceReturnData addThreadFromPost(AddThreadFromPostResourceInput input) throws IOException {
+	public AddPostResourceReturnData addThreadFromPost(@Valid AddThreadFromPostResourceInput input) throws IOException {
 		AddPostResourceReturnData regReturnData = null;
 		regReturnData = new AddPostResourceReturnData();
 		regReturnData.setSuccessful(false);
 	    UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
 	    if(!userEntity.isAdmin()) {
 	        mResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-	        return null;
-	    }
-		if(isBadRequest(input, userEntity)) {
-		    mResponse.sendError(HttpServletResponse.SC_BAD_REQUEST);
 	        return null;
 	    }
 	    UserEntity user = mUserModel .startTransaction().queryParam("username", input.getUserId()).single(UserEntity.class);  	    
@@ -106,14 +102,4 @@ public class ThreadFromPostRequest {
 		}
 	}
 	
-	private boolean isBadRequest(AddThreadFromPostResourceInput input, UserEntity userEntity) {
-		return input.getPostId()<=0 
-	               || input.getUserId()==null 
-	               || input.getUserId().trim().isEmpty()
-	               || EditPostModel.isBadInputParams(userEntity, 
-	                       input.getSubject(), 
-	                       input.getContent(), 
-	                       true);
-	}
-
 }

@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -14,11 +15,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
+import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.UserEntity;
-import org.denevell.natch.io.posts.EditPostResource;
 import org.denevell.natch.io.posts.EditPostResourceReturnData;
-import org.denevell.natch.serv.post.edit.EditPostModel;
+import org.denevell.natch.io.threads.EditThreadResource;
+import org.denevell.natch.serv.post.EditPostRequest;
 import org.denevell.natch.utils.Strings;
 
 @Path("post/editthread")
@@ -31,25 +33,24 @@ public class EditThreadRequest {
 	public final static String UNKNOWN_ERROR = "unknownerror";
 	public final static String BAD_USER_INPUT = "baduserinput";
 	public final static String NOT_YOURS_TO_DELETE = "notyourtodelete";
-    private static final String TAG_TOO_LARGE = "tagtoolarge";
-    private static final String SUBJECT_TOO_LARGE = "subtoolarge";		
+    private static final int TAG_TOO_LARGE = 105;
+    private static final int SUBJECT_TOO_LARGE = 106;		
 	@Context UriInfo mInfo;
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
-	private EditPostModel mModel;
+	private CallDbBuilder<PostEntity> mPostModel;
 	
 	public EditThreadRequest() {
-		mModel = new EditPostModel();
+		mPostModel = new CallDbBuilder<PostEntity>();
 	}
 	
 	/**
 	 * For DI testing.
 	 * @param editPostAdapter 
 	 */
-	public EditThreadRequest(EditPostModel postModel, HttpServletRequest request, HttpServletResponse response) {
-		mModel = postModel;
+	public EditThreadRequest(HttpServletRequest request, HttpServletResponse response) {
 		mRequest = request;
 		mResponse = response;
 	}
@@ -59,12 +60,12 @@ public class EditThreadRequest {
 	@Produces(MediaType.APPLICATION_JSON)
 	public EditPostResourceReturnData editpost(
 			@PathParam(value="postId") long postId, 
-			EditPostResource editPostResource) {
+			@Valid EditThreadResource editPostResource) {
 		return edit(postId, editPostResource, true);
 	}
 
 	private EditPostResourceReturnData edit(long postId, 
-			EditPostResource editPostResource, 
+			EditThreadResource editPostResource, 
 			boolean isEditingThread) {
 		EditPostResourceReturnData ret = new EditPostResourceReturnData();
 		ret.setSuccessful(false);
@@ -79,30 +80,24 @@ public class EditThreadRequest {
 		}
 
 		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-		PostEntity mPe = new PostEntity();
-		mPe.setContent(editPostResource.getContent());
-		mPe.setSubject(editPostResource.getSubject());
-		mPe.setTags(editPostResource.getTags());
-		String result = mModel.edit(userEntity, postId, mPe, isEditingThread); 
+		mPostModel.startTransaction();
+		int result = new EditPostRequest().editPost(postId, editPostResource, isEditingThread, userEntity, mPostModel);
+		mPostModel.commitAndCloseEntityManager();
 		generateEditReturnResource(ret, result, rb);
 		return ret;
 	}
 	
 	public static void generateEditReturnResource(EditPostResourceReturnData ret,
-			String result, ResourceBundle rb) {
-		if(result.equals(EDITED)) {
+			int result, ResourceBundle rb) {
+		if(result == CallDbBuilder.UPDATED) {
 			ret.setSuccessful(true);
-		} else if(result.equals(DOESNT_EXIST)) {
+		} else if(result == CallDbBuilder.NOT_FOUND) {
 			ret.setError(rb.getString(Strings.post_doesnt_exist));
-		} else if(result.equals(SUBJECT_TOO_LARGE)) {
+		} else if(result == SUBJECT_TOO_LARGE) {
 			ret.setError(rb.getString(Strings.subject_too_large));
-		} else if(result.equals(NOT_YOURS_TO_DELETE)) {
+		} else if(result == CallDbBuilder.PERMISSION_DENIED) {
 			ret.setError(rb.getString(Strings.post_not_yours));
-		} else if(result.equals(UNKNOWN_ERROR)) {
-			ret.setError(rb.getString(Strings.unknown_error));
-		} else if(result.equals(BAD_USER_INPUT)) {
-			ret.setError(rb.getString(Strings.post_fields_cannot_be_blank));
-		} else if(result.equals(TAG_TOO_LARGE)) {
+		} else if(result == TAG_TOO_LARGE) {
 			ret.setError(rb.getString(Strings.tag_too_large));
 		}
 	}

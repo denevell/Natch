@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -28,7 +29,6 @@ import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.threads.CutDownThreadResource;
 import org.denevell.natch.serv.post.ThreadFactory;
-import org.denevell.natch.serv.post.edit.EditPostModel;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.ManifestUtils;
 import org.denevell.natch.utils.Strings;
@@ -67,16 +67,9 @@ public class AddThreadRequest {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public AddPostResourceReturnData addThread(AddPostResourceInput input) {
+	public AddPostResourceReturnData addThread(@Valid AddPostResourceInput input) {
 		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-		if(EditPostModel.isBadInputParams(userEntity, 
-				input.getSubject(), 
-				input.getContent(), true)) {
-			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
-			regReturnData.setSuccessful(false);
-			regReturnData.setError(rb.getString(Strings.post_fields_cannot_be_blank));
-			return regReturnData;
-		} else if (input.getTags()!=null && !PostEntity.isTagLengthOkay(input.getTags())) {
+		if (input.getTags()!=null && !PostEntity.isTagLengthOkay(input.getTags())) {
 			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.tag_too_large));

@@ -5,8 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ResourceBundle;
-
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.WebTarget;
 
@@ -15,14 +13,12 @@ import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.tests.functional.pageobjects.AddPostPO;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
-import org.denevell.natch.utils.Strings;
 import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 public class AddPostFunctional {
 	
-    private ResourceBundle rb = Strings.getMainResourceBundle();
 	private LoginResourceReturnData loginResult;
     private WebTarget service;
     private String authKey;
@@ -106,32 +102,34 @@ public class AddPostFunctional {
 	
 	@Test
 	public void shouldSeeErrorOnBlankContent() {
-		AddPostResourceReturnData returnData = 
-				addPostPo.add("sub", " ", authKey);
-		
-		// Assert
-		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
-		assertFalse(returnData.isSuccessful());
+		try {
+			addPostPo.add("sub", " ", authKey);
+		} catch(WebApplicationException e) {
+			assertEquals(400, e.getResponse().getStatus());
+			return;
+		}
 	}
 	
 	@Test
 	public void shouldSeeErrorOnBlanks() {
-		AddPostResourceReturnData returnData = 
-				addPostPo.add(" ", " ", authKey);
-		
-		// Assert
-		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
-		assertFalse(returnData.isSuccessful());
+		try {
+			addPostPo.add(" ", " ", authKey);
+		} catch(WebApplicationException e) {
+			assertEquals(400, e.getResponse().getStatus());
+			return;
+		}
+		assertFalse("Was excepting a 400 response", true);		
 	}
 	
 	@Test
 	public void shouldSeeErrorOnNulls() {
-		AddPostResourceReturnData returnData = 
-				addPostPo.add(null, null, authKey);
-		
-		// Assert
-		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
-		assertFalse(returnData.isSuccessful());
+		try {
+			addPostPo.add(null, null, authKey);
+		} catch(WebApplicationException e) {
+			assertEquals(400, e.getResponse().getStatus());
+			return;
+		}
+		assertFalse("Was excepting a 400 response", true);			
 	}
 	
 }

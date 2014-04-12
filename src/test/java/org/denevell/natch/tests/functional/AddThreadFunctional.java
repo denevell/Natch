@@ -89,15 +89,14 @@ public class AddThreadFunctional {
 	
 	@Test
 	public void shouldSeeErrorOnBlankSubject() {
-		// Arrange 
 		AddPostResourceInput input = new AddPostResourceInput(" ", "cont");
-		
-		// Act
-		AddPostResourceReturnData returnData = addThread(service, loginResult.getAuthKey(), input);
-		
-		// Assert
-		assertFalse(returnData.isSuccessful());
-		assertEquals(rb.getString(Strings.post_fields_cannot_be_blank), returnData.getError());
+		try {
+			addThread(service, loginResult.getAuthKey(), input);
+		} catch(WebApplicationException e) {
+			assertEquals(400, e.getResponse().getStatus());
+			return;
+		}
+		assertFalse("Was excepting a 400 response", true);		
 	}
 
 	@Test

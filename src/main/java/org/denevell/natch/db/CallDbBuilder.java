@@ -27,6 +27,10 @@ public class CallDbBuilder<ListItem> {
 		public ListItem update(ListItem item);
 	}
 
+	public static interface UpdateItemOnPermissionCorrect<ListItem> {
+		public boolean update(ListItem item);
+	}
+
 	public static interface DeleteOrMerge<ListItem> {
 		public boolean shouldDelete(ListItem item);
 	}
@@ -34,6 +38,10 @@ public class CallDbBuilder<ListItem> {
 	public static interface NewItem<ListItem> {
 		public ListItem newItem();
 	}
+
+	public static final int UPDATED = 0;
+	public static int PERMISSION_DENIED=1;
+	public static int NOT_FOUND=2;
 
 	private EntityManager mEntityManager;
 	private String mNamedQuery;
@@ -280,6 +288,21 @@ public class CallDbBuilder<ListItem> {
 			mEntityManager.merge(foundItem);
 		}
 		return foundItem;
+	}
+
+	public int updateEntityOnPermission(
+			long postEntityId,
+			UpdateItemOnPermissionCorrect<ListItem> updateItemOnPermissionCorrect, 
+			Class<ListItem> clazz) {
+		ListItem foundItem = find(postEntityId, false, clazz);
+		if(foundItem==null) {
+			return NOT_FOUND;
+		}
+		if(!updateItemOnPermissionCorrect.update(foundItem)) {
+			return PERMISSION_DENIED;
+		}
+		getEntityManager().merge(foundItem);
+		return UPDATED;
 	}
 
 }

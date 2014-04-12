@@ -12,6 +12,7 @@ import javax.ws.rs.client.WebTarget;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.User;
 import org.denevell.natch.io.users.UserList;
+import org.denevell.natch.tests.functional.pageobjects.ListUsersPO;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
@@ -24,11 +25,13 @@ public class UsersListFunctional {
 	private WebTarget service;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private RegisterPO registerPo;
+	private ListUsersPO listUsersPO;
 
 	@Before
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
 	    registerPo = new RegisterPO(service);
+	    listUsersPO = new ListUsersPO(service);
 		TestUtils.deleteTestDb();
 	}
 	
@@ -44,14 +47,8 @@ public class UsersListFunctional {
 		
 		// Assert
 		List<User> users = thread.getUsers();
-		User user0 = users.get(0);
-		User user1 = users.get(1);
-		if(!user0.getUsername().equals("aaron")) {
-			user0 = user1; 
-			user1 = user0; 
-			assertTrue(user0.getUsername().equals("aaron"));
-			assertTrue(user1.getUsername().equals("other1"));
-		}
+		User user0 = listUsersPO.findUser("aaron", loginResult.getAuthKey());
+		User user1 = listUsersPO.findUser("other1", loginResult.getAuthKey());
 		assertEquals(2, users.size());
 		assertEquals(true, user0.isAdmin());
 		assertEquals(false, user1.isAdmin());

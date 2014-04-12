@@ -12,9 +12,9 @@ import javax.ws.rs.client.WebTarget;
 
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
-import org.denevell.natch.io.posts.EditPostResource;
 import org.denevell.natch.io.posts.EditPostResourceReturnData;
 import org.denevell.natch.io.posts.ListPostsResource;
+import org.denevell.natch.io.threads.EditThreadResource;
 import org.denevell.natch.io.threads.ListThreadsResource;
 import org.denevell.natch.io.threads.ThreadResource;
 import org.denevell.natch.io.users.LoginResourceReturnData;
@@ -231,7 +231,7 @@ public class ListThreadsFunctional {
 		assertEquals("Listing by last added", "sub2", listedPosts.getPosts().get(0).getSubject());
 		
 		// Act - modify input 1
-		EditPostResource editedInput = new EditPostResource();
+		EditThreadResource editedInput = new EditThreadResource();
 		editedInput.setContent("blar");
 		editedInput.setSubject("blar2");
 		EditPostResourceReturnData editReturnData = service
@@ -271,7 +271,7 @@ public class ListThreadsFunctional {
 		assertEquals("Listing by last added", "sub2", listedPosts.getThreads().get(0).getSubject());
 		
 		// Act - modify input 1
-		EditPostResource editedInput = new EditPostResource();
+		EditThreadResource editedInput = new EditThreadResource();
 		editedInput.setContent("blar");
 		editedInput.setSubject("blar2");
 		editedInput.setTags(new ArrayList<String>(){{add("a");add("b");}});

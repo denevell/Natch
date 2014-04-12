@@ -159,25 +159,4 @@ public class PostEntity {
 		return threadId;
 	}
 
-	/**
-	 * Excluding the subject and content fields which should be set separately.
-	 * This is used when editing a post.
-	 * Not overly keen.
-	 * @param postToFillWith
-	 * @param isEditingThread
-	 * @param editingUser
-	 */
-	public void setFieldsFromOtherEntity(PostEntity postToFillWith, boolean isEditingThread, UserEntity editingUser) {
-		setCreated(postToFillWith.getCreated());
-		setId(postToFillWith.getId());
-		setThreadId(postToFillWith.getThreadId());
-		setModified(new Date().getTime());
-		if(!editingUser.getUsername().equals(postToFillWith.getUser().getUsername()) && editingUser.isAdmin()) {
-		   adminEdited();
-		   setUser(postToFillWith.getUser()); 
-		} else {
-		    setUser(editingUser);			
-		}
-		if(!isEditingThread) setSubject("-");
-	}		
 }
