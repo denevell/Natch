@@ -2,6 +2,8 @@ package org.denevell.natch.serv.post;
 
 import java.util.ResourceBundle;
 
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +22,7 @@ import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.DeletePostResourceReturnData;
+import org.denevell.natch.model.interfaces.PostFindModel;
 import org.denevell.natch.utils.Strings;
 
 @Path("post/del")
@@ -36,9 +39,9 @@ public class DeletePostRequest {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
+	@Inject public PostFindModel mPostFindModel;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
 	private CallDbBuilder<ThreadEntity> mThreadModel = new CallDbBuilder<ThreadEntity>();
-	private CallDbBuilder<PostEntity> mPostModel = new CallDbBuilder<PostEntity>();
 	
 	public DeletePostRequest() {
 	}
@@ -55,15 +58,16 @@ public class DeletePostRequest {
 	
 	
 	public String delete(UserEntity userEntity, long postEntityId) {
-		final PostEntity pe = mPostModel.startTransaction().find(postEntityId, false, PostEntity.class);
+		final PostEntity pe = mPostFindModel.find(postEntityId, false);
+		EntityManager postEntityManager = (EntityManager) mPostFindModel.getTransactionObject();
 		if(pe==null) {
-			mPostModel.commitAndCloseEntityManager();
+			postEntityManager.close();
 			return DOESNT_EXIST;
 		} else if(!userEntity.isAdmin() && !pe.getUser().getUsername().equals(userEntity.getUsername())) {
-			mPostModel.commitAndCloseEntityManager();
+			postEntityManager.close();
 			return NOT_YOURS_TO_DELETE;
 		}
-		mThreadModel.useTransaction(mPostModel.getEntityManager())
+		mThreadModel.useTransaction(postEntityManager)
 			.findAndUpdateOrDelete(pe.getThreadId(), 
 				new DeleteOrMerge<ThreadEntity>() {
 					@Override public boolean shouldDelete(ThreadEntity item) {
@@ -72,7 +76,7 @@ public class DeletePostRequest {
 					}
 				}, 
 				ThreadEntity.class);
-		mPostModel.getEntityManager().remove(pe);
+		postEntityManager.remove(pe);
 		mThreadModel.commitAndCloseEntityManager();
 		return DELETED;
 	}	

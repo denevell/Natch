@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +29,7 @@ import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.threads.CutDownThreadResource;
-import org.denevell.natch.serv.post.ThreadFactory;
+import org.denevell.natch.model.interfaces.PostAddModel;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.ManifestUtils;
 import org.denevell.natch.utils.Strings;
@@ -44,26 +45,12 @@ public class AddThreadRequest {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
+	@Inject PostAddModel mAddPostModel;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
-	private ThreadFactory mThreadFactory;
-	private CallDbBuilder<ThreadEntity> mModel = new CallDbBuilder<ThreadEntity>();
 	
 	public AddThreadRequest() {
-		mThreadFactory = new ThreadFactory();
 	}
 	
-	/**
-	 * For DI testing.
-	 */
-	public AddThreadRequest(
-			HttpServletRequest request, 
-			HttpServletResponse response
-			) {
-		mRequest = request;
-		mResponse = response;
-	}
-		
-
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -88,21 +75,7 @@ public class AddThreadRequest {
 		AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 		regReturnData.setSuccessful(false);
 	    final PostEntity post = AddPostRequestToPostEntity.adapt(input, false, userEntity);
-		ThreadEntity thread = mModel
-			.startTransaction()
-			.createOrUpdate(
-				post.getThreadId(),
-				new CallDbBuilder.UpdateItem<ThreadEntity>() {
-					@Override public ThreadEntity update(ThreadEntity item) {
-						return mThreadFactory.makeThread(item, post);
-					}
-				}, new CallDbBuilder.NewItem<ThreadEntity>() {
-					@Override public ThreadEntity newItem() {
-						return mThreadFactory.makeThread(post);
-					}
-				}, 
-				ThreadEntity.class);		
-		mModel.commitAndCloseEntityManager();
+	    ThreadEntity thread = mAddPostModel.add(post);
 		generateAddPostReturnResource(regReturnData, thread);
 		sendPushNotifications(regReturnData);
 		return regReturnData;

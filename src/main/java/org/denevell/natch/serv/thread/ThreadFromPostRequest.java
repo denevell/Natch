@@ -3,6 +3,7 @@ package org.denevell.natch.serv.thread;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,8 +25,9 @@ import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.threads.AddThreadFromPostResourceInput;
+import org.denevell.natch.model.impl.PostFindModelImpl;
+import org.denevell.natch.model.interfaces.PostAddModel;
 import org.denevell.natch.serv.post.DeletePostRequest;
-import org.denevell.natch.serv.post.ThreadFactory;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
@@ -36,13 +38,11 @@ public class ThreadFromPostRequest {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
+	@Inject PostAddModel mAddPostModel;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
-	private ThreadFactory mThreadFactory;
 	private CallDbBuilder<UserEntity> mUserModel;
-	private CallDbBuilder<ThreadEntity> mModel = new CallDbBuilder<ThreadEntity>();
 	
 	public ThreadFromPostRequest() {
-		mThreadFactory = new ThreadFactory();
 		mUserModel = new CallDbBuilder<UserEntity>()
 		 .namedQuery(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME);
 	}
@@ -69,25 +69,17 @@ public class ThreadFromPostRequest {
 	        mResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 	        return null;
 	    }
-	    UserEntity user = mUserModel .startTransaction().queryParam("username", input.getUserId()).single(UserEntity.class);  	    
+	    UserEntity user = mUserModel.startTransaction().queryParam("username", input.getUserId()).single(UserEntity.class);  	    
 	    final PostEntity post = AddPostRequestToPostEntity.adapt(input, true, user);
-		ThreadEntity thread = mModel.startTransaction()
-			.createOrUpdate(post.getThreadId(),
-				new CallDbBuilder.UpdateItem<ThreadEntity>() {
-					@Override public ThreadEntity update(ThreadEntity item) {
-						return mThreadFactory.makeThread(item, post);
-					}
-				}, new CallDbBuilder.NewItem<ThreadEntity>() {
-					@Override public ThreadEntity newItem() {
-						return mThreadFactory.makeThread(post);
-					}
-				}, 
-				ThreadEntity.class);		
-		mModel.commitAndCloseEntityManager();
+	    mAddPostModel.setExistingTransactionObject(mUserModel.getEntityManager());
+	    ThreadEntity thread = mAddPostModel.add(post);
+	    mUserModel.commitAndCloseEntityManager();
 		generateAddPostReturnResource(regReturnData, thread);
 
 		userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-		new DeletePostRequest().delete(userEntity, input.getPostId());
+		DeletePostRequest deletePostRequest = new DeletePostRequest();
+		deletePostRequest.mPostFindModel = new PostFindModelImpl();
+		deletePostRequest.delete(userEntity, input.getPostId());
 		return regReturnData;
 	}
 
