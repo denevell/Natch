@@ -15,8 +15,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
-import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.DeletePostResourceReturnData;
+import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.PostDeleteModel;
 import org.denevell.natch.utils.Strings;
 

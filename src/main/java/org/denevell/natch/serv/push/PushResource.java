@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.denevell.natch.db.entities.PushEntity;
+import org.denevell.natch.model.entities.PushEntity;
 
 @XmlRootElement
 public class PushResource {

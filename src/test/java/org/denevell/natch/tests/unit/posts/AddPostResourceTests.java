@@ -12,9 +12,9 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
-import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
+import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.serv.post.AddPostRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;

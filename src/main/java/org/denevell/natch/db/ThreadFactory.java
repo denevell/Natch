@@ -3,8 +3,8 @@ package org.denevell.natch.db;
 import java.util.Arrays;
 import java.util.List;
 
-import org.denevell.natch.db.entities.PostEntity;
-import org.denevell.natch.db.entities.ThreadEntity;
+import org.denevell.natch.model.entities.PostEntity;
+import org.denevell.natch.model.entities.ThreadEntity;
 
 public class ThreadFactory {
 

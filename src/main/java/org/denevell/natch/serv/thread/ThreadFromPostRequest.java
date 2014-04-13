@@ -16,12 +16,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
+import org.denevell.natch.adapters.ThreadEntityToThreadResource;
 import org.denevell.natch.auth.LoginHeadersFilter;
-import org.denevell.natch.db.adapters.ThreadEntityToThreadResource;
-import org.denevell.natch.db.entities.ThreadEntity;
-import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.threads.AddThreadFromPostResourceInput;
+import org.denevell.natch.model.entities.ThreadEntity;
+import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.ThreadFromPostModel;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;

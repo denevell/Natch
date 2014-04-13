@@ -16,9 +16,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.posts.PostResource;
+import org.denevell.natch.model.entities.PostEntity;
 import org.denevell.natch.model.interfaces.PostsListByModDateModel;
 
 @Path("post")

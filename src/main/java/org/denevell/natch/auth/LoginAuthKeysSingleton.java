@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
-import org.denevell.natch.db.entities.UserEntity;
+import org.denevell.natch.model.entities.UserEntity;
 
 public class LoginAuthKeysSingleton {
 	private static LoginAuthKeysSingleton sInstance;

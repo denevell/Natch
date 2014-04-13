@@ -14,11 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.db.CallDbBuilder;
-import org.denevell.natch.db.entities.PostEntity;
-import org.denevell.natch.db.entities.ThreadEntity;
-import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.threads.ThreadResource;
+import org.denevell.natch.model.entities.PostEntity;
+import org.denevell.natch.model.entities.ThreadEntity;
+import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.PostsListByModDateModel;
 import org.denevell.natch.serv.post.ListPostsRequest;
 import org.denevell.natch.serv.thread.ListThreadRequest;

@@ -17,10 +17,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.db.CallDbBuilder;
-import org.denevell.natch.db.entities.PostEntity;
-import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.io.threads.ThreadResource;
+import org.denevell.natch.model.entities.PostEntity;
+import org.denevell.natch.model.entities.ThreadEntity;
 import org.denevell.natch.model.interfaces.ThreadListModel;
 import org.denevell.natch.model.interfaces.ThreadListModel.ThreadAndPosts;
 

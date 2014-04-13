@@ -1,4 +1,4 @@
-package org.denevell.natch.db.entities;
+package org.denevell.natch.model.entities;
 
 public class PersistenceInfo {
 

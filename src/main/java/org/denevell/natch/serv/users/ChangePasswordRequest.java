@@ -17,8 +17,8 @@ import javax.ws.rs.core.UriInfo;
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.db.CallDbBuilder.RunnableWith;
-import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.users.ChangePasswordInput;
+import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.utils.Strings;
 
 @Path("user/password")

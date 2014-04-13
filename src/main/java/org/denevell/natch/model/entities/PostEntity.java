@@ -1,4 +1,4 @@
-package org.denevell.natch.db.entities;
+package org.denevell.natch.model.entities;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

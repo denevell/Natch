@@ -17,9 +17,9 @@ import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.db.CallDbBuilder;
-import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
+import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.utils.PasswordSaltUtils;
 import org.denevell.natch.utils.Strings;
 

@@ -1,10 +1,10 @@
-package org.denevell.natch.db.adapters;
+package org.denevell.natch.adapters;
 
 import java.util.Date;
 
-import org.denevell.natch.db.entities.PostEntity;
-import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
+import org.denevell.natch.model.entities.PostEntity;
+import org.denevell.natch.model.entities.UserEntity;
 
 public class AddPostRequestToPostEntity {
 

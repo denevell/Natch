@@ -8,7 +8,7 @@ import javax.persistence.Persistence;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.denevell.natch.db.entities.PersistenceInfo;
+import org.denevell.natch.model.entities.PersistenceInfo;
 
 public class JPAFactoryContextListener implements ServletContextListener{
 	public static EntityManagerFactory sFactory;

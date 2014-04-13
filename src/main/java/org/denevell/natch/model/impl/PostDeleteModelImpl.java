@@ -5,9 +5,9 @@ import javax.persistence.EntityManager;
 
 import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.db.CallDbBuilder.DeleteOrMerge;
-import org.denevell.natch.db.entities.PostEntity;
-import org.denevell.natch.db.entities.ThreadEntity;
-import org.denevell.natch.db.entities.UserEntity;
+import org.denevell.natch.model.entities.PostEntity;
+import org.denevell.natch.model.entities.ThreadEntity;
+import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.PostDeleteModel;
 import org.jvnet.hk2.annotations.Service;
 

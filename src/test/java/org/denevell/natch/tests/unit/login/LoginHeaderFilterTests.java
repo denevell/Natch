@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.auth.LoginHeadersFilter;
-import org.denevell.natch.db.entities.UserEntity;
+import org.denevell.natch.model.entities.UserEntity;
 import org.junit.Before;
 import org.junit.Test;
 

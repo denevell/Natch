@@ -9,11 +9,11 @@ import javax.persistence.Persistence;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 
-import org.denevell.natch.db.entities.PersistenceInfo;
-import org.denevell.natch.db.entities.PostEntity;
-import org.denevell.natch.db.entities.PushEntity;
-import org.denevell.natch.db.entities.ThreadEntity;
-import org.denevell.natch.db.entities.UserEntity;
+import org.denevell.natch.model.entities.PersistenceInfo;
+import org.denevell.natch.model.entities.PostEntity;
+import org.denevell.natch.model.entities.PushEntity;
+import org.denevell.natch.model.entities.ThreadEntity;
+import org.denevell.natch.model.entities.UserEntity;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
 

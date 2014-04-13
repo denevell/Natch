@@ -5,6 +5,8 @@ import org.denevell.natch.model.interfaces.PostDeleteModel;
 import org.denevell.natch.model.interfaces.PostEditModel;
 import org.denevell.natch.model.interfaces.PostSingleModel;
 import org.denevell.natch.model.interfaces.PostsListByModDateModel;
+import org.denevell.natch.model.interfaces.PushAddModel;
+import org.denevell.natch.model.interfaces.PushListModel;
 import org.denevell.natch.model.interfaces.ThreadListModel;
 import org.denevell.natch.model.interfaces.ThreadFromPostModel;
 import org.denevell.natch.model.interfaces.ThreadsListModel;
@@ -21,5 +23,7 @@ public class DependencyInjectionBinder extends AbstractBinder {
 		bind(ThreadListModelImpl.class).to(ThreadListModel.class);
 		bind(ThreadsListModelImpl.class).to(ThreadsListModel.class);
 		bind(ThreadFromPostModelImpl.class).to(ThreadFromPostModel.class);
+		bind(PushAddModelImpl.class).to(PushAddModel.class);
+		bind(PushListModelImpl.class).to(PushListModel.class);
 	}
 }

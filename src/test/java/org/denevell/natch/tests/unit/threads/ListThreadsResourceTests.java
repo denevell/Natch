@@ -14,10 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.db.CallDbBuilder;
-import org.denevell.natch.db.entities.PostEntity;
-import org.denevell.natch.db.entities.ThreadEntity;
-import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.threads.ListThreadsResource;
+import org.denevell.natch.model.entities.PostEntity;
+import org.denevell.natch.model.entities.ThreadEntity;
+import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.serv.thread.ListThreadsRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;

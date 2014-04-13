@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
-import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.DeletePostResourceReturnData;
+import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.serv.post.DeletePostRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;

@@ -7,8 +7,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
-import org.denevell.natch.db.entities.PostEntity;
-import org.denevell.natch.db.entities.UserEntity;
+import org.denevell.natch.model.entities.PostEntity;
+import org.denevell.natch.model.entities.UserEntity;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

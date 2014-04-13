@@ -5,7 +5,7 @@ import java.util.List;
 import javax.inject.Singleton;
 
 import org.denevell.natch.db.CallDbBuilder;
-import org.denevell.natch.db.entities.PostEntity;
+import org.denevell.natch.model.entities.PostEntity;
 import org.denevell.natch.model.interfaces.PostsListByModDateModel;
 import org.jvnet.hk2.annotations.Service;
 

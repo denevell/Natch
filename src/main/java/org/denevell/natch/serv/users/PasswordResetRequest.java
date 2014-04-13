@@ -15,7 +15,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.CallDbBuilder;
-import org.denevell.natch.db.entities.UserEntity;
+import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.utils.Strings;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;

@@ -8,8 +8,8 @@ import static org.mockito.Mockito.when;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
-import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.io.posts.AddPostResourceInput;
+import org.denevell.natch.model.entities.ThreadEntity;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

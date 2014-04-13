@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.auth.LoginHeadersFilter;
-import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.users.LogoutResourceReturnData;
+import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.serv.users.LogoutRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;

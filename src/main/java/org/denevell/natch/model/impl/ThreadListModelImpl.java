@@ -3,8 +3,8 @@ package org.denevell.natch.model.impl;
 import java.util.List;
 
 import org.denevell.natch.db.CallDbBuilder;
-import org.denevell.natch.db.entities.PostEntity;
-import org.denevell.natch.db.entities.ThreadEntity;
+import org.denevell.natch.model.entities.PostEntity;
+import org.denevell.natch.model.entities.ThreadEntity;
 import org.denevell.natch.model.interfaces.ThreadListModel;
 
 public class ThreadListModelImpl implements ThreadListModel {

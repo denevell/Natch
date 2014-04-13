@@ -1,6 +1,6 @@
 package org.denevell.natch.model.interfaces;
 
-import org.denevell.natch.db.entities.ThreadEntity;
+import org.denevell.natch.model.entities.ThreadEntity;
 import org.glassfish.jersey.spi.Contract;
 
 @Contract

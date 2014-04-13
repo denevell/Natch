@@ -1,12 +1,12 @@
-package org.denevell.natch.db.adapters;
+package org.denevell.natch.adapters;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.denevell.natch.db.entities.PostEntity;
-import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.io.threads.ThreadResource;
+import org.denevell.natch.model.entities.PostEntity;
+import org.denevell.natch.model.entities.ThreadEntity;
 
 public class ThreadEntityToThreadResource {
 	
