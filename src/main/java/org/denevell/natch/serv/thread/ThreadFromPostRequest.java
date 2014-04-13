@@ -17,16 +17,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
-import org.denevell.natch.db.CallDbBuilder;
-import org.denevell.natch.db.adapters.AddPostRequestToPostEntity;
 import org.denevell.natch.db.adapters.ThreadEntityToThreadResource;
-import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.threads.AddThreadFromPostResourceInput;
-import org.denevell.natch.model.interfaces.PostAddModel;
-import org.denevell.natch.model.interfaces.PostDeleteModel;
+import org.denevell.natch.model.interfaces.ThreadFromPostModel;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
@@ -37,14 +33,10 @@ public class ThreadFromPostRequest {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-	@Inject PostAddModel mPostAddModel;
-	@Inject PostDeleteModel mPostDeleteModel;
+	@Inject ThreadFromPostModel mThreadFromPostModel;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
-	private CallDbBuilder<UserEntity> mUserModel;
 	
 	public ThreadFromPostRequest() {
-		mUserModel = new CallDbBuilder<UserEntity>()
-		 .namedQuery(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME);
 	}
 	
 	/**
@@ -61,33 +53,27 @@ public class ThreadFromPostRequest {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public AddPostResourceReturnData addThreadFromPost(@Valid AddThreadFromPostResourceInput input) throws IOException {
-		AddPostResourceReturnData regReturnData = null;
-		regReturnData = new AddPostResourceReturnData();
-		regReturnData.setSuccessful(false);
 	    UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
 	    if(!userEntity.isAdmin()) {
 	        mResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 	        return null;
 	    }
-	    UserEntity user = mUserModel.startTransaction().queryParam("username", input.getUserId()).single(UserEntity.class);  	    
-	    final PostEntity post = AddPostRequestToPostEntity.adapt(input, true, user);
-	    ThreadEntity thread = mPostAddModel.add(post);
-		generateAddPostReturnResource(regReturnData, thread);
-
-		userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-		mPostDeleteModel.delete(input.getPostId(), userEntity);
-		return regReturnData;
+	    ThreadEntity thread = mThreadFromPostModel.makeNewThread(input.getPostId(), input.getSubject());
+		AddPostResourceReturnData returnData = generateAddPostReturnResource(thread);
+		return returnData;
 	}
 
-	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, ThreadEntity thread) {
+	private AddPostResourceReturnData generateAddPostReturnResource(ThreadEntity thread) {
+		AddPostResourceReturnData returnData = new AddPostResourceReturnData();
 		if(thread!=null) {
-			regReturnData.setThread(ThreadEntityToThreadResource.adapt(thread));
-			regReturnData.setSuccessful(true);
+			returnData.setThread(ThreadEntityToThreadResource.adapt(thread));
+			returnData.setSuccessful(true);
 		} else {
 			Log.info(getClass(), "Added a post but the thread id was null when sending the json response...");
-			regReturnData.setSuccessful(false);
-			regReturnData.setError(rb.getString(Strings.unknown_error));
+			returnData.setSuccessful(false);
+			returnData.setError(rb.getString(Strings.unknown_error));
 		}
+		return returnData;
 	}
 	
 }

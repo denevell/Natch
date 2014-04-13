@@ -279,7 +279,8 @@ public class CallDbBuilder<ListItem> {
 			UpdateItem<ListItem> updateItem, 
 			NewItem<ListItem> newItem,
 			Class<ListItem> listItemClass) {
-		ListItem foundItem = find(threadId, true, listItemClass);
+		ListItem foundItem = null;
+		if(threadId!=null) foundItem = find(threadId, true, listItemClass);
 		if(foundItem==null) {
 			foundItem = newItem.newItem();
 			mEntityManager.persist(foundItem);

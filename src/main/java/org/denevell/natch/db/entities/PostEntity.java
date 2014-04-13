@@ -40,6 +40,19 @@ public class PostEntity {
 		this.threadId = threadId;
 	}
 
+	public PostEntity(PostEntity post) {
+		super();
+		this.id = post.id;
+		this.created = post.created;
+		this.modified = post.modified;
+		this.subject = post.subject;
+		this.content = post.content;
+		this.threadId = post.threadId;
+		this.tags = post.tags;
+		this.user = post.user;
+		this.adminEdited = post.adminEdited;
+	}
+
 	public static boolean isSubjectTooLarge(String subject) {
 	    return subject!=null && subject.length()>PostEntity.MAX_SUBJECT_LENGTH;
     }
@@ -95,8 +108,8 @@ public class PostEntity {
 	}
 
 	public void setThreadId(String threadId) {
-		long created = new Date().getTime();
 		if(threadId==null) {
+			long created = new Date().getTime();
 			threadId = getThreadId(subject, threadId, created);
 		}
 		this.threadId = threadId;

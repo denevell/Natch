@@ -34,7 +34,6 @@ public class ListPostsResourceTests {
 	private ListPostsRequest resourceList;
 	private PostsListByModDateModel postsModel;
 
-	@SuppressWarnings("unchecked")
 	@Before
 	public void setup() {
 		postsModel = mock(PostsListByModDateModel.class);

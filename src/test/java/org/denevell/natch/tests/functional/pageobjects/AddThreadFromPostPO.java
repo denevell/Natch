@@ -17,17 +17,12 @@ public class AddThreadFromPostPO {
 
     public AddPostResourceReturnData addThreadFromPost(
     		String subject, 
-    		String content,
     		long postId,
-    		String userId,
     		String authKey 
     		) {
         AddThreadFromPostResourceInput input = new AddThreadFromPostResourceInput();
-        input.setContent(content);
         input.setSubject(subject);
         input.setPostId(postId);
-        //input.setTags(tags)
-        input.setUserId(userId);
 
 		AddPostResourceReturnData returnData = 
 		mService 
