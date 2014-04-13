@@ -1,8 +1,8 @@
 package org.denevell.natch.serv.post;
 
-import java.util.Date;
 import java.util.ResourceBundle;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,12 +16,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
-import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.EditPostResource;
 import org.denevell.natch.io.posts.EditPostResourceReturnData;
-import org.denevell.natch.io.threads.EditThreadResource;
+import org.denevell.natch.model.interfaces.PostEditModel;
 import org.denevell.natch.serv.thread.EditThreadRequest;
 import org.denevell.natch.utils.Strings;
 
@@ -32,11 +31,10 @@ public class EditPostRequest {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
+	@Inject PostEditModel mPostEditModel;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
-	private CallDbBuilder<PostEntity> mPostModel;
 	
 	public EditPostRequest() {
-		mPostModel = new CallDbBuilder<PostEntity>();
 	}
 	
 	/**
@@ -54,48 +52,14 @@ public class EditPostRequest {
 	public EditPostResourceReturnData editpost(
 			@PathParam(value="postId") long postId, 
 			@Valid EditPostResource editPostResource) {
-		EditThreadResource r = new EditThreadResource();
-		r.setContent(editPostResource.getContent());
-		return edit(postId, r, false);
-	}
-
-	private EditPostResourceReturnData edit(
-			long postId, 
-			final EditThreadResource editPostResource, 
-			final boolean isEditingThread) {
 		EditPostResourceReturnData ret = new EditPostResourceReturnData();
 		final UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-		mPostModel.startTransaction();
-		int result = editPost(postId, editPostResource, isEditingThread, userEntity, mPostModel);
-		mPostModel.commitAndCloseEntityManager();
+		PostEntity editData = new PostEntity();
+		editData.setContent(editPostResource.getContent());
+		editData.setSubject("-");
+		int result = mPostEditModel.edit(postId, userEntity, editData);
 		EditThreadRequest.generateEditReturnResource(ret, result, rb);
 		return ret;
 	}
 
-	public int editPost(long postId, 
-			final EditThreadResource editPostResource,
-			final boolean isEditingThread, 
-			final UserEntity userEntity, 
-			CallDbBuilder<PostEntity> postModel) {
-		int result = postModel.updateEntityOnPermission(postId,
-				new CallDbBuilder.UpdateItemOnPermissionCorrect<PostEntity>() {
-					@Override
-					public boolean update(PostEntity item) {
-						if(!userEntity.isAdmin() && !item.getUser().getUsername().equals(userEntity.getUsername())) {
-							return false;
-						}
-						item.setContent(editPostResource.getContent());
-						if(editPostResource.getSubject()!=null) item.setSubject(editPostResource.getSubject());
-						if(editPostResource.getTags()!=null) item.setTags(editPostResource.getTags());
-                        item.setModified(new Date().getTime());
-                        if(!userEntity.getUsername().equals(item.getUser().getUsername()) && userEntity.isAdmin()) {
-                        	item.adminEdited();
-                        }
-                        if(!isEditingThread) item.setSubject("-");
-						return true;
-					}
-				},
-				PostEntity.class);
-		return result;
-	}
 }

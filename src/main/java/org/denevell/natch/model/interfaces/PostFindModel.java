@@ -4,6 +4,6 @@ import org.denevell.natch.db.entities.PostEntity;
 import org.glassfish.jersey.spi.Contract;
 
 @Contract
-public interface PostFindModel extends ReuseTransaction, GetTransaction {
+public interface PostFindModel {
 	PostEntity find(long id, boolean pessemesticRead);
 }

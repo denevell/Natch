@@ -42,7 +42,7 @@ public class DeletePostResourceTests {
 	public void shouldDeletePost() {
 		// Arrange
 		long postEntityId = 1l;
-		when(resource.delete(user, postEntityId)).thenReturn(DeletePostRequest.DELETED);
+		//when(resource.delete(user, postEntityId)).thenReturn(PostDeleteModel.DELETED);
 		
 		// Act
 		DeletePostResourceReturnData result = resource.delete(postEntityId);
@@ -56,7 +56,7 @@ public class DeletePostResourceTests {
 	public void shouldShowNotYoursError() {
 		// Arrange
 		long postEntityId = 1l;
-		when(resource.delete(user, postEntityId)).thenReturn(DeletePostRequest.NOT_YOURS_TO_DELETE);
+		//when(resource.delete(user, postEntityId)).thenReturn(PostDeleteModel.NOT_YOURS);
 		
 		// Act
 		DeletePostResourceReturnData result = resource.delete(postEntityId);
@@ -70,7 +70,7 @@ public class DeletePostResourceTests {
 	public void shouldShowUnknownPostError() {
 		// Arrange
 		long postEntityId = 1l;
-		when(resource.delete(user, postEntityId)).thenReturn(DeletePostRequest.DOESNT_EXIST);
+		//when(resource.delete(user, postEntityId)).thenReturn(PostDeleteModel.DOESNT_EXIST);
 		
 		// Act
 		DeletePostResourceReturnData result = resource.delete(postEntityId);

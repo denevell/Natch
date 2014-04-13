@@ -25,9 +25,8 @@ import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.threads.AddThreadFromPostResourceInput;
-import org.denevell.natch.model.impl.PostFindModelImpl;
 import org.denevell.natch.model.interfaces.PostAddModel;
-import org.denevell.natch.serv.post.DeletePostRequest;
+import org.denevell.natch.model.interfaces.PostDeleteModel;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
@@ -38,7 +37,8 @@ public class ThreadFromPostRequest {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-	@Inject PostAddModel mAddPostModel;
+	@Inject PostAddModel mPostAddModel;
+	@Inject PostDeleteModel mPostDeleteModel;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
 	private CallDbBuilder<UserEntity> mUserModel;
 	
@@ -71,15 +71,11 @@ public class ThreadFromPostRequest {
 	    }
 	    UserEntity user = mUserModel.startTransaction().queryParam("username", input.getUserId()).single(UserEntity.class);  	    
 	    final PostEntity post = AddPostRequestToPostEntity.adapt(input, true, user);
-	    mAddPostModel.setExistingTransactionObject(mUserModel.getEntityManager());
-	    ThreadEntity thread = mAddPostModel.add(post);
-	    mUserModel.commitAndCloseEntityManager();
+	    ThreadEntity thread = mPostAddModel.add(post);
 		generateAddPostReturnResource(regReturnData, thread);
 
 		userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-		DeletePostRequest deletePostRequest = new DeletePostRequest();
-		deletePostRequest.mPostFindModel = new PostFindModelImpl();
-		deletePostRequest.delete(userEntity, input.getPostId());
+		mPostDeleteModel.delete(input.getPostId(), userEntity);
 		return regReturnData;
 	}
 

@@ -5,6 +5,6 @@ import org.denevell.natch.db.entities.ThreadEntity;
 import org.glassfish.jersey.spi.Contract;
 
 @Contract
-public interface PostAddModel extends ReuseTransaction {
+public interface PostAddModel {
 	ThreadEntity add(PostEntity postEntity);
 }

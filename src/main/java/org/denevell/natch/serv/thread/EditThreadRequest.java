@@ -2,6 +2,7 @@ package org.denevell.natch.serv.thread;
 
 import java.util.ResourceBundle;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +21,7 @@ import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.EditPostResourceReturnData;
 import org.denevell.natch.io.threads.EditThreadResource;
-import org.denevell.natch.serv.post.EditPostRequest;
+import org.denevell.natch.model.interfaces.PostEditModel;
 import org.denevell.natch.utils.Strings;
 
 @Path("post/editthread")
@@ -39,6 +40,7 @@ public class EditThreadRequest {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
+	@Inject PostEditModel mPostEditModel;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
 	private CallDbBuilder<PostEntity> mPostModel;
 	
@@ -81,7 +83,11 @@ public class EditThreadRequest {
 
 		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
 		mPostModel.startTransaction();
-		int result = new EditPostRequest().editPost(postId, editPostResource, isEditingThread, userEntity, mPostModel);
+		PostEntity editingData = new PostEntity();
+		editingData.setSubject(editPostResource.getSubject());
+		editingData.setContent(editPostResource.getContent());
+		editingData.setTags(editPostResource.getTags());
+		int result = mPostEditModel.edit(postId, userEntity, editingData);
 		mPostModel.commitAndCloseEntityManager();
 		generateEditReturnResource(ret, result, rb);
 		return ret;

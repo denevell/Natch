@@ -1,7 +1,6 @@
 package org.denevell.natch.model.impl;
 
 import javax.inject.Singleton;
-import javax.persistence.EntityManager;
 
 import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.db.entities.PostEntity;
@@ -14,16 +13,11 @@ import org.jvnet.hk2.annotations.Service;
 public class PostAddModelImpl implements PostAddModel {
 
 	final ThreadFactory mThreadFactory = new ThreadFactory();
-	private EntityManager mExistingEntityManager;
 
 	@Override
 	public ThreadEntity add(final PostEntity postEntity) {
 		CallDbBuilder<ThreadEntity> model = new CallDbBuilder<ThreadEntity>();
-		if(mExistingEntityManager==null) {
-			model.startTransaction();
-		} else {
-			model.useTransaction(mExistingEntityManager);
-		}
+		model.startTransaction();
 		ThreadEntity thread = model.createOrUpdate(
 				postEntity.getThreadId(),
 				new CallDbBuilder.UpdateItem<ThreadEntity>() {
@@ -37,14 +31,8 @@ public class PostAddModelImpl implements PostAddModel {
 						return mThreadFactory.makeThread(postEntity);
 					}
 				}, ThreadEntity.class);
-		if(mExistingEntityManager==null) {
-			model.commitAndCloseEntityManager();
-		}
+		model.commitAndCloseEntityManager();
 		return thread;
 	}
 
-	@Override
-	public void setExistingTransactionObject(Object em) {
-		mExistingEntityManager = (EntityManager) em;
-	}
 }

@@ -3,7 +3,6 @@ package org.denevell.natch.serv.post;
 import java.util.ResourceBundle;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,32 +15,24 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
-import org.denevell.natch.db.CallDbBuilder;
-import org.denevell.natch.db.CallDbBuilder.DeleteOrMerge;
-import org.denevell.natch.db.entities.PostEntity;
-import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.DeletePostResourceReturnData;
-import org.denevell.natch.model.interfaces.PostFindModel;
+import org.denevell.natch.model.interfaces.PostDeleteModel;
 import org.denevell.natch.utils.Strings;
 
 @Path("post/del")
 public class DeletePostRequest {
 	
 	public final static String EDITED = "edited";
-	public final static String DELETED = "deleted";
 	public final static String ADDED = "added";
-	public final static String DOESNT_EXIST = "doesntexist";
 	public final static String UNKNOWN_ERROR = "unknownerror";
 	public final static String BAD_USER_INPUT = "baduserinput";
-	public final static String NOT_YOURS_TO_DELETE = "notyourtodelete";	
 	@Context UriInfo mInfo;
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-	@Inject public PostFindModel mPostFindModel;
+	@Inject public PostDeleteModel mPostFindModel;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
-	private CallDbBuilder<ThreadEntity> mThreadModel = new CallDbBuilder<ThreadEntity>();
 	
 	public DeletePostRequest() {
 	}
@@ -56,31 +47,6 @@ public class DeletePostRequest {
 		mResponse = response;
 	}
 	
-	
-	public String delete(UserEntity userEntity, long postEntityId) {
-		final PostEntity pe = mPostFindModel.find(postEntityId, false);
-		EntityManager postEntityManager = (EntityManager) mPostFindModel.getTransactionObject();
-		if(pe==null) {
-			postEntityManager.close();
-			return DOESNT_EXIST;
-		} else if(!userEntity.isAdmin() && !pe.getUser().getUsername().equals(userEntity.getUsername())) {
-			postEntityManager.close();
-			return NOT_YOURS_TO_DELETE;
-		}
-		mThreadModel.useTransaction(postEntityManager)
-			.findAndUpdateOrDelete(pe.getThreadId(), 
-				new DeleteOrMerge<ThreadEntity>() {
-					@Override public boolean shouldDelete(ThreadEntity item) {
-						item.updateThreadToRemovePost(pe);
-						return item.getPosts()==null || item.getPosts().size()==0;
-					}
-				}, 
-				ThreadEntity.class);
-		postEntityManager.remove(pe);
-		mThreadModel.commitAndCloseEntityManager();
-		return DELETED;
-	}	
-		
 	@DELETE
 	@Path("{postId}") 
 	@Produces(MediaType.APPLICATION_JSON)
@@ -88,17 +54,17 @@ public class DeletePostRequest {
 		DeletePostResourceReturnData ret = new DeletePostResourceReturnData();
 		ret.setSuccessful(false);
 		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-		String result = delete(userEntity, number);
+		int result = mPostFindModel.delete(number, userEntity);
 		generateDeleteReturnResource(result, ret, userEntity);
 		return ret;
 	}
 
-	private void generateDeleteReturnResource(String result, DeletePostResourceReturnData ret, UserEntity userEntity) {
-		if(result.equals(DELETED)) {
+	private void generateDeleteReturnResource(int result, DeletePostResourceReturnData ret, UserEntity userEntity) {
+		if(result == PostDeleteModel.DELETED) {
 			ret.setSuccessful(true);
-		} else if(result.equals(DOESNT_EXIST)) {
+		} else if(result == PostDeleteModel.DOESNT_EXIST) {
 			ret.setError(rb.getString(Strings.post_doesnt_exist));
-		} else if(result.equals(NOT_YOURS_TO_DELETE)) {
+		} else if(result == PostDeleteModel.NOT_YOURS) {
 			ret.setError(rb.getString(Strings.post_not_yours));
 		} 
 	}
