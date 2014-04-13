@@ -2,6 +2,7 @@ package org.denevell.natch.serv.post;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +18,7 @@ import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.io.posts.PostResource;
-import org.denevell.natch.utils.Log;
+import org.denevell.natch.model.interfaces.PostSingleModel;
 
 @Path("post/single")
 public class SinglePostRequest {
@@ -26,13 +27,9 @@ public class SinglePostRequest {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-	private CallDbBuilder<PostEntity> mModel;
-	private CallDbBuilder<ThreadEntity> mListThreadModel;
+	@Inject PostSingleModel mPostSingle;
 	
 	public SinglePostRequest() {
-		mModel = new CallDbBuilder<PostEntity>();
-
-		mListThreadModel = new CallDbBuilder<ThreadEntity>();
 	}
 	
 	/**
@@ -42,51 +39,30 @@ public class SinglePostRequest {
 	public SinglePostRequest(CallDbBuilder<PostEntity> postModel,
 			CallDbBuilder<ThreadEntity> threadModel,
 			HttpServletRequest request, HttpServletResponse response) {
-		mModel = postModel;
 		mRequest = request;
 		mResponse = response;
-		mListThreadModel = threadModel;
 	}
 
 	@GET
 	@Path("{postId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public PostResource findById(
-		@PathParam("postId") long postId) throws IOException {
-		PostEntity post = null;
-		ThreadEntity thread = null;
-		try {
-			post = mModel
-				.startTransaction()
-				.namedQuery(PostEntity.NAMED_QUERY_FIND_BY_ID)
-				.queryParam("id", postId)
-				.single(PostEntity.class);
-			if(post==null) {
-				mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
-				return null;
-			} else {
-				thread = mListThreadModel
-						.useTransaction(mModel.getEntityManager())
-						.namedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID)
-						.queryParam("id", post.getThreadId())
-						.single(ThreadEntity.class);		
-				mListThreadModel.closeEntityManager();
-				PostResource postResource = new PostResource(post.getUser().getUsername(), 
-						post.getCreated(), 
-						post.getModified(), 
-						thread.getRootPost().getSubject(), 
-						post.getContent(), 
-						post.getTags(), 
-						post.isAdminEdited());
-				postResource.setId(post.getId());
-				postResource.setThreadId(post.getThreadId());
-				return postResource;
-			}
-		} catch(Exception e) {
-			Log.info(getClass(), "Couldn't find post: " + e.toString());
-			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");
+	public PostResource findById(@PathParam("postId") long postId) throws IOException {
+		PostEntity post = mPostSingle.find(postId);
+		if(post==null) {
+			mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return null;
-		} 
-	}	
+		}
+		PostResource postResource = new PostResource(
+				post.getUser().getUsername(), 
+				post.getCreated(), 
+				post.getModified(),
+				post.getSubject(), 
+				post.getContent(), 
+				post.getTags(),
+				post.isAdminEdited());
+		postResource.setId(post.getId());
+		postResource.setThreadId(post.getThreadId());
+		return postResource;
+	}
 
 }

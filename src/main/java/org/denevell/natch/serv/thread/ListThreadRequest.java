@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,8 @@ import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.io.threads.ThreadResource;
+import org.denevell.natch.model.interfaces.ThreadListModel;
+import org.denevell.natch.model.interfaces.ThreadListModel.ThreadAndPosts;
 
 @Path("post/thread")
 public class ListThreadRequest {
@@ -28,12 +31,9 @@ public class ListThreadRequest {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-	private CallDbBuilder<PostEntity> mModel;
-	private CallDbBuilder<ThreadEntity> mThreadModel;
+	@Inject ThreadListModel mThreadModel;
 	
 	public ListThreadRequest() {
-		mModel = new CallDbBuilder<PostEntity>();
-		mThreadModel = new CallDbBuilder<ThreadEntity>();
 	}
 	
 	/**
@@ -44,8 +44,6 @@ public class ListThreadRequest {
 			CallDbBuilder<PostEntity> postModel, 
 			CallDbBuilder<ThreadEntity> threadModel,
 			HttpServletRequest request, HttpServletResponse response) {
-		mModel = postModel;
-		mThreadModel = threadModel;
 		mRequest = request;
 		mResponse = response;
 	}
@@ -57,45 +55,19 @@ public class ListThreadRequest {
 			@PathParam("threadId") String threadId,
 			@PathParam("start") int start, 	
 			@PathParam("limit") int limit) throws IOException {
-		List<PostEntity> posts = null;
-		ThreadEntity thread= null;
-		String username = null;
-		List<String> tags = null;
-
-			posts = mModel
-					.startTransaction()
-					.start(start)
-					.max(limit)
-					.namedQuery(PostEntity.NAMED_QUERY_FIND_BY_THREADID)
-					.queryParam("threadId", threadId)
-					.list(PostEntity.class);
-
-			if(posts!=null)  {
-				thread = mThreadModel 
-					.useTransaction(mModel.getEntityManager())
-					.namedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID)
-					.queryParam("id", threadId)
-					.single(ThreadEntity.class);
-			}
-			if(thread!=null) username = thread.getRootPost().getUser().getUsername();
-			if(thread!=null) tags = thread.getRootPost().getTags();
-			if(thread==null) {
-				mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
-				return null;
-			}
-
-		if(posts!=null && posts.size()==0) {
+		ThreadAndPosts ret = mThreadModel.list(threadId, start, limit);
+		if(ret==null) {
 			mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return null;
 		} else {
-			ThreadResource adaptedPosts = adaptPosts(
-					username, posts, thread);
-			adaptedPosts.setTags(tags);
+			ThreadResource adaptedPosts = adaptPosts(ret.getPosts(), ret.getThreadEntity());
 			return adaptedPosts;
 		}
 	}
 
-	private ThreadResource adaptPosts(String threadAuthor, List<PostEntity> posts, ThreadEntity thread) {
+	private ThreadResource adaptPosts(
+			List<PostEntity> posts, 
+			ThreadEntity thread) {
 		ThreadResource tr =  new ThreadResource();
 		List<PostResource> postsResources = new ArrayList<PostResource>();
 		for (PostEntity p: posts) {
@@ -115,6 +87,7 @@ public class ListThreadRequest {
 		tr.setPosts(postsResources);
 		tr.setNumPosts((int) thread.getNumPosts());
 		tr.setId(thread.getId());
+		tr.setTags(thread.getRootPost().getTags());
 		return tr;
 	}	
 

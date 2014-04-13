@@ -42,10 +42,8 @@ public class EditThreadRequest {
 	@Context HttpServletResponse mResponse;
 	@Inject PostEditModel mPostEditModel;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
-	private CallDbBuilder<PostEntity> mPostModel;
 	
 	public EditThreadRequest() {
-		mPostModel = new CallDbBuilder<PostEntity>();
 	}
 	
 	/**
@@ -82,13 +80,11 @@ public class EditThreadRequest {
 		}
 
 		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-		mPostModel.startTransaction();
 		PostEntity editingData = new PostEntity();
 		editingData.setSubject(editPostResource.getSubject());
 		editingData.setContent(editPostResource.getContent());
 		editingData.setTags(editPostResource.getTags());
 		int result = mPostEditModel.edit(postId, userEntity, editingData);
-		mPostModel.commitAndCloseEntityManager();
 		generateEditReturnResource(ret, result, rb);
 		return ret;
 	}

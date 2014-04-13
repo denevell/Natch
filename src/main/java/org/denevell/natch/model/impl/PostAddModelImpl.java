@@ -3,10 +3,10 @@ package org.denevell.natch.model.impl;
 import javax.inject.Singleton;
 
 import org.denevell.natch.db.CallDbBuilder;
+import org.denevell.natch.db.ThreadFactory;
 import org.denevell.natch.db.entities.PostEntity;
 import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.model.interfaces.PostAddModel;
-import org.denevell.natch.serv.post.ThreadFactory;
 import org.jvnet.hk2.annotations.Service;
 
 @Service @Singleton
