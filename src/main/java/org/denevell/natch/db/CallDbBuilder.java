@@ -40,8 +40,8 @@ public class CallDbBuilder<ListItem> {
 	}
 
 	public static final int UPDATED = 0;
-	public static int PERMISSION_DENIED=1;
-	public static int NOT_FOUND=2;
+	public final static int PERMISSION_DENIED=1;
+	public final static int NOT_FOUND=2;
 
 	private EntityManager mEntityManager;
 	private String mNamedQuery;

@@ -19,7 +19,8 @@ import org.denevell.natch.db.entities.ThreadEntity;
 import org.denevell.natch.db.entities.UserEntity;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.threads.ThreadResource;
-import org.denevell.natch.serv.post.ListPosts;
+import org.denevell.natch.model.interfaces.PostsListByModDateModel;
+import org.denevell.natch.serv.post.ListPostsRequest;
 import org.denevell.natch.serv.thread.ListThreadRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
@@ -30,20 +31,16 @@ public class ListPostsResourceTests {
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private HttpServletRequest request;
 	private HttpServletResponse response;
-	private ListPosts resourceList;
-	private CallDbBuilder<PostEntity> postsModel;
+	private ListPostsRequest resourceList;
+	private PostsListByModDateModel postsModel;
 
 	@SuppressWarnings("unchecked")
 	@Before
 	public void setup() {
-		postsModel = mock(CallDbBuilder.class);
-		when(postsModel.max(0)).thenReturn(postsModel);
-		when(postsModel.startTransaction()).thenReturn(postsModel);
-		when(postsModel.start(0)).thenReturn(postsModel);
-		when(postsModel.namedQuery(PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE)).thenReturn(postsModel);
+		postsModel = mock(PostsListByModDateModel.class);
 		response = mock(HttpServletResponse.class);
 		request = mock(HttpServletRequest.class);
-		resourceList = new ListPosts(postsModel, request, response);
+		resourceList = new ListPostsRequest(postsModel, request, response);
 	}
 	
 	@Test
@@ -56,7 +53,7 @@ public class ListPostsResourceTests {
 		postEntity.setId(400);
 		posts.add(postEntity);
 		posts.add(new PostEntity(new UserEntity("u2", ""), 2, 2, "s2", "c2", null));
-		when(postsModel.list(PostEntity.class)).thenReturn(posts);
+		when(postsModel.list(0, 0)).thenReturn(posts);
 		
 		// Act
 		ListPostsResource result = resourceList.listByModificationDate(0, 0);
@@ -81,7 +78,7 @@ public class ListPostsResourceTests {
 	public void shouldListZeroPosts() throws IOException {
 		// Arrange
 		List<PostEntity> posts = new ArrayList<PostEntity>();
-		when(postsModel.list(PostEntity.class)).thenReturn(posts);
+		when(postsModel.list(0, 0)).thenReturn(posts);
 		
 		// Act
 		ListPostsResource result = resourceList.listByModificationDate(0, 0);
@@ -97,7 +94,7 @@ public class ListPostsResourceTests {
 		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", "threadId");
 		postEntity.setId(400);
 		posts.add(postEntity);
-		when(postsModel.list(PostEntity.class)).thenReturn(posts);
+		when(postsModel.list(0, 0)).thenReturn(posts);
 		
 		// Act
 		ListPostsResource result = resourceList.listByModificationDate(0, 0);
@@ -122,7 +119,6 @@ public class ListPostsResourceTests {
 		CallDbBuilder<ThreadEntity> threadModel = mock(CallDbBuilder.class);
 		when(threadModel.max(0)).thenReturn(threadModel);
 		when(threadModel.start(0)).thenReturn(threadModel);
-		when(threadModel.useTransaction(postsModel.getEntityManager())).thenReturn(threadModel);
 		when(threadModel.queryParam("id", "t")).thenReturn(threadModel);
 		when(threadModel.namedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID)).thenReturn(threadModel);
 		when(threadModel.single(ThreadEntity.class)).thenReturn(thread);

@@ -39,7 +39,16 @@ public class PostEditModelImpl implements PostEditModel {
 				},
 				PostEntity.class);
 		mPostModel.commitAndCloseEntityManager();
-		return result;
+		switch (result) {
+		case CallDbBuilder.NOT_FOUND:
+			return PostEditModel.DOESNT_EXIST;
+		case CallDbBuilder.UPDATED:
+			return PostEditModel.EDITED;
+		case CallDbBuilder.PERMISSION_DENIED:
+			return PostEditModel.NOT_YOURS;
+		default:
+			return -1;
+		}
 	}
 
 }
