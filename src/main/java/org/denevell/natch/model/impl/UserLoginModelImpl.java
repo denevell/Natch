@@ -1,7 +1,7 @@
 package org.denevell.natch.model.impl;
 
-import org.denevell.natch.model.interfaces.UserAddModel;
+import org.denevell.natch.model.interfaces.UserLoginModel;
 
-public class UserLoginModelImpl implements UserAddModel  {
+public class UserLoginModelImpl implements UserLoginModel {
 
 }

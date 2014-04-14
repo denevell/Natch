@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,23 +17,20 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
-import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.io.users.User;
 import org.denevell.natch.io.users.UserList;
 import org.denevell.natch.model.entities.UserEntity;
+import org.denevell.natch.model.interfaces.UsersListModel;
 import org.denevell.natch.utils.Strings;
 
 @Path("user/list")
 public class UsersListRequest {
 
-	@Context
-	UriInfo info;
-	@Context
-	HttpServletRequest mRequest;
-	@Context
-	HttpServletResponse mResponse;
-	@Context
-	ServletContext context;
+	@Context UriInfo info;
+	@Context HttpServletRequest mRequest;
+	@Context HttpServletResponse mResponse;
+	@Context ServletContext context;
+	@Inject UsersListModel mUserList;
 	ResourceBundle rb = Strings.getMainResourceBundle();
 
 	public UsersListRequest() {
@@ -47,11 +45,8 @@ public class UsersListRequest {
 			mResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 			return null;
 		} else {
-			List<UserEntity> usersFromDb = new CallDbBuilder<UserEntity>()
-					.startTransaction()
-					.namedQuery(UserEntity.NAMED_QUERY_LIST_USERS).list(
-							UserEntity.class);
 			UserList usersList = new UserList();
+			List<UserEntity> usersFromDb = mUserList.list(0, 1000);
 			for (UserEntity user : usersFromDb) {
 				User u = new User(user.getUsername(), user.isAdmin());
 				u.setResetPasswordRequest(user.isPasswordResetRequest());

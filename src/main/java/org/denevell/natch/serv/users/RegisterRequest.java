@@ -2,6 +2,7 @@ package org.denevell.natch.serv.users;
 
 import java.util.ResourceBundle;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -13,11 +14,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.denevell.natch.db.CallDbBuilder;
-import org.denevell.natch.db.CallDbBuilder.RunnableWith;
 import org.denevell.natch.io.users.RegisterResourceInput;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
 import org.denevell.natch.model.entities.UserEntity;
+import org.denevell.natch.model.interfaces.UserAddModel;
 import org.denevell.natch.utils.Strings;
 
 
@@ -28,18 +28,16 @@ public class RegisterRequest {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
     ResourceBundle rb = Strings.getMainResourceBundle();
-	private CallDbBuilder<UserEntity> mModel;
+    @Inject UserAddModel mUserAddModel;
 	
 	public RegisterRequest() {
-		mModel = new CallDbBuilder<UserEntity>();
 	}
 	
 	/**
 	 * For DI testing.
 	 * @param request 
 	 */
-	public RegisterRequest(CallDbBuilder<UserEntity> userModel, HttpServletRequest request) {
-		mModel = userModel;
+	public RegisterRequest(HttpServletRequest request) {
 		mRequest = request;
 	}
 	
@@ -49,34 +47,17 @@ public class RegisterRequest {
 	public RegisterResourceReturnData register(@Valid RegisterResourceInput registerInput) {
 		RegisterResourceReturnData regReturnData = new RegisterResourceReturnData();
 		UserEntity u = new UserEntity(registerInput);
-		boolean exists = mModel
-			.startTransaction()
-			.namedQuery(UserEntity.NAMED_QUERY_FIND_BY_RECOVERY_EMAIL)
-			.queryParam("recoveryEmail", registerInput.getRecoveryEmail())
-			.exists();
-		if(exists) {
-			mModel.closeEntityManager();
+		int added = mUserAddModel.add(u);
+		if(added==UserAddModel.EMAIL_ALREADY_EXISTS) {
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.email_already_exists));
 			return regReturnData;
-		}
-		boolean added = mModel
-			.clearQueryParams()
-			.useTransaction(mModel.getEntityManager())
-			.ifFirstItem(UserEntity.NAMED_QUERY_COUNT, new RunnableWith<UserEntity>() {
-						@Override public void item(UserEntity item) {
-							item.setAdmin(true);
-						}
-					})
-			.queryParam("username", u.getUsername())
-			.addIfDoesntExist(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME, u);
-		mModel.commitAndCloseEntityManager();
-		if (added) {
-			regReturnData.setSuccessful(true);
-		} else if (!added) {
+		} else if (added==UserAddModel.USER_ALREADY_EXISTS) {
 			regReturnData.setSuccessful(false);
 			regReturnData.setError(rb.getString(Strings.username_already_exists));
-		} 
+		} else {
+			regReturnData.setSuccessful(true);
+		}
 		return regReturnData;
 	}	
 	
