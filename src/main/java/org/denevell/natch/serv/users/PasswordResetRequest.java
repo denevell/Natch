@@ -3,6 +3,7 @@ package org.denevell.natch.serv.users;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,8 @@ import javax.ws.rs.core.UriInfo;
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.model.entities.UserEntity;
+import org.denevell.natch.model.interfaces.UserPasswordResetDeleteModel;
+import org.denevell.natch.model.interfaces.UserPasswordResetRequestModel;
 import org.denevell.natch.utils.Strings;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -29,16 +32,10 @@ public class PasswordResetRequest {
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
     ResourceBundle rb = Strings.getMainResourceBundle();
-	private CallDbBuilder<UserEntity> mModel;
-	private CallDbBuilder<UserEntity> mUserListByEmailModel;
-	private CallDbBuilder<UserEntity> mUserListModel;
+    @Inject UserPasswordResetRequestModel mUserModelRequest;
+    @Inject UserPasswordResetDeleteModel mUserModelDelete;
 	
 	public PasswordResetRequest() {
-		mModel = new CallDbBuilder<UserEntity>();
-		mUserListByEmailModel = new CallDbBuilder<UserEntity>()
-		 .namedQuery(UserEntity.NAMED_QUERY_FIND_BY_RECOVERY_EMAIL);
-		mUserListModel = new CallDbBuilder<UserEntity>()
-		 .namedQuery(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME);
 	}
 	
 	/**
@@ -46,25 +43,17 @@ public class PasswordResetRequest {
 	 * @param request 
 	 */
 	public PasswordResetRequest(CallDbBuilder<UserEntity> userModel, HttpServletRequest request) {
-		mModel = userModel;
 		mRequest = request;
 	}
 	
 	@POST
 	@Path("/{recoveryEmail}")
 	public void requestReset(@PathParam("recoveryEmail") @NotEmpty @NotBlank String recoveryEmail) throws IOException {
-	    UserEntity user = mUserListByEmailModel
-	    		.startTransaction()
-	    		.queryParam("recoveryEmail", recoveryEmail).single(UserEntity.class);  	    
-	    if(user==null) {
+		int result = mUserModelRequest.requestReset(recoveryEmail);
+	    if(result==UserPasswordResetRequestModel.EMAIL_NOT_FOUND) {
 	    	mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
 	    	return;
-	    }
-		user.setPasswordResetRequest(true);
-		mModel
-			.startTransaction()
-			.update(user)
-			.commitAndCloseEntityManager();
+	    } 
 	}	
 
 	@DELETE
@@ -75,14 +64,11 @@ public class PasswordResetRequest {
 			mResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 			return;
 		}
-	    UserEntity user = mUserListModel
-	    		.startTransaction()
-	    		.queryParam("username", username).single(UserEntity.class);  	    
-		user.setPasswordResetRequest(false);
-		mModel
-			.startTransaction()
-			.update(user)
-			.commitAndCloseEntityManager();
+		int result = mUserModelDelete.deleteRequest(username);
+		if(result==UserPasswordResetDeleteModel.CANT_FIND) {
+			mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
 	}	
 	
 }
