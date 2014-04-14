@@ -62,7 +62,7 @@ public class ChangePasswordRequest {
 			mResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED); 
 			return;
 		}
-		int res = mUserChangePassword.changePassword(userEntity.getUsername(), changePass.getPassword());
+		int res = mUserChangePassword.changePassword(username, changePass.getPassword());
 		if(res==UserChangePasswordModel.NOT_FOUND) mResponse.sendError(HttpServletResponse.SC_NOT_FOUND); 
 	}
 }
