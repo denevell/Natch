@@ -13,13 +13,14 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.threads.ThreadResource;
 import org.denevell.natch.model.entities.PostEntity;
 import org.denevell.natch.model.entities.ThreadEntity;
 import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.PostsListByModDateModel;
+import org.denevell.natch.model.interfaces.ThreadListModel;
+import org.denevell.natch.model.interfaces.ThreadListModel.ThreadAndPosts;
 import org.denevell.natch.serv.post.ListPostsRequest;
 import org.denevell.natch.serv.thread.ListThreadRequest;
 import org.denevell.natch.utils.Strings;
@@ -113,26 +114,12 @@ public class ListPostsResourceTests {
 		posts.add(new PostEntity(new UserEntity("u2", ""), 2, 2, "s2", "c2", "t"));
 		ThreadEntity thread = new ThreadEntity(postEntity, posts);
 		thread.setNumPosts(5);
-		
-		@SuppressWarnings("unchecked")
-		CallDbBuilder<ThreadEntity> threadModel = mock(CallDbBuilder.class);
-		when(threadModel.max(0)).thenReturn(threadModel);
-		when(threadModel.start(0)).thenReturn(threadModel);
-		when(threadModel.queryParam("id", "t")).thenReturn(threadModel);
-		when(threadModel.namedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID)).thenReturn(threadModel);
-		when(threadModel.single(ThreadEntity.class)).thenReturn(thread);
 
-		@SuppressWarnings("unchecked")
-		CallDbBuilder<PostEntity> newPostsModel = mock(CallDbBuilder.class);
-		when(newPostsModel.max(0)).thenReturn(newPostsModel);
-		when(newPostsModel.startTransaction()).thenReturn(newPostsModel);
-		when(newPostsModel.start(0)).thenReturn(newPostsModel);
-		when(newPostsModel.queryParam("threadId", "t")).thenReturn(newPostsModel);
-		when(newPostsModel.namedQuery(PostEntity.NAMED_QUERY_FIND_BY_THREADID)).thenReturn(newPostsModel);
-		when(newPostsModel.list(PostEntity.class)).thenReturn(posts);
-
+		ThreadListModel model = mock(ThreadListModel.class);
+		ThreadAndPosts ret = new ThreadAndPosts(thread, posts);
+		when(model.list("t", 0, 0)).thenReturn(ret);
 		// Act
-		ListThreadRequest res = new ListThreadRequest(newPostsModel, threadModel, request, response);
+		ListThreadRequest res = new ListThreadRequest(model, request, response);
 		ThreadResource result = res.listByThreadId("t", 0, 0);
 		
 		// Assert

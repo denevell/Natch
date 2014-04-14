@@ -41,9 +41,9 @@ public class ListThreadRequest {
 	 * @param editPostAdapter 
 	 */
 	public ListThreadRequest(
-			CallDbBuilder<PostEntity> postModel, 
-			CallDbBuilder<ThreadEntity> threadModel,
+			ThreadListModel model,
 			HttpServletRequest request, HttpServletResponse response) {
+		mThreadModel = model;
 		mRequest = request;
 		mResponse = response;
 	}

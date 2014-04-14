@@ -36,9 +36,8 @@ public class SinglePostRequest {
 	 * For DI testing.
 	 * @param editPostAdapter 
 	 */
-	public SinglePostRequest(CallDbBuilder<PostEntity> postModel,
-			CallDbBuilder<ThreadEntity> threadModel,
-			HttpServletRequest request, HttpServletResponse response) {
+	public SinglePostRequest(PostSingleModel model, HttpServletRequest request, HttpServletResponse response) {
+		mPostSingle = model;
 		mRequest = request;
 		mResponse = response;
 	}

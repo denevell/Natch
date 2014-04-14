@@ -12,7 +12,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.denevell.natch.auth.LoginAuthKeysSingleton;
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.io.users.LogoutResourceReturnData;
 import org.denevell.natch.model.interfaces.UserLogoutModel;
@@ -32,9 +31,9 @@ public class LogoutRequest {
 	
 	/**
 	 * For DI testing.
-	 * @param request 
 	 */
-	public LogoutRequest(LoginAuthKeysSingleton loginAuth, HttpServletRequest request) {
+	public LogoutRequest(UserLogoutModel model, HttpServletRequest request) {
+		mUserLogoutModel = model;
 		mRequest = request;
 	}
 		

@@ -39,7 +39,8 @@ public class ListThreadsRequest {
 	/**
 	 * For DI testing.
 	 */
-	public ListThreadsRequest(CallDbBuilder<ThreadEntity> postModel, HttpServletRequest request, HttpServletResponse response) {
+	public ListThreadsRequest(ThreadsListModel threadModel, HttpServletRequest request, HttpServletResponse response) {
+		mThreadsModel = threadModel;
 		mRequest = request;
 		mResponse = response;
 	}

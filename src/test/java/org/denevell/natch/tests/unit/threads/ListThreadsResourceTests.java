@@ -13,11 +13,12 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.io.threads.ListThreadsResource;
 import org.denevell.natch.model.entities.PostEntity;
 import org.denevell.natch.model.entities.ThreadEntity;
 import org.denevell.natch.model.entities.UserEntity;
+import org.denevell.natch.model.interfaces.ThreadsListModel;
+import org.denevell.natch.model.interfaces.ThreadsListModel.ThreadsAndNumTotalThreads;
 import org.denevell.natch.serv.thread.ListThreadsRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
@@ -25,28 +26,17 @@ import org.junit.Test;
 
 public class ListThreadsResourceTests {
 	
-	private CallDbBuilder<ThreadEntity> threadModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private ListThreadsRequest resource;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
+	private ThreadsListModel threadModel;
 
-	@SuppressWarnings("unchecked")
 	@Before
 	public void setup() {
-		threadModel = mock(CallDbBuilder.class);
-		when(threadModel.max(0)).thenReturn(threadModel);
-		when(threadModel.startTransaction()).thenReturn(threadModel);
-		when(threadModel.useTransaction(threadModel.getEntityManager())).thenReturn(threadModel);
-		when(threadModel.start(0)).thenReturn(threadModel);
-		when(threadModel.queryParam("tag", "tagy")).thenReturn(threadModel);
-		when(threadModel.namedQuery(ThreadEntity.NAMED_QUERY_COUNT_THREAD_BY_TAG)).thenReturn(threadModel);
-		when(threadModel.namedQuery(ThreadEntity.NAMED_QUERY_COUNT_THREADS)).thenReturn(threadModel);
-		when(threadModel.namedQuery(ThreadEntity.NAMED_QUERY_LIST_THREADS)).thenReturn(threadModel);
-		when(threadModel.namedQuery(ThreadEntity.NAMED_QUERY_LIST_THREADS_BY_TAG)).thenReturn(threadModel);
-
 		response = mock(HttpServletResponse.class);
 		request = mock(HttpServletRequest.class);
+		threadModel = mock(ThreadsListModel.class);
 		resource = new ListThreadsRequest(threadModel, request, response);
 	}
 	
@@ -60,7 +50,8 @@ public class ListThreadsResourceTests {
 		threadEntity.setId("400");
 		threads.add(threadEntity);
 		threads.add(new ThreadEntity(postEntity1, Arrays.asList(new PostEntity[] { postEntity1 } )));
-		when(threadModel.list(ThreadEntity.class)).thenReturn(threads);
+		ThreadsAndNumTotalThreads ret = new ThreadsAndNumTotalThreads(threads, 0);
+		when(threadModel.list(null, 0, 0)).thenReturn(ret);
 		
 		// Act
 		ListThreadsResource result = resource.listThreads(0, 0);
@@ -86,7 +77,8 @@ public class ListThreadsResourceTests {
 		List<ThreadEntity> threads = new ArrayList<ThreadEntity>();
 		threads.add(new ThreadEntity(null, Arrays.asList(new PostEntity[] { postEntity } )));
 		threads.add(new ThreadEntity(postEntity1, Arrays.asList(new PostEntity[] { postEntity1 } )));
-		when(threadModel.list(ThreadEntity.class)).thenReturn(threads);
+		ThreadsAndNumTotalThreads ret = new ThreadsAndNumTotalThreads(threads, 0);
+		when(threadModel.list(null, 0, 0)).thenReturn(ret);
 		
 		// Act
 		ListThreadsResource result = resource.listThreads(0, 0);
@@ -105,7 +97,8 @@ public class ListThreadsResourceTests {
 		threadEntity.setId("400");
 		threads.add(threadEntity);
 		threads.add(new ThreadEntity(postEntity1, Arrays.asList(new PostEntity[] { postEntity1 } )));
-		when(threadModel.list(ThreadEntity.class)).thenReturn(threads);
+		ThreadsAndNumTotalThreads ret = new ThreadsAndNumTotalThreads(threads, 0);
+		when(threadModel.list("tagy", 0, 0)).thenReturn(ret);
 		
 		// Act
 		ListThreadsResource result = resource.listThreadsByTag("tagy", 0, 0);
