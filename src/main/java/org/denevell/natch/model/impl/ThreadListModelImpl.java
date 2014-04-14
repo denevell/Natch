@@ -2,11 +2,15 @@ package org.denevell.natch.model.impl;
 
 import java.util.List;
 
+import javax.inject.Singleton;
+
 import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.model.entities.PostEntity;
 import org.denevell.natch.model.entities.ThreadEntity;
 import org.denevell.natch.model.interfaces.ThreadListModel;
+import org.jvnet.hk2.annotations.Service;
 
+@Service @Singleton
 public class ThreadListModelImpl implements ThreadListModel {
 
 	private CallDbBuilder<PostEntity> mPostModel = new CallDbBuilder<PostEntity>();

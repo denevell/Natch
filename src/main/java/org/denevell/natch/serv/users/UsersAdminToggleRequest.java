@@ -16,11 +16,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.io.base.SuccessOrError;
 import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.UserAdminToggleModel;
+import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
 import org.denevell.natch.utils.Strings;
 
 
@@ -32,6 +32,7 @@ public class UsersAdminToggleRequest {
 	@Context HttpServletResponse mResponse;
 	@Context ServletContext context;
 	@Inject UserAdminToggleModel mModel;
+	@Inject UserGetLoggedInModel mUserLogggedInModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	
 	public UsersAdminToggleRequest() {
@@ -50,7 +51,7 @@ public class UsersAdminToggleRequest {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public SuccessOrError toggleAdmin(@PathParam("userId") final String userId) throws IOException {
-		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+		UserEntity userEntity = mUserLogggedInModel.get(mRequest);
 		if (!userEntity.isAdmin()) {
 			mResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 			return null;

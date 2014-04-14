@@ -13,6 +13,7 @@ import org.denevell.natch.model.interfaces.ThreadsListModel;
 import org.denevell.natch.model.interfaces.UserAddModel;
 import org.denevell.natch.model.interfaces.UserAdminToggleModel;
 import org.denevell.natch.model.interfaces.UserChangePasswordModel;
+import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
 import org.denevell.natch.model.interfaces.UserLoginModel;
 import org.denevell.natch.model.interfaces.UserLogoutModel;
 import org.denevell.natch.model.interfaces.UserPasswordResetDeleteModel;
@@ -41,5 +42,6 @@ public class DependencyInjectionBinder extends AbstractBinder {
 		bind(UserPasswordResetRequestModelImpl.class).to(UserPasswordResetRequestModel.class);
 		bind(UserPasswordResetDeleteModelImpl.class).to(UserPasswordResetDeleteModel.class);
 		bind(UsersListModelImpl.class).to(UsersListModel.class);
+		bind(UserGetLoggedInModelImpl.class).to(UserGetLoggedInModel.class);
 	}
 }

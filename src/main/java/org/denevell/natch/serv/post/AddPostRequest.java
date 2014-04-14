@@ -17,7 +17,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.adapters.AddPostRequestToPostEntity;
 import org.denevell.natch.adapters.ThreadEntityToThreadResource;
-import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.threads.ThreadResource;
@@ -25,6 +24,7 @@ import org.denevell.natch.model.entities.PostEntity;
 import org.denevell.natch.model.entities.ThreadEntity;
 import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.PostAddModel;
+import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
@@ -36,6 +36,7 @@ public class AddPostRequest {
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
 	@Inject PostAddModel mAddPostModel;
+	@Inject UserGetLoggedInModel mUserLogggedInModel;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
 	
 	public AddPostRequest() {
@@ -45,7 +46,7 @@ public class AddPostRequest {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public AddPostResourceReturnData addPost(@Valid AddPostResourceInput input) {
-		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+		UserEntity userEntity = mUserLogggedInModel.get(mRequest);
 		return addPost(input, userEntity);
 	}
 	

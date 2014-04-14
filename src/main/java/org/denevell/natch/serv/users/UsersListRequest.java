@@ -16,10 +16,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.io.users.User;
 import org.denevell.natch.io.users.UserList;
 import org.denevell.natch.model.entities.UserEntity;
+import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
 import org.denevell.natch.model.interfaces.UsersListModel;
 import org.denevell.natch.utils.Strings;
 
@@ -31,6 +31,7 @@ public class UsersListRequest {
 	@Context HttpServletResponse mResponse;
 	@Context ServletContext context;
 	@Inject UsersListModel mUserList;
+	@Inject UserGetLoggedInModel mUserLogggedInModel;
 	ResourceBundle rb = Strings.getMainResourceBundle();
 
 	public UsersListRequest() {
@@ -40,7 +41,7 @@ public class UsersListRequest {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public UserList listUsers() throws IOException {
-		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+		UserEntity userEntity = mUserLogggedInModel.get(mRequest);
 		if (!userEntity.isAdmin()) {
 			mResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 			return null;

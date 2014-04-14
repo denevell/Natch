@@ -15,11 +15,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.io.users.ChangePasswordInput;
 import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.UserChangePasswordModel;
+import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
 import org.denevell.natch.utils.Strings;
 
 @Path("user/password")
@@ -31,6 +31,7 @@ public class ChangePasswordRequest {
 	@Context ServletContext context;
     ResourceBundle rb = Strings.getMainResourceBundle();
     @Inject UserChangePasswordModel mUserChangePassword;
+	@Inject UserGetLoggedInModel mUserLogggedInModel;
 	
 	public ChangePasswordRequest() {
 	}
@@ -46,7 +47,7 @@ public class ChangePasswordRequest {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void changePassword(@Valid final ChangePasswordInput changePass) throws Exception {
-		final UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+		final UserEntity userEntity = mUserLogggedInModel.get(mRequest);
 		int res = mUserChangePassword.changePassword(userEntity.getUsername(), changePass.getPassword());
 		if(res==UserChangePasswordModel.NOT_FOUND) mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); 
 	}
@@ -57,7 +58,7 @@ public class ChangePasswordRequest {
 	public void changePasswordAsAdmin(
 			@PathParam("username") String username,
 			@Valid final ChangePasswordInput changePass) throws Exception {
-		final UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+		final UserEntity userEntity = mUserLogggedInModel.get(mRequest);
 		if(!userEntity.isAdmin()) {
 			mResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED); 
 			return;

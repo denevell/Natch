@@ -20,7 +20,6 @@ import javax.ws.rs.core.UriInfo;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.denevell.natch.adapters.AddPostRequestToPostEntity;
 import org.denevell.natch.adapters.ThreadEntityToThreadResource;
-import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
@@ -30,6 +29,7 @@ import org.denevell.natch.model.entities.PushEntity;
 import org.denevell.natch.model.entities.ThreadEntity;
 import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.PostAddModel;
+import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.ManifestUtils;
 import org.denevell.natch.utils.Strings;
@@ -46,6 +46,7 @@ public class AddThreadRequest {
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
 	@Inject PostAddModel mAddPostModel;
+	@Inject UserGetLoggedInModel mUserLogggedInModel;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
 	
 	public AddThreadRequest() {
@@ -55,7 +56,7 @@ public class AddThreadRequest {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public AddPostResourceReturnData addThread(@Valid AddPostResourceInput input) {
-		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+		UserEntity userEntity = mUserLogggedInModel.get(mRequest);
 		if (input.getTags()!=null && !PostEntity.isTagLengthOkay(input.getTags())) {
 			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 			regReturnData.setSuccessful(false);

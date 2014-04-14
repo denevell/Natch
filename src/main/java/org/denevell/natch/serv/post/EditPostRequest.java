@@ -15,12 +15,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.io.posts.EditPostResource;
 import org.denevell.natch.io.posts.EditPostResourceReturnData;
 import org.denevell.natch.model.entities.PostEntity;
 import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.PostEditModel;
+import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
 import org.denevell.natch.serv.thread.EditThreadRequest;
 import org.denevell.natch.utils.Strings;
 
@@ -32,6 +32,7 @@ public class EditPostRequest {
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
 	@Inject PostEditModel mPostEditModel;
+	@Inject UserGetLoggedInModel mUserLogggedInModel;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
 	
 	public EditPostRequest() {
@@ -53,7 +54,7 @@ public class EditPostRequest {
 			@PathParam(value="postId") long postId, 
 			@Valid EditPostResource editPostResource) {
 		EditPostResourceReturnData ret = new EditPostResourceReturnData();
-		final UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+		final UserEntity userEntity = mUserLogggedInModel.get(mRequest);
 		PostEntity editData = new PostEntity();
 		editData.setContent(editPostResource.getContent());
 		editData.setSubject("-");

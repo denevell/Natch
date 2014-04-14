@@ -14,9 +14,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 
-import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.model.entities.UserEntity;
+import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
 import org.denevell.natch.model.interfaces.UserPasswordResetDeleteModel;
 import org.denevell.natch.model.interfaces.UserPasswordResetRequestModel;
 import org.denevell.natch.utils.Strings;
@@ -34,6 +34,7 @@ public class PasswordResetRequest {
     ResourceBundle rb = Strings.getMainResourceBundle();
     @Inject UserPasswordResetRequestModel mUserModelRequest;
     @Inject UserPasswordResetDeleteModel mUserModelDelete;
+	@Inject UserGetLoggedInModel mUserLogggedInModel;
 	
 	public PasswordResetRequest() {
 	}
@@ -59,7 +60,7 @@ public class PasswordResetRequest {
 	@DELETE
 	@Path("remove/{username}")
 	public void requestNoReset(@PathParam("username") @NotEmpty @NotBlank String username) throws IOException {
-		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+		UserEntity userEntity = mUserLogggedInModel.get(mRequest);
 		if(!userEntity.isAdmin()) {
 			mResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 			return;

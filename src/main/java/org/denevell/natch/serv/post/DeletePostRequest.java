@@ -14,10 +14,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.io.posts.DeletePostResourceReturnData;
 import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.PostDeleteModel;
+import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
 import org.denevell.natch.utils.Strings;
 
 @Path("post/del")
@@ -31,7 +31,8 @@ public class DeletePostRequest {
 	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
-	@Inject public PostDeleteModel mPostFindModel;
+	@Inject PostDeleteModel mPostFindModel;
+	@Inject UserGetLoggedInModel mUserLogggedInModel;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
 	
 	public DeletePostRequest() {
@@ -53,7 +54,7 @@ public class DeletePostRequest {
 	public DeletePostResourceReturnData delete(@PathParam("postId") long number) {
 		DeletePostResourceReturnData ret = new DeletePostResourceReturnData();
 		ret.setSuccessful(false);
-		UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+		UserEntity userEntity = mUserLogggedInModel.get(mRequest);
 		int result = mPostFindModel.delete(number, userEntity);
 		generateDeleteReturnResource(result, ret, userEntity);
 		return ret;

@@ -17,12 +17,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.adapters.ThreadEntityToThreadResource;
-import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.threads.AddThreadFromPostResourceInput;
 import org.denevell.natch.model.entities.ThreadEntity;
 import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.ThreadFromPostModel;
+import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.Strings;
 
@@ -34,6 +34,7 @@ public class ThreadFromPostRequest {
 	@Context ServletContext context;
 	@Context HttpServletResponse mResponse;
 	@Inject ThreadFromPostModel mThreadFromPostModel;
+	@Inject UserGetLoggedInModel mUserLogggedInModel;
 	private ResourceBundle rb = Strings.getMainResourceBundle();
 	
 	public ThreadFromPostRequest() {
@@ -53,7 +54,7 @@ public class ThreadFromPostRequest {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public AddPostResourceReturnData addThreadFromPost(@Valid AddThreadFromPostResourceInput input) throws IOException {
-	    UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
+	    UserEntity userEntity = mUserLogggedInModel.get(mRequest);
 	    if(!userEntity.isAdmin()) {
 	        mResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 	        return null;
