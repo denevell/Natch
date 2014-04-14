@@ -13,15 +13,15 @@ public class UserPasswordResetDeleteModelImpl implements UserPasswordResetDelete
 	public int deleteRequest(String username) {
 	    UserEntity user = mModel
 	    		.startTransaction()
-	    		.queryParam("username", username).single(UserEntity.class);  	    
+	    		.queryParam("username", username)
+	    		.single(UserEntity.class);  	    
 	    if(user==null) {
 	    	return UserPasswordResetDeleteModel.CANT_FIND;
 	    }
 		user.setPasswordResetRequest(false);
 		mModel
 			.useTransaction(mModel.getEntityManager())
-			.update(user)
-			.commitAndCloseEntityManager();
+			.update(user);
 		mModel.commitAndCloseEntityManager();
 		return UserPasswordResetDeleteModel.UPDATED;
 	}

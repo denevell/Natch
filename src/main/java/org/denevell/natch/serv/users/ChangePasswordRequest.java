@@ -2,6 +2,7 @@ package org.denevell.natch.serv.users;
 
 import java.util.ResourceBundle;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,9 +17,9 @@ import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.db.CallDbBuilder;
-import org.denevell.natch.db.CallDbBuilder.RunnableWith;
 import org.denevell.natch.io.users.ChangePasswordInput;
 import org.denevell.natch.model.entities.UserEntity;
+import org.denevell.natch.model.interfaces.UserChangePasswordModel;
 import org.denevell.natch.utils.Strings;
 
 @Path("user/password")
@@ -28,11 +29,10 @@ public class ChangePasswordRequest {
 	@Context HttpServletRequest mRequest;
 	@Context HttpServletResponse mResponse;
 	@Context ServletContext context;
-	private CallDbBuilder<UserEntity> mModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
+    @Inject UserChangePasswordModel mUserChangePassword;
 	
 	public ChangePasswordRequest() {
-        mModel = new CallDbBuilder<UserEntity>();
 	}
 	
 	/**
@@ -40,7 +40,6 @@ public class ChangePasswordRequest {
 	 * @param request 
 	 */
 	public ChangePasswordRequest(CallDbBuilder<UserEntity> userModel, HttpServletRequest request) {
-		mModel = userModel;
 		mRequest = request;
 	}
 	
@@ -48,19 +47,8 @@ public class ChangePasswordRequest {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void changePassword(@Valid final ChangePasswordInput changePass) throws Exception {
 		final UserEntity userEntity = LoginHeadersFilter.getLoggedInUser(mRequest);
-		boolean found = mModel
-			.startTransaction()
-			.queryParam("username", userEntity.getUsername())
-			.findAndUpdate(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME,
-				new RunnableWith<UserEntity>() {
-					@Override
-					public void item(UserEntity item) {
-						item.generatePassword(changePass.getPassword());
-					}
-				}, 
-				UserEntity.class);
-		mModel.commitAndCloseEntityManager();
-		if(!found) mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); 
+		int res = mUserChangePassword.changePassword(userEntity.getUsername(), changePass.getPassword());
+		if(res==UserChangePasswordModel.NOT_FOUND) mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); 
 	}
 
 	@POST
@@ -74,18 +62,7 @@ public class ChangePasswordRequest {
 			mResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED); 
 			return;
 		}
-		boolean found = mModel
-			.startTransaction()
-			.queryParam("username", username)
-			.findAndUpdate(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME,
-				new RunnableWith<UserEntity>() {
-					@Override
-					public void item(UserEntity item) {
-						item.generatePassword(changePass.getPassword());
-					}
-				}, 
-				UserEntity.class);
-		mModel.commitAndCloseEntityManager();
-		if(!found) mResponse.sendError(HttpServletResponse.SC_NOT_FOUND); 
+		int res = mUserChangePassword.changePassword(userEntity.getUsername(), changePass.getPassword());
+		if(res==UserChangePasswordModel.NOT_FOUND) mResponse.sendError(HttpServletResponse.SC_NOT_FOUND); 
 	}
 }
