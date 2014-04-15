@@ -14,10 +14,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.model.entities.PostEntity;
-import org.denevell.natch.model.entities.ThreadEntity;
 import org.denevell.natch.model.interfaces.PostSingleModel;
 
 @Path("post/single")

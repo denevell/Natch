@@ -51,7 +51,7 @@ public class EditThreadFunctional {
 			editedInput.setContent("sdfsfd");
 			editedInput.setSubject(" ");
 			editThread(service, authKey, thread.getId(), editedInput); 		
-			assertFalse("Excepted 400 error", true);
+			assertFalse("Expected 400 error", true);
 		} catch(WebApplicationException e) {
 			assertEquals(400, e.getResponse().getStatus());
 			return;
@@ -73,7 +73,7 @@ public class EditThreadFunctional {
 			editedInput.setContent(" ");
 			editedInput.setSubject(" ");
 			editThread(service, authKey, thread.getId(), editedInput); 		
-			assertFalse("Excepted 400 error", true);
+			assertFalse("Expected 400 error", true);
 		} catch(WebApplicationException e) {
 			assertEquals(400, e.getResponse().getStatus());
 			return;
