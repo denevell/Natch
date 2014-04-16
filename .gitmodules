@@ -1,3 +1,6 @@
 [submodule "Natch-io"]
 	path = Natch-io
 	url = https://github.com/denevell/Natch-io.git
+[submodule "Jrappy"]
+	path = Jrappy
+	url = git://github.com/denevell/Jrappy.git
