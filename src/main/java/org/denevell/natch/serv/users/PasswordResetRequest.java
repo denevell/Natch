@@ -14,7 +14,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 
-import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
 import org.denevell.natch.model.interfaces.UserPasswordResetDeleteModel;
@@ -43,7 +42,7 @@ public class PasswordResetRequest {
 	 * For DI testing.
 	 * @param request 
 	 */
-	public PasswordResetRequest(CallDbBuilder<UserEntity> userModel, HttpServletRequest request) {
+	public PasswordResetRequest(HttpServletRequest request) {
 		mRequest = request;
 	}
 	

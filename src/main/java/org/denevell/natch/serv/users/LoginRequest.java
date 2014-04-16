@@ -16,10 +16,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.UserLoginModel;
 import org.denevell.natch.model.interfaces.UserLoginModel.UserEntityAndAuthKey;
 import org.denevell.natch.utils.Strings;
@@ -41,7 +39,7 @@ public class LoginRequest {
 	 * For DI testing.
 	 * @param request 
 	 */
-	public LoginRequest(CallDbBuilder<UserEntity> userModel, HttpServletRequest request) {
+	public LoginRequest(HttpServletRequest request) {
 		mRequest = request;
 	}
 	

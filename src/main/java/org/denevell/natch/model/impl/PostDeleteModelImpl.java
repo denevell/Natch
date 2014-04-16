@@ -3,19 +3,20 @@ package org.denevell.natch.model.impl;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 
-import org.denevell.natch.db.CallDbBuilder;
-import org.denevell.natch.db.CallDbBuilder.DeleteOrMerge;
+import org.denevell.jrappy.Jrappy;
+import org.denevell.jrappy.Jrappy.DeleteOrMerge;
 import org.denevell.natch.model.entities.PostEntity;
 import org.denevell.natch.model.entities.ThreadEntity;
 import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.PostDeleteModel;
+import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.jvnet.hk2.annotations.Service;
 
 @Service @Singleton
 public class PostDeleteModelImpl implements PostDeleteModel { 
 
-	private CallDbBuilder<PostEntity> mPostModel = new CallDbBuilder<PostEntity>(); 
-	private CallDbBuilder<ThreadEntity> mThreadModel = new CallDbBuilder<ThreadEntity>();
+	private Jrappy<PostEntity> mPostModel = new Jrappy<PostEntity>(JPAFactoryContextListener.sFactory); 
+	private Jrappy<ThreadEntity> mThreadModel = new Jrappy<ThreadEntity>(JPAFactoryContextListener.sFactory);
 	/**
 	 * Doesn't close the entity manager
 	 */

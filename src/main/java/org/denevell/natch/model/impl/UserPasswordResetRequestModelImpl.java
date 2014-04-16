@@ -1,12 +1,13 @@
 package org.denevell.natch.model.impl;
 
-import org.denevell.natch.db.CallDbBuilder;
+import org.denevell.jrappy.Jrappy;
 import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.UserPasswordResetRequestModel;
+import org.denevell.natch.utils.JPAFactoryContextListener;
 
 public class UserPasswordResetRequestModelImpl implements UserPasswordResetRequestModel {
 	
-	CallDbBuilder<UserEntity> mModel = new CallDbBuilder<UserEntity>();
+	Jrappy<UserEntity> mModel = new Jrappy<UserEntity>(JPAFactoryContextListener.sFactory);
 	
 	@Override
 	public int requestReset(String recoveryEmail) {

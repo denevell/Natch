@@ -16,7 +16,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.io.base.SuccessOrError;
 import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.UserAdminToggleModel;
@@ -42,7 +41,7 @@ public class UsersAdminToggleRequest {
 	 * For DI testing.
 	 * @param request 
 	 */
-	public UsersAdminToggleRequest(CallDbBuilder<UserEntity> userModel, HttpServletRequest request) {
+	public UsersAdminToggleRequest(HttpServletRequest request) {
 		mRequest = request;
 	}
 	

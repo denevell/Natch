@@ -1,12 +1,13 @@
 package org.denevell.natch.model.impl;
 
-import org.denevell.natch.db.CallDbBuilder;
+import org.denevell.jrappy.Jrappy;
 import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.UserPasswordResetDeleteModel;
+import org.denevell.natch.utils.JPAFactoryContextListener;
 
 public class UserPasswordResetDeleteModelImpl implements UserPasswordResetDeleteModel {
 
-	private CallDbBuilder<UserEntity> mModel = new CallDbBuilder<UserEntity>()
+	private Jrappy<UserEntity> mModel = new Jrappy<UserEntity>(JPAFactoryContextListener.sFactory)
 		 .namedQuery(UserEntity.NAMED_QUERY_FIND_EXISTING_USERNAME);
 	
 	@Override

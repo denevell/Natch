@@ -9,6 +9,7 @@ import javax.persistence.Persistence;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 
+import org.denevell.jrappy.EntityUtils;
 import org.denevell.natch.model.entities.PersistenceInfo;
 import org.denevell.natch.model.entities.PostEntity;
 import org.denevell.natch.model.entities.PushEntity;

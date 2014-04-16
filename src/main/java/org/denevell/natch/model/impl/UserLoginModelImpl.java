@@ -2,17 +2,18 @@ package org.denevell.natch.model.impl;
 
 import javax.inject.Singleton;
 
+import org.denevell.jrappy.Jrappy;
 import org.denevell.natch.auth.LoginAuthKeysSingleton;
-import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.UserLoginModel;
+import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.PasswordSaltUtils;
 import org.jvnet.hk2.annotations.Service;
 
 @Service @Singleton
 public class UserLoginModelImpl implements UserLoginModel {
 
-	private CallDbBuilder<UserEntity> mLoginModel = new CallDbBuilder<UserEntity>();
+	private Jrappy<UserEntity> mLoginModel = new Jrappy<UserEntity>(JPAFactoryContextListener.sFactory);
 	private LoginAuthKeysSingleton mAuthDataGenerator = LoginAuthKeysSingleton.getInstance();
 	private PasswordSaltUtils mSaltedPasswordUtils = new PasswordSaltUtils();
 	

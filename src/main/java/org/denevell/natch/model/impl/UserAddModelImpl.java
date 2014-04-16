@@ -1,13 +1,14 @@
 package org.denevell.natch.model.impl;
 
-import org.denevell.natch.db.CallDbBuilder;
-import org.denevell.natch.db.CallDbBuilder.RunnableWith;
+import org.denevell.jrappy.Jrappy;
+import org.denevell.jrappy.Jrappy.RunnableWith;
 import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.UserAddModel;
+import org.denevell.natch.utils.JPAFactoryContextListener;
 
 public class UserAddModelImpl implements UserAddModel {
 	
-	private CallDbBuilder<UserEntity> mModel = new CallDbBuilder<UserEntity>();
+	private Jrappy<UserEntity> mModel = new Jrappy<UserEntity>(JPAFactoryContextListener.sFactory);
 
 	public int add(final UserEntity user) {
 		boolean exists = mModel

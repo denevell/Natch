@@ -15,7 +15,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.io.posts.EditPostResourceReturnData;
 import org.denevell.natch.io.threads.EditThreadResource;
 import org.denevell.natch.model.entities.PostEntity;
@@ -92,13 +91,13 @@ public class EditThreadRequest {
 	
 	public static void generateEditReturnResource(EditPostResourceReturnData ret,
 			int result, ResourceBundle rb) {
-		if(result == CallDbBuilder.UPDATED) {
+		if(result == PostEditModel.EDITED) {
 			ret.setSuccessful(true);
-		} else if(result == CallDbBuilder.NOT_FOUND) {
+		} else if(result == PostEditModel.DOESNT_EXIST) {
 			ret.setError(rb.getString(Strings.post_doesnt_exist));
 		} else if(result == SUBJECT_TOO_LARGE) {
 			ret.setError(rb.getString(Strings.subject_too_large));
-		} else if(result == CallDbBuilder.PERMISSION_DENIED) {
+		} else if(result == PostEditModel.NOT_YOURS) {
 			ret.setError(rb.getString(Strings.post_not_yours));
 		} else if(result == TAG_TOO_LARGE) {
 			ret.setError(rb.getString(Strings.tag_too_large));

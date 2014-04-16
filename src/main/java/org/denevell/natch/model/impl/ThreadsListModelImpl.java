@@ -4,15 +4,16 @@ import java.util.List;
 
 import javax.inject.Singleton;
 
-import org.denevell.natch.db.CallDbBuilder;
+import org.denevell.jrappy.Jrappy;
 import org.denevell.natch.model.entities.ThreadEntity;
 import org.denevell.natch.model.interfaces.ThreadsListModel;
+import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.jvnet.hk2.annotations.Service;
 
 @Service @Singleton
 public class ThreadsListModelImpl implements ThreadsListModel {
 
-	private CallDbBuilder<ThreadEntity> mThreadModel = new CallDbBuilder<ThreadEntity>();
+	private Jrappy<ThreadEntity> mThreadModel = new Jrappy<ThreadEntity>(JPAFactoryContextListener.sFactory);
 
 	public ThreadsAndNumTotalThreads list(String tag, int start, int maxNumPosts) {
 		String listNamedQuery;

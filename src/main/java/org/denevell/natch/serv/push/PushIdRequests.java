@@ -16,7 +16,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.io.base.SuccessOrError;
 import org.denevell.natch.io.push.PushInput;
 import org.denevell.natch.model.entities.PushEntity;
@@ -39,8 +38,7 @@ public class PushIdRequests {
 	/**
 	 * For DI testing.
 	 */
-	public PushIdRequests(CallDbBuilder<PushEntity> postModel, 
-			HttpServletRequest request, 
+	public PushIdRequests(HttpServletRequest request, 
 			HttpServletResponse response
 			) {
 		mRequest = request;

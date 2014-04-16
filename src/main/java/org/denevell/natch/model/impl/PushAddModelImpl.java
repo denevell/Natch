@@ -2,14 +2,15 @@ package org.denevell.natch.model.impl;
 
 import javax.inject.Singleton;
 
-import org.denevell.natch.db.CallDbBuilder;
+import org.denevell.jrappy.Jrappy;
 import org.denevell.natch.model.entities.PushEntity;
 import org.denevell.natch.model.interfaces.PushAddModel;
+import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.jvnet.hk2.annotations.Service;
 
 @Service @Singleton
 public class PushAddModelImpl implements PushAddModel {
-	private CallDbBuilder<PushEntity> model = new CallDbBuilder<PushEntity>();
+	private Jrappy<PushEntity> model = new Jrappy<PushEntity>(JPAFactoryContextListener.sFactory);
 
 	public void add(final PushEntity entity) {
 		model

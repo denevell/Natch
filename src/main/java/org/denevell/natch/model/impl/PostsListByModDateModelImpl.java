@@ -4,15 +4,16 @@ import java.util.List;
 
 import javax.inject.Singleton;
 
-import org.denevell.natch.db.CallDbBuilder;
+import org.denevell.jrappy.Jrappy;
 import org.denevell.natch.model.entities.PostEntity;
 import org.denevell.natch.model.interfaces.PostsListByModDateModel;
+import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.jvnet.hk2.annotations.Service;
 
 @Service @Singleton
 public class PostsListByModDateModelImpl implements PostsListByModDateModel {
 
-	private CallDbBuilder<PostEntity> mPostModel = new CallDbBuilder<PostEntity>();
+	private Jrappy<PostEntity> mPostModel = new Jrappy<PostEntity>(JPAFactoryContextListener.sFactory);
 	
 	@Override
 	public List<PostEntity> list(int start, int numResults) {

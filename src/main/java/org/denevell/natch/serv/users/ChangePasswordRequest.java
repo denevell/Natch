@@ -15,7 +15,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.denevell.natch.db.CallDbBuilder;
 import org.denevell.natch.io.users.ChangePasswordInput;
 import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.UserChangePasswordModel;
@@ -40,7 +39,7 @@ public class ChangePasswordRequest {
 	 * For DI testing.
 	 * @param request 
 	 */
-	public ChangePasswordRequest(CallDbBuilder<UserEntity> userModel, HttpServletRequest request) {
+	public ChangePasswordRequest(HttpServletRequest request) {
 		mRequest = request;
 	}
 	

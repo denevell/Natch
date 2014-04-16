@@ -5,7 +5,7 @@ import static org.mockito.Mockito.when;
 
 import javax.persistence.Query;
 
-import org.denevell.natch.db.CallDbBuilder;
+import org.denevell.jrappy.Jrappy;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -18,11 +18,11 @@ import org.junit.Test;
 public class RegisterModelTests {
 	
 	@SuppressWarnings({ "rawtypes", "unused" })
-	private CallDbBuilder entityManager;
+	private Jrappy entityManager;
 
 	@Before
 	public void setup() {
-		entityManager = mock(CallDbBuilder.class);
+		entityManager = mock(Jrappy.class);
 	}
 	
 	@Ignore

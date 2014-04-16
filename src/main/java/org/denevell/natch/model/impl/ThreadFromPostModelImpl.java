@@ -2,19 +2,19 @@ package org.denevell.natch.model.impl;
 
 import javax.inject.Singleton;
 
-import org.denevell.natch.db.CallDbBuilder;
-import org.denevell.natch.db.CallDbBuilder.DeleteOrMerge;
-import org.denevell.natch.db.ThreadFactory;
+import org.denevell.jrappy.Jrappy;
+import org.denevell.jrappy.Jrappy.DeleteOrMerge;
 import org.denevell.natch.model.entities.PostEntity;
 import org.denevell.natch.model.entities.ThreadEntity;
 import org.denevell.natch.model.interfaces.ThreadFromPostModel;
+import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.jvnet.hk2.annotations.Service;
 
 @Service @Singleton
 public class ThreadFromPostModelImpl implements ThreadFromPostModel {
 
-	private CallDbBuilder<PostEntity> mPostModel = new CallDbBuilder<PostEntity>();
-	private CallDbBuilder<ThreadEntity> mThreadModel = new CallDbBuilder<ThreadEntity>();
+	private Jrappy<PostEntity> mPostModel = new Jrappy<PostEntity>(JPAFactoryContextListener.sFactory);
+	private Jrappy<ThreadEntity> mThreadModel = new Jrappy<ThreadEntity>(JPAFactoryContextListener.sFactory);
 
 	@Override
 	public ThreadEntity makeNewThread(long postId, String subject) {
@@ -51,11 +51,11 @@ public class ThreadFromPostModelImpl implements ThreadFromPostModel {
 			.useTransaction(mPostModel.getEntityManager())
 			.createOrUpdate(
 				null,
-				new CallDbBuilder.UpdateItem<ThreadEntity>() {
+				new Jrappy.UpdateItem<ThreadEntity>() {
 					@Override public ThreadEntity update(ThreadEntity item) {
 							return null;
 						}
-					}, new CallDbBuilder.NewItem<ThreadEntity>() {
+					}, new Jrappy.NewItem<ThreadEntity>() {
 						@Override public ThreadEntity newItem() {
 							return new ThreadFactory().makeThread(post);
 						}

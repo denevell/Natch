@@ -4,16 +4,17 @@ import java.util.Date;
 
 import javax.inject.Singleton;
 
-import org.denevell.natch.db.CallDbBuilder;
+import org.denevell.jrappy.Jrappy;
 import org.denevell.natch.model.entities.PostEntity;
 import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.PostEditModel;
+import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.jvnet.hk2.annotations.Service;
 
 @Service @Singleton
 public class PostEditModelImpl implements PostEditModel { 
 
-	private CallDbBuilder<PostEntity> mPostModel = new CallDbBuilder<PostEntity>(); 
+	private Jrappy<PostEntity> mPostModel = new Jrappy<PostEntity>(JPAFactoryContextListener.sFactory); 
 	public int edit(
 			final long id, 
 			final UserEntity userEntity,
@@ -21,7 +22,7 @@ public class PostEditModelImpl implements PostEditModel {
 		int result = mPostModel.
 				startTransaction().
 				updateEntityOnPermission(id,
-				new CallDbBuilder.UpdateItemOnPermissionCorrect<PostEntity>() {
+				new Jrappy.UpdateItemOnPermissionCorrect<PostEntity>() {
 					@Override
 					public boolean update(PostEntity item) {
 						if(!userEntity.isAdmin() && !item.getUser().getUsername().equals(userEntity.getUsername())) {
@@ -40,11 +41,11 @@ public class PostEditModelImpl implements PostEditModel {
 				PostEntity.class);
 		mPostModel.commitAndCloseEntityManager();
 		switch (result) {
-		case CallDbBuilder.NOT_FOUND:
+		case Jrappy.NOT_FOUND:
 			return PostEditModel.DOESNT_EXIST;
-		case CallDbBuilder.UPDATED:
+		case Jrappy.UPDATED:
 			return PostEditModel.EDITED;
-		case CallDbBuilder.PERMISSION_DENIED:
+		case Jrappy.PERMISSION_DENIED:
 			return PostEditModel.NOT_YOURS;
 		default:
 			return -1;

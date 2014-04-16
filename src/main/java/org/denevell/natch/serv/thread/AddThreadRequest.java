@@ -20,7 +20,7 @@ import javax.ws.rs.core.UriInfo;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.denevell.natch.adapters.AddPostRequestToPostEntity;
 import org.denevell.natch.adapters.ThreadEntityToThreadResource;
-import org.denevell.natch.db.CallDbBuilder;
+import org.denevell.jrappy.Jrappy;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.threads.CutDownThreadResource;
@@ -30,6 +30,7 @@ import org.denevell.natch.model.entities.ThreadEntity;
 import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.PostAddModel;
 import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
+import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.ManifestUtils;
 import org.denevell.natch.utils.Strings;
@@ -98,7 +99,7 @@ public class AddThreadRequest {
 					e1.printStackTrace();
 				}
 				Sender sender = new Sender(key);
-				List<PushEntity> list = new CallDbBuilder<PushEntity>()
+				List<PushEntity> list = new Jrappy<PushEntity>(JPAFactoryContextListener.sFactory)
 						.startTransaction()
 						.namedQuery(PushEntity.NAMED_QUERY_LIST_IDS)
 						.list(PushEntity.class);
