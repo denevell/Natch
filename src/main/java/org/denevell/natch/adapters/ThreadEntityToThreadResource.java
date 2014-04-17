@@ -14,7 +14,7 @@ public class ThreadEntityToThreadResource {
 		ThreadResource tr = new ThreadResource();
 		List<PostResource> postsResources = new ArrayList<PostResource>();
 		for (PostEntity p: thread.getPosts()) {
-			PostResource postResource = new PostResource(p.getUser().getUsername(), 
+			PostResource postResource = new PostResource(p.getUsername(), 
 					p.getCreated(), 
 					p.getModified(), 
 					p.getSubject(), 
@@ -27,7 +27,7 @@ public class ThreadEntityToThreadResource {
 		}
 		if(postsResources.size()>0) {
 			tr.setSubject(postsResources.get(0).getSubject());
-			tr.setAuthor(thread.getRootPost().getUser().getUsername());
+			tr.setAuthor(thread.getRootPost().getUsername());
 			tr.setTags(postsResources.get(0).getTags());
 			tr.setModification(postsResources.get(0).getModification());
 		}

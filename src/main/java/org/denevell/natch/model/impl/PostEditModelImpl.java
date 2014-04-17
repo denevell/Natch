@@ -25,14 +25,14 @@ public class PostEditModelImpl implements PostEditModel {
 				new Jrappy.UpdateItemOnPermissionCorrect<PostEntity>() {
 					@Override
 					public boolean update(PostEntity item) {
-						if(!userEntity.isAdmin() && !item.getUser().getUsername().equals(userEntity.getUsername())) {
+						if(!userEntity.isAdmin() && !item.getUsername().equals(userEntity.getUsername())) {
 							return false;
 						}
 						item.setContent(editedPostEntity.getContent());
 						if(editedPostEntity.getSubject()!=null) item.setSubject(editedPostEntity.getSubject());
 						if(editedPostEntity.getTags()!=null) item.setTags(editedPostEntity.getTags());
                         item.setModified(new Date().getTime());
-                        if(!userEntity.getUsername().equals(item.getUser().getUsername()) && userEntity.isAdmin()) {
+                        if(!userEntity.getUsername().equals(item.getUsername()) && userEntity.isAdmin()) {
                         	item.adminEdited();
                         }
 						return true;

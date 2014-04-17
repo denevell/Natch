@@ -25,14 +25,14 @@ public class PostEntity {
 	private String content;
 	private String threadId;
 	private List<String> tags;
-	private UserEntity user;
+	private String username;
     private boolean adminEdited = false;
 	
 	public PostEntity() {
 	}
 	
-	public PostEntity(UserEntity user, long created, long modified, String subject, String content, String threadId) {
-		this.user = user;
+	public PostEntity(String user, long created, long modified, String subject, String content, String threadId) {
+		this.username = user;
 		this.created = created;
 		this.modified = modified;
 		this.subject = subject;
@@ -49,7 +49,7 @@ public class PostEntity {
 		this.content = post.content;
 		this.threadId = post.threadId;
 		this.tags = post.tags;
-		this.user = post.user;
+		this.username = post.username;
 		this.adminEdited = post.adminEdited;
 	}
 
@@ -123,12 +123,12 @@ public class PostEntity {
 		this.id = id;
 	}
 
-	public UserEntity getUser() {
-		return user;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUser(UserEntity user) {
-		this.user = user;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public List<String> getTags() {

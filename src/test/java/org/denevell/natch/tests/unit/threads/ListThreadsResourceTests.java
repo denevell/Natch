@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.denevell.natch.io.threads.ListThreadsResource;
 import org.denevell.natch.model.entities.PostEntity;
 import org.denevell.natch.model.entities.ThreadEntity;
-import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.ThreadsListModel;
 import org.denevell.natch.model.interfaces.ThreadsListModel.ThreadsAndNumTotalThreads;
 import org.denevell.natch.serv.thread.ListThreadsRequest;
@@ -43,8 +42,8 @@ public class ListThreadsResourceTests {
 	@Test
 	public void shouldListThreads() throws IOException {
 		// Arrange
-		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", "t");
-		PostEntity postEntity1 = new PostEntity(new UserEntity("u2", ""), 2, 2, "s2", "c2", "t");
+		PostEntity postEntity = new PostEntity("u1", 1, 1, "s1", "c1", "t");
+		PostEntity postEntity1 = new PostEntity("u2", 2, 2, "s2", "c2", "t");
 		List<ThreadEntity> threads = new ArrayList<ThreadEntity>();
 		ThreadEntity threadEntity = new ThreadEntity(postEntity, Arrays.asList(new PostEntity[] { postEntity } ));
 		threadEntity.setId("400");
@@ -72,8 +71,8 @@ public class ListThreadsResourceTests {
 	@Test
 	public void shouldntListThreadsWhenWithAnInitialPostAsNull() throws IOException {
 		// Arrange
-		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", "t");
-		PostEntity postEntity1 = new PostEntity(new UserEntity("u2", ""), 1, 1, "s2", "c2", "t");
+		PostEntity postEntity = new PostEntity("u1", 1, 1, "s1", "c1", "t");
+		PostEntity postEntity1 = new PostEntity("u2", 1, 1, "s2", "c2", "t");
 		List<ThreadEntity> threads = new ArrayList<ThreadEntity>();
 		threads.add(new ThreadEntity(null, Arrays.asList(new PostEntity[] { postEntity } )));
 		threads.add(new ThreadEntity(postEntity1, Arrays.asList(new PostEntity[] { postEntity1 } )));
@@ -90,8 +89,8 @@ public class ListThreadsResourceTests {
 	@Test
 	public void shouldListThreadsByTag() throws IOException {
 		// Arrange
-		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", "t");
-		PostEntity postEntity1 = new PostEntity(new UserEntity("u2", ""), 2, 2, "s2", "c2", "t");
+		PostEntity postEntity = new PostEntity("u1", 1, 1, "s1", "c1", "t");
+		PostEntity postEntity1 = new PostEntity("u2", 2, 2, "s2", "c2", "t");
 		List<ThreadEntity> threads = new ArrayList<ThreadEntity>();
 		ThreadEntity threadEntity = new ThreadEntity(postEntity, Arrays.asList(new PostEntity[] { postEntity } ));
 		threadEntity.setId("400");

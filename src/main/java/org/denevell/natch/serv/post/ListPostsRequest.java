@@ -66,7 +66,7 @@ public class ListPostsRequest {
 		public ListPostsResourceAdapter(List<PostEntity> posts) {
 			List<PostResource> postsResources = new ArrayList<PostResource>();
 			for (PostEntity p: posts) {
-				PostResource postResource = new PostResource(p.getUser().getUsername(), 
+				PostResource postResource = new PostResource(p.getUsername(), 
 						p.getCreated(), 
 						p.getModified(), 
 						p.getSubject(), 

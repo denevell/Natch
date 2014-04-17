@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.model.entities.PostEntity;
-import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.PostSingleModel;
 import org.denevell.natch.serv.post.SinglePostRequest;
 import org.denevell.natch.utils.Strings;
@@ -36,7 +35,7 @@ public class ShowPostRequestTests {
 	@Test
 	public void shouldFindSinglePost() throws IOException {
 		// Arrange
-		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", null);
+		PostEntity postEntity = new PostEntity("u1", 1, 1, "s1", "c1", null);
 		List<String> asList = Arrays.asList(new String[] {"tag1"});
 		postEntity.setTags(asList);
 		postEntity.setId(400);

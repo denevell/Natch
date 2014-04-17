@@ -35,7 +35,7 @@ public class EditPostModelTests {
 		// Arrange
 		long num = 1;
 		PostEntity post = new PostEntity(null, 1, 1, "df", "sdf", null);
-		post.setUser(new UserEntity("this_person", null));
+		post.setUsername("this_person");
 		//doReturn(post).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");
@@ -55,7 +55,7 @@ public class EditPostModelTests {
 		// Arrange
 		long num = 1;
 		PostEntity post = new PostEntity();
-		post.setUser(new UserEntity("this_person", null));
+		post.setUsername("this_person");
 		//doReturn(post).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("that_person");
@@ -74,7 +74,7 @@ public class EditPostModelTests {
 		// Arrange
 		long num = 1;
 		PostEntity post = new PostEntity();
-		post.setUser(new UserEntity("this_person", null));
+		post.setUsername("this_person");
 		//doReturn(post).when(model).findPostById(num+1);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("that_person");
@@ -93,7 +93,7 @@ public class EditPostModelTests {
 		// Arrange
 		long num = 1;
 		PostEntity post = new PostEntity();
-		post.setUser(new UserEntity("this_person", null));
+		post.setUsername("this_person");
 		//doThrow(new RuntimeException()).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");
@@ -112,7 +112,7 @@ public class EditPostModelTests {
 		// Arrange
 		long num = 1;
 		PostEntity post = new PostEntity();
-		post.setUser(new UserEntity("this_person", null));
+		post.setUsername("this_person");
 		//doReturn(post).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");
@@ -131,7 +131,7 @@ public class EditPostModelTests {
 		// Arrange
 		long num = 1;
 		PostEntity post = new PostEntity();
-		post.setUser(new UserEntity("this_person", null));
+		post.setUsername("this_person");
 		//doReturn(post).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");
@@ -149,7 +149,7 @@ public class EditPostModelTests {
 		// Arrange
 		long num = 1;
 		PostEntity post = new PostEntity();
-		post.setUser(new UserEntity("this_person", null));
+		post.setUsername("this_person");
 		//doReturn(post).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");
@@ -169,7 +169,7 @@ public class EditPostModelTests {
 		// Arrange
 		long num = 1;
 		PostEntity post = new PostEntity();
-		post.setUser(new UserEntity("this_person", null));
+		post.setUsername("this_person");
 		//doReturn(post).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");
@@ -189,7 +189,7 @@ public class EditPostModelTests {
 		// Arrange
 		long num = 1;
 		PostEntity post = new PostEntity();
-		post.setUser(new UserEntity("this_person", null));
+		post.setUsername("this_person");
 		//doReturn(post).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");
@@ -209,7 +209,7 @@ public class EditPostModelTests {
 		// Arrange
 		long num = 1;
 		PostEntity post = new PostEntity();
-		post.setUser(new UserEntity("this_person", null));
+		post.setUsername("this_person");
 		//doReturn(post).when(model).findPostById(num);
 		UserEntity userEntity = new UserEntity();
 		userEntity.setUsername("this_person");

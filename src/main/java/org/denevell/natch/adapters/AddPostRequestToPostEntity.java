@@ -18,7 +18,7 @@ public class AddPostRequestToPostEntity {
 		pe.setSubject(input.getSubject());
 		pe.setThreadId(input.getThreadId());
 		pe.setTags(input.getTags());
-		pe.setUser(userEntity);
+		pe.setUsername(userEntity.getUsername());
 		pe.setCreated(created);
 		pe.setModified(created);
 		if (adminEdited) {

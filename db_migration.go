@@ -168,3 +168,15 @@ func (m migration) Migration_6() {
 		panic(err)
 	}
 }
+
+func (m migration) Migration_7() {
+	_, err := m.Tx.Exec("alter table postentity drop constraint postentity_user_reference_fkey")
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = m.Tx.Exec("alter table postentity rename column user_reference to username")
+	if err != nil {
+		panic(err)
+	}
+}

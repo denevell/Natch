@@ -50,7 +50,7 @@ public class SinglePostRequest {
 			return null;
 		}
 		PostResource postResource = new PostResource(
-				post.getUser().getUsername(), 
+				post.getUsername(), 
 				post.getCreated(), 
 				post.getModified(),
 				post.getSubject(), 

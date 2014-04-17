@@ -17,7 +17,6 @@ import org.denevell.natch.io.posts.ListPostsResource;
 import org.denevell.natch.io.threads.ThreadResource;
 import org.denevell.natch.model.entities.PostEntity;
 import org.denevell.natch.model.entities.ThreadEntity;
-import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.PostsListByModDateModel;
 import org.denevell.natch.model.interfaces.ThreadListModel;
 import org.denevell.natch.model.interfaces.ThreadListModel.ThreadAndPosts;
@@ -47,12 +46,12 @@ public class ListPostsResourceTests {
 	public void shouldListPosts() throws IOException {
 		// Arrange
 		List<PostEntity> posts = new ArrayList<PostEntity>();
-		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", null);
+		PostEntity postEntity = new PostEntity("u1", 1, 1, "s1", "c1", null);
 		List<String> asList = Arrays.asList(new String[] {"tag1"});
 		postEntity.setTags(asList);
 		postEntity.setId(400);
 		posts.add(postEntity);
-		posts.add(new PostEntity(new UserEntity("u2", ""), 2, 2, "s2", "c2", null));
+		posts.add(new PostEntity("u2", 2, 2, "s2", "c2", null));
 		when(postsModel.list(0, 0)).thenReturn(posts);
 		
 		// Act
@@ -91,7 +90,7 @@ public class ListPostsResourceTests {
 	public void shouldListPostsWithThreadId() throws IOException {
 		// Arrange
 		List<PostEntity> posts = new ArrayList<PostEntity>();
-		PostEntity postEntity = new PostEntity(new UserEntity("u1", ""), 1, 1, "s1", "c1", "threadId");
+		PostEntity postEntity = new PostEntity("u1", 1, 1, "s1", "c1", "threadId");
 		postEntity.setId(400);
 		posts.add(postEntity);
 		when(postsModel.list(0, 0)).thenReturn(posts);
@@ -107,11 +106,10 @@ public class ListPostsResourceTests {
 	public void shouldListPostsByThread() throws IOException {
 		// Arrange
 		List<PostEntity> posts = new ArrayList<PostEntity>();
-		UserEntity ue = new UserEntity("u1", "");
-		PostEntity postEntity = new PostEntity(ue, 1, 1, "s1", "c1", "t");
+		PostEntity postEntity = new PostEntity("u1", 1, 1, "s1", "c1", "t");
 		postEntity.setId(400);
 		posts.add(postEntity);
-		posts.add(new PostEntity(new UserEntity("u2", ""), 2, 2, "s2", "c2", "t"));
+		posts.add(new PostEntity("u2", 2, 2, "s2", "c2", "t"));
 		ThreadEntity thread = new ThreadEntity(postEntity, posts);
 		thread.setNumPosts(5);
 

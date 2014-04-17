@@ -70,7 +70,7 @@ public class ListThreadRequest {
 		ThreadResource tr =  new ThreadResource();
 		List<PostResource> postsResources = new ArrayList<PostResource>();
 		for (PostEntity p: posts) {
-			PostResource postResource = new PostResource(p.getUser().getUsername(), 
+			PostResource postResource = new PostResource(p.getUsername(), 
 					p.getCreated(), 
 					p.getModified(), 
 					p.getSubject(), 
@@ -82,7 +82,7 @@ public class ListThreadRequest {
 			postsResources.add(postResource);
 		}
 		tr.setSubject(thread.getRootPost().getSubject());
-		tr.setAuthor(thread.getRootPost().getUser().getUsername());
+		tr.setAuthor(thread.getRootPost().getUsername());
 		tr.setPosts(postsResources);
 		tr.setNumPosts((int) thread.getNumPosts());
 		tr.setId(thread.getId());

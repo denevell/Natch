@@ -28,7 +28,7 @@ public class PostDeleteModelImpl implements PostDeleteModel {
 		if(pe==null) {
 			mPostModel.commitAndCloseEntityManager();
 			return PostDeleteModel.DOESNT_EXIST;
-		} else if(!userEntity.isAdmin() && !pe.getUser().getUsername().equals(userEntity.getUsername())) {
+		} else if(!userEntity.isAdmin() && !pe.getUsername().equals(userEntity.getUsername())) {
 			mPostModel.commitAndCloseEntityManager();
 			return PostDeleteModel.NOT_YOURS;
 		}

@@ -81,7 +81,7 @@ public class ListThreadsRequest {
 					continue;
 				} else {
 					ThreadResource postResource = new ThreadResource();
-					postResource.setAuthor(p.getRootPost().getUser().getUsername());
+					postResource.setAuthor(p.getRootPost().getUsername());
 					postResource.setNumPosts((int) p.getNumPosts());
 					postResource.setSubject(p.getRootPost().getSubject());
 					postResource.setRootPostId(p.getRootPost().getId());
