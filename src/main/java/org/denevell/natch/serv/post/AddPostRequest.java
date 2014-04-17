@@ -32,8 +32,8 @@ import org.denevell.natch.utils.Strings;
 public class AddPostRequest {
 	
 	@Context UriInfo mInfo;
-	@Context HttpServletRequest mRequest;
 	@Context ServletContext context;
+	@Context HttpServletRequest mRequest;
 	@Context HttpServletResponse mResponse;
 	@Inject PostAddModel mAddPostModel;
 	@Inject UserGetLoggedInModel mUserLogggedInModel;
