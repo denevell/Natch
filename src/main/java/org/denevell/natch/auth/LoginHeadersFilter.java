@@ -11,27 +11,24 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.denevell.natch.model.entities.UserEntity;
-import org.denevell.natch.utils.Log;
+import org.denevell.natch.io.users.User;
+import org.denevell.natch.model.impl.UserGetLoggedInModelImpl;
+import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
 
 public class LoginHeadersFilter implements Filter {
 	
 	private static final String AUTHENTICATION_KEY = "AuthKey";
 	public static final String KEY_SERVLET_REQUEST_LOGGEDIN_USER= "authed_username";
 	public static final String KEY_SERVLET_REQUEST_LOGGEDIN_AUTHKEY = "authkey";
-	private LoginAuthKeysSingleton mModel;
+	private UserGetLoggedInModel mModel = new UserGetLoggedInModelImpl();
 	
 	public LoginHeadersFilter() {
-		mModel = LoginAuthKeysSingleton.getInstance();
-	}
-	
-	/**
-	 * For testing with DI
-	 */
-	public LoginHeadersFilter(LoginAuthKeysSingleton model) {
-		mModel = model;
 	}
 
+	public LoginHeadersFilter(UserGetLoggedInModel model) {
+		mModel = model;
+	}
+	
 	@Override
 	public void destroy() {
 	}
@@ -43,13 +40,14 @@ public class LoginHeadersFilter implements Filter {
 		// Get the auth data from the header
 		String authKey = request.getHeader(AUTHENTICATION_KEY);
 		// Check it
-		UserEntity username = mModel.retrieveUserEntity(authKey);
-		if(username==null || username.getUsername()==null || username.getUsername().trim().length()==0) {
+		User user = mModel.get(authKey);
+		req.setAttribute("user", user);
+		if(user==null || user.getUsername()==null || user.getUsername().trim().length()==0) {
 			HttpServletResponse r = (HttpServletResponse) resp;
 			r.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Doesn't man you need to HTTP auth, but this is a good response fit.
 			return;
 		} else { // Since we're logged in, set the auth object
-			request.setAttribute(KEY_SERVLET_REQUEST_LOGGEDIN_USER, username);
+			request.setAttribute(KEY_SERVLET_REQUEST_LOGGEDIN_USER, user.getUsername());
 			request.setAttribute(KEY_SERVLET_REQUEST_LOGGEDIN_AUTHKEY, authKey);
 			chain.doFilter(request, resp);		
 		}
@@ -57,16 +55,5 @@ public class LoginHeadersFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
-	}
-	
-	public static UserEntity getLoggedInUser(ServletRequest request) {
-		try {
-			UserEntity userEntity = (UserEntity) request.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER);
-			return userEntity;
-		} catch (Exception e) {
-			Log.info(LoginHeadersFilter.class, "Unable to get logged in user: " + e.toString());
-			return null;
-		}			
-	}
-
+	} 
 }

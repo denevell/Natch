@@ -1,9 +1,9 @@
 package org.denevell.natch.model.interfaces;
 
-import org.denevell.natch.model.entities.UserEntity;
+import org.denevell.natch.io.users.User;
 
 public interface UserGetLoggedInModel {
 
-	UserEntity get(Object authObject);
+	User get(Object authObject);
 
 }

@@ -1,18 +1,24 @@
 package org.denevell.natch.tests.functional.pageobjects;
 
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.io.users.RegisterResourceInput;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
+import org.denevell.natch.tests.functional.TestUtils;
+import org.glassfish.jersey.client.JerseyClientBuilder;
+import org.glassfish.jersey.jackson.JacksonFeature;
 
 public class RegisterPO {
 	
 	private WebTarget mService;
 
-	public RegisterPO(WebTarget service) {
-		mService = service;
+	public RegisterPO() {
+		Client client = JerseyClientBuilder.createClient();
+		client.register(JacksonFeature.class);
+		mService = client.target(TestUtils.URL_USER_SERVICE);
 	}
 
 	public RegisterResourceReturnData register(String username, String password) {

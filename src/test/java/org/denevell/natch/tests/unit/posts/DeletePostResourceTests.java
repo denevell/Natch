@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.io.posts.DeletePostResourceReturnData;
-import org.denevell.natch.model.entities.UserEntity;
+import org.denevell.natch.io.users.User;
 import org.denevell.natch.serv.post.DeletePostRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
@@ -26,12 +26,12 @@ public class DeletePostResourceTests {
 	
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private DeletePostRequest resource;
-	private UserEntity user;
+	private User user;
 	private HttpServletRequest request;
 
 	@Before
 	public void setup() {
-		user = new UserEntity();
+		user = new User();
 		request = mock(HttpServletRequest.class);
 		when(request.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER)).thenReturn(user);
 		HttpServletResponse response = mock(HttpServletResponse.class);

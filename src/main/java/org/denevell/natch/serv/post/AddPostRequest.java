@@ -20,9 +20,9 @@ import org.denevell.natch.adapters.ThreadEntityToThreadResource;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.threads.ThreadResource;
+import org.denevell.natch.io.users.User;
 import org.denevell.natch.model.entities.PostEntity;
 import org.denevell.natch.model.entities.ThreadEntity;
-import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.PostAddModel;
 import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
 import org.denevell.natch.utils.Log;
@@ -46,14 +46,14 @@ public class AddPostRequest {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public AddPostResourceReturnData addPost(@Valid AddPostResourceInput input) {
-		UserEntity userEntity = mUserLogggedInModel.get(mRequest);
-		return addPost(input, userEntity);
+		User userEntity = (User) mRequest.getAttribute("user");
+		return addPost(input, userEntity.getUsername());
 	}
 	
-	private AddPostResourceReturnData addPost(AddPostResourceInput input, UserEntity userEntity) {
+	private AddPostResourceReturnData addPost(AddPostResourceInput input, String username) {
 		AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 		regReturnData.setSuccessful(false);
-	    final PostEntity post = AddPostRequestToPostEntity.adapt(input, false, userEntity);
+	    final PostEntity post = AddPostRequestToPostEntity.adapt(input, false, username);
 	    ThreadEntity okay = mAddPostModel.add(post);
 		generateAddPostReturnResource(regReturnData, okay, input);
 		return regReturnData;

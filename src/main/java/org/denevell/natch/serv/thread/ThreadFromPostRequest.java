@@ -19,8 +19,8 @@ import javax.ws.rs.core.UriInfo;
 import org.denevell.natch.adapters.ThreadEntityToThreadResource;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.threads.AddThreadFromPostResourceInput;
+import org.denevell.natch.io.users.User;
 import org.denevell.natch.model.entities.ThreadEntity;
-import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.ThreadFromPostModel;
 import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
 import org.denevell.natch.utils.Log;
@@ -54,7 +54,7 @@ public class ThreadFromPostRequest {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public AddPostResourceReturnData addThreadFromPost(@Valid AddThreadFromPostResourceInput input) throws IOException {
-	    UserEntity userEntity = mUserLogggedInModel.get(mRequest);
+		User userEntity = (User) mRequest.getAttribute("user");
 	    if(!userEntity.isAdmin()) {
 	        mResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 	        return null;

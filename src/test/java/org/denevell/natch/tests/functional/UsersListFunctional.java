@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.client.WebTarget;
 
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.User;
@@ -16,22 +15,19 @@ import org.denevell.natch.tests.functional.pageobjects.ListUsersPO;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
-import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 public class UsersListFunctional {
 	
-	private WebTarget service;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private RegisterPO registerPo;
 	private ListUsersPO listUsersPO;
 
 	@Before
 	public void setup() throws Exception {
-		service = TestUtils.getRESTClient();
-	    registerPo = new RegisterPO(service);
-	    listUsersPO = new ListUsersPO(service);
+	    registerPo = new RegisterPO();
+	    listUsersPO = new ListUsersPO();
 		TestUtils.deleteTestDb();
 	}
 	
@@ -40,10 +36,10 @@ public class UsersListFunctional {
 		// Arrange 
 	    registerPo.register("aaron", "aaron");
 	    registerPo.register("other1", "other1");
-		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron", "aaron");
+		LoginResourceReturnData loginResult = new LoginPO().login("aaron", "aaron");
 
 	    // Act
-		UserList thread = listUsers(service, loginResult.getAuthKey());	
+		UserList thread = listUsersPO.listUsers(loginResult.getAuthKey());	
 		
 		// Assert
 		List<User> users = thread.getUsers();
@@ -54,27 +50,16 @@ public class UsersListFunctional {
 		assertEquals(false, user1.isAdmin());
 	}
 
-    public static UserList listUsers(WebTarget s, String authKey) {
-        UserList thread = s
-        .path("rest").path("user").path("list").request()
-        .header("AuthKey", authKey)
-        .get(UserList.class);
-        return thread;
-    }
-	
     @Test
     public void shouldntListUsersAsNormalUser() {
         // Arrange 
 	    registerPo.register("aaron", "aaron");
 	    registerPo.register("other1", "other1");
-		LoginResourceReturnData loginResult = new LoginPO(service).login("other1", "other1");
+		LoginResourceReturnData loginResult = new LoginPO().login("other1", "other1");
 
         // Act
         try {
-            service
-            .path("rest").path("user").path("list").request()
-            .header("AuthKey", loginResult.getAuthKey())
-            .get(UserList.class);   
+        	listUsersPO.listUsers(loginResult.getAuthKey());	
         } catch (WebApplicationException e) {
             assertEquals(401, e.getResponse().getStatus());
             return;

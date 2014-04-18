@@ -16,7 +16,6 @@ import org.denevell.natch.io.posts.PostResource;
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
-import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,9 +29,9 @@ public class ListSinglePostFunctional {
 		service = TestUtils.getRESTClient();
 		// Delete all users
 		TestUtils.deleteTestDb();
-	    new RegisterPO(service).register("aaron@aaron.com", "passy");
+	    new RegisterPO().register("aaron@aaron.com", "passy");
 		// Login
-		loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
+		loginResult = new LoginPO().login("aaron@aaron.com", "passy");
 	}
 	
 	@Test

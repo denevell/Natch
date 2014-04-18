@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
-import org.denevell.natch.model.entities.UserEntity;
+import org.denevell.natch.io.users.User;
 import org.denevell.natch.serv.post.AddPostRequest;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
@@ -32,13 +32,13 @@ public class AddPostResourceTests {
 	//private AddPostModel postsModel;
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private AddPostRequest resource;
-	private UserEntity user;
+	private User user;
 	private HttpServletRequest request;
 
 	@Before
 	public void setup() {
 		//postsModel = mock(AddPostModel.class);
-		user = new UserEntity();
+		user = new User();
 		user.setUsername("dsf");
 		request = mock(HttpServletRequest.class);
 		when(request.getAttribute(LoginHeadersFilter.KEY_SERVLET_REQUEST_LOGGEDIN_USER)).thenReturn(user);

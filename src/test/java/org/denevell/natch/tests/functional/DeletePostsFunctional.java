@@ -17,7 +17,6 @@ import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
-import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,9 +31,9 @@ public class DeletePostsFunctional {
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
 		TestUtils.deleteTestDb();
-	    registerPo = new RegisterPO(service);
+	    registerPo = new RegisterPO();
 	    registerPo.register("aaron@aaron.com", "passy");
-		loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
+		loginResult = new LoginPO().login("aaron@aaron.com", "passy");
 	}
 	
 	@Test
@@ -82,7 +81,7 @@ public class DeletePostsFunctional {
 		// Arrange 
 		// Register other user
 	    registerPo.register("aaron1@aaron.com", "passy");
-		LoginResourceReturnData loginResult1 = new LoginPO(service).login("aaron1@aaron.com", "passy");
+		LoginResourceReturnData loginResult1 = new LoginPO().login("aaron1@aaron.com", "passy");
 
 		// Make post with user one 
 		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
@@ -117,7 +116,7 @@ public class DeletePostsFunctional {
         // Arrange 
         // Register other user
 	    registerPo.register("aaron1@aaron.com", "passy");
-		LoginResourceReturnData loginResult1 = new LoginPO(service).login("aaron1@aaron.com", "passy");
+		LoginResourceReturnData loginResult1 = new LoginPO().login("aaron1@aaron.com", "passy");
 
         // Make post with user two
         AddPostResourceInput input = new AddPostResourceInput("sub", "cont");

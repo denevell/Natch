@@ -18,16 +18,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.denevell.jrappy.Jrappy;
 import org.denevell.natch.adapters.AddPostRequestToPostEntity;
 import org.denevell.natch.adapters.ThreadEntityToThreadResource;
-import org.denevell.jrappy.Jrappy;
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.threads.CutDownThreadResource;
+import org.denevell.natch.io.users.User;
 import org.denevell.natch.model.entities.PostEntity;
 import org.denevell.natch.model.entities.PushEntity;
 import org.denevell.natch.model.entities.ThreadEntity;
-import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.PostAddModel;
 import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
 import org.denevell.natch.utils.JPAFactoryContextListener;
@@ -57,7 +57,7 @@ public class AddThreadRequest {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public AddPostResourceReturnData addThread(@Valid AddPostResourceInput input) {
-		UserEntity userEntity = mUserLogggedInModel.get(mRequest);
+		User userEntity = (User) mRequest.getAttribute("user");
 		if (input.getTags()!=null && !PostEntity.isTagLengthOkay(input.getTags())) {
 			AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 			regReturnData.setSuccessful(false);
@@ -69,14 +69,14 @@ public class AddThreadRequest {
 			regReturnData.setError(rb.getString(Strings.subject_too_large));
 			return regReturnData;
 		} else {
-			return addPostOrThread(input, userEntity);
+			return addPostOrThread(input, userEntity.getUsername());
 		}
 	}	
 
-    public AddPostResourceReturnData addPostOrThread(AddPostResourceInput input, UserEntity userEntity) {
+    public AddPostResourceReturnData addPostOrThread(AddPostResourceInput input, String username) {
 		AddPostResourceReturnData regReturnData = new AddPostResourceReturnData();
 		regReturnData.setSuccessful(false);
-	    final PostEntity post = AddPostRequestToPostEntity.adapt(input, false, userEntity);
+	    final PostEntity post = AddPostRequestToPostEntity.adapt(input, false, username);
 	    ThreadEntity thread = mAddPostModel.add(post);
 		generateAddPostReturnResource(regReturnData, thread);
 		sendPushNotifications(regReturnData);

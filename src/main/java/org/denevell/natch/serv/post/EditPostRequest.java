@@ -17,8 +17,8 @@ import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.io.posts.EditPostResource;
 import org.denevell.natch.io.posts.EditPostResourceReturnData;
+import org.denevell.natch.io.users.User;
 import org.denevell.natch.model.entities.PostEntity;
-import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.PostEditModel;
 import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
 import org.denevell.natch.serv.thread.EditThreadRequest;
@@ -54,11 +54,11 @@ public class EditPostRequest {
 			@PathParam(value="postId") long postId, 
 			@Valid EditPostResource editPostResource) {
 		EditPostResourceReturnData ret = new EditPostResourceReturnData();
-		final UserEntity userEntity = mUserLogggedInModel.get(mRequest);
+		User userEntity = (User) mRequest.getAttribute("user");
 		PostEntity editData = new PostEntity();
 		editData.setContent(editPostResource.getContent());
 		editData.setSubject("-");
-		int result = mPostEditModel.edit(postId, userEntity, editData);
+		int result = mPostEditModel.edit(postId, userEntity.getUsername(), editData, userEntity.isAdmin());
 		EditThreadRequest.generateEditReturnResource(ret, result, rb);
 		return ret;
 	}

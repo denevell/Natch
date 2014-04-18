@@ -1,4 +1,4 @@
-package org.denevell.natch.tests.functional.pageobjects;
+package org.denevell.natch.tests.functional;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -7,7 +7,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.io.users.LoginResourceInput;
 import org.denevell.natch.io.users.LoginResourceReturnData;
-import org.denevell.natch.tests.functional.TestUtils;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
 

@@ -21,7 +21,6 @@ import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
-import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,9 +34,9 @@ public class AddThreadFunctional {
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
 		TestUtils.deleteTestDb();
-	    new RegisterPO(service).register("aaron@aaron.com", "passy");
+	    new RegisterPO().register("aaron@aaron.com", "passy");
 		// Login
-		loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
+		loginResult = new LoginPO().login("aaron@aaron.com", "passy");
 	}
 	
 	@Test

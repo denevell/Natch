@@ -7,8 +7,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
+import org.denevell.natch.io.users.User;
 import org.denevell.natch.model.entities.PostEntity;
-import org.denevell.natch.model.entities.UserEntity;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -37,13 +37,13 @@ public class EditPostModelTests {
 		PostEntity post = new PostEntity(null, 1, 1, "df", "sdf", null);
 		post.setUsername("this_person");
 		//doReturn(post).when(model).findPostById(num);
-		UserEntity userEntity = new UserEntity();
-		userEntity.setUsername("this_person");
+		User User = new User();
+		User.setUsername("this_person");
 		//PostEntity postToBeEdited = new PostEntity(null, 1, 1, "xxx", "xxx", null);
-//		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(postToBeEdited);
+//		when(postEntityAdapter.createPost(post, User)).thenReturn(postToBeEdited);
 		
 		// Act
-//		String result = model.edit(userEntity, num, postEntityAdapter, false);
+//		String result = model.edit(User, num, postEntityAdapter, false);
 		
 		// Assert 
 //		assertEquals(PostsModel.EDITED, result);
@@ -57,12 +57,12 @@ public class EditPostModelTests {
 		PostEntity post = new PostEntity();
 		post.setUsername("this_person");
 		//doReturn(post).when(model).findPostById(num);
-		UserEntity userEntity = new UserEntity();
-		userEntity.setUsername("that_person");
-//		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(post);
+		User User = new User();
+		User.setUsername("that_person");
+//		when(postEntityAdapter.createPost(post, User)).thenReturn(post);
 		
 		// Act
-//		String result = model.edit(userEntity, num, postEntityAdapter, false);
+//		String result = model.edit(User, num, postEntityAdapter, false);
 		
 		// Assert 
 //		assertEquals(PostsModel.NOT_YOURS_TO_DELETE, result);
@@ -76,12 +76,12 @@ public class EditPostModelTests {
 		PostEntity post = new PostEntity();
 		post.setUsername("this_person");
 		//doReturn(post).when(model).findPostById(num+1);
-		UserEntity userEntity = new UserEntity();
-		userEntity.setUsername("that_person");
-//		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(post);
+		User User = new User();
+		User.setUsername("that_person");
+//		when(postEntityAdapter.createPost(post, User)).thenReturn(post);
 		
 		// Act
-//		String result = model.edit(userEntity, num, postEntityAdapter, false);
+//		String result = model.edit(User, num, postEntityAdapter, false);
 		
 		// Assert 
 //		assertEquals(PostsModel.DOESNT_EXIST, result);
@@ -95,12 +95,12 @@ public class EditPostModelTests {
 		PostEntity post = new PostEntity();
 		post.setUsername("this_person");
 		//doThrow(new RuntimeException()).when(model).findPostById(num);
-		UserEntity userEntity = new UserEntity();
-		userEntity.setUsername("this_person");
-//		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(post);
+		User User = new User();
+		User.setUsername("this_person");
+//		when(postEntityAdapter.createPost(post, User)).thenReturn(post);
 		
 		// Act
-//		String result = model.edit(userEntity, num, postEntityAdapter, false);
+//		String result = model.edit(User, num, postEntityAdapter, false);
 		
 		// Assert 
 //		assertEquals(PostsModel.UNKNOWN_ERROR, result);
@@ -114,9 +114,9 @@ public class EditPostModelTests {
 		PostEntity post = new PostEntity();
 		post.setUsername("this_person");
 		//doReturn(post).when(model).findPostById(num);
-		UserEntity userEntity = new UserEntity();
-		userEntity.setUsername("this_person");
-//		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(post);
+		User User = new User();
+		User.setUsername("this_person");
+//		when(postEntityAdapter.createPost(post, User)).thenReturn(post);
 		
 		// Act
 //		String result = model.edit(null, num, postEntityAdapter, false);
@@ -133,11 +133,11 @@ public class EditPostModelTests {
 		PostEntity post = new PostEntity();
 		post.setUsername("this_person");
 		//doReturn(post).when(model).findPostById(num);
-		UserEntity userEntity = new UserEntity();
-		userEntity.setUsername("this_person");
+		User User = new User();
+		User.setUsername("this_person");
 		
 		// Act
-//		String result = model.edit(userEntity, num, null, false);
+//		String result = model.edit(User, num, null, false);
 		
 		// Assert 
 //		assertEquals(PostsModel.UNKNOWN_ERROR, result);
@@ -151,13 +151,13 @@ public class EditPostModelTests {
 		PostEntity post = new PostEntity();
 		post.setUsername("this_person");
 		//doReturn(post).when(model).findPostById(num);
-		UserEntity userEntity = new UserEntity();
-		userEntity.setUsername("this_person");
+		User User = new User();
+		User.setUsername("this_person");
 		//PostEntity postToEdit = new PostEntity(null, 1, 1, " ", " ", null);
-//		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(postToEdit);
+//		when(postEntityAdapter.createPost(post, User)).thenReturn(postToEdit);
 		
 		// Act
-//		String result = model.edit(userEntity, num, postEntityAdapter, false);
+//		String result = model.edit(User, num, postEntityAdapter, false);
 		
 		// Assert 
 //		assertEquals(PostsModel.BAD_USER_INPUT, result);
@@ -171,13 +171,13 @@ public class EditPostModelTests {
 		PostEntity post = new PostEntity();
 		post.setUsername("this_person");
 		//doReturn(post).when(model).findPostById(num);
-		UserEntity userEntity = new UserEntity();
-		userEntity.setUsername("this_person");
+		User User = new User();
+		User.setUsername("this_person");
 		//PostEntity postToEdit = new PostEntity(null, 1, 1, null, null, null);
-//		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(postToEdit);
+//		when(postEntityAdapter.createPost(post, User)).thenReturn(postToEdit);
 		
 		// Act
-//		String result = model.edit(userEntity, num, postEntityAdapter, true);
+//		String result = model.edit(User, num, postEntityAdapter, true);
 		
 		// Assert 
 //		assertEquals(PostsModel.BAD_USER_INPUT, result);
@@ -191,13 +191,13 @@ public class EditPostModelTests {
 		PostEntity post = new PostEntity();
 		post.setUsername("this_person");
 		//doReturn(post).when(model).findPostById(num);
-		UserEntity userEntity = new UserEntity();
-		userEntity.setUsername("this_person");
+		User User = new User();
+		User.setUsername("this_person");
 		//PostEntity postToEdit = new PostEntity(null, 1, 1, " ", "sdfsdf", null);
-//		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(postToEdit);
+//		when(postEntityAdapter.createPost(post, User)).thenReturn(postToEdit);
 		
 		// Act
-//		String result = model.edit(userEntity, num, postEntityAdapter, true);
+//		String result = model.edit(User, num, postEntityAdapter, true);
 		
 		// Assert 
 //		assertEquals(PostsModel.BAD_USER_INPUT, result);
@@ -211,12 +211,12 @@ public class EditPostModelTests {
 		PostEntity post = new PostEntity();
 		post.setUsername("this_person");
 		//doReturn(post).when(model).findPostById(num);
-		UserEntity userEntity = new UserEntity();
-		userEntity.setUsername("this_person");
-//		when(postEntityAdapter.createPost(post, userEntity)).thenReturn(null);
+		User User = new User();
+		User.setUsername("this_person");
+//		when(postEntityAdapter.createPost(post, User)).thenReturn(null);
 		
 		// Act
-		//String result = model.edit(userEntity, num, postEntityAdapter, false);
+		//String result = model.edit(User, num, postEntityAdapter, false);
 		
 		// Assert 
 //		assertEquals(PostsModel.UNKNOWN_ERROR, result);

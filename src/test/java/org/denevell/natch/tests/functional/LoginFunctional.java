@@ -17,7 +17,6 @@ import org.denevell.natch.tests.functional.pageobjects.AddPostPO;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
-import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,7 +29,7 @@ public class LoginFunctional {
 	@Before
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
-		registerPo = new RegisterPO(service);
+		registerPo = new RegisterPO();
 		TestUtils.deleteTestDb();
 	}
 	
@@ -38,7 +37,7 @@ public class LoginFunctional {
 	public void shouldLoginWithGoodCredentials() {
 		// Arrange 
 	    registerPo.register("aaron@aaron.com", "passy");
-		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
+		LoginResourceReturnData loginResult = new LoginPO().login("aaron@aaron.com", "passy");
 		
 		// Assert
 		assertEquals("", loginResult.getError());
@@ -50,7 +49,7 @@ public class LoginFunctional {
 	public void shouldSee403OnBadCredentials() {
 	    registerPo.register("aaron@aaron.com", "passy");
 		try{
-			new LoginPO(service).login("aaron@aaron.com", "passyWRONG");
+			new LoginPO().login("aaron@aaron.com", "passyWRONG");
 		} catch(WebApplicationException e) {
 			assertEquals(403, e.getResponse().getStatus());
 			return;
@@ -62,7 +61,7 @@ public class LoginFunctional {
 	@Test
 	public void login_shouldSeeJsonErrorOnBlanksPassed() {
 		try{
-			new LoginPO(service).login(" ", " ");
+			new LoginPO().login(" ", " ");
 		} catch(BadRequestException e) {
 			assertEquals(400, e.getResponse().getStatus());
 			return;
@@ -73,7 +72,7 @@ public class LoginFunctional {
 	@Test
 	public void login_shouldSeeJsonErrorOnBlankUsername() {
 		try{
-			new LoginPO(service).login(" ", "password");
+			new LoginPO().login(" ", "password");
 		} catch(BadRequestException e) {
 			assertEquals(400, e.getResponse().getStatus());
 			return;
@@ -84,7 +83,7 @@ public class LoginFunctional {
 	@Test
 	public void login_shouldSeeJsonErrorOnBlankPassword() {
 		try{
-			new LoginPO(service).login("username", " ");
+			new LoginPO().login("username", " ");
 		} catch(BadRequestException e) {
 			assertEquals(400, e.getResponse().getStatus());
 			return;
@@ -95,7 +94,7 @@ public class LoginFunctional {
 	@Test
 	public void login_shouldSeeJsonErrorOnNullUsername() {
 		try{
-			new LoginPO(service).login(null, "password");
+			new LoginPO().login(null, "password");
 		} catch(BadRequestException e) {
 			assertEquals(400, e.getResponse().getStatus());
 			return;
@@ -106,7 +105,7 @@ public class LoginFunctional {
 	@Test
 	public void login_shouldSeeJsonErrorOnNullPassword() {
 		try{
-			new LoginPO(service).login("username", null);
+			new LoginPO().login("username", null);
 		} catch(BadRequestException e) {
 			assertEquals(400, e.getResponse().getStatus());
 			return;
@@ -123,8 +122,8 @@ public class LoginFunctional {
 	public void login_shouldBeAbleToLoginTwice() {
 		// Arrange 
 	    registerPo.register("aaron@aaron.com", "passy");
-		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
-		LoginResourceReturnData loginResult2 = new LoginPO(service).login("aaron@aaron.com", "passy");
+		LoginResourceReturnData loginResult = new LoginPO().login("aaron@aaron.com", "passy");
+		LoginResourceReturnData loginResult2 = new LoginPO().login("aaron@aaron.com", "passy");
 		
 		// Assert
 		assertEquals("", loginResult.getError());
@@ -137,7 +136,7 @@ public class LoginFunctional {
 	public void shouldReturnAuthKeyOnLogin() {
 		// Arrange 
 	    registerPo.register("aaron@aaron.com", "passy");
-		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
+		LoginResourceReturnData loginResult = new LoginPO().login("aaron@aaron.com", "passy");
 		
 		// Assert
 		assertTrue("Should return auth key", loginResult.getAuthKey().length()>5);
@@ -147,8 +146,8 @@ public class LoginFunctional {
 	public void shouldReturnDifferentAuthKeys() {
 		// Arrange 
 	    registerPo.register("aaron@aaron.com", "passy");
-		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
-		LoginResourceReturnData loginResult1 = new LoginPO(service).login("aaron@aaron.com", "passy");
+		LoginResourceReturnData loginResult = new LoginPO().login("aaron@aaron.com", "passy");
+		LoginResourceReturnData loginResult1 = new LoginPO().login("aaron@aaron.com", "passy");
 		
 		// Assert
 		assertFalse("Should return different auth key", loginResult.getAuthKey().equals(loginResult1.getAuthKey()));		
@@ -158,7 +157,7 @@ public class LoginFunctional {
 	public void shouldLoginWithAuthKey() {
 		// Arrange 
 	    registerPo.register("aaron@aaron.com", "passy");
-		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
+		LoginResourceReturnData loginResult = new LoginPO().login("aaron@aaron.com", "passy");
 	    
 	    // Act
 		AddPostResourceReturnData result = new AddPostPO(service).add("s", "c", loginResult.getAuthKey());
@@ -171,7 +170,7 @@ public class LoginFunctional {
 	public void shouldntLoginWithBadAuthKey() {
 		// Arrange 
 	    registerPo.register("aaron@aaron.com", "passy");
-		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
+		LoginResourceReturnData loginResult = new LoginPO().login("aaron@aaron.com", "passy");
 
 		loginResult.getAuthKey();
 	    
@@ -193,8 +192,8 @@ public class LoginFunctional {
 	public void shouldntLoginWithOldAuthKey() {
 		// Arrange 
 	    registerPo.register("aaron@aaron.com", "passy");
-		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
-		new LoginPO(service).login("aaron@aaron.com", "passy");
+		LoginResourceReturnData loginResult = new LoginPO().login("aaron@aaron.com", "passy");
+		new LoginPO().login("aaron@aaron.com", "passy");
 	    
 	    // Act
 

@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.io.posts.DeletePostResourceReturnData;
-import org.denevell.natch.model.entities.UserEntity;
+import org.denevell.natch.io.users.User;
 import org.denevell.natch.model.interfaces.PostDeleteModel;
 import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
 import org.denevell.natch.utils.Strings;
@@ -54,13 +54,13 @@ public class DeletePostRequest {
 	public DeletePostResourceReturnData delete(@PathParam("postId") long number) {
 		DeletePostResourceReturnData ret = new DeletePostResourceReturnData();
 		ret.setSuccessful(false);
-		UserEntity userEntity = mUserLogggedInModel.get(mRequest);
-		int result = mPostFindModel.delete(number, userEntity);
-		generateDeleteReturnResource(result, ret, userEntity);
+		User userEntity = (User) mRequest.getAttribute("user");
+		int result = mPostFindModel.delete(number, userEntity.getUsername(), userEntity.isAdmin());
+		generateDeleteReturnResource(result, ret);
 		return ret;
 	}
 
-	private void generateDeleteReturnResource(int result, DeletePostResourceReturnData ret, UserEntity userEntity) {
+	private void generateDeleteReturnResource(int result, DeletePostResourceReturnData ret) {
 		if(result == PostDeleteModel.DELETED) {
 			ret.setSuccessful(true);
 		} else if(result == PostDeleteModel.DOESNT_EXIST) {

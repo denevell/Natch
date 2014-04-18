@@ -20,7 +20,6 @@ import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
-import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,8 +34,8 @@ public class EditThreadFunctional {
 		service = TestUtils.getRESTClient();
 		// Delete all users and add one new
 		TestUtils.deleteTestDb();
-	    new RegisterPO(service).register("aaron@aaron.com", "passy");
-		LoginResourceReturnData loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
+	    new RegisterPO().register("aaron@aaron.com", "passy");
+		LoginResourceReturnData loginResult = new LoginPO().login("aaron@aaron.com", "passy");
 	    authKey = loginResult.getAuthKey();
 	}
 	

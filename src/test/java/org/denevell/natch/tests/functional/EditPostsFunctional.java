@@ -22,7 +22,6 @@ import org.denevell.natch.tests.functional.pageobjects.AddPostPO;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
-import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,11 +41,11 @@ public class EditPostsFunctional {
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
 		TestUtils.deleteTestDb();
-	    registerPo = new RegisterPO(service);
+	    registerPo = new RegisterPO();
 	    addPostPo = new AddPostPO(service);
 
 	    registerPo.register("aaron@aaron.com", "passy");
-		loginResult = new LoginPO(service).login("aaron@aaron.com", "passy");
+		loginResult = new LoginPO().login("aaron@aaron.com", "passy");
 	    authKey = loginResult.getAuthKey();
 
 		// Add post
@@ -99,7 +98,7 @@ public class EditPostsFunctional {
 		editedInput.setContent("sup");
 		// Login with another user
 	    registerPo.register("aaron1@aaron.com", "passy");
-		LoginResourceReturnData loginResult1 = new LoginPO(service).login("aaron1@aaron.com", "passy");
+		LoginResourceReturnData loginResult1 = new LoginPO().login("aaron1@aaron.com", "passy");
 		
 		// Act - edit with different user then list
 		EditPostResourceReturnData editReturnData = editPost(service, loginResult1.getAuthKey(), initialPost.getId(), editedInput); 		
@@ -117,7 +116,7 @@ public class EditPostsFunctional {
 		// Arrange
 		// Login with another user
 	    registerPo.register("aaron1@aaron.com", "passy");
-		LoginResourceReturnData loginResult1 = new LoginPO(service).login("aaron1@aaron.com", "passy");
+		LoginResourceReturnData loginResult1 = new LoginPO().login("aaron1@aaron.com", "passy");
 
         // Act - Add a post as new user
         addPostPo.add("presubadminedit", "precontadminedit", new String[] {"tag1", "tag2"}, loginResult1.getAuthKey());

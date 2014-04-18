@@ -5,30 +5,26 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
-import org.denevell.natch.io.users.LoginResourceInput;
-import org.denevell.natch.io.users.LoginResourceReturnData;
+import org.denevell.natch.io.base.SuccessOrError;
 import org.denevell.natch.tests.functional.TestUtils;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
-public class LoginPO {
+public class AdminTogglePO {
 	
 	private WebTarget mService;
 
-	public LoginPO() {
+	public AdminTogglePO() {
 		Client client = JerseyClientBuilder.createClient();
 		client.register(JacksonFeature.class);
 		mService = client.target(TestUtils.URL_USER_SERVICE);
 	}
 
-	public LoginResourceReturnData login(String username, String password) {
-		LoginResourceInput loginInput = new LoginResourceInput(username, password);
-		LoginResourceReturnData loginResult = mService 
-	    		.path("rest").path("user").path("login").request()
-	    		.post(Entity.entity(loginInput, MediaType.APPLICATION_JSON), 
-	    				LoginResourceReturnData.class);
-		return loginResult;
+	public SuccessOrError toggle(String authKey) {
+        return mService
+            .path("rest").path("user").path("admin").path("toggle").path("other1").request()
+            .header("AuthKey", authKey)
+            .post(Entity.entity(null, MediaType.APPLICATION_JSON), SuccessOrError.class);
 	}	
-	
 
 }

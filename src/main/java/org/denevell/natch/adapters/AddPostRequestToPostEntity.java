@@ -4,21 +4,20 @@ import java.util.Date;
 
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.model.entities.PostEntity;
-import org.denevell.natch.model.entities.UserEntity;
 
 public class AddPostRequestToPostEntity {
 
 	public static PostEntity adapt(
 			AddPostResourceInput input,
 			boolean adminEdited,
-			UserEntity userEntity) {
+			String username) {
 		PostEntity pe = new PostEntity();
 		long created = new Date().getTime();
 		pe.setContent(input.getContent());
 		pe.setSubject(input.getSubject());
 		pe.setThreadId(input.getThreadId());
 		pe.setTags(input.getTags());
-		pe.setUsername(userEntity.getUsername());
+		pe.setUsername(username);
 		pe.setCreated(created);
 		pe.setModified(created);
 		if (adminEdited) {

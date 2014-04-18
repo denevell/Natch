@@ -1,7 +1,6 @@
 package org.denevell.natch.model.interfaces;
 
 import org.denevell.natch.model.entities.PostEntity;
-import org.denevell.natch.model.entities.UserEntity;
 import org.glassfish.jersey.spi.Contract;
 
 @Contract
@@ -13,6 +12,7 @@ public interface PostEditModel {
 	 * @return -1 on error on a static constant in this class
 	 */
 	int edit(long id, 
-			UserEntity user, 
-			PostEntity postWithEditedData);
+			String user, 
+			PostEntity postWithEditedData,
+			boolean adminEditing);
 }

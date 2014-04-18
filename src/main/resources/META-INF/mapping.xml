@@ -20,42 +20,6 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
        </attributes>
     </entity>    
 
-    <entity class="org.denevell.natch.model.entities.UserEntity"> 
-       <table name="UserEntity" />
-	   <named-query name="findWithUsernamePassword">
-	       <query>select u from UserEntity u where u.username=:username and u.password=:password</query>
-	   </named-query>       
-	   <named-query name="listUsers">
-	       <query>select u from UserEntity u</query>
-	   </named-query>       
-	   <named-query name="findByEmail">
-	       <query>select u from UserEntity u where u.recoveryEmail=:recoveryEmail</query>
-	   </named-query>       
-	   <named-query name="countUsers">
-	       <query>select count(u) from UserEntity u</query>
-	   </named-query>       
-	   <named-query name="findExistingUsername">
-	       <query>select u from UserEntity u where u.username=:username</query>
-	   </named-query>       
-       <attributes>
-            <id name="username">
-	           <column name="username" nullable="false" length="50" />
-            </id>
-            <basic name="admin">
-	           <column name="admin" nullable="false" />
-            </basic>
-	        <basic name="password">
-	           <column name="password" nullable="false" length="100" />
-	        </basic>       
-            <basic name="passwordResetRequest">
-	           <column name="request_pw_reset" nullable="false"/>
-            </basic>
-            <basic name="recoveryEmail">
-	           <column name="recovery_email" nullable="true"/>
-            </basic>
-       </attributes>
-    </entity>    
-    
     <entity class="org.denevell.natch.model.entities.PostEntity">
        <table name="PostEntity" />
 	   <named-query name="findByModData">

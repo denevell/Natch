@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.ResourceBundle;
 
 import javax.ws.rs.BadRequestException;
-import javax.ws.rs.client.WebTarget;
 
 import org.denevell.natch.io.users.LoginResourceReturnData;
 import org.denevell.natch.io.users.RegisterResourceReturnData;
@@ -15,24 +14,21 @@ import org.denevell.natch.tests.functional.pageobjects.ListUsersPO;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
-import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 public class RegisterFunctional {
 	
     ResourceBundle rb = Strings.getMainResourceBundle();
-	private WebTarget service;
 	private RegisterPO registerPo;
 	private LoginPO loginPo;
 	private ListUsersPO listUsersPo;
 
 	@Before
 	public void setup() throws Exception {
-		service = TestUtils.getRESTClient();
-		registerPo = new RegisterPO(service);
-	    loginPo = new LoginPO(service);
-	    listUsersPo = new ListUsersPO(service);
+		registerPo = new RegisterPO();
+	    loginPo = new LoginPO();
+	    listUsersPo = new ListUsersPO();
 		TestUtils.deleteTestDb();
 	}
 
@@ -66,7 +62,7 @@ public class RegisterFunctional {
 		// Arrange 
 	    // Act
 	    RegisterResourceReturnData result = registerPo.register("aaron", "aaron");
-		LoginResourceReturnData login = new LoginPO(service).login("aaron", "aaron");
+		LoginResourceReturnData login = new LoginPO().login("aaron", "aaron");
 
 		// Assert
 		assertTrue("Should register", result.isSuccessful());
@@ -79,7 +75,7 @@ public class RegisterFunctional {
 	    // Act
 	    registerPo.register("aaron", "aaron");
 	    RegisterResourceReturnData resultInput = registerPo.register("aaron1", "aaron1");
-		LoginResourceReturnData login = new LoginPO(service).login("aaron1", "aaron1");
+		LoginResourceReturnData login = new LoginPO().login("aaron1", "aaron1");
 
 		// Assert
 		assertTrue("Should register", resultInput.isSuccessful());

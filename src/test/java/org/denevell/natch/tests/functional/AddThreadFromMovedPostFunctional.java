@@ -17,7 +17,6 @@ import org.denevell.natch.tests.functional.pageobjects.AddThreadFromPostPO;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.natch.utils.Strings;
-import org.denevell.natch.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,13 +33,13 @@ public class AddThreadFromMovedPostFunctional {
 	@Before
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
-		registerPo = new RegisterPO(service);
-		loginPo = new LoginPO(service);
+		registerPo = new RegisterPO();
+		loginPo = new LoginPO();
 		addPostPo = new AddPostPO(service);
 		addThreadFromPostPo = new AddThreadFromPostPO(service);
 		TestUtils.deleteTestDb();
-	    new RegisterPO(service).register("aaron", "aaron");
-		adminLoginResult = new LoginPO(service).login("aaron", "aaron");
+	    new RegisterPO().register("aaron", "aaron");
+		adminLoginResult = new LoginPO().login("aaron", "aaron");
 	}
 	
 	@Test

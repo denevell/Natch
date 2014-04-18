@@ -7,7 +7,6 @@ import org.denevell.jrappy.Jrappy;
 import org.denevell.jrappy.Jrappy.DeleteOrMerge;
 import org.denevell.natch.model.entities.PostEntity;
 import org.denevell.natch.model.entities.ThreadEntity;
-import org.denevell.natch.model.entities.UserEntity;
 import org.denevell.natch.model.interfaces.PostDeleteModel;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.jvnet.hk2.annotations.Service;
@@ -20,7 +19,7 @@ public class PostDeleteModelImpl implements PostDeleteModel {
 	/**
 	 * Doesn't close the entity manager
 	 */
-	public int delete(long id, UserEntity userEntity) {
+	public int delete(long id, String username, boolean adminEditing) {
 		final PostEntity pe = mPostModel
 				.startTransaction()
 				.find(id, false, PostEntity.class);
@@ -28,7 +27,7 @@ public class PostDeleteModelImpl implements PostDeleteModel {
 		if(pe==null) {
 			mPostModel.commitAndCloseEntityManager();
 			return PostDeleteModel.DOESNT_EXIST;
-		} else if(!userEntity.isAdmin() && !pe.getUsername().equals(userEntity.getUsername())) {
+		} else if(!adminEditing && !pe.getUsername().equals(username)) {
 			mPostModel.commitAndCloseEntityManager();
 			return PostDeleteModel.NOT_YOURS;
 		}
