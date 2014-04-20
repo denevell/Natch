@@ -60,4 +60,12 @@ public class ManifestVars implements ServletContextListener {
 		return sGCMKey;
 	}
 
+	public static String getsUserServiceUrl() {
+		return sUserServiceUrl;
+	}
+
+	public static void setUserServiceUrl(String sUserServiceUrl) {
+		ManifestVars.sUserServiceUrl = sUserServiceUrl;
+	}
+
 }

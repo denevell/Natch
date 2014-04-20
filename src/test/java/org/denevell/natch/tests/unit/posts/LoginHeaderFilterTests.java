@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.denevell.natch.auth.LoginHeadersFilter;
 import org.denevell.natch.io.users.User;
 import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
+import org.denevell.natch.utils.ManifestVars;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,6 +30,7 @@ public class LoginHeaderFilterTests {
 
 	@Before
 	public void setup() {
+		ManifestVars.setUserServiceUrl("http://something.org/");
 		filter = new LoginHeadersFilter(model);
 		chain = mock(FilterChain.class);
 		req = mock(HttpServletRequest.class);
