@@ -35,6 +35,13 @@ dependencies {
 	testCompile 'postgresql:postgresql:9.1-901-1.jdbc4'
 }    
 
+task cleanWars() << {
+        ["rm", "Natch-REST-ForAutomatedTests.war"].execute()
+        ["rm", "Natch-REST-Production.war"].execute()
+}
+clean.dependsOn = [cleanWars]
+
+
 // DB MIGRATION
 
 task migrate() << {
@@ -57,14 +64,7 @@ task lookForGcmKey () {
 // War for the rest project
 
 task createTest (type: War, dependsOn: [migrate]) << {}
-createTest.classifier = 'ForAutomatedTests'
-createTest.destinationDir = new File(".")
-createTest.manifest = manifest { attributes  "ISPROD": "FALSE","GCM_KEY":System.env['GCM_KEY'] }
-
 task createProd (type: War, dependsOn: [migrateProd]) << {}
-createProd.classifier = 'Production'
-createProd.destinationDir = new File(".")
-createProd.manifest = manifest { attributes  "ISPROD": "TRUE","GCM_KEY":System.env['GCM_KEY'] }
 
 // Db stuff
 
@@ -78,4 +78,16 @@ def migrationScript(connStr) {
        } else {
                println "Migration script okay.: " + cmdres
        }
+}
+
+war {
+        destinationDir = new File(".")
+        classifier = 'ForAutomatedTests'
+}
+
+if(project.hasProperty('PRODUCTION')) {
+        sourceSets.main.resources.srcDirs 'src/main/resources', 'src/prod/resources'
+        war {   
+                classifier = 'Production'
+        }
 }

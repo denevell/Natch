@@ -27,10 +27,6 @@
 	  <url-pattern>/rest/post/del/*</url-pattern>
 	</filter-mapping>	
 	
-	<listener>
-		<listener-class>org.denevell.natch.auth.LoginClearContextListener</listener-class>
-	</listener>	
-	
 	<servlet>
 		<servlet-name>Jersey REST Service</servlet-name>
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer
@@ -49,6 +45,10 @@
 		<servlet-name>Jersey REST Service</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
+
+	<listener>
+		<listener-class>org.denevell.natch.utils.ManifestVars</listener-class>
+	</listener>	
 	
 	<listener>
 		<listener-class>org.denevell.natch.utils.JPAFactoryContextListener</listener-class>

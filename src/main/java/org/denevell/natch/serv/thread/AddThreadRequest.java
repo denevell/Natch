@@ -1,6 +1,5 @@
 package org.denevell.natch.serv.thread;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -32,7 +31,7 @@ import org.denevell.natch.model.interfaces.PostAddModel;
 import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Log;
-import org.denevell.natch.utils.ManifestUtils;
+import org.denevell.natch.utils.ManifestVars;
 import org.denevell.natch.utils.Strings;
 
 import com.google.android.gcm.server.Message;
@@ -87,16 +86,9 @@ public class AddThreadRequest {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				String key = null;
-				try {
-					key = ManifestUtils.getManifest(context).getValue("GCM_KEY");
-					if (key != null && !key.trim().isEmpty()) {
-					} else {
-						Log.error(AddThreadRequest.class, "GCM key looks bad -- empty");
-					}
-				} catch (IOException e1) {
-					Log.error(AddThreadRequest.class, "GCM key looks bad -- empty");
-					e1.printStackTrace();
+				String key = ManifestVars.getGCMKey();
+				if(key==null || key.trim().length()==0) {
+					Log.error(getClass(), "GCM KEY is null or blank");
 				}
 				Sender sender = new Sender(key);
 				List<PushEntity> list = new Jrappy<PushEntity>(JPAFactoryContextListener.sFactory)

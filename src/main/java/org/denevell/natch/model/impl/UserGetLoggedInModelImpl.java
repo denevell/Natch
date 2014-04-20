@@ -6,6 +6,7 @@ import javax.ws.rs.client.WebTarget;
 
 import org.denevell.natch.io.users.User;
 import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
+import org.denevell.natch.utils.ManifestVars;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.jvnet.hk2.annotations.Service;
@@ -18,7 +19,8 @@ public class UserGetLoggedInModelImpl implements UserGetLoggedInModel {
 	public UserGetLoggedInModelImpl() {
 		Client client = JerseyClientBuilder.createClient();
 		client.register(JacksonFeature.class);
-		WebTarget target = client.target("http://localhost:8080/CoreUserService-ForAutomatedTests/");
+		String uri = ManifestVars.getUserServiceUrl();
+		WebTarget target = client.target(uri);
 		mServiceTarget = target.path("rest").path("user").path("get");
 	}
 
