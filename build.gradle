@@ -1,3 +1,6 @@
+import org.gradle.api.java.archives.internal.DefaultManifest
+import org.gradle.api.internal.file.IdentityFileResolver
+
 apply plugin: 'war' 
 apply plugin: 'eclipse'
 
@@ -41,6 +44,20 @@ task cleanWars() << {
 }
 clean.dependsOn = [cleanWars]
 
+// GCM Key stuff
+
+task lookForGcmKey () {
+	def key = System.env['GCM_KEY']
+	if(!key?.trim()) {
+		throw new GradleException("Couldn't find gcm key.")
+	}
+}
+
+task insertGCMIntoManifest() << {
+	File manif = file(file(".").absolutePath+"/build/resources/main/META-INF/MANIFEST.MF")
+	manif << "\nGCM_KEY: "+System.env['GCM_KEY']+"\n"
+}
+war.dependsOn insertGCMIntoManifest 
 
 // DB MIGRATION
 
@@ -54,20 +71,6 @@ task migrateProd() << {
 	migrationScript(connStr)
 }
 
-task lookForGcmKey () {
-	def key = System.env['GCM_KEY']
-	if(!key?.trim()) {
-		throw new GradleException("Couldn't find gcm key.")
-	}
-}
-
-// War for the rest project
-
-task createTest (type: War, dependsOn: [migrate]) << {}
-task createProd (type: War, dependsOn: [migrateProd]) << {}
-
-// Db stuff
-
 def migrationScript(connStr) {
         def cmdstr = 'go run '+file('.')+'/db_migration.go ' + connStr
         def cmd = cmdstr.execute()
@@ -80,14 +83,15 @@ def migrationScript(connStr) {
        }
 }
 
-war {
-        destinationDir = new File(".")
-        classifier = 'ForAutomatedTests'
-}
+// Creating the WAR file
+
+war.destinationDir = new File(".")
 
 if(project.hasProperty('PRODUCTION')) {
         sourceSets.main.resources.srcDirs 'src/main/resources', 'src/prod/resources'
-        war {   
-                classifier = 'Production'
-        }
+	war.dependsOn migrateProd
+        war.classifier = 'Production'
+} else {
+	war.dependsOn migrate
+        war.classifier = 'ForAutomatedTests'
 }

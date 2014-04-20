@@ -1,6 +1,7 @@
 bin/
 build/
 *.class
+*.war
 .settings/
 .classpath
 .gradle/
