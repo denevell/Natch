@@ -44,6 +44,14 @@ task cleanWars() << {
 }
 clean.dependsOn = [cleanWars]
 
+test {
+	testLogging.events = ['failed','passed']
+	testLogging.showStandardStreams = true
+	testLogging.showCauses = true
+	testLogging.showExceptions = true
+	testLogging.showStackTraces = true
+}
+
 // GCM Key stuff
 
 task lookForGcmKey () {

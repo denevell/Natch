@@ -49,8 +49,7 @@ public class ListPostsRequest {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ListPostsResource listByModificationDate(
 		@PathParam("start") int start, 	
-		@PathParam("limit") int limit 	
-			) throws IOException {
+		@PathParam("limit") int limit) throws IOException {
 		List<PostEntity> posts = mPostsListModel.list(start, limit);
 		if(posts==null) {
 			mResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexcepted error");

@@ -5,6 +5,16 @@
 	<display-name>hello</display-name>
 	
 	<filter>
+	   <filter-name>Logging Filter</filter-name>
+	   <filter-class>
+	    org.denevell.natch.utils.ExceptionLogger
+	   </filter-class>
+	</filter>
+	<filter-mapping>
+	  <filter-name>Logging Filter</filter-name>
+	  <url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter>
 	   <filter-name>Auth Filter</filter-name>
 	   <filter-class>
 	    org.denevell.natch.auth.LoginHeadersFilter
@@ -37,7 +47,7 @@
         </init-param>		
 	    <init-param>
 	    	<param-name>jersey.config.server.provider.packages</param-name>
-			<param-value>org.denevell.natch.serv.push;org.denevell.natch.serv.testutils;org.denevell.natch.serv.post;org.denevell.natch.serv.users;org.denevell.natch.serv.thread;org.denevell.natch.utils</param-value>
+			<param-value>org.denevell.natch.serv.push;org.denevell.natch.serv.testutils;org.denevell.natch.serv.post;org.denevell.natch.serv.thread;org.denevell.natch.utils</param-value>
 	    </init-param>
         <load-on-startup>1</load-on-startup>
 	</servlet>
