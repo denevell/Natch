@@ -180,3 +180,26 @@ func (m migration) Migration_7() {
 		panic(err)
 	}
 }
+
+func (m migration) Migration_8() {
+	_, err := m.Tx.Exec("alter table userentity add id bigserial")
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = m.Tx.Exec("alter table userentity drop constraint userentity_pkey")
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = m.Tx.Exec("alter table userentity add primary key (id)")
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = m.Tx.Exec("alter table userentity add constraint username_unique unique (username)")
+	if err != nil {
+		panic(err)
+	}
+
+}
