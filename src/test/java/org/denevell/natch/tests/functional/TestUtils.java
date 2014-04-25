@@ -34,6 +34,7 @@ public class TestUtils {
                 connectionProps);
 
         Statement statement = conn.createStatement();
+        statement.execute("delete from users_loggedin");
         statement.execute("delete from thread_posts");
         statement.execute("delete from post_tags");
         statement.execute("delete from ThreadEntity");

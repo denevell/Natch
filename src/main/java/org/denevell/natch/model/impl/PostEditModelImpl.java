@@ -10,7 +10,7 @@ import org.denevell.natch.model.interfaces.PostEditModel;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.jvnet.hk2.annotations.Service;
 
-@Service @Singleton
+@Service
 public class PostEditModelImpl implements PostEditModel { 
 
 	private Jrappy<PostEntity> mPostModel = new Jrappy<PostEntity>(JPAFactoryContextListener.sFactory); 

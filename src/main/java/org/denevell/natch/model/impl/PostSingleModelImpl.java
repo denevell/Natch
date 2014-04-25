@@ -1,7 +1,5 @@
 package org.denevell.natch.model.impl;
 
-import javax.inject.Singleton;
-
 import org.denevell.jrappy.Jrappy;
 import org.denevell.natch.model.entities.PostEntity;
 import org.denevell.natch.model.entities.ThreadEntity;
@@ -9,7 +7,7 @@ import org.denevell.natch.model.interfaces.PostSingleModel;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.jvnet.hk2.annotations.Service;
 
-@Service @Singleton
+@Service
 public class PostSingleModelImpl implements PostSingleModel {
 
 	private Jrappy<PostEntity> mPostModel = new Jrappy<PostEntity>(JPAFactoryContextListener.sFactory);

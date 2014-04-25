@@ -1,6 +1,5 @@
 package org.denevell.natch.model.impl;
 
-import javax.inject.Singleton;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 
@@ -11,7 +10,7 @@ import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.jvnet.hk2.annotations.Service;
 
-@Service @Singleton
+@Service
 public class UserGetLoggedInModelImpl implements UserGetLoggedInModel {
 	
 	private WebTarget mServiceTarget;

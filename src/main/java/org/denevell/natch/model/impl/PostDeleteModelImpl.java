@@ -11,7 +11,7 @@ import org.denevell.natch.model.interfaces.PostDeleteModel;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.jvnet.hk2.annotations.Service;
 
-@Service @Singleton
+@Service
 public class PostDeleteModelImpl implements PostDeleteModel { 
 
 	private Jrappy<PostEntity> mPostModel = new Jrappy<PostEntity>(JPAFactoryContextListener.sFactory); 

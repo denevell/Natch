@@ -203,3 +203,11 @@ func (m migration) Migration_8() {
 	}
 
 }
+
+func (m migration) Migration_9() {
+	_, err := m.Tx.Exec("create table users_loggedin (auth_key text primary key, user_id bigint references userentity(id))")
+	if err != nil {
+		panic(err)
+	}
+
+}

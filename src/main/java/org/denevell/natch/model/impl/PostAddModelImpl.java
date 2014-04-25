@@ -9,7 +9,7 @@ import org.denevell.natch.model.interfaces.PostAddModel;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.jvnet.hk2.annotations.Service;
 
-@Service @Singleton
+@Service
 public class PostAddModelImpl implements PostAddModel {
 
 	final ThreadFactory mThreadFactory = new ThreadFactory();

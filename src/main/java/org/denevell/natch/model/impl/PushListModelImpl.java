@@ -2,15 +2,13 @@ package org.denevell.natch.model.impl;
 
 import java.util.List;
 
-import javax.inject.Singleton;
-
 import org.denevell.jrappy.Jrappy;
 import org.denevell.natch.model.entities.PushEntity;
 import org.denevell.natch.model.interfaces.PushListModel;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.jvnet.hk2.annotations.Service;
 
-@Service @Singleton
+@Service
 public class PushListModelImpl implements PushListModel {
 	private Jrappy<PushEntity> model = new Jrappy<PushEntity>(JPAFactoryContextListener.sFactory);
 

@@ -2,8 +2,6 @@ package org.denevell.natch.model.impl;
 
 import java.util.List;
 
-import javax.inject.Singleton;
-
 import org.denevell.jrappy.Jrappy;
 import org.denevell.natch.model.entities.PostEntity;
 import org.denevell.natch.model.entities.ThreadEntity;
@@ -11,7 +9,7 @@ import org.denevell.natch.model.interfaces.ThreadListModel;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.jvnet.hk2.annotations.Service;
 
-@Service @Singleton
+@Service
 public class ThreadListModelImpl implements ThreadListModel {
 
 	private Jrappy<PostEntity> mPostModel = new Jrappy<PostEntity>(JPAFactoryContextListener.sFactory);
