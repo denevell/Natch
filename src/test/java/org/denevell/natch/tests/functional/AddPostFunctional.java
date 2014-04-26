@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.client.WebTarget;
 
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.users.LoginResourceReturnData;
@@ -19,14 +18,12 @@ import org.junit.Test;
 public class AddPostFunctional {
 	
 	private LoginResourceReturnData loginResult;
-    private WebTarget service;
     private String authKey;
 	private AddPostPO addPostPo;
 	
 	@Before
 	public void setup() throws Exception {
-		service = TestUtils.getRESTClient();
-		addPostPo = new AddPostPO(service);
+		addPostPo = new AddPostPO();
 		TestUtils.deleteTestDb();
 	    new RegisterPO().register("aaron@aaron.com", "passy");
 		loginResult = new LoginPO().login("aaron@aaron.com", "passy");

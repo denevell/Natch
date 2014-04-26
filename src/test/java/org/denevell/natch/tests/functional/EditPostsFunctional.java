@@ -42,7 +42,7 @@ public class EditPostsFunctional {
 		service = TestUtils.getRESTClient();
 		TestUtils.deleteTestDb();
 	    registerPo = new RegisterPO();
-	    addPostPo = new AddPostPO(service);
+	    addPostPo = new AddPostPO();
 
 	    registerPo.register("aaron@aaron.com", "passy");
 		loginResult = new LoginPO().login("aaron@aaron.com", "passy");

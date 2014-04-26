@@ -1,5 +1,6 @@
 package org.denevell.natch.tests.functional.pageobjects;
 
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
@@ -8,13 +9,18 @@ import jersey.repackaged.com.google.common.collect.Lists;
 
 import org.denevell.natch.io.posts.AddPostResourceInput;
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
+import org.denevell.natch.tests.functional.TestUtils;
+import org.glassfish.jersey.client.JerseyClientBuilder;
+import org.glassfish.jersey.jackson.JacksonFeature;
 
 public class AddPostPO {
 	
 	private WebTarget mService;
 
-	public AddPostPO(WebTarget service) {
-		mService = service;
+	public AddPostPO() {
+		Client client = JerseyClientBuilder.createClient();
+		client.register(JacksonFeature.class);
+		mService = client.target(TestUtils.URL_REST_SERVICE);
 	}
 
 	public AddPostResourceReturnData add(String subject, String content, String authKey) {

@@ -160,7 +160,7 @@ public class LoginFunctional {
 		LoginResourceReturnData loginResult = new LoginPO().login("aaron@aaron.com", "passy");
 	    
 	    // Act
-		AddPostResourceReturnData result = new AddPostPO(service).add("s", "c", loginResult.getAuthKey());
+		AddPostResourceReturnData result = new AddPostPO().add("s", "c", loginResult.getAuthKey());
 		
 		// Assert
 		assertTrue("Should be logged in to do this", result.isSuccessful());		
@@ -189,25 +189,21 @@ public class LoginFunctional {
 	}
 	
 	@Test
-	public void shouldntLoginWithOldAuthKey() {
+	public void shouldLoginWithOldAuthKey() {
 		// Arrange 
 	    registerPo.register("aaron@aaron.com", "passy");
 		LoginResourceReturnData loginResult = new LoginPO().login("aaron@aaron.com", "passy");
-		new LoginPO().login("aaron@aaron.com", "passy");
-	    
-	    // Act
+		AddPostResourceReturnData result = new AddPostPO().add("s", "c", loginResult.getAuthKey());
+		assertTrue("Should be logged in to do this", result.isSuccessful());		
 
-		try {
-			service
-		    	.path("rest").path("user").path("is").request()
-				.header("AuthKey", loginResult.getAuthKey())
-		    	.get(LoginResourceLoggedInReturnData.class);
-		} catch(WebApplicationException e) {
-			// Assert
-			assertEquals("Should get 401", 401, e.getResponse().getStatus()); 
-			return;
-		}
-		assertTrue("Wanted to see a 401", false);		
+	    // Act - Use a new key
+		LoginResourceReturnData newLoginResult = new LoginPO().login("aaron@aaron.com", "passy");
+		result = new AddPostPO().add("s", "c", newLoginResult.getAuthKey());
+		assertTrue("Should be logged in to do this", result.isSuccessful());		
+	    
+	    // Act - Use the old key
+		result = new AddPostPO().add("s", "c", loginResult.getAuthKey());
+		assertTrue("Should be logged in to do this", result.isSuccessful());		
 	}	
 	
 }

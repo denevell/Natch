@@ -35,7 +35,7 @@ public class AddThreadFromMovedPostFunctional {
 		service = TestUtils.getRESTClient();
 		registerPo = new RegisterPO();
 		loginPo = new LoginPO();
-		addPostPo = new AddPostPO(service);
+		addPostPo = new AddPostPO();
 		addThreadFromPostPo = new AddThreadFromPostPO(service);
 		TestUtils.deleteTestDb();
 	    new RegisterPO().register("aaron", "aaron");

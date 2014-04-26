@@ -16,6 +16,7 @@ public class TestUtils {
 	private static final String NATCH_FUNCTIONAL = "/Natch-REST-ForAutomatedTests/";
 
 	public static final String URL_USER_SERVICE = "http://localhost:8080/CoreUserService-ForAutomatedTests/";
+	public static final String URL_REST_SERVICE = "http://localhost:8080/Natch-REST-ForAutomatedTests/";
 	private static String getHost() {
 		return "http://localhost:8080";
 	}

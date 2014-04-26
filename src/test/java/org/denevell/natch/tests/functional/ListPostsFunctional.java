@@ -31,7 +31,7 @@ public class ListPostsFunctional {
 	    new RegisterPO().register("aaron@aaron.com", "passy");
 		listThread = service.path("rest").path("post").path("thread");
 		loginResult = new LoginPO().login("aaron@aaron.com", "passy");
-	    addPostPo = new AddPostPO(service);
+	    addPostPo = new AddPostPO();
 	}
 	
 	@Test
