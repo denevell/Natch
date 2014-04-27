@@ -1,6 +1,5 @@
 package org.denevell.natch.model.impl;
 
-import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 
 import org.denevell.jrappy.Jrappy;
