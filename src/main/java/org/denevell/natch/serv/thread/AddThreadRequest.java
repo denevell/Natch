@@ -16,6 +16,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.denevell.jrappy.Jrappy;
 import org.denevell.natch.adapters.AddPostRequestToPostEntity;
@@ -82,34 +83,49 @@ public class AddThreadRequest {
 		return regReturnData;
 	}
 
-	private void sendPushNotifications(final AddPostResourceReturnData thread) {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				String key = ManifestVars.getGCMKey();
-				if(key==null || key.trim().length()==0) {
-					Log.error(getClass(), "GCM KEY is null or blank");
-				}
-				Sender sender = new Sender(key);
-				List<PushEntity> list = new Jrappy<PushEntity>(JPAFactoryContextListener.sFactory)
-						.startTransaction()
-						.namedQuery(PushEntity.NAMED_QUERY_LIST_IDS)
-						.list(PushEntity.class);
-				for (PushEntity pushEntity : list) {
-					try {
-						String registrationId = pushEntity.getClientId();
-						String s = new ObjectMapper().writeValueAsString(new CutDownThreadResource(thread.getThread()));
-						Message message = new Message.Builder().addData("thread", s).build();
-						Result result = sender.send(message, registrationId, 5);
-						Log.info(AddThreadRequest.class, "Push send result: " + result);
-					} catch (Exception e) {
-						Log.info(AddThreadRequest.class, "Error sending push message: " + e.getMessage());
-						e.printStackTrace();
-					}
-				}
-			}
-		}).start();
-	}
+  private void sendPushNotifications(final AddPostResourceReturnData thread) {
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        String key = ManifestVars.getGCMKey();
+        if (key == null || key.trim().length() == 0) {
+          Log.error(getClass(), "GCM KEY is null or blank");
+        }
+        Sender sender = new Sender(key);
+        Jrappy<PushEntity> jrappy = new Jrappy<PushEntity>(
+            JPAFactoryContextListener.sFactory);
+        List<PushEntity> list = null;
+        for (int i = 0; i < 2000; i++) {
+        list = jrappy
+              .startTransaction()
+              .namedQuery(PushEntity.NAMED_QUERY_LIST_IDS)
+              .list(PushEntity.class);
+        jrappy.commitAndCloseEntityManager();
+        try {
+          Thread.sleep(500);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+        }
+        if(list!=null) {
+          for (PushEntity pushEntity : list) {
+            try {
+              String registrationId = pushEntity.getClientId();
+              String s = new ObjectMapper() .writeValueAsString(new CutDownThreadResource(thread .getThread()));
+              Message message = new Message.Builder().addData("thread", s) .build();
+              Result result = sender.send(message, registrationId, 5);
+              Log.info(AddThreadRequest.class, "Push send result: " + result);
+            } catch (Exception e) {
+              Log.info(AddThreadRequest.class, "Error sending push message: "
+                  + e.getMessage());
+              e.printStackTrace();
+            }
+          }
+          
+        }
+      }
+    }).start();
+  }
 
 	private void generateAddPostReturnResource(AddPostResourceReturnData regReturnData, ThreadEntity thread) {
 		if(thread!=null) {

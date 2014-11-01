@@ -17,14 +17,17 @@ public class PostsListByModDateModelImpl implements PostsListByModDateModel {
 	
 	@Override
 	public List<PostEntity> list(int start, int numResults) {
+	  try  {
 		List<PostEntity> posts = mPostModel 
 				.startTransaction()
 				.start(start)
 				.max(numResults)
 				.namedQuery(PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE)
 				.list(PostEntity.class);
-		mPostModel.commitAndCloseEntityManager();
 		return posts;
+	  } finally {
+	    mPostModel.commitAndCloseEntityManager();
+	  }
 	}
 
 }

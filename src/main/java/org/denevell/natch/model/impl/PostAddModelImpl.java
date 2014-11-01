@@ -15,6 +15,7 @@ public class PostAddModelImpl implements PostAddModel {
 	@Override
 	public ThreadEntity add(final PostEntity postEntity) {
 		Jrappy<ThreadEntity> model = new Jrappy<ThreadEntity>(JPAFactoryContextListener.sFactory);
+		try {
 		model.startTransaction();
 		ThreadEntity thread = model.createOrUpdate(
 				postEntity.getThreadId(),
@@ -29,8 +30,11 @@ public class PostAddModelImpl implements PostAddModel {
 						return mThreadFactory.makeThread(postEntity);
 					}
 				}, ThreadEntity.class);
-		model.commitAndCloseEntityManager();
 		return thread;
+      
+    } finally {
+		model.commitAndCloseEntityManager();
+    }
 	}
 
 }
