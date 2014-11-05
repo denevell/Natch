@@ -4,3 +4,6 @@
 [submodule "Jrappy"]
 	path = Jrappy
 	url = https://github.com/denevell/Jrappy.git
+[submodule "UserServiceGenerator"]
+	path = UserServiceGenerator
+	url = https://github.com/denevell/UserServiceGenerator

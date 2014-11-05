@@ -1,2 +1,2 @@
 Manifest-Version: 1.0
-UserServiceUrl: http://localhost:8080/CoreUserService-ForAutomatedTests/
+UserServiceUrl: http://localhost:8084/cus/

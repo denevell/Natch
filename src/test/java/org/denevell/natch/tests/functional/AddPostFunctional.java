@@ -25,7 +25,7 @@ public class AddPostFunctional {
 	public void setup() throws Exception {
 		addPostPo = new AddPostPO();
 		TestUtils.deleteTestDb();
-	    new RegisterPO().register("aaron@aaron.com", "passy");
+	  new RegisterPO().register("aaron@aaron.com", "passy");
 		loginResult = new LoginPO().login("aaron@aaron.com", "passy");
 		authKey = loginResult.getAuthKey();
 	}

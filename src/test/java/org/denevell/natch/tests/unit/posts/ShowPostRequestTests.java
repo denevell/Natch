@@ -22,7 +22,7 @@ import org.mockito.Mockito;
 
 public class ShowPostRequestTests {
 	
-    ResourceBundle rb = Strings.getMainResourceBundle();
+  ResourceBundle rb = Strings.getMainResourceBundle();
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	@Before

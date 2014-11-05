@@ -24,7 +24,7 @@ public class LoginPO {
 	public LoginResourceReturnData login(String username, String password) {
 		LoginResourceInput loginInput = new LoginResourceInput(username, password);
 		LoginResourceReturnData loginResult = mService 
-	    		.path("rest").path("user").path("login").request()
+	    		.path("user").path("login").request()
 	    		.post(Entity.entity(loginInput, MediaType.APPLICATION_JSON), 
 	    				LoginResourceReturnData.class);
 		return loginResult;

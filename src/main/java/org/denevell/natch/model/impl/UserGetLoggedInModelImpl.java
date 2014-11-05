@@ -20,7 +20,7 @@ public class UserGetLoggedInModelImpl implements UserGetLoggedInModel {
 		client.register(JacksonFeature.class);
 		String uri = ManifestVars.getUserServiceUrl();
 		WebTarget target = client.target(uri);
-		mServiceTarget = target.path("rest").path("user").path("get");
+		mServiceTarget = target.path("user").path("get");
 	}
 
 	@Override

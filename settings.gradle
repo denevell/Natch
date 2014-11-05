@@ -1,2 +1,3 @@
 include 'Natch-io'
 include 'Jrappy'
+include 'UserServiceGenerator'

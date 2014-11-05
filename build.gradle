@@ -17,6 +17,7 @@ dependencies {
 	compile files('json_simple-1.1.jar')
 	compile files('gcm-server.jar')
 
+	compile project(':UserServiceGenerator')
 	compile project(':Natch-io')
 	compile project(':Jrappy')
 
@@ -25,13 +26,14 @@ dependencies {
 	compile 'postgresql:postgresql:9.1-901-1.jdbc4'
 	compile 'org.glassfish.jersey.ext:jersey-bean-validation:2.6'
 	compile 'org.hibernate:hibernate-validator:5.1.0.CR1'
+	compile 'org.mindrot:jbcrypt:0.3m'
 
     providedCompile 'org.eclipse.jetty:jetty-jsp:9.1.0.M0'
     providedCompile 'org.eclipse.jetty:jetty-webapp:9.1.0.M0'
-	providedCompile 'org.apache.commons:commons-lang3:3.1'
-	providedCompile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.6'
-	providedCompile 'org.glassfish.jersey.containers:jersey-container-servlet:2.6'
-	providedCompile 'org.eclipse.persistence:eclipselink:2.4.0'
+	compile 'org.apache.commons:commons-lang3:3.1'
+	compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.6'
+	compile 'org.glassfish.jersey.containers:jersey-container-servlet:2.6'
+	compile 'org.eclipse.persistence:eclipselink:2.4.0'
 
 	testCompile 'junit:junit:4.11'
 	testCompile 'org.mockito:mockito-all:1.9.5'
@@ -103,3 +105,32 @@ if(project.hasProperty('PRODUCTION')) {
 	war.dependsOn migrate
         war.classifier = 'ForAutomatedTests'
 }
+
+test {  
+        testLogging.events = ['failed','passed']
+        testLogging.showStandardStreams = true
+        testLogging.showCauses = true
+        testLogging.showExceptions = true
+        testLogging.showStackTraces = true
+}
+
+// When we want to start this independently
+
+task jettyStop() << {
+        println("Stopping Jetty based on its WAR name")
+        ["bash", "-c", "ps -aux | grep -v grep | grep 'java.* -jar.* Natch-REST-ForAutomatedTests.war' | awk '{ print \$2}' | xargs kill -9"].execute()
+        sleep(1000)
+}
+
+task jettyStart(dependsOn: [jettyStop]) << {
+        println("Starting Jetty")
+        ["mkdir", "logs"].execute();
+        def cmd = ["bash", "-c", "java -Xdebug -Xrunjdwp:transport=dt_socket,address=8011,server=y,suspend=n -server -Xmx50m -jar jetty-runner-9.1.0.M0.jar --port 8084 Natch-REST-ForAutomatedTests.war &> logs/jetty-stdout-stderr.log"].execute()
+        cmd.in.close()
+        cmd.out.close()
+        cmd.err.close()
+        println("Waiting 7 seconds to settle")
+        sleep(7000)
+        println("Finished waiting")
+}
+

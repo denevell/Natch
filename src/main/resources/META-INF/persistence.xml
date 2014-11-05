@@ -5,6 +5,7 @@
      <persistence-unit name="PERSISTENCE_UNIT_NAME" transaction-type="RESOURCE_LOCAL">
          <shared-cache-mode>NONE</shared-cache-mode>
 	     <mapping-file>META-INF/mapping.xml</mapping-file>
+	     <mapping-file>META-INF/userservice_mapping.xml</mapping-file>
 	     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 	     <properties>
 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/testnatch" />

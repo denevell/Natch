@@ -31,7 +31,7 @@ public class RegisterPO {
 		registerInput.setPassword(password);
 		registerInput.setRecoveryEmail(emailRecover);
 		RegisterResourceReturnData result = mService 
-	    		.path("rest").path("user").request()
+	    		.path("user").request()
 	    		.put(Entity.entity(registerInput, MediaType.APPLICATION_JSON), 
 	    				RegisterResourceReturnData.class);
 		return result;

@@ -28,7 +28,7 @@ import org.junit.Test;
 
 public class ListPostsResourceTests {
 	
-    ResourceBundle rb = Strings.getMainResourceBundle();
+  ResourceBundle rb = Strings.getMainResourceBundle();
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private ListPostsRequest resourceList;
