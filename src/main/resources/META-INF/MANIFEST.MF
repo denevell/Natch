@@ -1,2 +1,1 @@
-Manifest-Version: 1.0
-UserServiceUrl: http://localhost:8084/cus/
+UserServiceUrl: http://localhost:8080/Natch-REST-ForAutomatedTests/cus/

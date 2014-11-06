@@ -9,6 +9,7 @@ import javax.ws.rs.WebApplicationException;
 
 import org.denevell.natch.io.posts.AddPostResourceReturnData;
 import org.denevell.natch.io.users.LoginResourceReturnData;
+import org.denevell.natch.io.users.RegisterResourceReturnData;
 import org.denevell.natch.tests.functional.pageobjects.AddPostPO;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
@@ -25,7 +26,7 @@ public class AddPostFunctional {
 	public void setup() throws Exception {
 		addPostPo = new AddPostPO();
 		TestUtils.deleteTestDb();
-	  new RegisterPO().register("aaron@aaron.com", "passy");
+	  RegisterResourceReturnData r = new RegisterPO().register("aaron@aaron.com", "passy");
 		loginResult = new LoginPO().login("aaron@aaron.com", "passy");
 		authKey = loginResult.getAuthKey();
 	}

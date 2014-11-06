@@ -30,10 +30,10 @@ dependencies {
 
     providedCompile 'org.eclipse.jetty:jetty-jsp:9.1.0.M0'
     providedCompile 'org.eclipse.jetty:jetty-webapp:9.1.0.M0'
-	compile 'org.apache.commons:commons-lang3:3.1'
-	compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.6'
-	compile 'org.glassfish.jersey.containers:jersey-container-servlet:2.6'
-	compile 'org.eclipse.persistence:eclipselink:2.4.0'
+	providedCompile 'org.apache.commons:commons-lang3:3.1'
+	providedCompile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.6'
+	providedCompile 'org.glassfish.jersey.containers:jersey-container-servlet:2.6'
+	providedCompile 'org.eclipse.persistence:eclipselink:2.4.0'
 
 	testCompile 'junit:junit:4.11'
 	testCompile 'org.mockito:mockito-all:1.9.5'

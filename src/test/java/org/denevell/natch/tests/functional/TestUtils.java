@@ -15,13 +15,11 @@ public class TestUtils {
 	
 	//private static final String NATCH_FUNCTIONAL = "/Natch-REST-ForAutomatedTests/";
 
-	//public static final String URL_USER_SERVICE = "http://localhost:8080/Natch-REST-ForAutomatedTests/cus";
-	//public static final String URL_REST_SERVICE = "http://localhost:8080/Natch-REST-ForAutomatedTests/";
-	private static final String NATCH_FUNCTIONAL = "/";
-	public static final String URL_USER_SERVICE = "http://localhost:8084/cus/";
-	public static final String URL_REST_SERVICE = "http://localhost:8084";
+	public static final String URL_USER_SERVICE = "http://localhost:8080/Natch-REST-ForAutomatedTests/cus/";
+	public static final String URL_REST_SERVICE = "http://localhost:8080/Natch-REST-ForAutomatedTests/";
+	private static final String NATCH_FUNCTIONAL = "/Natch-REST-ForAutomatedTests/";
 	private static String getHost() {
-		return "http://localhost:8084";
+		return "http://localhost:8080";
 	}
 
 	public static void deleteTestDb() throws Exception {
