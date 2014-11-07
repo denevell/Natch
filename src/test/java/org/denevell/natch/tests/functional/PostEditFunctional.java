@@ -75,7 +75,7 @@ public class PostEditFunctional {
 		assertEquals(initialPost.getId(), newListedPosts.getPosts().get(0).getId());
 		assertEquals(initialPost.getCreation(), newListedPosts.getPosts().get(0).getCreation());
 		assertEquals(initialPost.getUsername(), newListedPosts.getPosts().get(0).getUsername());
-		assertEquals(initialPost.getThreadId(), newListedPosts.getPosts().get(0).getThreadId());
+		assertEquals(initialPost.threadId, newListedPosts.getPosts().get(0).threadId);
 		assertEquals("sup", newListedPosts.getPosts().get(0).getContent());
 		assertFalse("Edit as admin not set", newListedPosts.getPosts().get(0).isAdminEdited());
 		//assertEquals("sup two?", newListedPosts.getPosts().get(0).getSubject());

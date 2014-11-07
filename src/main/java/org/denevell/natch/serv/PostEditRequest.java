@@ -51,8 +51,8 @@ public class PostEditRequest {
 			@Valid EditPostResource editPostResource) {
 		User userEntity = (User) mRequest.getAttribute("user");
 		PostEntity editData = new PostEntity();
-		editData.setContent(editPostResource.content);
-		editData.setSubject("-");
+		editData.content = (editPostResource.content);
+		editData.subject = ("-");
 		int result = mPostEditModel.edit(postId, userEntity.username, editData, userEntity.admin);
 		if(result == PostEditModel.EDITED) {
 		  return Response.ok().build();

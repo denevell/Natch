@@ -78,15 +78,15 @@ public class ThreadsListRequest {
 					continue;
 				} else {
 					ThreadResource postResource = new ThreadResource();
-					postResource.author = (p.getRootPost().getUsername());
+					postResource.author = (p.getRootPost().username);
 					postResource.numPosts = ((int) p.getNumPosts());
 					postResource.subject = (p.getRootPost().getSubject());
-					postResource.rootPostId = (p.getRootPost().getId());
+					postResource.rootPostId = (p.getRootPost().id);
 					postResource.tags = (p.getRootPost().getTags());
-					postResource.modification = (p.getLatestPost().getModified());
-					postResource.creation = (p.getRootPost().getCreated());
+					postResource.modification = (p.getLatestPost().modified);
+					postResource.creation = (p.getRootPost().created);
 					postResource.id = (p.getId());
-					postResource.latestPostId = (p.getLatestPost().getId());
+					postResource.latestPostId = (p.getLatestPost().id);
 					postsResources.add(postResource);
 				}
 			}

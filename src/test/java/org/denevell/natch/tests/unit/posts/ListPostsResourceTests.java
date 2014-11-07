@@ -99,7 +99,7 @@ public class ListPostsResourceTests {
 		ListPostsResource result = resourceList.listByModificationDate(0, 0);
 		
 		// Assert
-		assertEquals("threadId", result.getPosts().get(0).getThreadId());
+		assertEquals("threadId", result.getPosts().get(0).threadId);
 	}	
 	
 	@Test

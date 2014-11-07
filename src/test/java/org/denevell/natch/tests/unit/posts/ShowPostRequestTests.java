@@ -54,7 +54,7 @@ public class ShowPostRequestTests {
 		// Assert
 		assertEquals(1, result.getCreation());
 		assertEquals(1, result.getModification());
-		assertEquals("1234", result.getThreadId());
+		assertEquals("1234", result.threadId);
 		assertEquals("u1", result.getUsername());
 		assertEquals("thread_subject", result.getSubject());
 		assertEquals("c1", result.getContent());

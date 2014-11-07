@@ -82,15 +82,15 @@ public class ThreadAddRequest {
     public static PostEntity adapt(AddThreadResourceInput input, boolean adminEdited, String username) {
       PostEntity pe = new PostEntity();
       long created = new Date().getTime();
-      pe.setContent(input.content);
-      pe.setSubject(input.subject);
-      pe.setThreadId(input.threadId);
-      pe.setTags(input.tags);
-      pe.setUsername(username);
-      pe.setCreated(created);
-      pe.setModified(created);
+      pe.content = (input.content);
+      pe.subject = (input.subject);
+      pe.threadId = (input.threadId);
+      pe.tags = (input.tags);
+      pe.username = (username);
+      pe.created = (created);
+      pe.modified = (created);
       if (adminEdited) {
-        pe.adminEdited();
+        pe.adminEdited = true;
       }
       return pe;
     }
@@ -146,12 +146,12 @@ public class ThreadAddRequest {
     
     public CutDownThreadResource(ThreadEntity tr) {
       subject = tr.getRootPost().getSubject();
-      author = tr.getRootPost().getUsername();
+      author = tr.getRootPost().username;
       numPosts = tr.getNumPosts();
       tags = tr.getRootPost().getTags();
-      rootPostId = tr.getRootPost().getId();
-      modification = tr.getRootPost().getModified();
-      creation = tr.getRootPost().getCreated();
+      rootPostId = tr.getRootPost().id;
+      modification = tr.getRootPost().modified;
+      creation = tr.getRootPost().created;
       id = tr.getId();
     }
 

@@ -60,7 +60,7 @@ public class PostSingleFunctional {
 		assertEquals("Get subject of post", "subthread", returnData.getSubject());
 		assertEquals("Get content of post", "contpost", returnData.getContent());
 		assertNotNull("Get id of post", returnData.getId());
-		assertNotNull("Get threadid of post", returnData.getThreadId());
+		assertNotNull("Get threadid of post", returnData.threadId);
 	}
 	
 	@Test

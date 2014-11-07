@@ -19,7 +19,7 @@ public interface PostAddModel {
       Jrappy<ThreadEntity> model = new Jrappy<ThreadEntity>(JPAFactoryContextListener.sFactory);
       try {
         model.startTransaction();
-        ThreadEntity thread = model.createOrUpdate(postEntity.getThreadId(), new Jrappy.UpdateItem<ThreadEntity>() {
+        ThreadEntity thread = model.createOrUpdate(postEntity.threadId, new Jrappy.UpdateItem<ThreadEntity>() {
           @Override
           public ThreadEntity update(ThreadEntity item) {
             return mThreadFactory.makeThread(item, postEntity);

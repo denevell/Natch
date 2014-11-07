@@ -81,9 +81,9 @@ public class ThreadEditRequest {
 	private int edit(long postId, EditThreadResource editPostResource) {
 		User userEntity = (User) mRequest.getAttribute("user");
 		PostEntity editingData = new PostEntity();
-		editingData.setSubject(editPostResource.subject);
-		editingData.setContent(editPostResource.content);
-		editingData.setTags(editPostResource.tags);
+		editingData.subject = (editPostResource.subject);
+		editingData.content = (editPostResource.content);
+		editingData.tags = (editPostResource.tags);
 		int result = mPostEditModel.edit(postId, userEntity.username, editingData, userEntity.admin);
 		return result;
 	}

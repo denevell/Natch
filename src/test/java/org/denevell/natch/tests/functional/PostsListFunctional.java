@@ -99,7 +99,7 @@ public class PostsListFunctional {
 		ListPostsResource returnData = listRecentPostsThreads(service); 
 		
 		// Assert
-		assertNotNull(returnData.getPosts().get(0).getThreadId());
+		assertNotNull(returnData.getPosts().get(0).threadId);
 	}	
 	
 	@Test
@@ -110,7 +110,7 @@ public class PostsListFunctional {
 		ListPostsResource returnData = listRecentPostsThreads(service); 
 		
 		// Assert
-		assertEquals("threadId", returnData.getPosts().get(0).getThreadId());
+		assertEquals("threadId", returnData.getPosts().get(0).threadId);
 	}	
 	
 	@Test
@@ -131,10 +131,10 @@ public class PostsListFunctional {
 		assertEquals("sub", returnData.getSubject());
 		assertEquals("aaron@aaron.com", returnData.getAuthor());
 		assertEquals("cont", returnData.getPosts().get(0).getContent());
-		assertEquals("t", returnData.getPosts().get(0).getThreadId());
+		assertEquals("t", returnData.getPosts().get(0).threadId);
 		assertEquals("sub", returnData.getPosts().get(1).getSubject());
 		assertEquals("cont2", returnData.getPosts().get(1).getContent());		
-		assertEquals("t", returnData.getPosts().get(1).getThreadId());
+		assertEquals("t", returnData.getPosts().get(1).threadId);
 	}
 	
 	@Test
@@ -155,7 +155,7 @@ public class PostsListFunctional {
 		assertEquals("sub", returnData.getSubject());
 		assertEquals("aaron@aaron.com", returnData.getAuthor());
 		assertEquals("cont2", returnData.getPosts().get(0).getContent());
-		assertEquals("t", returnData.getPosts().get(0).getThreadId());
+		assertEquals("t", returnData.getPosts().get(0).threadId);
 	}		
 	
 	@Test

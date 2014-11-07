@@ -50,15 +50,15 @@ public class PostSingleRequest {
 			return null;
 		}
 		PostResource postResource = new PostResource(
-				post.getUsername(), 
-				post.getCreated(), 
-				post.getModified(),
-				post.getSubject(), 
-				post.getContent(), 
-				post.getTags(),
-				post.isAdminEdited());
-		postResource.id = post.getId();
-		postResource.threadId = post.getThreadId();
+				post.username, 
+				post.created, 
+				post.modified,
+				post.subject, 
+				post.content, 
+				post.tags,
+				post.adminEdited);
+		postResource.id = post.id;
+		postResource.threadId = post.threadId;
 		return postResource;
 	}
 	

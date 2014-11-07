@@ -23,10 +23,10 @@ public interface ThreadFromPostModel {
         if (post == null)
           return null;
         PostEntity newPost = new PostEntity(post);
-        newPost.setId(0);
-        newPost.adminEdited();
+        newPost.id = (0);
+        newPost.adminEdited = true;
         newPost.setThreadId(null);
-        newPost.setSubject(subject);
+        newPost.subject = (subject);
         removePostFromOldThread(post);
         mPostModel.getEntityManager().remove(post);
         ThreadEntity thread = createNewThreadFromPost(newPost);
@@ -37,7 +37,7 @@ public interface ThreadFromPostModel {
     }
 
     private void removePostFromOldThread(final PostEntity post) {
-      mThreadModel.useTransaction(mPostModel.getEntityManager()).findAndUpdateOrDelete(post.getThreadId(), new DeleteOrMerge<ThreadEntity>() {
+      mThreadModel.useTransaction(mPostModel.getEntityManager()).findAndUpdateOrDelete(post.threadId, new DeleteOrMerge<ThreadEntity>() {
         @Override
         public boolean shouldDelete(ThreadEntity item) {
           item.updateThreadToRemovePost(post);

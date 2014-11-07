@@ -69,19 +69,19 @@ public class ThreadListRequest {
 		ThreadResource tr =  new ThreadResource();
 		List<PostResource> postsResources = new ArrayList<PostResource>();
 		for (PostEntity p: posts) {
-			PostResource postResource = new PostResource(p.getUsername(), 
-					p.getCreated(), 
-					p.getModified(), 
+			PostResource postResource = new PostResource(p.username, 
+					p.created, 
+					p.modified, 
 					p.getSubject(), 
 					p.getContent(),
 					p.getTags(), 
-					p.isAdminEdited());
-			postResource.id = p.getId();
-			postResource.threadId = p.getThreadId();
+					p.adminEdited);
+			postResource.id = p.id;
+			postResource.threadId = p.threadId;
 			postsResources.add(postResource);
 		}
 		tr.subject = thread.getRootPost().getSubject();
-		tr.author = thread.getRootPost().getUsername();
+		tr.author = thread.getRootPost().username;
 		tr.posts = postsResources;
 		tr.numPosts = (int) thread.getNumPosts();
 		tr.id = thread.getId();

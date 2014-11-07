@@ -18,7 +18,6 @@ dependencies {
 	compile files('gcm-server.jar')
 
 	compile project(':UserServiceGenerator')
-	compile project(':Natch-io')
 	compile project(':Jrappy')
 
 	compile 'log4j:log4j:1.2.7'

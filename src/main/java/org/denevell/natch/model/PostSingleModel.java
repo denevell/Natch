@@ -24,8 +24,8 @@ public interface PostSingleModel {
           return null;
         } else {
           ThreadEntity thread = mThreadModel.useTransaction(mPostModel.getEntityManager()).namedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID)
-              .queryParam("id", post.getThreadId()).single(ThreadEntity.class);
-          post.setSubject(thread.getRootPost().getSubject());
+              .queryParam("id", post.threadId).single(ThreadEntity.class);
+          post.subject = (thread.getRootPost().getSubject());
           return post;
         }
 

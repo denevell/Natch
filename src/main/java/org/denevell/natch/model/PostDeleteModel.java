@@ -32,11 +32,11 @@ public interface PostDeleteModel {
         if (pe == null) {
           mPostModel.commitAndCloseEntityManager();
           return PostDeleteModel.DOESNT_EXIST;
-        } else if (!adminEditing && !pe.getUsername().equals(username)) {
+        } else if (!adminEditing && !pe.username.equals(username)) {
           mPostModel.commitAndCloseEntityManager();
           return PostDeleteModel.NOT_YOURS;
         }
-        mThreadModel.useTransaction(postEntityManager).findAndUpdateOrDelete(pe.getThreadId(), new DeleteOrMerge<ThreadEntity>() {
+        mThreadModel.useTransaction(postEntityManager).findAndUpdateOrDelete(pe.threadId, new DeleteOrMerge<ThreadEntity>() {
           @Override
           public boolean shouldDelete(ThreadEntity item) {
             item.updateThreadToRemovePost(pe);

@@ -28,17 +28,17 @@ public interface PostEditModel {
         int result = mPostModel.startTransaction().updateEntityOnPermission(id, new Jrappy.UpdateItemOnPermissionCorrect<PostEntity>() {
           @Override
           public boolean update(PostEntity item) {
-            if (!adminEditing && !item.getUsername().equals(username)) {
+            if (!adminEditing && !item.username.equals(username)) {
               return false;
             }
-            item.setContent(editedPostEntity.getContent());
+            item.content = (editedPostEntity.getContent());
             if (editedPostEntity.getSubject() != null)
-              item.setSubject(editedPostEntity.getSubject());
+              item.subject = (editedPostEntity.getSubject());
             if (editedPostEntity.getTags() != null)
-              item.setTags(editedPostEntity.getTags());
-            item.setModified(new Date().getTime());
-            if (!username.equals(item.getUsername()) && adminEditing) {
-              item.adminEdited();
+              item.tags = (editedPostEntity.getTags());
+            item.modified = (new Date().getTime());
+            if (!username.equals(item.username) && adminEditing) {
+              item.adminEdited = true;
             }
             return true;
           }
