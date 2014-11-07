@@ -1,170 +1,99 @@
 package org.denevell.natch.tests.functional;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.List;
+
+import javax.ws.rs.core.Response;
+
+import org.denevell.natch.serv.PostSingleRequest.PostResource;
+import org.denevell.natch.serv.PostsListRequest.ListPostsResource;
+import org.denevell.natch.tests.functional.pageobjects.LoginPO;
+import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
+import org.denevell.natch.tests.functional.pageobjects.PostDeletePO;
+import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
+import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
+import org.denevell.userservice.serv.LoginRequest.LoginResourceReturnData;
+import org.junit.Before;
+import org.junit.Test;
+
 
 public class PostDeleteFunctional {
 	
-  /*
-	private WebTarget service;
-    ResourceBundle rb = Strings.getMainResourceBundle();
 	private LoginResourceReturnData loginResult;
 	private RegisterPO registerPo;
+  private PostAddPO postAddPo;
+  private PostDeletePO postDeletePo;
+  private String authKey;
+  private PostsListPO postListPo;
 
 	@Before
 	public void setup() throws Exception {
-		service = TestUtils.getRESTClient();
 		TestUtils.deleteTestDb();
-	    registerPo = new RegisterPO();
-	    registerPo.register("aaron@aaron.com", "passy");
+		postAddPo = new PostAddPO();
+		postListPo = new PostsListPO();
+		postDeletePo = new PostDeletePO();
+	  registerPo = new RegisterPO();
+	  registerPo.register("aaron@aaron.com", "passy");
 		loginResult = new LoginPO().login("aaron@aaron.com", "passy");
+		authKey = loginResult.getAuthKey();
 	}
 	
 	@Test
 	public void shouldDeletePost() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("a", "b", "thread");	
-		AddPostResourceInput input2 = new AddPostResourceInput("d", "e", "thread");	
-
-		AddPostResourceReturnData res = service
-		.path("rest").path("post").path("addthread").request()
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(Entity.json(input), AddPostResourceReturnData.class);
-		assertTrue("Added thraed", res.isSuccessful());				
-
-		res = service
-		.path("rest").path("post").path("addthread").request()
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(Entity.json(input2), AddPostResourceReturnData.class);
-		assertTrue("Added thraed", res.isSuccessful());				
-
-		ListPostsResource listPostsBefore = 
-		service.path("rest").path("post").path("0").path("10").request()
-		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListPostsResource.class); 		
-		
-		// Act
-		DeletePostResourceReturnData ret = service.path("rest").path("post").path("del")
-		.path(String.valueOf(listPostsBefore.getPosts().get(0).getId())).request()
-		.header("AuthKey", loginResult.getAuthKey())
-		.delete(DeletePostResourceReturnData.class);
-		ListPostsResource listPostsAfter = service
-		.path("rest").path("post").path("0").path("10").request()
-		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListPostsResource.class); 		
-		
-		// Assert
-		assertEquals("", ret.getError());
-		assertTrue(ret.isSuccessful());		
-		assertEquals(2, listPostsBefore.getPosts().size());		
-		assertEquals(1, listPostsAfter.getPosts().size());		
+		assertEquals(200, postAddPo.add("cont", authKey, "thread").getStatus());
+		assertEquals(200, postAddPo.add("cont1", authKey, "thread").getStatus());
+		List<PostResource> posts = postListPo.list("0", "10").posts;
+		assertEquals(2, posts.size());
+		postDeletePo.delete(posts.get(0).id, authKey);
+		List<PostResource> postsAfter = postListPo.list("0", "10").posts;
+		assertEquals(1, postsAfter.size());
+		assertEquals("cont", postsAfter.get(0).content);
 	}
-	
+
 	@Test
 	public void shouldSeeErrorOnUnAuthorised() {
-		// Arrange 
-		// Register other user
-	    registerPo.register("aaron1@aaron.com", "passy");
-		LoginResourceReturnData loginResult1 = new LoginPO().login("aaron1@aaron.com", "passy");
+	  registerPo.register("other_user", "passy");
+		String otherUserAuthKey = new LoginPO().login("other_user", "passy").getAuthKey();
 
-		// Make post with user one 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		service
-		.path("rest").path("post").path("add").request()
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(Entity.json(input), AddPostResourceReturnData.class); 
-		ListPostsResource listPosts = service
-		.path("rest").path("post").path("0").path("10").request()
-		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListPostsResource.class); 		
+		postAddPo.add("cont1", authKey, "thread").getStatus();
+		ListPostsResource posts = postListPo.list("0", "10");
 		
-		// Act - delete with second user
-		DeletePostResourceReturnData ret = service.path("rest").path("post").path("del")
-		.path(String.valueOf(listPosts.getPosts().get(0).getId())).request()
-		.header("AuthKey", loginResult1.getAuthKey())
-		.delete(DeletePostResourceReturnData.class);
-		ListPostsResource listPostsAfter = service
-		.path("rest").path("post").path("0").path("10").request()
-		.header("AuthKey", loginResult1.getAuthKey())
-    	.get(ListPostsResource.class); 		
-		
-		// Assert
-		assertEquals(rb.getString(Strings.post_not_yours), ret.getError());
-		assertFalse(ret.isSuccessful());		
-		assertEquals(1, listPosts.getPosts().size());		
-		assertEquals(1, listPostsAfter.getPosts().size());		
+		Response response = postDeletePo.delete(posts.posts.get(0).id, otherUserAuthKey);
+		ListPostsResource postsAfter = postListPo.list("0", "10");
+
+		assertEquals(403, response.getStatus());
+		assertEquals(1, posts.posts.size());
+		assertEquals(1, postsAfter.posts.size());
 	}
-	
-    @Test
-    public void shouldAllowAdminToDelete() {
-        // Arrange 
-        // Register other user
-	    registerPo.register("aaron1@aaron.com", "passy");
-		LoginResourceReturnData loginResult1 = new LoginPO().login("aaron1@aaron.com", "passy");
 
-        // Make post with user two
-        AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-        service
-        .path("rest").path("post").path("add").request()
-        .header("AuthKey", loginResult1.getAuthKey())
-        .put(Entity.json(input), AddPostResourceReturnData.class); 
-        ListPostsResource listPosts = service
-        .path("rest").path("post").path("0").path("10").request() 
-        .header("AuthKey", loginResult1.getAuthKey())
-        .get(ListPostsResource.class);      
-        
-        // Act - delete with first user, admin user
-        DeletePostResourceReturnData ret = service.path("rest").path("post").path("del")
-        .path(String.valueOf(listPosts.getPosts().get(0).getId())).request()
-        .header("AuthKey", loginResult.getAuthKey())
-        .delete(DeletePostResourceReturnData.class);
-        ListPostsResource listPostsAfter = service
-        .path("rest").path("post").path("0").path("10").request()
-        .header("AuthKey", loginResult.getAuthKey())
-        .get(ListPostsResource.class);      
-        
-        // Assert
-        assertEquals("", ret.getError());
-        assertTrue(ret.isSuccessful());     
-        assertEquals(1, listPosts.getPosts().size());       
-        assertEquals(0, listPostsAfter.getPosts().size());      
-    }	
-	
 	@Test
 	public void shouldSeeErrorOnUnknownPost() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		service
-		.path("rest").path("post").path("add").request()
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(Entity.json(input), AddPostResourceReturnData.class); 
-		ListPostsResource listPosts = service
-		.path("rest").path("post").path("0").path("10").request()
-		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListPostsResource.class); 		
+		postAddPo.add("cont1", authKey, "thread").getStatus();
+		ListPostsResource posts = postListPo.list("0", "10");
 		
-		// Act
-		DeletePostResourceReturnData ret = service.path("rest").path("post").path("del")
-		.path(String.valueOf(listPosts.getPosts().get(0).getId()+1)).request()
-		.header("AuthKey", loginResult.getAuthKey())
-		.delete(DeletePostResourceReturnData.class);
-		ListPostsResource listPostsAfter = service
-		.path("rest").path("post").path("0").path("10").request()
-		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListPostsResource.class); 		
+		Response response = postDeletePo.delete(posts.posts.get(0).id+999, authKey);
+		ListPostsResource postsAfter = postListPo.list("0", "10");
+
+		assertEquals(404, response.getStatus());
+		assertEquals(1, posts.posts.size());
+		assertEquals(1, postsAfter.posts.size());
+	}
+
+	@Test
+	public void shouldAllowAdminToDelete() {
+	  registerPo.register("other_user", "passy");
+		String otherUserAuthKey = new LoginPO().login("other_user", "passy").getAuthKey();
+
+		postAddPo.add("cont1", otherUserAuthKey, "thread").getStatus();
+		ListPostsResource posts = postListPo.list("0", "10");
 		
-		// Assert
-		assertEquals(rb.getString(Strings.post_doesnt_exist), ret.getError());
-		assertFalse(ret.isSuccessful());		
-		assertEquals(1, listPosts.getPosts().size());		
-		assertEquals(1, listPostsAfter.getPosts().size());				
+		Response response = postDeletePo.delete(posts.posts.get(0).id, authKey);
+		ListPostsResource postsAfter = postListPo.list("0", "10");
+
+		assertEquals(200, response.getStatus());
+		assertEquals(1, posts.posts.size());
+		assertEquals(0, postsAfter.posts.size());
 	}
-	
-	public static DeletePostResourceReturnData deletePost(WebTarget service, long postId, String authKey) {
-		DeletePostResourceReturnData ret = service.path("rest").path("post").path("del")
-		.path(String.valueOf(postId)).request()
-		.header("AuthKey", authKey)
-		.delete(DeletePostResourceReturnData.class);	
-		return ret;
-	}
-	*/
-	
+
 }

@@ -10,7 +10,7 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 ~~ * Post add tests
 ~~ * Check for jersey error return bodies
 ~~ * Check for listed posts in add posts tests
-* Post delete tests
+~~ * Post delete tests
 * Post edit tests
 * Thread add tests
 * Thread delete tests
@@ -29,6 +29,7 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 * Fix multiple paths etc in testutils
 * Make adding a post with a non existent post id an error
 * Stop directory listing
+* Should probably return post id in add post
 
 ### Dev complete
 
