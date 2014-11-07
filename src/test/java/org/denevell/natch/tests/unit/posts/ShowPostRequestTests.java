@@ -11,10 +11,10 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.denevell.natch.io.posts.PostResource;
-import org.denevell.natch.model.entities.PostEntity;
-import org.denevell.natch.model.interfaces.PostSingleModel;
-import org.denevell.natch.serv.post.SinglePostRequest;
+import org.denevell.natch.model.PostEntity;
+import org.denevell.natch.model.PostSingleModel;
+import org.denevell.natch.serv.PostSingleRequest;
+import org.denevell.natch.serv.PostSingleRequest.PostResource;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,7 +43,7 @@ public class ShowPostRequestTests {
 		postEntity.setSubject("thread_subject");
 		PostSingleModel model = mock(PostSingleModel.class);
 		Mockito.when(model.find(0)).thenReturn(postEntity);
-		SinglePostRequest resourceShow = new SinglePostRequest(
+		PostSingleRequest resourceShow = new PostSingleRequest(
 				model,
 				request, 
 				response);

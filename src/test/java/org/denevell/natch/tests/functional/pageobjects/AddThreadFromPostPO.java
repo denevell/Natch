@@ -4,8 +4,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
-import org.denevell.natch.io.posts.AddPostResourceReturnData;
-import org.denevell.natch.io.threads.AddThreadFromPostResourceInput;
+import org.denevell.natch.serv.ThreadFromPostRequest.AddThreadFromPostResourceInput;
 
 public class AddThreadFromPostPO {
 	

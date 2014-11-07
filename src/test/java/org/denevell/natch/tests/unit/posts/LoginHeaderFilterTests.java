@@ -12,9 +12,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.denevell.natch.auth.LoginHeadersFilter;
-import org.denevell.natch.io.users.User;
-import org.denevell.natch.model.interfaces.UserGetLoggedInModel;
+import org.denevell.natch.model.UserGetLoggedInModel;
+import org.denevell.natch.model.UserGetLoggedInModel.User;
+import org.denevell.natch.utils.LoginHeadersFilter;
 import org.denevell.natch.utils.ManifestVars;
 import org.junit.Before;
 import org.junit.Test;

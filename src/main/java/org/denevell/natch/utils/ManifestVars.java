@@ -27,7 +27,6 @@ public class ManifestVars implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent sce) {
 		try {
 			InputStream inputStream = getClass().getClassLoader().getResourceAsStream("META-INF/MANIFEST.MF");
-			Logger.getLogger(getClass()).info(inputStream);
 			Manifest manifest = new Manifest(inputStream);
 			sMainManifestAttributes = manifest.getMainAttributes();
 			sUserServiceUrl = (String) sMainManifestAttributes.getValue("UserServiceUrl");

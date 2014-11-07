@@ -5,7 +5,7 @@
 http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
     version="2.0">
 
-    <entity class="org.denevell.natch.model.entities.PushEntity"> 
+    <entity class="org.denevell.natch.model.PushEntity"> 
        <table name="PushIds" />
 	   <named-query name="listIds">
 	       <query>select p from PushEntity p</query>
@@ -20,7 +20,7 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
        </attributes>
     </entity>    
 
-    <entity class="org.denevell.natch.model.entities.PostEntity">
+    <entity class="org.denevell.natch.model.PostEntity">
        <table name="PostEntity" />
 	   <named-query name="findByModData">
 	       <query>select p from PostEntity p order by p.modified desc</query>
@@ -66,7 +66,7 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
        </attributes>
     </entity>    
     
-    <entity class="org.denevell.natch.model.entities.ThreadEntity">
+    <entity class="org.denevell.natch.model.ThreadEntity">
        <table name="ThreadEntity" />
 	   <named-query name="findThreads">
 	       <query>select p from ThreadEntity p where p.rootPost is not null order by p.latestPost.modified desc</query>

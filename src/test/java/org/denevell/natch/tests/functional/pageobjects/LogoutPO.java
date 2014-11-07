@@ -3,8 +3,8 @@ package org.denevell.natch.tests.functional.pageobjects;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 
-import org.denevell.natch.io.users.LogoutResourceReturnData;
 import org.denevell.natch.tests.functional.TestUtils;
+import org.denevell.userservice.serv.LogoutRequest.LogoutResourceReturnData;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
 

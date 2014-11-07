@@ -1,1 +1,1 @@
-UserServiceUrl: http://localhost:8080/Natch-REST-ForAutomatedTests/cus/
+UserServiceUrl: http://localhost:8084/cus/

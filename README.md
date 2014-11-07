@@ -7,7 +7,28 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 
 ## TODO
 
+* Check for listed posts in add posts tests
+* Check for jersey error return bodies
+* ~~ Post add tests
+* Post delete tests
+* Post edit tests
+* Thread add tests
+* Thread delete tests
+* Thread edit tests
+* Thread from post tests
+* Posts list tests
+* Post single tests
+* Pust ids test
+* Return thread id in add thread and move post to new thread
+* Return thread id in move post to new thread
+
+## Later
+
 * Make user service generator give a better logging name so as not to conflict
+* Some services generator squashing the loader file
+* Fix multiple paths etc in testutils
+* Make adding a post with a non existent post id an error
+* Stop directory listing
 
 ### Dev complete
 

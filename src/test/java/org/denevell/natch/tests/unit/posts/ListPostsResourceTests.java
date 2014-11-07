@@ -13,15 +13,15 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.denevell.natch.io.posts.ListPostsResource;
-import org.denevell.natch.io.threads.ThreadResource;
-import org.denevell.natch.model.entities.PostEntity;
-import org.denevell.natch.model.entities.ThreadEntity;
-import org.denevell.natch.model.interfaces.PostsListByModDateModel;
-import org.denevell.natch.model.interfaces.ThreadListModel;
-import org.denevell.natch.model.interfaces.ThreadListModel.ThreadAndPosts;
-import org.denevell.natch.serv.post.ListPostsRequest;
-import org.denevell.natch.serv.thread.ListThreadRequest;
+import org.denevell.natch.model.PostEntity;
+import org.denevell.natch.model.PostsListByModDateModel;
+import org.denevell.natch.model.ThreadEntity;
+import org.denevell.natch.model.ThreadListModel;
+import org.denevell.natch.model.ThreadListModel.ThreadAndPosts;
+import org.denevell.natch.serv.PostsListRequest;
+import org.denevell.natch.serv.PostsListRequest.ListPostsResource;
+import org.denevell.natch.serv.ThreadListRequest;
+import org.denevell.natch.serv.ThreadListRequest.ThreadResource;
 import org.denevell.natch.utils.Strings;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +31,7 @@ public class ListPostsResourceTests {
   ResourceBundle rb = Strings.getMainResourceBundle();
 	private HttpServletRequest request;
 	private HttpServletResponse response;
-	private ListPostsRequest resourceList;
+	private PostsListRequest resourceList;
 	private PostsListByModDateModel postsModel;
 
 	@Before
@@ -39,7 +39,7 @@ public class ListPostsResourceTests {
 		postsModel = mock(PostsListByModDateModel.class);
 		response = mock(HttpServletResponse.class);
 		request = mock(HttpServletRequest.class);
-		resourceList = new ListPostsRequest(postsModel, request, response);
+		resourceList = new PostsListRequest(postsModel, request, response);
 	}
 	
 	@Test
@@ -117,7 +117,7 @@ public class ListPostsResourceTests {
 		ThreadAndPosts ret = new ThreadAndPosts(thread, posts);
 		when(model.list("t", 0, 0)).thenReturn(ret);
 		// Act
-		ListThreadRequest res = new ListThreadRequest(model, request, response);
+		ThreadListRequest res = new ThreadListRequest(model, request, response);
 		ThreadResource result = res.listByThreadId("t", 0, 0);
 		
 		// Assert

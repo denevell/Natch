@@ -5,9 +5,9 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
-import org.denevell.natch.io.users.RegisterResourceInput;
-import org.denevell.natch.io.users.RegisterResourceReturnData;
 import org.denevell.natch.tests.functional.TestUtils;
+import org.denevell.userservice.serv.RegisterRequest.RegisterResourceInput;
+import org.denevell.userservice.serv.RegisterRequest.RegisterResourceReturnData;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
