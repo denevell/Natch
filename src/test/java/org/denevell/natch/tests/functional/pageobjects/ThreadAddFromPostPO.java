@@ -7,11 +7,11 @@ import javax.ws.rs.core.Response;
 
 import org.denevell.natch.serv.ThreadFromPostRequest.AddThreadFromPostResourceInput;
 
-public class AddThreadFromPostPO {
+public class ThreadAddFromPostPO {
 	
 	private WebTarget mService;
 
-	public AddThreadFromPostPO(WebTarget service) {
+	public ThreadAddFromPostPO(WebTarget service) {
 		mService = service;
 	}
 

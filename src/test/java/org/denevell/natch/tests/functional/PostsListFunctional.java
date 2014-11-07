@@ -9,7 +9,7 @@ import javax.ws.rs.client.WebTarget;
 
 import org.denevell.natch.serv.PostsListRequest.ListPostsResource;
 import org.denevell.natch.serv.ThreadListRequest.ThreadResource;
-import org.denevell.natch.tests.functional.pageobjects.AddPostPO;
+import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.userservice.serv.LoginRequest.LoginResourceReturnData;
@@ -21,7 +21,7 @@ public class PostsListFunctional {
 	private LoginResourceReturnData loginResult;
 	private WebTarget service;
 	private WebTarget listThread;
-	private AddPostPO addPostPo;
+	private PostAddPO addPostPo;
 
 	/*
 	@Before

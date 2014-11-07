@@ -2,10 +2,14 @@ package org.denevell.natch.tests.functional;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 import javax.ws.rs.core.Response;
 
-import org.denevell.natch.tests.functional.pageobjects.AddPostPO;
+import org.denevell.natch.serv.PostSingleRequest.PostResource;
+import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
 import org.denevell.natch.tests.functional.pageobjects.LoginPO;
+import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
 import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.userservice.serv.LoginRequest.LoginResourceReturnData;
 import org.junit.Before;
@@ -15,11 +19,13 @@ public class PostAddFunctional {
 	
 	private LoginResourceReturnData loginResult;
   private String authKey;
-	private AddPostPO addPostPo;
+	private PostAddPO postAddPo;
+  private PostsListPO postListPo;
 	
 	@Before
 	public void setup() throws Exception {
-		addPostPo = new AddPostPO();
+		postAddPo = new PostAddPO();
+		postListPo = new PostsListPO();
 		TestUtils.deleteTestDb();
 	  new RegisterPO().register("aaron@aaron.com", "passy");
 		loginResult = new LoginPO().login("aaron@aaron.com", "passy");
@@ -28,13 +34,21 @@ public class PostAddFunctional {
 	
 	@Test
 	public void shouldMakePost() {
-		assertEquals(200, addPostPo.add("cont", authKey, "thread").getStatus());
+		assertEquals(200, postAddPo.add("cont", authKey, "thread").getStatus());
+		PostResource postResource = postListPo.list("0", "1").posts.get(0);
+    assertEquals("cont", postResource.content);
+		assertEquals("thread", postResource.threadId);
 	}
 
 	@Test 
 	public void shouldMakePostWithSameContent() {
-		assertEquals(200, addPostPo.add("cont", authKey, "thread").getStatus());
-		assertEquals(200, addPostPo.add("cont", authKey, "thread").getStatus());
+		assertEquals(200, postAddPo.add("cont", authKey, "thread").getStatus());
+		assertEquals(200, postAddPo.add("cont", authKey, "thread").getStatus());
+		List<PostResource> posts = postListPo.list("0", "2").posts;
+    assertEquals("cont", posts.get(0).content);
+		assertEquals("thread", posts.get(0).threadId);
+    assertEquals("cont", posts.get(1).content);
+		assertEquals("thread", posts.get(1).threadId);
 	}
 	
 	@Test 
@@ -55,24 +69,26 @@ public class PostAddFunctional {
 				"aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit " +
 				"esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, " +
 				"sunt in culpa qui officia deserunt mollit anim id est laborum.";
-		assertEquals(200, addPostPo.add(largeContent, authKey, "thread").getStatus());
+		assertEquals(200, postAddPo.add(largeContent, authKey, "thread").getStatus());
+		PostResource postResource = postListPo.list("0", "1").posts.get(0);
+    assertEquals(largeContent, postResource.content);
 	}	
 	
 	@Test
 	public void shouldSeeErrorOnUnAuthorised() {
-		assertEquals(401, addPostPo.add("cont", authKey+"BAD", "thread").getStatus());
+		assertEquals(401, postAddPo.add("cont", authKey+"BAD", "thread").getStatus());
 	}
 	
 	@Test
 	public void shouldSeeErrorOnBlankContent() {
-		Response response = addPostPo.add(" ", authKey, "thread");
+		Response response = postAddPo.add(" ", authKey, "thread");
     assertEquals(400, response.getStatus());
     assertEquals("Post must have content", TestUtils.getValidationMessage(response, 0));
 	}
 
 	@Test
 	public void shouldSeeErrorOnBlankThread() {
-		Response response = addPostPo.add("cont", authKey, " ");
+		Response response = postAddPo.add("cont", authKey, " ");
     assertEquals(400, response.getStatus());
     assertEquals("Post must include thread id", TestUtils.getValidationMessage(response, 0));
 	}
@@ -80,14 +96,14 @@ public class PostAddFunctional {
 	
 	@Test
 	public void shouldSeeErrorOnBlanks() {
-		Response response = addPostPo.add(" ", authKey, " ");
+		Response response = postAddPo.add(" ", authKey, " ");
     assertEquals(400, response.getStatus());
     assertEquals(2, TestUtils.getValidationMessages(response));
 	}
 
 	@Test
 	public void shouldSeeErrorOnNulls() {
-		Response response = addPostPo.add(null, authKey, null);
+		Response response = postAddPo.add(null, authKey, null);
     assertEquals(400, response.getStatus());
     assertEquals(2, TestUtils.getValidationMessages(response));
 	}

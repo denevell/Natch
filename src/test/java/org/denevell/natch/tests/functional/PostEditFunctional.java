@@ -1,26 +1,5 @@
 package org.denevell.natch.tests.functional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-import java.util.ResourceBundle;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-
-import org.denevell.natch.serv.PostEditRequest.EditPostResource;
-import org.denevell.natch.serv.PostSingleRequest.PostResource;
-import org.denevell.natch.serv.PostsListRequest.ListPostsResource;
-import org.denevell.natch.tests.functional.pageobjects.AddPostPO;
-import org.denevell.natch.tests.functional.pageobjects.LoginPO;
-import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
-import org.denevell.userservice.serv.LoginRequest.LoginResourceReturnData;
-import org.junit.Before;
-import org.junit.Test;
 
 public class PostEditFunctional {
 	

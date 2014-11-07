@@ -1,38 +1,29 @@
 package org.denevell.natch.tests.functional.pageobjects;
 
 import javax.ws.rs.client.Client;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import org.denevell.natch.serv.PostAddRequest.PostAddInput;
+import org.denevell.natch.serv.PostsListRequest.ListPostsResource;
 import org.denevell.natch.tests.functional.TestUtils;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
-public class AddPostPO {
+public class PostsListPO {
 	
 	private WebTarget mService;
 
-	public AddPostPO() {
+	public PostsListPO() {
 		Client client = JerseyClientBuilder.createClient();
 		client.register(JacksonFeature.class);
 		mService = client.target(TestUtils.URL_REST_SERVICE);
 	}
 
-	public Response add(
-	    String content, 
-			String authKey,
-			String threadId) {
-	  PostAddInput input = new PostAddInput();
-		input.content = content;
-		input.threadId = threadId;
+	public ListPostsResource list(String start, String limit) {
     return mService
-		.path("rest").path("post").path("add").request()
+		.path("rest").path("post").path(start).path(limit).request()
 		.accept(MediaType.APPLICATION_JSON)
-		.header("AuthKey", authKey)
-		.put(Entity.entity(input, MediaType.APPLICATION_JSON));
+		.get(ListPostsResource.class);
 	}	
 	
 
