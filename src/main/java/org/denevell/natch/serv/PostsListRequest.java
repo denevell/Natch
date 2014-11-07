@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.model.PostEntity;
@@ -20,21 +18,8 @@ import org.denevell.natch.serv.PostSingleRequest.PostResource;
 @Path("post")
 public class PostsListRequest {
 	
-	@Context HttpServletRequest mRequest;
 	@Inject PostsListByModDateModel mPostsListModel;
 	
-	public PostsListRequest() {
-	}
-	
-	/**
-	 * For DI testing.
-	 * @param editPostAdapter 
-	 */
-	public PostsListRequest(PostsListByModDateModel model, HttpServletRequest request) {
-		mPostsListModel = model;
-		mRequest = request;
-	}
-
 	@GET
 	@Path("/{start}/{limit}")
 	@Produces(MediaType.APPLICATION_JSON)

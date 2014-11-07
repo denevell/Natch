@@ -28,18 +28,8 @@ public class PostEntity {
 	public String username;
   public boolean adminEdited = false;
 	
-	public PostEntity() {
-	}
+	public PostEntity() {}
 	
-	public PostEntity(String user, long created, long modified, String subject, String content, String threadId) {
-		this.username = user;
-		this.created = created;
-		this.modified = modified;
-		this.subject = subject;
-		this.content = content;
-		this.threadId = threadId;
-	}
-
 	public PostEntity(PostEntity post) {
 		this.id = post.id;
 		this.created = post.created;
@@ -51,21 +41,6 @@ public class PostEntity {
 		this.username = post.username;
 		this.adminEdited = post.adminEdited;
 	}
-
-  public static boolean isSubjectTooLarge(String subject) {
-    return subject != null && subject.length() > PostEntity.MAX_SUBJECT_LENGTH;
-  }
-
-  public static boolean isTagLengthOkay(List<String> tags) {
-    if (tags != null && tags.size() > 0) {
-      for (String tag : tags) {
-        if (tag != null & tag.length() > PostEntity.MAX_TAG_LENGTH) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
 
 	public String getSubject() {
 		String escaped = StringEscapeUtils.escapeHtml4(subject);

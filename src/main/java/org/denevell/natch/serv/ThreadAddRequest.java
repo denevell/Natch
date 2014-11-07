@@ -28,8 +28,8 @@ import org.denevell.natch.model.UserGetLoggedInModel.User;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.ManifestVars;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.Result;
@@ -51,29 +51,24 @@ public class ThreadAddRequest {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addThread(@Valid AddThreadResourceInput input) {
-		User userEntity = (User) mRequest.getAttribute("user");
-		if (input.tags!=null && !PostEntity.isTagLengthOkay(input.tags)) {
-			return Response.status(400).build(); // How to know a 400 means that?
-		} else if (PostEntity.isSubjectTooLarge(input.subject)) {
-			return Response.status(400).build(); // How to know a 400 means that?
-		} else {
-		  PostEntity post = AddPostRequestToPostEntity.adapt(input, false, userEntity.username);
-		  ThreadEntity thread = mAddPostModel.add(post);
-		  if(thread==null) {
-		    return Response.serverError().build();
-		  }
-		  sendPushNotifications(thread);
-		  return Response.ok().build();
-		}
+    User userEntity = (User) mRequest.getAttribute("user");
+    PostEntity post = AddPostRequestToPostEntity.adapt(input, false, userEntity.username);
+    ThreadEntity thread = mAddPostModel.add(post);
+    if (thread == null) {
+      return Response.serverError().build();
+    }
+    sendPushNotifications(thread);
+    return Response.ok().build();
 	}	
 
   public static class AddThreadResourceInput {
-    @NotEmpty @NotBlank 
+    @NotBlank @Length(max=PostEntity.MAX_SUBJECT_LENGTH, message="Subject cannot be more than 300 characters")
     public String subject;
-    @NotEmpty @NotBlank 
+    @NotBlank 
     public String content;
-    @NotEmpty @NotBlank 
+    @NotBlank 
     public String threadId;
+    @Length(max=PostEntity.MAX_TAG_LENGTH, message="Tag cannot be more than 20 characters")
     public List<String> tags;
   }
 
