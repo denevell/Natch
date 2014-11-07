@@ -63,7 +63,7 @@ public class ThreadFromPostRequest {
   }
 
   @XmlRootElement
-  public class AddThreadFromPostResourceInput {
+  public static class AddThreadFromPostResourceInput {
     public long postId;
     public String subject;
   }

@@ -1,30 +1,9 @@
 package org.denevell.natch.tests.functional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-
-import org.denevell.natch.serv.PostAddRequest.AddPostResourceInput;
-import org.denevell.natch.tests.functional.pageobjects.LoginPO;
-import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
-import org.denevell.natch.utils.Strings;
-import org.denevell.userservice.serv.LoginRequest.LoginResourceReturnData;
-import org.junit.Before;
-import org.junit.Test;
 
 public class ThreadAddFunctional {
 	
+  /*
 	private WebTarget service;
   ResourceBundle rb = Strings.getMainResourceBundle();
 	private LoginResourceReturnData loginResult;
@@ -121,5 +100,6 @@ public class ThreadAddFunctional {
 		.put(Entity.entity(input, MediaType.APPLICATION_JSON), AddPostResourceReturnData.class);
         return returnData;
     }
+    */
 	
 }

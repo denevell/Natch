@@ -3,13 +3,17 @@ package org.denevell.natch.tests.functional;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Properties;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.server.validation.ValidationError;
 
 public class TestUtils {
 	
@@ -51,5 +55,17 @@ public class TestUtils {
 		client.register(JacksonFeature.class);
 	    return client.target(baseUrl);		
 	}
+	
+	public static List<ValidationError> getValidationErrors(Response response) {
+		return response.readEntity(new GenericType<List<ValidationError>>() {{}});
+	}
+
+	public static String getValidationMessage(Response response, int num) {
+		return response.readEntity(new GenericType<List<ValidationError>>() {{}}).get(num).getMessage();
+	}
+
+  public static int getValidationMessages(Response response) {
+		return response.readEntity(new GenericType<List<ValidationError>>() {{}}).size();
+  }
 
 }

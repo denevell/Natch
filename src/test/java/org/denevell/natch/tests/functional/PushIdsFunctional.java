@@ -1,19 +1,15 @@
 package org.denevell.natch.tests.functional;
 
-import static org.junit.Assert.assertEquals;
-
 import javax.ws.rs.client.WebTarget;
 
-import org.denevell.natch.serv.PushResource;
 import org.denevell.natch.tests.functional.pageobjects.PushIdsPO;
-import org.junit.Before;
-import org.junit.Test;
 
 public class PushIdsFunctional {
 	
-    private WebTarget service;
+  private WebTarget service;
 	private PushIdsPO addPushIdsPo;
 	
+	/*
 	@Before
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
@@ -41,5 +37,6 @@ public class PushIdsFunctional {
 		assertEquals(1, ids.getIds().size());
 		assertEquals("pushId1", ids.getIds().get(0).getClientId());
 	}
+	*/
 
 }

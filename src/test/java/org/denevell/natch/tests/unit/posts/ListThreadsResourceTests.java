@@ -1,30 +1,9 @@
 package org.denevell.natch.tests.unit.posts;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.denevell.natch.model.PostEntity;
-import org.denevell.natch.model.ThreadEntity;
-import org.denevell.natch.model.ThreadsListModel;
-import org.denevell.natch.model.ThreadsListModel.ThreadsAndNumTotalThreads;
-import org.denevell.natch.serv.ThreadsListRequest;
-import org.denevell.natch.serv.ThreadsListRequest.ListThreadsResource;
-import org.denevell.natch.utils.Strings;
-import org.junit.Before;
-import org.junit.Test;
 
 public class ListThreadsResourceTests {
 	
+  /*
     ResourceBundle rb = Strings.getMainResourceBundle();
 	private ThreadsListRequest resource;
 	private HttpServletRequest request;
@@ -114,5 +93,6 @@ public class ListThreadsResourceTests {
 		assertEquals("u2", result.getThreads().get(1).getAuthor());
 		assertEquals("s2", result.getThreads().get(1).getSubject());
 	}		
+	*/
 	
 }

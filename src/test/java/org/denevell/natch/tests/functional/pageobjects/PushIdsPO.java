@@ -4,7 +4,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 
 import org.denevell.natch.serv.PushIdRequests.PushInput;
-import org.denevell.natch.serv.PushResource;
+import org.denevell.natch.serv.PushIdRequests.PushResource;
 
 public class PushIdsPO {
 	
@@ -16,7 +16,7 @@ public class PushIdsPO {
 
 	public void add(String id) {
 		PushInput entity = new PushInput();
-		entity.setId(id);
+		entity.id = (id);
         	mService
         	.path("rest").path("push").path("add").request()
         	.put(Entity.json(entity));

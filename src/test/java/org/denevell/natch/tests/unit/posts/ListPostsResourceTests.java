@@ -1,33 +1,9 @@
 package org.denevell.natch.tests.unit.posts;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.denevell.natch.model.PostEntity;
-import org.denevell.natch.model.PostsListByModDateModel;
-import org.denevell.natch.model.ThreadEntity;
-import org.denevell.natch.model.ThreadListModel;
-import org.denevell.natch.model.ThreadListModel.ThreadAndPosts;
-import org.denevell.natch.serv.PostsListRequest;
-import org.denevell.natch.serv.PostsListRequest.ListPostsResource;
-import org.denevell.natch.serv.ThreadListRequest;
-import org.denevell.natch.serv.ThreadListRequest.ThreadResource;
-import org.denevell.natch.utils.Strings;
-import org.junit.Before;
-import org.junit.Test;
 
 public class ListPostsResourceTests {
 	
+  /*
   ResourceBundle rb = Strings.getMainResourceBundle();
 	private HttpServletRequest request;
 	private HttpServletResponse response;
@@ -137,5 +113,6 @@ public class ListPostsResourceTests {
 		assertEquals("s2", result.getPosts().get(1).getSubject());
 		assertEquals("c2", result.getPosts().get(1).getContent());
 	}
+	*/
 	
 }

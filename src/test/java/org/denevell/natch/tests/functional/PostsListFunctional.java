@@ -23,6 +23,7 @@ public class PostsListFunctional {
 	private WebTarget listThread;
 	private AddPostPO addPostPo;
 
+	/*
 	@Before
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
@@ -186,5 +187,5 @@ public class PostsListFunctional {
         return returnData;
     }
 	
-	
+	*/
 }

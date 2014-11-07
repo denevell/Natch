@@ -1,29 +1,9 @@
 package org.denevell.natch.tests.functional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-
-import org.denevell.natch.serv.PostAddRequest.AddPostResourceInput;
-import org.denevell.natch.serv.PostsListRequest.ListPostsResource;
-import org.denevell.natch.serv.ThreadEditRequest.EditThreadResource;
-import org.denevell.natch.serv.ThreadListRequest.ThreadResource;
-import org.denevell.natch.serv.ThreadsListRequest.ListThreadsResource;
-import org.denevell.natch.tests.functional.pageobjects.LoginPO;
-import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
-import org.denevell.userservice.serv.LoginRequest.LoginResourceReturnData;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
 
 public class ThreadsListFunctional {
 	
+  /*
 	private LoginResourceReturnData loginResult;
 	private WebTarget service;
 
@@ -317,4 +297,5 @@ public class ThreadsListFunctional {
     	.get(ListThreadsResource.class);
 		return threads;
 	}	
+	*/
 }
