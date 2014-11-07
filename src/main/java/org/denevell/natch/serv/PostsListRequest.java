@@ -53,15 +53,7 @@ public class PostsListRequest {
 		public ListPostsResource(List<PostEntity> postsEntities) {
 			List<PostResource> postsResources = new ArrayList<PostResource>();
 			for (PostEntity p: postsEntities) {
-				PostResource postResource = new PostResource(p.username, 
-						p.created, 
-						p.modified, 
-						p.subject, 
-						p.content,
-						p.tags, 
-						p.adminEdited);
-				postResource.id = p.id;
-				postResource.threadId = p.threadId;
+				PostResource postResource = new PostResource(p);
 				postsResources.add(postResource);
 			}
 			posts = postsResources;
