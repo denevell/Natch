@@ -1,137 +1,106 @@
 package org.denevell.natch.tests.functional;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+
+import javax.ws.rs.core.Response;
+
+import org.denevell.natch.serv.PostSingleRequest.PostResource;
+import org.denevell.natch.serv.PostsListRequest.ListPostsResource;
+import org.denevell.natch.tests.functional.pageobjects.LoginPO;
+import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
+import org.denevell.natch.tests.functional.pageobjects.PostEditPO;
+import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
+import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
+import org.denevell.userservice.serv.LoginRequest.LoginResourceReturnData;
+import org.junit.Before;
+import org.junit.Test;
+
 
 public class PostEditFunctional {
 	
-  /*
-	private WebTarget service;
 	private LoginResourceReturnData loginResult;
-	private AddPostResourceInput initalInput;
 	private PostResource initialPost;
-    ResourceBundle rb = Strings.getMainResourceBundle();
 	private ListPostsResource originallyListedPosts;
-    private String authKey;
+  private String authKey;
 	private RegisterPO registerPo;
-	private AddPostPO addPostPo;
+  private PostAddPO postAddPo;
+  private PostsListPO postsListPo;
+  private PostEditPO postEditPo;
 
 	@Before
 	public void setup() throws Exception {
-		service = TestUtils.getRESTClient();
 		TestUtils.deleteTestDb();
-	    registerPo = new RegisterPO();
-	    addPostPo = new AddPostPO();
+	  registerPo = new RegisterPO();
+	  postAddPo = new PostAddPO();
+	  postEditPo = new PostEditPO();
+	  postsListPo = new PostsListPO();
 
-	    registerPo.register("aaron@aaron.com", "passy");
+	  registerPo.register("aaron@aaron.com", "passy");
 		loginResult = new LoginPO().login("aaron@aaron.com", "passy");
-	    authKey = loginResult.getAuthKey();
+	  authKey = loginResult.getAuthKey();
 
 		// Add post
-		initalInput = new AddPostResourceInput("sub", "cont");
-		initalInput.setTags(Arrays.asList(new String[] {"tag1", "tag2"}));
-		addPostPo.add("sub", "cont", authKey);
-		originallyListedPosts = PostsListFunctional.listRecentPostsThreads(service);
-		// save it
-		initialPost = originallyListedPosts.getPosts().get(0);
-		// Pre assert
-		assertEquals(initalInput.getContent(), initialPost.getContent());
-		assertEquals(initalInput.getSubject(), initialPost.getSubject());
+		postAddPo.add("cont", authKey, "thread");
+		originallyListedPosts = postsListPo.list("0", "10");
+		initialPost = originallyListedPosts.posts.get(0); 
 	}
 	
 	@Test
 	public void shouldEditPost() {
-		// Arrange
-		EditPostResource editedInput = new EditPostResource();
-		editedInput.setContent("sup");
-		
-		// Act - edit then list
-		EditPostResourceReturnData editReturnData = editPost(service, authKey, initialPost.getId(), editedInput); 		
-		ListPostsResource newListedPosts = PostsListFunctional.listRecentPostsThreads(service);
-		
-		// Assert
-		assertEquals("", editReturnData.getError());
-		assertTrue(editReturnData.isSuccessful());		
-		assertEquals(initialPost.getId(), newListedPosts.getPosts().get(0).getId());
-		assertEquals(initialPost.getCreation(), newListedPosts.getPosts().get(0).getCreation());
-		assertEquals(initialPost.getUsername(), newListedPosts.getPosts().get(0).getUsername());
-		assertEquals(initialPost.threadId, newListedPosts.getPosts().get(0).threadId);
-		assertEquals("sup", newListedPosts.getPosts().get(0).getContent());
-		assertFalse("Edit as admin not set", newListedPosts.getPosts().get(0).isAdminEdited());
-		//assertEquals("sup two?", newListedPosts.getPosts().get(0).getSubject());
-		assertTrue(newListedPosts.getPosts().get(0).getModification() > initialPost.getModification());
+	  assertEquals(200, postEditPo.edit("sup", initialPost.id, authKey).getStatus());
+	  List<PostResource> posts = postsListPo.list("0", "10").posts;
+	  PostResource post = posts.get(0);
+	  assertEquals("sup", post.content);
+	  assertEquals(initialPost.creation, post.creation);
+	  assertEquals(initialPost.username, post.username);
+	  assertEquals(initialPost.threadId, post.threadId);
+	  assertEquals(initialPost.adminEdited, post.adminEdited);
+	  assertTrue(initialPost.modification < post.modification);
 	}
 
-    public static EditPostResourceReturnData editPost(WebTarget service, String authKey, long postId, EditPostResource editedInput) {
-        return service
-		.path("rest").path("post").path("editpost")
-		.path(String.valueOf(postId)).request()
-		.header("AuthKey", authKey)
-    	.post(Entity.entity(editedInput, MediaType.APPLICATION_JSON),EditPostResourceReturnData.class);
-    }
-	
 	@Test
 	public void shouldSeeErrorOnUnAuthorised() {
-		// Arrange
-		EditPostResource editedInput = new EditPostResource();
-		editedInput.setContent("sup");
-		// Login with another user
-	    registerPo.register("aaron1@aaron.com", "passy");
-		LoginResourceReturnData loginResult1 = new LoginPO().login("aaron1@aaron.com", "passy");
-		
-		// Act - edit with different user then list
-		EditPostResourceReturnData editReturnData = editPost(service, loginResult1.getAuthKey(), initialPost.getId(), editedInput); 		
-		ListPostsResource newListedPosts = PostsListFunctional.listRecentPostsThreads(service);
-		
-		// Assert
-		assertEquals(rb.getString(Strings.post_not_yours), editReturnData.getError());
-		assertFalse(editReturnData.isSuccessful());		
-		assertEquals(initalInput.getContent(), newListedPosts.getPosts().get(0).getContent());
-		assertEquals(initalInput.getSubject(), newListedPosts.getPosts().get(0).getSubject());
+	  registerPo.register("other_user", "passy");
+		String otherUserAuthKey = new LoginPO().login("other_user", "passy").getAuthKey();
+
+		Response response = postEditPo.edit("editeeed", initialPost.id, otherUserAuthKey);
+		ListPostsResource postsAfter = postsListPo.list("0", "10");
+
+		assertEquals(403, response.getStatus());
+		assertEquals(1, originallyListedPosts.posts.size());
+		assertEquals(1, postsAfter.posts.size());
 	}
 
 	@Test
-	public void shouldEditAsAdmin() {
-		// Arrange
-		// Login with another user
-	    registerPo.register("aaron1@aaron.com", "passy");
-		LoginResourceReturnData loginResult1 = new LoginPO().login("aaron1@aaron.com", "passy");
+	public void shouldAllowAdminToEdit() {
+	  registerPo.register("other_user", "passy");
+		String otherUserAuthKey = new LoginPO().login("other_user", "passy").getAuthKey();
 
-        // Act - Add a post as new user
-        addPostPo.add("presubadminedit", "precontadminedit", new String[] {"tag1", "tag2"}, loginResult1.getAuthKey());
-		ListPostsResource originalPosts = PostsListFunctional.listRecentPostsThreads(service);
-		PostResource addedPost = originalPosts.getPosts().get(0);
+		postAddPo.add("cont", otherUserAuthKey, "thread").getStatus();
+		ListPostsResource posts = postsListPo.list("0", "10");
 		
-		// Act - edit with first, admin, user
-		EditPostResource editedInput = new EditPostResource();
-		editedInput.setContent("supadmineditedcontent");
-		EditPostResourceReturnData editReturnData = editPost(service, loginResult.getAuthKey(), addedPost.getId(), editedInput); 		
-		ListPostsResource newListedPosts = PostsListFunctional.listRecentPostsThreads(service);
-		PostResource editPost = newListedPosts.getPosts().get(0);
-		
-		// Assert
-		assertEquals("", editReturnData.getError());
-		assertTrue(editReturnData.isSuccessful());		
-		assertEquals("supadmineditedcontent", editPost.getContent());
-		assertEquals("aaron1@aaron.com", editPost.getUsername());
-		assertFalse("Edited as admin flag not set originally", addedPost.isAdminEdited());
-		assertTrue("Edited as admin flag set", editPost.isAdminEdited());
+		Response response = postEditPo.edit("editeeed", posts.posts.get(0).id, authKey);
+		ListPostsResource postsAfter = postsListPo.list("0", "10");
+
+		assertEquals(200, response.getStatus());
+		assertEquals(2, posts.posts.size());
+		assertEquals(2, postsAfter.posts.size());
+		assertEquals("other_user", posts.posts.get(0).username);
+		assertEquals("other_user", postsAfter.posts.get(0).username);
+		assertEquals("cont", posts.posts.get(0).content);
+		assertEquals("editeeed", postsAfter.posts.get(0).content);
+		assertEquals(false, posts.posts.get(0).adminEdited);
+		assertEquals(true, postsAfter.posts.get(0).adminEdited);
 	}
-	
+
 	@Test
 	public void shouldSeeErrorOnBlankContent() {
-		try {
-			EditPostResource editedInput = new EditPostResource();
-			editedInput.setContent(" ");
-			editPost(service, loginResult.getAuthKey(), initialPost.getId(), editedInput); 		
-			assertFalse("Excepted 400 error", true);
-		} catch(WebApplicationException e) {
-			assertEquals(400, e.getResponse().getStatus());
-			return;
-		}	
-		
-		ListPostsResource newListedPosts = PostsListFunctional.listRecentPostsThreads(service);
-		assertEquals(initalInput.getContent(), newListedPosts.getPosts().get(0).getContent());
-		assertEquals(initalInput.getSubject(), newListedPosts.getPosts().get(0).getSubject());
+	  Response response = postEditPo.edit(" ", initialPost.id, authKey);
+    assertEquals(400, response.getStatus());
+    assertEquals("Post must have content", TestUtils.getValidationMessage(response, 0));
 	}
-	*/
 	
 }

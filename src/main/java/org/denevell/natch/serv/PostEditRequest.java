@@ -1,9 +1,7 @@
 package org.denevell.natch.serv;
 
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -12,43 +10,24 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 import org.denevell.natch.model.PostEditModel;
 import org.denevell.natch.model.PostEntity;
-import org.denevell.natch.model.UserGetLoggedInModel;
 import org.denevell.natch.model.UserGetLoggedInModel.User;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 
 @Path("post/editpost")
 public class PostEditRequest {
 	
-	@Context UriInfo mInfo;
 	@Context HttpServletRequest mRequest;
-	@Context ServletContext context;
-	@Context HttpServletResponse mResponse;
 	@Inject PostEditModel mPostEditModel;
-	@Inject UserGetLoggedInModel mUserLogggedInModel;
-	
-	public PostEditRequest() {
-	}
-	
-	/**
-	 * For DI testing.
-	 * @param editPostAdapter 
-	 */
-	public PostEditRequest(HttpServletRequest request, HttpServletResponse response) {
-		mRequest = request;
-		mResponse = response;
-	}
 	
 	@POST
 	@Path("{postId}") 
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response editpost(
 			@PathParam(value="postId") long postId, 
-			@Valid EditPostResource editPostResource) {
+			@Valid PostEditInput editPostResource) {
 		User userEntity = (User) mRequest.getAttribute("user");
 		PostEntity editData = new PostEntity();
 		editData.content = (editPostResource.content);
@@ -65,10 +44,9 @@ public class PostEditRequest {
 		}
 	}
 
-  public static class EditPostResource {
-    @NotEmpty
-    @NotBlank
-    private String content;
+  public static class PostEditInput {
+    @NotBlank(message="Post must have content")
+    public String content;
   }
 
 }
