@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.denevell.natch.model.ThreadEntity.AddInput.StringWrapper;
+import org.denevell.natch.utils.Log;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -113,6 +114,39 @@ public class ThreadEntity {
       id = thread.id;
       tags = PostEntityUtils.getTagsEscaped(thread.rootPost.tags);
     }
+  }
+
+  public static class OutputList {
+    public long numOfThreads;
+    public List<Output> threads = new ArrayList<Output>();
+
+		public OutputList(List<ThreadEntity> threadEntities) {
+		  this.numOfThreads = threadEntities.size();
+			List<Output> postsResources = new ArrayList<Output>();
+			for (ThreadEntity p: threadEntities) {
+        if (p.rootPost == null) {
+          if (p.id != null) {
+            Log.info(getClass(), "Found a thread with a null root post. Thread: " + p.id);
+          } else {
+            Log.info(getClass(), "Found a thread with a null root post. Unknown thread id.");
+          }
+          continue;
+				} else {
+					Output postResource = new Output();
+					postResource.author = (p.rootPost.username);
+					postResource.numPosts = ((int) p.numPosts);
+					postResource.subject = StringEscapeUtils.escapeHtml4(p.rootPost.subject);
+					postResource.rootPostId = (p.rootPost.id);
+					postResource.tags = PostEntityUtils.getTagsEscaped(p.rootPost.tags);
+					postResource.modification = (p.latestPost.modified);
+					postResource.creation = (p.rootPost.created);
+					postResource.id = (p.id);
+					postResource.latestPostId = (p.latestPost.id);
+					postsResources.add(postResource);
+				}
+			}
+			this.threads = (postsResources);
+		}
   }
 	
 }

@@ -24,8 +24,11 @@ import org.denevell.natch.model.ThreadEntity;
 import org.denevell.natch.model.ThreadEntity.AddInput;
 import org.denevell.natch.model.ThreadEntity.EditInput;
 import org.denevell.natch.model.ThreadEntity.Output;
+import org.denevell.natch.model.ThreadEntity.OutputList;
 import org.denevell.natch.model.ThreadListModel;
 import org.denevell.natch.model.ThreadListModel.ThreadAndPosts;
+import org.denevell.natch.model.ThreadsListModel;
+import org.denevell.natch.model.ThreadsListModel.ThreadsAndNumTotalThreads;
 import org.denevell.natch.model.UserGetLoggedInModel.User;
 
 @Path("thread")
@@ -36,6 +39,16 @@ public class ThreadRequests {
 	@Inject ThreadListModel mThreadModel;
 	@Inject PostAddModel mAddPostModel;
 	@Inject PostEditModel mPostEditModel;
+	@Inject ThreadsListModel mThreadsModel;
+	
+	@GET
+	@Path("/{start}/{limit}")
+	@Produces(MediaType.APPLICATION_JSON)	
+	public OutputList listThreads(
+		@PathParam("start") int start, 	
+		@PathParam("limit") int limit) throws IOException {
+		return new OutputList(mThreadsModel.list(null, start, limit).getThreads());
+	}	
 
 	@GET
 	@Path("/{threadId}/{start}/{limit}")
@@ -51,6 +64,17 @@ public class ThreadRequests {
 		} else {
 			return new Output(ret.getPosts(), ret.getThreadEntity());
 		}
+	}
+	
+	@GET
+	@Path("bytag/{tag}/{start}/{limit}")
+	@Produces(MediaType.APPLICATION_JSON)	
+	public OutputList listThreadsByTag(
+			@PathParam("tag")  String tag,
+			@PathParam("start") int start, 	
+			@PathParam("limit") int limit) throws IOException {
+		ThreadsAndNumTotalThreads threads = mThreadsModel.list(tag, start, limit);
+		return new OutputList(threads.getThreads());
 	}
 
 	@PUT
