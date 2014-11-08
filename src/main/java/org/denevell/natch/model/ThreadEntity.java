@@ -7,6 +7,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.denevell.natch.model.ThreadEntity.AddInput.StringWrapper;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -65,6 +66,24 @@ public class ThreadEntity {
       return entity;
     }
   }
+	
+	public static class EditInput {
+	  @NotBlank(message="Content cannot be blank")
+	  public String content;
+	  @NotBlank
+	  @Length(max=200, message="Subject cannot be more than 200 characters") 
+	  public String subject;
+    @Valid
+    public List<StringWrapper> tags;
+
+    public PostEntity adapt() {
+      PostEntity entity = new PostEntity();
+      entity.subject = subject;
+      entity.content = content;
+      entity.tags = StringWrapper.toStrings(tags);
+      return entity;
+    }
+	}
 
   public static class Output {
     public List<String> tags;

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -17,9 +18,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.denevell.natch.model.PostAddModel;
+import org.denevell.natch.model.PostEditModel;
 import org.denevell.natch.model.PushSendModel;
 import org.denevell.natch.model.ThreadEntity;
 import org.denevell.natch.model.ThreadEntity.AddInput;
+import org.denevell.natch.model.ThreadEntity.EditInput;
 import org.denevell.natch.model.ThreadEntity.Output;
 import org.denevell.natch.model.ThreadListModel;
 import org.denevell.natch.model.ThreadListModel.ThreadAndPosts;
@@ -32,6 +35,7 @@ public class ThreadRequests {
 	@Context HttpServletRequest mRequest;
 	@Inject ThreadListModel mThreadModel;
 	@Inject PostAddModel mAddPostModel;
+	@Inject PostEditModel mPostEditModel;
 
 	@GET
 	@Path("/{threadId}/{start}/{limit}")
@@ -60,5 +64,24 @@ public class ThreadRequests {
     PushSendModel.sendPushNotifications(thread);
     return Response.ok().build();
 	}	
+
+	@POST
+	@Path("{postId}") 
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response editpost(
+			@PathParam(value="postId") long postId, 
+			@Valid EditInput input) {
+		User userEntity = (User) mRequest.getAttribute("user");
+		int result = mPostEditModel.edit(postId, userEntity.username, input.adapt(), userEntity.admin);
+		if(result == PostEditModel.EDITED) {
+		  return Response.ok().build();
+		} else if(result == PostEditModel.DOESNT_EXIST) {
+		  return Response.status(404).build();
+		} else if(result == PostEditModel.NOT_YOURS) {
+		  return Response.status(403).build();
+		} else {
+		  return Response.serverError().build();
+		}
+	}
 
 }
