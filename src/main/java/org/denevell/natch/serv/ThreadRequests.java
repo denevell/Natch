@@ -21,10 +21,12 @@ import org.denevell.natch.model.PostAddModel;
 import org.denevell.natch.model.PostEditModel;
 import org.denevell.natch.model.PushSendModel;
 import org.denevell.natch.model.ThreadEntity;
+import org.denevell.natch.model.ThreadEntity.AddFromPostInput;
 import org.denevell.natch.model.ThreadEntity.AddInput;
 import org.denevell.natch.model.ThreadEntity.EditInput;
 import org.denevell.natch.model.ThreadEntity.Output;
 import org.denevell.natch.model.ThreadEntity.OutputList;
+import org.denevell.natch.model.ThreadFromPostModel;
 import org.denevell.natch.model.ThreadListModel;
 import org.denevell.natch.model.ThreadListModel.ThreadAndPosts;
 import org.denevell.natch.model.ThreadsListModel;
@@ -40,6 +42,7 @@ public class ThreadRequests {
 	@Inject PostAddModel mAddPostModel;
 	@Inject PostEditModel mPostEditModel;
 	@Inject ThreadsListModel mThreadsModel;
+	@Inject ThreadFromPostModel mThreadFromPostModel;
 	
 	@GET
 	@Path("/{start}/{limit}")
@@ -88,6 +91,22 @@ public class ThreadRequests {
     PushSendModel.sendPushNotifications(thread);
     return Response.ok().build();
 	}	
+	
+	@PUT
+	@Path("frompost")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+  public Response addThreadFromPost(@Valid AddFromPostInput input) throws IOException {
+    User userEntity = (User) mRequest.getAttribute("user");
+    if (!userEntity.admin) {
+      return Response.status(403).build();
+    }
+    ThreadEntity thread = mThreadFromPostModel.makeNewThread(input.postId, input.subject);
+    if(thread==null) {
+      return Response.serverError().build();
+    }
+    return Response.ok().build();
+  }
 
 	@POST
 	@Path("{postId}") 

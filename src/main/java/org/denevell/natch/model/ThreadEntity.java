@@ -67,6 +67,11 @@ public class ThreadEntity {
       return entity;
     }
   }
+
+  public static class AddFromPostInput {
+    public long postId;
+    public String subject;
+  }
 	
 	public static class EditInput {
 	  @NotBlank(message="Content cannot be blank")

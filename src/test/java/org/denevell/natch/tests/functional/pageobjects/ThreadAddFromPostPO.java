@@ -16,7 +16,7 @@ public class ThreadAddFromPostPO {
 	}
 
   public Response addThreadFromPost(String subject, long postId, String authKey) {
-    AddThreadFromPostResourceInput input = new AddThreadFromPostResourceInput();
+    AddFromPostInput input = new AddFromPostInput();
     input.subject = (subject);
     input.postId = (postId);
 
