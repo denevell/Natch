@@ -6,7 +6,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.denevell.natch.serv.PostEditRequest.PostEditInput;
+import org.denevell.natch.model.PostEntity.EditInput;
 import org.denevell.natch.tests.functional.TestUtils;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -25,7 +25,7 @@ public class PostEditPO {
 	    String content, 
 	    long postId,
 			String authKey) {
-	  PostEditInput input = new PostEditInput();
+	  EditInput input = new EditInput();
 		input.content = content;
     return mService
 		.path("rest").path("post").path("editpost")

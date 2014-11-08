@@ -10,9 +10,10 @@ import java.util.List;
     }
 
     public ThreadEntity makeThread(PostEntity p) {
+      p.threadId = PostEntityUtils.createNewThreadId(p.threadId, p.subject);
       ThreadEntity threadEntity = new ThreadEntity(p, Arrays.asList(p));
-      threadEntity.setId(p.threadId);
-      threadEntity.setNumPosts(threadEntity.getNumPosts() + 1);
+      threadEntity.id = (p.threadId);
+      threadEntity.numPosts = (threadEntity.numPosts + 1);
       return threadEntity;
     }
 
@@ -20,16 +21,16 @@ import java.util.List;
      * Making a thread based on an existing thread
      */
     public ThreadEntity makeThread(ThreadEntity thread, PostEntity p) {
-      p.subject = (thread.getRootPost().getSubject());
-      thread.setLatestPost(p);
-      List<PostEntity> posts = thread.getPosts();
+      p.subject = (thread.rootPost.subject);
+      thread.latestPost = p;
+      List<PostEntity> posts = thread.posts;
       if (posts != null) {
         posts.add(p);
       } else {
         posts = Arrays.asList(p);
       }
-      thread.setPosts(posts);
-      thread.setNumPosts(thread.getNumPosts() + 1);
+      thread.posts = (posts);
+      thread.numPosts = (thread.numPosts + 1);
       return thread;
     }
 

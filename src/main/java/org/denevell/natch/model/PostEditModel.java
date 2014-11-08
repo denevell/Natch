@@ -31,11 +31,11 @@ public interface PostEditModel {
             if (!adminEditing && !item.username.equals(username)) {
               return false;
             }
-            item.content = (editedPostEntity.getContent());
-            if (editedPostEntity.getSubject() != null)
-              item.subject = (editedPostEntity.getSubject());
-            if (editedPostEntity.getTags() != null)
-              item.tags = (editedPostEntity.getTags());
+            item.content = (editedPostEntity.content);
+            if (editedPostEntity.subject != null)
+              item.subject = (editedPostEntity.subject);
+            if (editedPostEntity.tags != null)
+              item.tags = (editedPostEntity.tags);
             item.modified = (new Date().getTime());
             if (!username.equals(item.username) && adminEditing) {
               item.adminEdited = true;

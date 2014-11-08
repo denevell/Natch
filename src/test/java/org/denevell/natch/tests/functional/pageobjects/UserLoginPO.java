@@ -11,11 +11,11 @@ import org.denevell.userservice.serv.LoginRequest.LoginResourceReturnData;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
-public class LoginPO {
+public class UserLoginPO {
 	
 	private WebTarget mService;
 
-	public LoginPO() {
+	public UserLoginPO() {
 		Client client = JerseyClientBuilder.createClient();
 		client.register(JacksonFeature.class);
 		mService = client.target(TestUtils.URL_USER_SERVICE);

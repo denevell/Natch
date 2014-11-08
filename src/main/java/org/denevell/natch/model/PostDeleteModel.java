@@ -39,8 +39,8 @@ public interface PostDeleteModel {
         mThreadModel.useTransaction(postEntityManager).findAndUpdateOrDelete(pe.threadId, new DeleteOrMerge<ThreadEntity>() {
           @Override
           public boolean shouldDelete(ThreadEntity item) {
-            item.updateThreadToRemovePost(pe);
-            return item.getPosts() == null || item.getPosts().size() == 0;
+            ThreadEntityUtils.updateThreadToRemovePost(item, pe);
+            return item.posts == null || item.posts.size() == 0;
           }
         }, ThreadEntity.class);
         postEntityManager.remove(pe);

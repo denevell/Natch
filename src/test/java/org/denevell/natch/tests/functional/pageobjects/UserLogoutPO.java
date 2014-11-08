@@ -8,11 +8,11 @@ import org.denevell.userservice.serv.LogoutRequest.LogoutResourceReturnData;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
-public class LogoutPO {
+public class UserLogoutPO {
 
 	private WebTarget service;
 
-	public LogoutPO() {
+	public UserLogoutPO() {
 		Client client = JerseyClientBuilder.createClient();
 		client.register(JacksonFeature.class);
 		service = client.target(TestUtils.URL_USER_SERVICE);

@@ -6,11 +6,11 @@ import java.util.List;
 
 import javax.ws.rs.core.Response;
 
-import org.denevell.natch.serv.PostSingleRequest.PostResource;
+import org.denevell.natch.model.PostEntity.Output;
+import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
 import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
-import org.denevell.natch.tests.functional.pageobjects.LoginPO;
 import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
-import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
+import org.denevell.natch.tests.functional.pageobjects.UserRegisterPO;
 import org.denevell.userservice.serv.LoginRequest.LoginResourceReturnData;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,15 +27,15 @@ public class PostAddFunctional {
 		postAddPo = new PostAddPO();
 		postListPo = new PostsListPO();
 		TestUtils.deleteTestDb();
-	  new RegisterPO().register("aaron@aaron.com", "passy");
-		loginResult = new LoginPO().login("aaron@aaron.com", "passy");
+	  new UserRegisterPO().register("aaron@aaron.com", "passy");
+		loginResult = new UserLoginPO().login("aaron@aaron.com", "passy");
 		authKey = loginResult.getAuthKey();
 	}
 	
 	@Test
 	public void shouldMakePost() {
 		assertEquals(200, postAddPo.add("cont", authKey, "thread").getStatus());
-		PostResource postResource = postListPo.list("0", "1").posts.get(0);
+		Output postResource = postListPo.list("0", "1").posts.get(0);
     assertEquals("cont", postResource.content);
 		assertEquals("thread", postResource.threadId);
 	}
@@ -44,7 +44,7 @@ public class PostAddFunctional {
 	public void shouldMakePostWithSameContent() {
 		assertEquals(200, postAddPo.add("cont", authKey, "thread").getStatus());
 		assertEquals(200, postAddPo.add("cont", authKey, "thread").getStatus());
-		List<PostResource> posts = postListPo.list("0", "2").posts;
+		List<Output> posts = postListPo.list("0", "2").posts;
     assertEquals("cont", posts.get(0).content);
 		assertEquals("thread", posts.get(0).threadId);
     assertEquals("cont", posts.get(1).content);
@@ -70,7 +70,7 @@ public class PostAddFunctional {
 				"esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, " +
 				"sunt in culpa qui officia deserunt mollit anim id est laborum.";
 		assertEquals(200, postAddPo.add(largeContent, authKey, "thread").getStatus());
-		PostResource postResource = postListPo.list("0", "1").posts.get(0);
+		Output postResource = postListPo.list("0", "1").posts.get(0);
     assertEquals(largeContent, postResource.content);
 	}	
 	

@@ -1,12 +1,11 @@
 package org.denevell.natch.model;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.denevell.natch.utils.Log;
+import org.hibernate.validator.constraints.NotBlank;
 
 public class PostEntity {
 	
@@ -30,63 +29,87 @@ public class PostEntity {
 	
 	public PostEntity() {}
 	
-	public PostEntity(PostEntity post) {
-		this.id = post.id;
-		this.created = post.created;
-		this.modified = post.modified;
-		this.subject = post.subject;
-		this.content = post.content;
-		this.threadId = post.threadId;
-		this.tags = post.tags;
-		this.username = post.username;
-		this.adminEdited = post.adminEdited;
+	public PostEntity(PostEntity entity) {
+		this.id = entity.id;
+		this.created = entity.created;
+		this.modified = entity.modified;
+		this.subject = entity.subject;
+		this.content = entity.content;
+		this.threadId = entity.threadId;
+		this.tags = entity.tags;
+		this.username = entity.username;
+		this.adminEdited = entity.adminEdited;
 	}
 
-	public String getSubject() {
-		String escaped = StringEscapeUtils.escapeHtml4(subject);
-		return escaped;
-	}
+  public static class AddInput {
+    @NotBlank(message = "Post must have content")
+    public String content;
+    @NotBlank(message = "Post must include thread id")
+    public String threadId;
 
-	public String getContent() {
-		String escaped = StringEscapeUtils.escapeHtml4(content);
-		return escaped;
-	}
-
-	public void setThreadId(String threadId) {
-		if(threadId==null) {
-			long created = new Date().getTime();
-			threadId = getThreadId(subject, threadId, created);
-		}
-		this.threadId = threadId;
-	}
-
-	public List<String> getTags() {
-		if(tags==null) return null;
-		for (int i = 0; i < tags.size(); i++) {
-			String string = StringEscapeUtils.escapeHtml4(tags.get(i));
-			tags.set(i, string);
-		}
-		return tags;
-	}
-
-  private String getThreadId(String subject, String threadId, long time) {
-    if (threadId == null || threadId.trim().length() == 0) {
-      try {
-        MessageDigest md5Algor = MessageDigest.getInstance("MD5");
-        StringBuffer sb = new StringBuffer();
-        byte[] digest = md5Algor.digest(subject.getBytes());
-        for (byte b : digest) {
-          sb.append(Integer.toHexString((int) (b & 0xff)));
-        }
-        threadId = sb.toString();
-      } catch (NoSuchAlgorithmException e) {
-        Log.info(getClass(), "Couldn't get an MD5 hash. I guess we'll just use hashCode() then.");
-        e.printStackTrace();
-        threadId = String.valueOf(subject.hashCode());
-      }
-      threadId = threadId + String.valueOf(time);
+    public PostEntity adapt(String username) {
+      PostEntity entity = new PostEntity();
+      long created = new Date().getTime();
+      entity.content = content;
+      entity.threadId = threadId;
+      entity.username = username;
+      entity.created = created;
+      entity.modified = created;
+      return entity;
     }
-    return threadId;
   }
+
+  public static class EditInput {
+    @NotBlank(message = "Post must have content")
+    public String content;
+
+    public PostEntity adapt() {
+      PostEntity entity = new PostEntity();
+      entity.content = content;
+      entity.subject = ("-");
+      return entity;
+    }
+  }
+
+  public static class Output {
+    public long id;
+    public String username;
+    public String subject;
+    public String content;
+    public String threadId;
+    public long creation;
+    public long modification;
+    public List<String> tags;
+    public boolean adminEdited;
+
+    public Output() {}
+
+    public Output(PostEntity post) {
+      this.username = post.username;
+      this.creation = post.created;
+      this.modification = post.modified;
+      this.subject = StringEscapeUtils.escapeHtml4(post.subject);
+      this.content = StringEscapeUtils.escapeHtml4(post.content);
+      this.tags = PostEntityUtils.getTagsEscaped(post.tags);
+      this.adminEdited = post.adminEdited;
+      this.id = post.id;
+      this.threadId = post.threadId;
+    }
+  }
+
+  public static class OutputList {
+    public List<Output> posts = new ArrayList<Output>();
+    public OutputList() {}
+
+    public OutputList(List<PostEntity> entities) {
+      List<Output> outputs = new ArrayList<Output>();
+      for (PostEntity p : entities) {
+        Output entity = new Output(p);
+        outputs.add(entity);
+      }
+      posts = outputs;
+    }
+  }
+
 
 }

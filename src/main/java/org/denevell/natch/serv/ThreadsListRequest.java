@@ -16,10 +16,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.denevell.natch.model.PostEntityUtils;
 import org.denevell.natch.model.ThreadEntity;
+import org.denevell.natch.model.ThreadEntity.Output;
 import org.denevell.natch.model.ThreadsListModel;
 import org.denevell.natch.model.ThreadsListModel.ThreadsAndNumTotalThreads;
-import org.denevell.natch.serv.ThreadListRequest.ThreadResource;
 import org.denevell.natch.utils.Log;
 
 @Path("threads")
@@ -71,22 +73,22 @@ public class ThreadsListRequest {
 	public static class ListThreadsResourceAdapter extends ListThreadsResource {
 
 		public ListThreadsResourceAdapter(List<ThreadEntity> threads) {
-			List<ThreadResource> postsResources = new ArrayList<ThreadResource>();
+			List<Output> postsResources = new ArrayList<Output>();
 			for (ThreadEntity p: threads) {
-				if(p.getRootPost()==null) {
+				if(p.rootPost==null) {
 					reportNullRootThreadError(p);
 					continue;
 				} else {
-					ThreadResource postResource = new ThreadResource();
-					postResource.author = (p.getRootPost().username);
-					postResource.numPosts = ((int) p.getNumPosts());
-					postResource.subject = (p.getRootPost().getSubject());
-					postResource.rootPostId = (p.getRootPost().id);
-					postResource.tags = (p.getRootPost().getTags());
-					postResource.modification = (p.getLatestPost().modified);
-					postResource.creation = (p.getRootPost().created);
-					postResource.id = (p.getId());
-					postResource.latestPostId = (p.getLatestPost().id);
+					Output postResource = new Output();
+					postResource.author = (p.rootPost.username);
+					postResource.numPosts = ((int) p.numPosts);
+					postResource.subject = StringEscapeUtils.escapeHtml4(p.rootPost.subject);
+					postResource.rootPostId = (p.rootPost.id);
+					postResource.tags = PostEntityUtils.getTagsEscaped(p.rootPost.tags);
+					postResource.modification = (p.latestPost.modified);
+					postResource.creation = (p.rootPost.created);
+					postResource.id = (p.id);
+					postResource.latestPostId = (p.latestPost.id);
 					postsResources.add(postResource);
 				}
 			}
@@ -94,8 +96,8 @@ public class ThreadsListRequest {
 		}
 
 		private void reportNullRootThreadError(ThreadEntity p) {
-			if(p.getId()!=null) {
-				Log.info(getClass(), "Found a thread with a null root post. Thread: " + p.getId());
+			if(p.id!=null) {
+				Log.info(getClass(), "Found a thread with a null root post. Thread: " + p.id);
 			} else {
 				Log.info(getClass(), "Found a thread with a null root post. Unknown thread id.");
 			}
@@ -105,7 +107,7 @@ public class ThreadsListRequest {
 
   public static class ListThreadsResource {
     public long numOfThreads;
-    public List<ThreadResource> threads = new ArrayList<ThreadResource>();
+    public List<Output> threads = new ArrayList<Output>();
 
   }
 }

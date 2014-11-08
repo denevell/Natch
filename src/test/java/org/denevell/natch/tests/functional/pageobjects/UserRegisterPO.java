@@ -11,11 +11,11 @@ import org.denevell.userservice.serv.RegisterRequest.RegisterResourceReturnData;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
-public class RegisterPO {
+public class UserRegisterPO {
 	
 	private WebTarget mService;
 
-	public RegisterPO() {
+	public UserRegisterPO() {
 		Client client = JerseyClientBuilder.createClient();
 		client.register(JacksonFeature.class);
 		mService = client.target(TestUtils.URL_USER_SERVICE);

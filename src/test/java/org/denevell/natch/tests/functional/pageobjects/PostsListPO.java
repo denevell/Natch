@@ -4,7 +4,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
-import org.denevell.natch.serv.PostsListRequest.ListPostsResource;
+import org.denevell.natch.model.PostEntity.OutputList;
 import org.denevell.natch.tests.functional.TestUtils;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -19,11 +19,11 @@ public class PostsListPO {
 		mService = client.target(TestUtils.URL_REST_SERVICE);
 	}
 
-	public ListPostsResource list(String start, String limit) {
+	public OutputList list(String start, String limit) {
     return mService
 		.path("rest").path("post").path(start).path(limit).request()
 		.accept(MediaType.APPLICATION_JSON)
-		.get(ListPostsResource.class);
+		.get(OutputList.class);
 	}	
 	
 

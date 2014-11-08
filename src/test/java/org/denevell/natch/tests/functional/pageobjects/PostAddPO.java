@@ -6,7 +6,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.denevell.natch.serv.PostAddRequest.PostAddInput;
+import org.denevell.natch.model.PostEntity.AddInput;
 import org.denevell.natch.tests.functional.TestUtils;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -25,7 +25,7 @@ public class PostAddPO {
 	    String content, 
 			String authKey,
 			String threadId) {
-	  PostAddInput input = new PostAddInput();
+	  AddInput input = new AddInput();
 		input.content = content;
 		input.threadId = threadId;
     return mService

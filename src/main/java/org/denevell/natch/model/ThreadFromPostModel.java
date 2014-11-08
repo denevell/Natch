@@ -25,7 +25,7 @@ public interface ThreadFromPostModel {
         PostEntity newPost = new PostEntity(post);
         newPost.id = (0);
         newPost.adminEdited = true;
-        newPost.setThreadId(null);
+        newPost.threadId = PostEntityUtils.createNewThreadId(null, subject);
         newPost.subject = (subject);
         removePostFromOldThread(post);
         mPostModel.getEntityManager().remove(post);
@@ -40,8 +40,8 @@ public interface ThreadFromPostModel {
       mThreadModel.useTransaction(mPostModel.getEntityManager()).findAndUpdateOrDelete(post.threadId, new DeleteOrMerge<ThreadEntity>() {
         @Override
         public boolean shouldDelete(ThreadEntity item) {
-          item.updateThreadToRemovePost(post);
-          return item.getPosts() == null || item.getPosts().size() == 0;
+          ThreadEntityUtils.updateThreadToRemovePost(item, post);
+          return item.posts == null || item.posts.size() == 0;
         }
       }, ThreadEntity.class);
     }
