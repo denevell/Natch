@@ -17,6 +17,8 @@ import javax.ws.rs.core.Response;
 
 import org.denevell.natch.model.PushAddModel;
 import org.denevell.natch.model.PushEntity;
+import org.denevell.natch.model.PushEntity.AddInput;
+import org.denevell.natch.model.PushEntity.Output;
 import org.denevell.natch.model.PushListModel;
 
 @Path("push")
@@ -31,28 +33,20 @@ public class PushIdRequests {
 	@Path("add")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addPost(PushInput pushId) {
+	public Response addPost(AddInput pushId) {
 		PushEntity pushEntity = new PushEntity();
-		pushEntity.setClientId(pushId.id);
+		pushEntity.clientId = pushId.id;
 		mAddModel.add(pushEntity);
 		return Response.ok().build(); // Erm
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public PushResource list() {
+	public Output list() {
 		List<PushEntity> list = mListModel.list();
-		PushResource pr = new PushResource();
+		Output pr = new Output();
 		pr.ids = new ArrayList<PushEntity>(list);
 		return pr;
 	}
-	
-	public static class PushInput {
-	  public String id;
-	}
-
-  public static class PushResource {
-    public ArrayList<PushEntity> ids = new ArrayList<PushEntity>();
-  }
 	
 }

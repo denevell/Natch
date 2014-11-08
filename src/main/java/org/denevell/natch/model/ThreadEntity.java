@@ -117,7 +117,7 @@ public class ThreadEntity {
       posts = postsResources;
       numPosts = (int) thread.numPosts;
       id = thread.id;
-      tags = PostEntityUtils.getTagsEscaped(thread.rootPost.tags);
+      tags = PostEntity.Utils.getTagsEscaped(thread.rootPost.tags);
     }
   }
 
@@ -142,7 +142,7 @@ public class ThreadEntity {
 					postResource.numPosts = ((int) p.numPosts);
 					postResource.subject = StringEscapeUtils.escapeHtml4(p.rootPost.subject);
 					postResource.rootPostId = (p.rootPost.id);
-					postResource.tags = PostEntityUtils.getTagsEscaped(p.rootPost.tags);
+					postResource.tags = PostEntity.Utils.getTagsEscaped(p.rootPost.tags);
 					postResource.modification = (p.latestPost.modified);
 					postResource.creation = (p.rootPost.created);
 					postResource.id = (p.id);
@@ -152,6 +152,19 @@ public class ThreadEntity {
 			}
 			this.threads = (postsResources);
 		}
+  }
+
+  public static class Utils {
+    public static void updateThreadToRemovePost(ThreadEntity te, PostEntity pe) {
+      te.posts.remove(pe);
+      if (te.rootPost != null && te.rootPost.id == pe.id) {
+        te.rootPost = null;
+      }
+      if (te.latestPost != null && te.latestPost.id == pe.id && te.posts != null && te.posts.size() >= 1) {
+        te.latestPost = (te.posts.get(te.posts.size() - 1));
+      }
+      te.numPosts = (te.numPosts - 1);
+    }
   }
 	
 }

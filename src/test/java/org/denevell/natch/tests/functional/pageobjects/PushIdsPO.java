@@ -3,8 +3,8 @@ package org.denevell.natch.tests.functional.pageobjects;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 
-import org.denevell.natch.serv.PushIdRequests.PushInput;
-import org.denevell.natch.serv.PushIdRequests.PushResource;
+import org.denevell.natch.model.PushEntity.AddInput;
+import org.denevell.natch.model.PushEntity.Output;
 
 public class PushIdsPO {
 	
@@ -15,7 +15,7 @@ public class PushIdsPO {
 	}
 
 	public void add(String id) {
-		PushInput entity = new PushInput();
+		AddInput entity = new AddInput();
 		entity.id = (id);
         	mService
         	.path("rest").path("push").path("add").request()
@@ -23,10 +23,10 @@ public class PushIdsPO {
 		return;
 	}	
 
-	public PushResource list() {
+	public Output list() {
        return mService
         	.path("rest").path("push").request()
-        	.get(PushResource.class);
+        	.get(Output.class);
 	}	
 	
 

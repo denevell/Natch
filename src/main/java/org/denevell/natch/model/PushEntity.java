@@ -1,21 +1,21 @@
 package org.denevell.natch.model;
 
+import java.util.ArrayList;
+
 public class PushEntity {
 	
 	public static String NAMED_QUERY_FIND_ID = "findId";
 	public static String NAMED_QUERY_LIST_IDS = "listIds";
 	
-	private String clientId;
+	public String clientId;
 	
-	public PushEntity() {
+	
+	public static class AddInput {
+	  public String id;
 	}
 
-	public String getClientId() {
-		return clientId;
-	}
-
-	public void setClientId(String clientId) {
-		this.clientId = clientId;
-	}
+  public static class Output {
+    public ArrayList<PushEntity> ids = new ArrayList<PushEntity>();
+  }
 
 }

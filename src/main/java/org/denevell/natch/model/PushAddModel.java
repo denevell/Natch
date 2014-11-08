@@ -15,7 +15,7 @@ public interface PushAddModel {
 
     public void add(final PushEntity entity) {
       try {
-        model.startTransaction().queryParam("id", entity.getClientId()).addIfDoesntExist(PushEntity.NAMED_QUERY_FIND_ID, entity);
+        model.startTransaction().queryParam("id", entity.clientId).addIfDoesntExist(PushEntity.NAMED_QUERY_FIND_ID, entity);
       } finally {
         model.commitAndCloseEntityManager();
       }

@@ -34,7 +34,7 @@ public class PushSendModel {
         if(list!=null) {
           for (PushEntity pushEntity : list) {
             try {
-              String registrationId = pushEntity.getClientId();
+              String registrationId = pushEntity.clientId;
               String s = new ObjectMapper() .writeValueAsString(new CutDownThreadResource(thread));
               Message message = new Message.Builder().addData("thread", s) .build();
               Result result = sender.send(message, registrationId, 5);
@@ -68,7 +68,7 @@ public class PushSendModel {
       subject = StringEscapeUtils.escapeHtml4(tr.rootPost.subject);
       author = tr.rootPost.username;
       numPosts = tr.numPosts;
-      tags = PostEntityUtils.getTagsEscaped(tr.rootPost.tags);
+      tags = PostEntity.Utils.getTagsEscaped(tr.rootPost.tags);
       rootPostId = tr.rootPost.id;
       modification = tr.rootPost.modified;
       creation = tr.rootPost.created;

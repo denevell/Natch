@@ -10,7 +10,7 @@ import java.util.List;
     }
 
     public ThreadEntity makeThread(PostEntity p) {
-      p.threadId = PostEntityUtils.createNewThreadId(p.threadId, p.subject);
+      p.threadId = PostEntity.Utils.createNewThreadId(p.threadId, p.subject);
       ThreadEntity threadEntity = new ThreadEntity(p, Arrays.asList(p));
       threadEntity.id = (p.threadId);
       threadEntity.numPosts = (threadEntity.numPosts + 1);
