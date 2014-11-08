@@ -79,7 +79,7 @@ public class PostEditFunctional {
 	  registerPo.register("other_user", "passy");
 		String otherUserAuthKey = new LoginPO().login("other_user", "passy").getAuthKey();
 
-		postAddPo.add("cont", otherUserAuthKey, "thread").getStatus();
+		postAddPo.add("cont", otherUserAuthKey, "thread");
 		ListPostsResource posts = postsListPo.list("0", "10");
 		
 		Response response = postEditPo.edit("editeeed", posts.posts.get(0).id, authKey);

@@ -12,7 +12,7 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 ~~ * Check for listed posts in add posts tests
 ~~ * Post delete tests
 ~~ * Post edit tests
-* Post single tests
+~~ * Post single tests
 * Posts list tests
 * Pust ids test
 * Thread add tests
@@ -21,6 +21,7 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 * Thread from post tests
 * Return thread id in add thread and move post to new thread
 * Return thread id in move post to new thread
+* Go back to test thread title in single post
 
 ## Later
 

@@ -1,82 +1,51 @@
 package org.denevell.natch.tests.functional;
 
-import javax.ws.rs.client.WebTarget;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import org.denevell.natch.serv.PostSingleRequest.PostResource;
+import org.denevell.natch.serv.PostsListRequest.ListPostsResource;
+import org.denevell.natch.tests.functional.pageobjects.LoginPO;
+import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
+import org.denevell.natch.tests.functional.pageobjects.PostSinglePO;
+import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
+import org.denevell.natch.tests.functional.pageobjects.RegisterPO;
 import org.denevell.userservice.serv.LoginRequest.LoginResourceReturnData;
+import org.junit.Before;
+import org.junit.Test;
 
 public class PostSingleFunctional {
 	
 	private LoginResourceReturnData loginResult;
-	private WebTarget service;
+  private PostAddPO postAddPo;
+  private PostsListPO postsListPo;
+  private PostSinglePO postSinglePo;
 
-	/*
 	@Before
 	public void setup() throws Exception {
-		service = TestUtils.getRESTClient();
-		// Delete all users
 		TestUtils.deleteTestDb();
-	    new RegisterPO().register("aaron@aaron.com", "passy");
-		// Login
+	  new RegisterPO().register("aaron@aaron.com", "passy");
 		loginResult = new LoginPO().login("aaron@aaron.com", "passy");
+		postAddPo = new PostAddPO();
+		postsListPo = new PostsListPO();
+		postSinglePo = new PostSinglePO();
 	}
+
 	
 	@Test
 	public void shouldListSinglePost() {
-		// Arrange 
-		// Add thread
-		AddPostResourceInput input = new AddPostResourceInput("subthread", "contthread");
-		AddPostResourceReturnData newThreads = ThreadAddFunctional.addThread(service, loginResult.getAuthKey(), input);
-		// Add post
-		input = new AddPostResourceInput("subpost", "contpost");
-		input.setThreadId(newThreads.getThread().getId());
-		service
-		.path("rest").path("post").path("add").request()
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(Entity.entity(input, MediaType.APPLICATION_JSON), AddPostResourceReturnData.class); 
-		// Arrange list posts 
-		ListPostsResource postsList = service
-		.path("rest").path("post").path("0").path("10").request()
-    	.get(ListPostsResource.class); 	
-		
-		// Act
-		PostResource returnData = service
-		.path("rest").path("post").path("single").path(postsList.getPosts().get(0).getId()+"").request()
-    	.get(PostResource.class); 
-		
-		// Assert
-		assertEquals("Get subject of post", "subthread", returnData.getSubject());
-		assertEquals("Get content of post", "contpost", returnData.getContent());
-		assertNotNull("Get id of post", returnData.getId());
-		assertNotNull("Get threadid of post", returnData.threadId);
+		postAddPo.add("contxx", loginResult.getAuthKey(), "thread");
+		ListPostsResource posts = postsListPo.list("0", "10");
+		PostResource single = postSinglePo.single(posts.posts.get(0).id);
+		assertEquals("Get content of post", "contxx", single.content);
+		assertEquals("thread", single.threadId);
+		assertTrue("Has a id more than zero", single.id > 0);
+		//TODO: Thread title
 	}
-	
+
 	@Test
 	public void shouldShow404OnNoPost() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont");
-		ThreadAddFunctional.addThread(service, loginResult.getAuthKey(), input);
-		// Arrange list posts 
-		ListPostsResource postsList = service
-		.path("rest").path("post").path("0").path("10").request()
-    	.get(ListPostsResource.class); 	
-		
-		// Act
-		try {
-			service
-			.path("rest").path("post").path("single")
-			.path(postsList.getPosts().get(0).getId()+"blarblar").request()
-	    	.get(PostResource.class); 		
-		} catch (WebApplicationException e) {
-			assertEquals(404, e.getResponse().getStatus());
-			return;
-		} catch(Exception e) {
-			assertTrue("Expected 404", false);
-			return;
-		}
-
-		// Assert
-		assertTrue("Expected 404", false);
+		postSinglePo.gives404OnBadId();
 	}	
-	*/
 	
 }
