@@ -24,11 +24,11 @@ public class PostEditModelImpl implements PostEditModel {
               if (!adminEditing && !item.getUsername().equals(username)) {
                 return false;
               }
-              item.setContent(editedPostEntity.getContent());
+              item.setContent(editedPostEntity.getContentUnescaped());
               if (editedPostEntity.getSubject() != null)
-                item.setSubject(editedPostEntity.getSubject());
+                item.setSubject(editedPostEntity.getSubjectUnescaped());
               if (editedPostEntity.getTags() != null)
-                item.setTags(editedPostEntity.getTags());
+                item.setTags(editedPostEntity.getTagsUnescaped());
               item.setModified(new Date().getTime());
               if (!username.equals(item.getUsername()) && adminEditing) {
                 item.adminEdited();

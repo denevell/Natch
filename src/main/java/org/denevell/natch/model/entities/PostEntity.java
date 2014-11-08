@@ -2,6 +2,7 @@ package org.denevell.natch.model.entities;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -133,11 +134,12 @@ public class PostEntity {
 
 	public List<String> getTags() {
 		if(tags==null) return null;
-		for (int i = 0; i < tags.size(); i++) {
+		List<String> etags = new ArrayList<>();
+    for (int i = 0; i < tags.size(); i++) {
 			String string = StringEscapeUtils.escapeHtml4(tags.get(i));
-			tags.set(i, string);
+			etags.add(string);
 		}
-		return tags;
+		return etags;
 	}
 
 	public void setTags(List<String> tags) {
@@ -171,5 +173,17 @@ public class PostEntity {
 		}
 		return threadId;
 	}
+
+  public String getContentUnescaped() {
+    return content;
+  }
+
+  public String getSubjectUnescaped() {
+    return subject;
+  }
+
+  public List<String> getTagsUnescaped() {
+    return tags;
+  }
 
 }

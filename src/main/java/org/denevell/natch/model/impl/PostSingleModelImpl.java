@@ -27,7 +27,7 @@ public class PostSingleModelImpl implements PostSingleModel {
             .useTransaction(mPostModel.getEntityManager())
             .namedQuery(ThreadEntity.NAMED_QUERY_FIND_THREAD_BY_ID)
             .queryParam("id", post.getThreadId()).single(ThreadEntity.class);
-        post.setSubject(thread.getRootPost().getSubject());
+        post.setSubject(thread.getRootPost().getSubjectUnescaped());
         return post;
       }
 
