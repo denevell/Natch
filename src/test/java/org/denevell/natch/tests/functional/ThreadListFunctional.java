@@ -1,94 +1,83 @@
 package org.denevell.natch.tests.functional;
 
-import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import jersey.repackaged.com.google.common.collect.Lists;
+
+import org.denevell.natch.model.ThreadEntity.Output;
 import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
-import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
+import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
+import org.denevell.natch.tests.functional.pageobjects.ThreadsListPO;
+import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
 import org.denevell.natch.tests.functional.pageobjects.UserRegisterPO;
 import org.denevell.userservice.serv.LoginRequest.LoginResourceReturnData;
 import org.junit.Before;
+import org.junit.Test;
 
 public class ThreadListFunctional {
 	
 	private LoginResourceReturnData loginResult;
-	private PostAddPO addPostPo;
-  private PostsListPO postsListPo;
+	private PostAddPO postAddPo;
+  private ThreadAddPO threadAddPo;
+  private ThreadsListPO threadsList;
 
 	@Before
 	public void setup() throws Exception {
 		TestUtils.deleteTestDb();
 	  new UserRegisterPO().register("aaron@aaron.com", "passy");
 		loginResult = new UserLoginPO().login("aaron@aaron.com", "passy");
-	  addPostPo = new PostAddPO();
-	  postsListPo = new PostsListPO();
+	  postAddPo = new PostAddPO();
+		threadsList = new ThreadsListPO();
+		threadAddPo = new ThreadAddPO();
+		TestUtils.deleteTestDb();
+	  new UserRegisterPO().register("aaron@aaron.com", "passy");
+		loginResult = new UserLoginPO().login("aaron@aaron.com", "passy");
 	}
 	
-	/*
 	
 	@Test
 	public void shouldPostsListByThreadId() {
-		// Arrange 
-		addPostPo.add("sub", "cont", loginResult.getAuthKey(), "t");
-		addPostPo.add("sub1", "cont1", loginResult.getAuthKey(), "other");
-		addPostPo.add("sub2", "cont2", loginResult.getAuthKey(), "t");
+	  assertEquals(200, threadAddPo.add("sub", "cont", "t", loginResult.getAuthKey()).getStatus());
+	  assertEquals(200, postAddPo.add("cont1", loginResult.getAuthKey(), "other").getStatus());
+	  assertEquals(200, postAddPo.add("cont2", loginResult.getAuthKey(), "t").getStatus());
 		
-		// Act
-		ThreadResource returnData = listThread.path("t").path("0").path("20").request()
-    	.get(ThreadResource.class); 
+		Output returnData = threadsList.byThread("t", 0, 10);
 		
-		// Assert
-		assertEquals(2, returnData.getPosts().size());
-		assertTrue(returnData.getPosts().get(0).getId()!=0);
-		assertTrue(returnData.getPosts().get(1).getId()!=0);
-		assertEquals("sub", returnData.getSubject());
-		assertEquals("aaron@aaron.com", returnData.getAuthor());
-		assertEquals("cont", returnData.getPosts().get(0).getContent());
-		assertEquals("t", returnData.getPosts().get(0).threadId);
-		assertEquals("sub", returnData.getPosts().get(1).getSubject());
-		assertEquals("cont2", returnData.getPosts().get(1).getContent());		
-		assertEquals("t", returnData.getPosts().get(1).threadId);
+		assertEquals(2, returnData.posts.size());
+		assertTrue(returnData.posts.get(0).id!=0);
+		assertTrue(returnData.posts.get(1).id!=0);
+		assertEquals("sub", returnData.subject);
+		assertEquals("aaron@aaron.com", returnData.author);
+		assertEquals("cont", returnData.posts.get(0).content);
+		assertEquals("t", returnData.posts.get(0).threadId);
+		assertEquals("cont2", returnData.posts.get(1).content);		
+		assertEquals("t", returnData.posts.get(1).threadId);
 	}
 	
 	@Test
 	public void shouldListPostsByThreadIdWithLimit() {
-		// Arrange 
-		addPostPo.add("sub", "cont", new String[] {"again", "blar"}, loginResult.getAuthKey(), "t");
-		addPostPo.add("sub1", "cont1", loginResult.getAuthKey(), "other");
-		addPostPo.add("rubbish", "cont2", loginResult.getAuthKey(), "t");
+	  assertEquals(200, threadAddPo.add("sub", "cont", 
+	      "t", Lists.newArrayList("tagy"), loginResult.getAuthKey()).getStatus());
+	  assertEquals(200, postAddPo.add("cont1", loginResult.getAuthKey(), "other").getStatus());
+	  assertEquals(200, postAddPo.add("cont2", loginResult.getAuthKey(), "t").getStatus());
+
+		Output returnData = threadsList.byThread("t", 1, 1);
 		
-		// Act
-		ThreadResource returnData = listThread.path("t").path("1").path("1").request()
-    	.get(ThreadResource.class); 
-		
-		// Assert
-		assertEquals(1, returnData.getPosts().size());
-		assertEquals(2, returnData.getNumPosts());
-		assertEquals("again", returnData.getTags().get(0));
-		assertEquals("sub", returnData.getSubject());
-		assertEquals("aaron@aaron.com", returnData.getAuthor());
-		assertEquals("cont2", returnData.getPosts().get(0).getContent());
-		assertEquals("t", returnData.getPosts().get(0).threadId);
+		assertEquals(1, returnData.posts.size());
+		assertEquals(2, returnData.numPosts);
+		assertEquals("sub", returnData.subject);
+		assertEquals("tagy", returnData.tags.get(0));
+		assertEquals("aaron@aaron.com", returnData.author);
+		assertEquals("cont2", returnData.posts.get(0).content);
+		assertEquals("t", returnData.posts.get(0).threadId);
 	}		
 	
 	@Test
 	public void shouldShowBlankOnBadThreadId() {
-		// Arrange 
-		
-		// Act
-		try {
-			service
-			.path("rest").path("post").path("xxxxxxxxxxx").path("0").path("20").request()
-	    	.get(ThreadResource.class); 
-		} catch (WebApplicationException e) {
-			assertEquals(404, e.getResponse().getStatus());
-			return;
-		} catch(Exception e) {
-			assertTrue("Expected 404", false);
-			return;
-		}
-		
-		// Assert
-		assertTrue("Expected 404", false);
+	  assertEquals(200, threadAddPo.add("sub", "cont", "t", loginResult.getAuthKey()).getStatus());
+	  assertEquals(200, postAddPo.add("cont2", loginResult.getAuthKey(), "t").getStatus());
+
+		threadsList.byThreadShow404("rubbish", 1, 1);
 	}	
 
-	*/
 }

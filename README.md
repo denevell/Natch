@@ -18,8 +18,8 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 ~~ * Thread list
 ~~ * Thread edit tests
 ~~ * Thread from post tests
+~~ * Threads list
 * Thread list by tag
-* Threads list
 * Pust ids test
 --
 * Go back to test thread title in single post

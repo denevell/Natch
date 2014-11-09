@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.denevell.natch.model.ThreadEntity.AddInput.StringWrapper;

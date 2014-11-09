@@ -2,18 +2,14 @@ package org.denevell.natch.tests.functional;
 
 import static org.junit.Assert.assertEquals;
 
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
 import jersey.repackaged.com.google.common.collect.Lists;
 
 import org.denevell.natch.model.PostEntity.Output;
-import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
-import org.denevell.natch.tests.functional.pageobjects.PostDeletePO;
 import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadEditPO;
-import org.denevell.natch.tests.functional.pageobjects.ThreadsListPO;
 import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
 import org.denevell.natch.tests.functional.pageobjects.UserRegisterPO;
 import org.denevell.userservice.serv.LoginRequest.LoginResourceReturnData;
@@ -23,25 +19,17 @@ import org.junit.Test;
 
 public class ThreadEditFunctional {
     
-	private WebTarget service;
-    private String authKey;
     private LoginResourceReturnData loginResult;
-    private ThreadsListPO threadsListPo;
     private PostsListPO postListPo;
-    private PostDeletePO postDeletePo;
-    private PostAddPO postAddPo;
     private ThreadAddPO threadAddPo;
     private ThreadEditPO threadEditPo;
 
-    @Before
+  @Before
 	public void setup() throws Exception {
 		TestUtils.deleteTestDb();
 		threadAddPo = new ThreadAddPO();
-		postAddPo = new PostAddPO();
-		postDeletePo = new PostDeletePO();
 		postListPo = new PostsListPO();
 		threadEditPo = new ThreadEditPO();
-		threadsListPo = new ThreadsListPO();
 	  new UserRegisterPO().register("aaron@aaron.com", "passy");
 		loginResult = new UserLoginPO().login("aaron@aaron.com", "passy");
 	}
