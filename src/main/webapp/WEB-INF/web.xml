@@ -22,21 +22,14 @@
 	</filter>
 	<filter-mapping>
 	  <filter-name>Auth Filter</filter-name>
-	  <url-pattern>/rest/user/logout</url-pattern>
-	  <url-pattern>/rest/user/password</url-pattern>
-	  <url-pattern>/rest/user/password/*</url-pattern>
-	  <url-pattern>/rest/user/password_reset/remove/*</url-pattern>
-	  <url-pattern>/rest/user/is</url-pattern>
-	  <url-pattern>/rest/user/admin/toggle/*</url-pattern>
 	  <url-pattern>/rest/post/add</url-pattern>
-	  <url-pattern>/rest/user/list</url-pattern>
 	  <url-pattern>/rest/post/addthread</url-pattern>
-	  <url-pattern>/rest/thread/</url-pattern>
-	  <url-pattern>/rest/thread</url-pattern>
-	  <url-pattern>/rest/thread/frompost</url-pattern>
 	  <url-pattern>/rest/post/editthread/*</url-pattern>
 	  <url-pattern>/rest/post/editpost/*</url-pattern>
 	  <url-pattern>/rest/post/del/*</url-pattern>
+	  <url-pattern>/rest/thread/</url-pattern>
+	  <url-pattern>/rest/thread</url-pattern>
+	  <url-pattern>/rest/thread/frompost</url-pattern>
 	</filter-mapping>	
 	
 	<servlet>

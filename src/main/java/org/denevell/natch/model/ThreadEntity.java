@@ -50,6 +50,11 @@ public class ThreadEntity {
         if(ws!=null) for (StringWrapper w: ws) { ret.add(w.string); }
         return ret;
       }
+      public static List<StringWrapper> fromStrings(List<String> ws) {
+        List<StringWrapper> ret = new ArrayList<StringWrapper>();
+        if(ws!=null) for (String w: ws) { StringWrapper sw = new StringWrapper(); sw.string=w; ret.add(sw); }
+        return ret;
+      }
     }
 
     public PostEntity adapt(boolean adminEdited, String username) {
@@ -101,7 +106,7 @@ public class ThreadEntity {
     public long modification;
     public long rootPostId;
     public long latestPostId;
-    public List<org.denevell.natch.model.PostEntity.Output> posts = new ArrayList<>();
+    public List<org.denevell.natch.model.PostEntity.Output> posts;
 
     public Output() {}
 
@@ -123,7 +128,9 @@ public class ThreadEntity {
 
   public static class OutputList {
     public long numOfThreads;
-    public List<Output> threads = new ArrayList<Output>();
+    public List<Output> threads;
+
+    public OutputList() {}
 
 		public OutputList(List<ThreadEntity> threadEntities) {
 		  this.numOfThreads = threadEntities.size();

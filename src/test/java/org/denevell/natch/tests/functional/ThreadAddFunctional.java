@@ -1,37 +1,47 @@
 package org.denevell.natch.tests.functional;
 
+import static org.junit.Assert.assertEquals;
+
+import javax.ws.rs.core.Response;
+
+import jersey.repackaged.com.google.common.collect.Lists;
+
+import org.denevell.natch.model.ThreadEntity.Output;
+import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
+import org.denevell.natch.tests.functional.pageobjects.ThreadsListPO;
+import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
+import org.denevell.natch.tests.functional.pageobjects.UserRegisterPO;
+import org.denevell.userservice.serv.LoginRequest.LoginResourceReturnData;
+import org.junit.Before;
+import org.junit.Test;
+
 
 public class ThreadAddFunctional {
 	
-  /*
-	private WebTarget service;
-  ResourceBundle rb = Strings.getMainResourceBundle();
 	private LoginResourceReturnData loginResult;
+  private ThreadsListPO threadsListPo;
+  private ThreadAddPO threadAddPo;
 	
 	@Before
 	public void setup() throws Exception {
-		service = TestUtils.getRESTClient();
 		TestUtils.deleteTestDb();
-	  new RegisterPO().register("aaron@aaron.com", "passy");
-		// Login
-		loginResult = new LoginPO().login("aaron@aaron.com", "passy");
+		threadAddPo = new ThreadAddPO();
+		threadsListPo = new ThreadsListPO();
+	  new UserRegisterPO().register("aaron@aaron.com", "passy");
+		loginResult = new UserLoginPO().login("aaron@aaron.com", "passy");
 	}
 	
 	@Test
 	public void shouldMakeThread() {
-		// Arrange 
-		List<String> tags = Arrays.asList("tag1", "tag2");
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", tags);
+	  Response addResponse = threadAddPo.add("sub", "cont", Lists.newArrayList("tagy"), loginResult.getAuthKey());
+	  Output thread = threadsListPo.list(0,  10).threads.get(0);
 		
-		// Act
-		AddPostResourceReturnData returnData = addThread(service, loginResult.getAuthKey(), input); 
-		
-		// Assert
-		assertEquals("", returnData.getError());
-		assertNotNull(returnData.getThread().getSubject());
-		assertTrue("Has tags in returned value",  returnData.getThread().getTags()!=null && returnData.getThread().getTags().contains("tag2"));
-		assertTrue(returnData.isSuccessful());
+		assertEquals(200, addResponse.getStatus());
+		assertEquals("sub", thread.subject);
+		assertEquals("tagy", thread.tags.get(0));
 	}
+
+  /*
 	
     @SuppressWarnings("serial")
     @Test
@@ -91,15 +101,6 @@ public class ThreadAddFunctional {
 		}
 		assertFalse("Was excepting a 401 response", true);		
 	}	
-
-    public static AddPostResourceReturnData addThread(WebTarget service, Object authKey, AddPostResourceInput input) {
-        AddPostResourceReturnData returnData = 
-        service
-        .path("rest").path("post").path("addthread").request()
-		.header("AuthKey", authKey)
-		.put(Entity.entity(input, MediaType.APPLICATION_JSON), AddPostResourceReturnData.class);
-        return returnData;
-    }
     */
 	
 }
