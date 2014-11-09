@@ -1,120 +1,104 @@
 package org.denevell.natch.tests.functional;
 
+import static org.junit.Assert.assertEquals;
+
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+
+import jersey.repackaged.com.google.common.collect.Lists;
+
+import org.denevell.natch.model.PostEntity.Output;
+import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
+import org.denevell.natch.tests.functional.pageobjects.PostDeletePO;
+import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
+import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
+import org.denevell.natch.tests.functional.pageobjects.ThreadEditPO;
+import org.denevell.natch.tests.functional.pageobjects.ThreadsListPO;
+import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
+import org.denevell.natch.tests.functional.pageobjects.UserRegisterPO;
+import org.denevell.userservice.serv.LoginRequest.LoginResourceReturnData;
+import org.junit.Before;
+import org.junit.Test;
+
 
 public class ThreadEditFunctional {
     
-  /*
 	private WebTarget service;
     private String authKey;
-    ResourceBundle rb = Strings.getMainResourceBundle();
+    private LoginResourceReturnData loginResult;
+    private ThreadsListPO threadsListPo;
+    private PostsListPO postListPo;
+    private PostDeletePO postDeletePo;
+    private PostAddPO postAddPo;
+    private ThreadAddPO threadAddPo;
+    private ThreadEditPO threadEditPo;
 
     @Before
 	public void setup() throws Exception {
-		service = TestUtils.getRESTClient();
-		// Delete all users and add one new
 		TestUtils.deleteTestDb();
-	    new RegisterPO().register("aaron@aaron.com", "passy");
-		LoginResourceReturnData loginResult = new LoginPO().login("aaron@aaron.com", "passy");
-	    authKey = loginResult.getAuthKey();
+		threadAddPo = new ThreadAddPO();
+		postAddPo = new PostAddPO();
+		postDeletePo = new PostDeletePO();
+		postListPo = new PostsListPO();
+		threadEditPo = new ThreadEditPO();
+		threadsListPo = new ThreadsListPO();
+	  new UserRegisterPO().register("aaron@aaron.com", "passy");
+		loginResult = new UserLoginPO().login("aaron@aaron.com", "passy");
 	}
 	
 	@Test
 	public void shouldSeeErrorOnBlankSubject() {
-		PostResource thread = null;
-		try {
-			AddPostResourceInput threadInput = new AddPostResourceInput("thread", "threadc");
-			ThreadAddFunctional.addThread(service, authKey, threadInput);
-			thread = PostsListFunctional.listRecentPostsThreads(service).getPosts().get(0);
-			EditThreadResource editedInput = new EditThreadResource();
-			editedInput.setContent("sdfsfd");
-			editedInput.setSubject(" ");
-			editThread(service, authKey, thread.getId(), editedInput); 		
-			assertFalse("Expected 400 error", true);
-		} catch(WebApplicationException e) {
-			assertEquals(400, e.getResponse().getStatus());
-			return;
-		}	
-		
-		ListPostsResource newListedPosts = PostsListFunctional.listRecentPostsThreads(service);
-		assertEquals(thread.getContent(), newListedPosts.getPosts().get(0).getContent());
-		assertEquals(thread.getSubject(), newListedPosts.getPosts().get(0).getSubject());
+	  assertEquals(200, 
+	      threadAddPo.add("thread", "threadc", "thread", loginResult.getAuthKey()).getStatus());
+		Output post = postListPo.list("0", "10").posts.get(0);
+		Response ret = threadEditPo.edit(" ", "dsfd", post.id, loginResult.getAuthKey());
+		assertEquals(400, ret.getStatus());
+		assertEquals("Subject cannot be blank", TestUtils.getValidationMessage(ret, 0));
+
+		post = postListPo.list("0", "10").posts.get(0);
+		assertEquals("threadc", post.content);
+		assertEquals("thread", post.subject);
 	}
 
 	@Test
-	public void shouldSeeErrorOnBlanks() {
-		PostResource thread = null;
-		try {
-			AddPostResourceInput threadInput = new AddPostResourceInput("thread", "threadc");
-			ThreadAddFunctional.addThread(service, authKey, threadInput);
-			thread = PostsListFunctional.listRecentPostsThreads(service).getPosts().get(0);
-			EditThreadResource editedInput = new EditThreadResource();
-			editedInput.setContent(" ");
-			editedInput.setSubject(" ");
-			editThread(service, authKey, thread.getId(), editedInput); 		
-			assertFalse("Expected 400 error", true);
-		} catch(WebApplicationException e) {
-			assertEquals(400, e.getResponse().getStatus());
-			return;
-		}	
-		
-		ListPostsResource newListedPosts = PostsListFunctional.listRecentPostsThreads(service);
-		assertEquals(thread.getContent(), newListedPosts.getPosts().get(0).getContent());
-		assertEquals(thread.getSubject(), newListedPosts.getPosts().get(0).getSubject());
+	public void shouldSeeErrorOnBlankContent() {
+		threadAddPo.add("thread", "threadc", "thread", loginResult.getAuthKey());
+		Output post = postListPo.list("0", "10").posts.get(0);
+		Response ret = threadEditPo.edit("xdfsdf", " ", post.id, loginResult.getAuthKey());
+		assertEquals(400, ret.getStatus());
+		assertEquals("Content cannot be blank", TestUtils.getValidationMessage(ret, 0));
+
+		post = postListPo.list("0", "10").posts.get(0);
+		assertEquals("threadc", post.content);
+		assertEquals("thread", post.subject);
 	}
 
-    @Test
-    public void shouldSeeErrorOnLargeSubject() {
-		AddPostResourceInput threadInput = new AddPostResourceInput("thread", "threadc");
-	    ThreadAddFunctional.addThread(service, authKey, threadInput);
-	    PostResource thread = PostsListFunctional.listRecentPostsThreads(service).getPosts().get(0);
-		EditThreadResource editedInput = new EditThreadResource();
-		editedInput.setContent("sdfsfd");
-		editedInput.setSubject("sdfsdfassdfklasjdflksdfkjasfl;kjasdl;kfjsd;lfjasdl;fjsal;fjas;ldfjasld;fjasl;fjasl;fjsal;dfjsdlfkjasdjf;lkasjf;lajsdfl;ajsdf;ljasdf;lkjsdlfjasd;lkfjasl;dfkjasdlfjasdlfkjasdlfjsadlkfjasldfkjsadlfkjlkdfj;alskdfjasl;kdfjasl;dfj;alsdfjal;skdfj;alsdkjf;slajdflk;asjflkasdjflasjflkajdflkasdjflksdjflkasdjflkasjdflkasdjf;lasdjf;lasjdf;lkasdjfl;sjadfl;asjdfl;asjdf;lasjdf");
-		
-		// Act - edit then list
-		EditPostResourceReturnData editReturnData = editThread(service, authKey, thread.getId(), editedInput); 		
-		ListPostsResource newListedPosts = PostsListFunctional.listRecentPostsThreads(service);
-		
-		// Assert
-		assertFalse(editReturnData.isSuccessful());		
-		assertEquals(rb.getString(Strings.subject_too_large), editReturnData.getError());
-		assertEquals(thread.getContent(), newListedPosts.getPosts().get(0).getContent());
-		assertEquals(thread.getSubject(), newListedPosts.getPosts().get(0).getSubject());
-    }
+	@Test
+	public void shouldSeeErrorOnLargeSubject() {
+		threadAddPo.add("thread", "threadc", "thread", loginResult.getAuthKey());
+		Output post = postListPo.list("0", "10").posts.get(0);
+		Response ret = threadEditPo.edit("sdfsdfassdfklasjdflksdfkjasfl;kjasdl;kfjsd;lfjasdl;fjsal;fjas;ldfjasld;fjasl;fjasl;fjsal;dfjsdlfkjasdjf;lkasjf;lajsdfl;ajsdf;ljasdf;lkjsdlfjasd;lkfjasl;dfkjasdlfjasdlfkjasdlfjsadlkfjasldfkjsadlfkjlkdfj;alskdfjasl;kdfjasl;dfj;alsdfjal;skdfj;alsdkjf;slajdflk;asjflkasdjflasjflkajdflkasdjflksdjflkasdjflkasjdflkasdjf;lasdjf;lasjdf;lkasdjfl;sjadfl;asjdfl;asjdf;lasjdfxdfsdf", "cont", post.id, loginResult.getAuthKey());
+		assertEquals(400, ret.getStatus());
+		assertEquals("Subject cannot be more than 300 characters", TestUtils.getValidationMessage(ret, 0));
 
-	@SuppressWarnings("serial")
-    @Test
+		post = postListPo.list("0", "10").posts.get(0);
+		assertEquals("threadc", post.content);
+		assertEquals("thread", post.subject);
+	}
+
+	@Test
 	public void shouldSeeErrorOnLargeTag() {
-        // Arrange
-		AddPostResourceInput threadInput = new AddPostResourceInput("thread", "threadc");
-	    ThreadAddFunctional.addThread(service, authKey, threadInput);
-	    PostResource thread = PostsListFunctional.listRecentPostsThreads(service).getPosts().get(0);
-		EditThreadResource editedInput = new EditThreadResource();
-		editedInput.setContent("sdfsfd");
-		editedInput.setSubject("sdfsdf");
-		editedInput.setTags(new ArrayList<String>(){{
-		   add("small");
-		   add("thisislargerthan20charactersdefiniteily");
-		}});
-		
-		// Act - edit then list
-		EditPostResourceReturnData editReturnData = editThread(service, authKey, thread.getId(), editedInput); 		
-		ListPostsResource newListedPosts = PostsListFunctional.listRecentPostsThreads(service);
-		
-		// Assert
-		assertFalse(editReturnData.isSuccessful());		
-		assertEquals(rb.getString(Strings.tag_too_large), editReturnData.getError());
-		assertEquals(thread.getContent(), newListedPosts.getPosts().get(0).getContent());
-		assertEquals(thread.getSubject(), newListedPosts.getPosts().get(0).getSubject());
+		threadAddPo.add("thread", "threadc", "thread", loginResult.getAuthKey());
+		Output post = postListPo.list("0", "10").posts.get(0);
+		Response ret = threadEditPo.edit("fxdfsdf", "cont", 
+		    Lists.newArrayList("dslkjfaslkfjasd;ljfas;lkfjas;ljfas;lfjasld;fjsdlfkj"),
+		    post.id, loginResult.getAuthKey());
+		assertEquals(400, ret.getStatus());
+		assertEquals("Tag cannot be more than 20 characters", TestUtils.getValidationMessage(ret, 0));
+
+		post = postListPo.list("0", "10").posts.get(0);
+		assertEquals("threadc", post.content);
+		assertEquals("thread", post.subject);
 	}
 
-    public static EditPostResourceReturnData editThread(WebTarget service, String authKey, long postId, EditThreadResource editedInput) {
-        return service
-		.path("rest").path("post").path("editthread")
-		.path(String.valueOf(postId)).request()
-		.header("AuthKey", authKey)
-    	.post(Entity.entity(editedInput, MediaType.APPLICATION_JSON),EditPostResourceReturnData.class);
-    }
-
-*/
 }

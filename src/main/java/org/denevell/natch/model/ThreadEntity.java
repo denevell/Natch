@@ -51,7 +51,7 @@ public class ThreadEntity {
       public static List<String> toStrings(List<StringWrapper> ws) {
         List<String> ret = new ArrayList<>();
         if(ws!=null) for (StringWrapper w: ws) { 
-          if(w.string!=null) ret.add(w.string); 
+          if(w!=null && w.string!=null) ret.add(w.string); 
         }
         return ret;
       }
@@ -91,8 +91,8 @@ public class ThreadEntity {
 	public static class EditInput {
 	  @NotBlank(message="Content cannot be blank")
 	  public String content;
-	  @NotBlank
-	  @Length(max=200, message="Subject cannot be more than 200 characters") 
+	  @NotBlank(message="Subject cannot be blank")
+	  @Length(max=PostEntity.MAX_SUBJECT_LENGTH, message="Subject cannot be more than 300 characters") 
 	  public String subject;
     @Valid
     public List<StringWrapper> tags;
