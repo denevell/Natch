@@ -47,10 +47,12 @@ public class ThreadRequests {
 	@GET
 	@Path("/{start}/{limit}")
 	@Produces(MediaType.APPLICATION_JSON)	
-	public OutputList listThreads(
+	public Response listThreads(
 		@PathParam("start") int start, 	
 		@PathParam("limit") int limit) throws IOException {
-		return new OutputList(mThreadsModel.list(null, start, limit));
+    ThreadsAndNumTotalThreads list = mThreadsModel.list(null, start, limit);
+	  OutputList output = new OutputList(list);
+    return Response.ok().entity(output).build();
 	}	
 
 	@GET

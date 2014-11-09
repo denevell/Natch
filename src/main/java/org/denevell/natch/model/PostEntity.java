@@ -82,7 +82,7 @@ public class PostEntity {
     public String threadId;
     public long creation;
     public long modification;
-    public List<String> tags;
+    public List<String> tags = new ArrayList<>();
     public boolean adminEdited;
 
     public Output() {}

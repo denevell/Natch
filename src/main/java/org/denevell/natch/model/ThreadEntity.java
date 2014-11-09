@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.denevell.natch.model.ThreadEntity.AddInput.StringWrapper;
@@ -107,7 +108,7 @@ public class ThreadEntity {
 	}
 
   public static class Output {
-    public List<String> tags;
+    public List<String> tags = new ArrayList<>();
     public String id;
     public String subject;
     public String author;
@@ -116,15 +117,14 @@ public class ThreadEntity {
     public long modification;
     public long rootPostId;
     public long latestPostId;
-    public List<org.denevell.natch.model.PostEntity.Output> posts;
+    public List<org.denevell.natch.model.PostEntity.Output> posts = new ArrayList<>();
 
     public Output() {}
 
     public Output (List<PostEntity> postEntities, ThreadEntity thread) {
       List<org.denevell.natch.model.PostEntity.Output> postsResources = new ArrayList<>();
       for (PostEntity p : postEntities) {
-        org.denevell.natch.model.PostEntity.Output postResource = 
-            new org.denevell.natch.model.PostEntity.Output(p);
+        org.denevell.natch.model.PostEntity.Output postResource = new org.denevell.natch.model.PostEntity.Output(p);
         postsResources.add(postResource);
       }
       subject = StringEscapeUtils.escapeHtml4(thread.rootPost.subject);
@@ -138,13 +138,13 @@ public class ThreadEntity {
 
   public static class OutputList {
     public long numOfThreads;
-    public List<Output> threads;
+    public List<Output> threads = new ArrayList<Output>();
 
     public OutputList() {}
 
 		public OutputList(ThreadsAndNumTotalThreads threadsAndNumTotalThreads) {
 		  this.numOfThreads = threadsAndNumTotalThreads.getNumOfThreads();
-			List<Output> postsResources = new ArrayList<Output>();
+			ArrayList<Output> postsResources = new ArrayList<Output>();
 			for (ThreadEntity p: threadsAndNumTotalThreads.getThreads()) {
         if (p.rootPost == null) {
           if (p.id != null) {
