@@ -36,10 +36,12 @@ public class ThreadEntity {
 	}
 
   public static class AddInput {
-    @NotBlank @Length(max=PostEntity.MAX_SUBJECT_LENGTH, message="Subject cannot be more than 300 characters")
+    @NotBlank(message="Subject cannot be blank")
+    @Length(max=PostEntity.MAX_SUBJECT_LENGTH, message="Subject cannot be more than 300 characters")
     public String subject;
-    @NotBlank 
+    @NotBlank(message="Content cannot be blank") 
     public String content;
+    public String threadId;
     @Valid
     public List<StringWrapper> tags;
     public static class StringWrapper {
@@ -62,6 +64,7 @@ public class ThreadEntity {
       long created = new Date().getTime();
       entity.content = content;
       entity.subject = subject;
+      entity.threadId = threadId;
       entity.tags = StringWrapper.toStrings(tags);
       entity.username = (username);
       entity.created = (created);

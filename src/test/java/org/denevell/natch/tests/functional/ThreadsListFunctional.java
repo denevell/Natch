@@ -1,94 +1,90 @@
 package org.denevell.natch.tests.functional;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import org.denevell.natch.model.ThreadEntity.OutputList;
+import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
+import org.denevell.natch.tests.functional.pageobjects.PostDeletePO;
+import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
+import org.denevell.natch.tests.functional.pageobjects.ThreadsListPO;
+import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
+import org.denevell.natch.tests.functional.pageobjects.UserRegisterPO;
+import org.denevell.userservice.serv.LoginRequest.LoginResourceReturnData;
+import org.junit.Before;
+import org.junit.Test;
+
 
 public class ThreadsListFunctional {
 	
-  /*
 	private LoginResourceReturnData loginResult;
-	private WebTarget service;
+  private ThreadAddPO threadAddPo;
+  private ThreadsListPO threadsListPo;
+  private PostAddPO postAddPo;
+  private PostDeletePO postDeletePo;
 
 	@Before
 	public void setup() throws Exception {
-		service = TestUtils.getRESTClient();
-		// Delete all users
 		TestUtils.deleteTestDb();
-	    // Register
-	    new RegisterPO().register("aaron@aaron.com", "passy");
-		// Login
-		loginResult = new LoginPO().login("aaron@aaron.com", "passy");
+		threadAddPo = new ThreadAddPO();
+		postAddPo = new PostAddPO();
+		postDeletePo = new PostDeletePO();
+		threadsListPo = new ThreadsListPO();
+	  new UserRegisterPO().register("aaron@aaron.com", "passy");
+		loginResult = new UserLoginPO().login("aaron@aaron.com", "passy");
 	}
 
-	
 	@Test
 	public void shouldListThreadsByPostLastEntered() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
-		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
-		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
-		addThread(input); 
-		addThread(input1); 
-		addThread(input2); 
+		threadAddPo.add("sub", "cont", "t", loginResult.getAuthKey());
+		threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey());
+		assertEquals(200, postAddPo.add("cont2", loginResult.getAuthKey(), "t").getStatus());
 		
-		ListThreadsResource returnData = listThreads(); 
+		OutputList returnData = threadsListPo.list(0, 10);
 		
 		// Assert
-		assertEquals(2, returnData.getNumOfThreads());
-		assertEquals(2, returnData.getThreads().size());
-		assertTrue(returnData.getThreads().get(0).getId()!=null);
-		assertTrue(returnData.getThreads().get(1).getId()!=null);
-		assertEquals("sub", returnData.getThreads().get(0).getSubject());
-		assertEquals("sub1", returnData.getThreads().get(1).getSubject());
-		assertEquals("other", returnData.getThreads().get(1).getId());		
-		assertEquals("t", returnData.getThreads().get(0).getId());		
-	}
-
-	@Test
-	public void shouldListThreadsAfterThreadDelete() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
-		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
-		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
-		AddPostResourceReturnData threadWithSecondPost = addThread(input); 
-		addThread(input1); 
-		addThread(input2); 
-		
-		// Act
-		PostDeleteFunctional.deletePost(
-				service, 
-				threadWithSecondPost.getThread().getPosts().get(0).getId(), 
-				loginResult.getAuthKey());
-		ListThreadsResource returnData = listThreads(); 
-		
-		// Assert
-		assertEquals(1, returnData.getNumOfThreads());
-		assertEquals(1, returnData.getThreads().size());
+		assertEquals(2, returnData.numOfThreads);
+		assertEquals(2, returnData.threads.size());
+		assertEquals("sub", returnData.threads.get(0).subject);
+		assertEquals("sub1", returnData.threads.get(1).subject);
+		assertEquals("other", returnData.threads.get(1).id);		
+		assertEquals("t", returnData.threads.get(0).id);		
 	}
 
 	@Test
 	public void shouldHaveRootPostIdInThread() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
-		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
-		addThread(input); 
-		addThread(input1); 
+		threadAddPo.add("sub", "cont", "t", loginResult.getAuthKey());
+		threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey());
 		
-		ListThreadsResource returnData = listThreads(); 
+		OutputList returnData = threadsListPo.list(0, 10);
 		
-		// Assert
-		long rootPostId1 = returnData.getThreads().get(0).getRootPostId();
-        assertTrue("Thread has root post", rootPostId1>0);
-		long rootPostId2 = returnData.getThreads().get(1).getRootPostId();
-        assertTrue("Thread has root post", rootPostId2>0);
+		long rootPostId1 = returnData.threads.get(0).rootPostId;
+    assertTrue("Thread has root post", rootPostId1>0);
+		long rootPostId2 = returnData.threads.get(1).rootPostId;
+    assertTrue("Thread has root post", rootPostId2>0);
 		assertTrue("Root posts aren't the same", rootPostId1!=rootPostId2);
 	}
+
+	@Test
+	public void shouldListThreadsAfterThreadDelete() {
+		threadAddPo.add("sub", "cont", "t", loginResult.getAuthKey());
+		threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey());
+		threadAddPo.add("sub2", "cont2", "t", loginResult.getAuthKey());
+		
+		OutputList returnData = threadsListPo.list(0, 10);
+		postDeletePo.delete(returnData.threads.get(0).rootPostId, loginResult.getAuthKey());
+		returnData = threadsListPo.list(0, 10);
+		
+		assertEquals(1, returnData.numOfThreads);
+		assertEquals(1, returnData.threads.size());
+		assertEquals("other", returnData.threads.get(0).id);
+	}
 	
+  /*
 	@Test
 	public void shouldListThreadsWithModificationDateAsLatestPost() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
-		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "t");
-		addThread(input); 
-		addPost(input1); 
+		threadAddPo("sub", "cont", "t", loginResult.getAuthKey());
+		threadAddPo("sub1", "cont1", "other", loginResult.getAuthKey());
 		
 		// Act
 		ListThreadsResource threads = listThreads(); 
@@ -107,13 +103,9 @@ public class ThreadsListFunctional {
 	
 	@Test
 	public void shouldListThreadsByPostLastEnteredWithLimit() {
-		// Arrange 
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
-		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
-		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
-		addThread(input); 
-		addThread(input1); 
-		addThread(input2); 
+		threadAddPo("sub", "cont", "t", loginResult.getAuthKey());
+		threadAddPo("sub1", "cont1", "other", loginResult.getAuthKey());
+		threadAddPo("sub2", "cont2", "t", loginResult.getAuthKey());
 		
 		// Act
 		ListThreadsResource returnData = service
@@ -129,20 +121,10 @@ public class ThreadsListFunctional {
 	
 	@Test
 	public void shouldListThreadsByTag() {
-		// Arrange 
-		AddPostResourceInput input0 = new AddPostResourceInput("x", "x", "x");
-		input0.setTags(Arrays.asList(new String[] {"onetag", "f"})); 
-		// We need two in the list, since our deserialisation doesn't like single item lists.
-		// Works fine on the command line though: curl url ... -d '{"content":"xxx", "posttags": ["t"], "subject":"xxx", "thread":"NEW"}'
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
-		input.setTags(Arrays.asList(new String[] {"tag", "onetag"}));
-		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
-		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
-		input2.setTags(Arrays.asList(new String[] {"tag", "onetag"}));
-		addThread(input0); 
-		addThread(input); 
-		addThread(input1); 
-		addThread(input2); 
+		threadAddPo("x", "x", "x", new ArrayList<String>(){{add("onetag");}}, loginResult.getAuthKey());
+		threadAddPo("sub", "cont", "t", new ArrayList<String>(){{add("onetag");}}, loginResult.getAuthKey());
+		threadAddPo("sub1", "cont1", "other", loginResult.getAuthKey());
+		threadAddPo("sub2", "cont2", "t", loginResult.getAuthKey());
 		
 		// Act
 		ListThreadsResource returnData = service
@@ -163,20 +145,10 @@ public class ThreadsListFunctional {
 	
 	@Test
 	public void shouldListThreadsByTagWithLimit() {
-		// Arrange 
-		AddPostResourceInput input0 = new AddPostResourceInput("x", "x", "x");
-		input0.setTags(Arrays.asList(new String[] {"onetag", "f"})); 
-		// We need two in the list, since our deserialisation doesn't like single item lists.
-		// Works fine on the command line though: curl url ... -d '{"content":"xxx", "posttags": ["t"], "subject":"xxx", "thread":"NEW"}'
-		AddPostResourceInput input = new AddPostResourceInput("sub", "cont", "t");
-		input.setTags(Arrays.asList(new String[] {"tag", "onetag"}));
-		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
-		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
-		input2.setTags(Arrays.asList(new String[] {"tag", "onetag"}));
-		addThread(input0); 
-		addThread(input); 
-		addThread(input1); 
-		addThread(input2); 
+		threadAddPo("x", "x", "x", new ArrayList<String>(){{add("onetag");}}, loginResult.getAuthKey());
+		threadAddPo("sub", "cont", "t", loginResult.getAuthKey());
+		threadAddPo("sub1", "cont1", "other", loginResult.getAuthKey());
+		threadAddPo("sub2", "cont2", "t", loginResult.getAuthKey());
 		
 		// Act
 		ListThreadsResource returnData = service
@@ -193,11 +165,9 @@ public class ThreadsListFunctional {
 
 	@Test
 	public void shouldListThreadsWithThreadWithLastModifiedContentFirst() {	
-		// Arrange
-		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
-		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
-		addThread(input1); 
-		addThread(input2); 		
+		threadAddPo("sub1", "cont1", "other", loginResult.getAuthKey());
+		threadAddPo("sub1", "cont1", "t", loginResult.getAuthKey());
+
 		// Note: input2 was added last so should be first in the list
 		// Arrange - list them
 		ListPostsResource listedPosts = service
@@ -231,13 +201,9 @@ public class ThreadsListFunctional {
 	@SuppressWarnings("serial")
 	@Test
 	public void shouldListThreadsByTagWithThreadWithLastModifiedContentFirst() {	
-		// Arrange
-		AddPostResourceInput input1 = new AddPostResourceInput("sub1", "cont1", "other");
-		input1.setTags(new ArrayList<String>(){{add("a");add("b");}});
-		AddPostResourceInput input2 = new AddPostResourceInput("sub2", "cont2", "t");
-		input2.setTags(new ArrayList<String>(){{add("a");add("b");}});
-		addThread(input1); 
-		addThread(input2); 	
+		threadAddPo("sub1", "cont1", "other", new ArrayList<String>(){{add("a");add("b");}}, loginResult.getAuthKey());
+		threadAddPo("sub2", "cont2", "t", new ArrayList<String>(){{add("a");add("b");}}, loginResult.getAuthKey());
+
 		// Note: input2 was added last so should be first in the list
 		// Arrange - list them
 		ListThreadsResource listedPosts = service
@@ -268,34 +234,5 @@ public class ThreadsListFunctional {
 		assertEquals("Listing by last added", "blar2", listedPosts.getThreads().get(0).getSubject());
 	}
 
-	public void addPost(AddPostResourceInput input2) {
-		service
-		.path("rest").path("post").path("add").request()
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(Entity.json(input2), AddPostResourceReturnData.class);
-	}		
-
-	public AddPostResourceReturnData addThread(AddPostResourceInput input2) {
-		AddPostResourceReturnData res = service
-		.path("rest").path("post").path("addthread").request()
-		.header("AuthKey", loginResult.getAuthKey())
-    	.put(Entity.json(input2), AddPostResourceReturnData.class);
-		assertTrue("Should have added thread", res.isSuccessful());
-		return res;
-	}		
-	
-	public ThreadResource listThreadById(String id) {
-		ThreadResource thread = service
-		.path("rest").path("post").path("thread").path(id).path("0").path("10").request()
-		.get(ThreadResource.class);
-		return thread;
-	}		
-	
-	public ListThreadsResource listThreads() {
-		ListThreadsResource threads = service
-		.path("rest").path("threads").path("0").path("10").request()
-    	.get(ListThreadsResource.class);
-		return threads;
-	}	
 	*/
 }

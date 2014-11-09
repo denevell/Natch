@@ -28,17 +28,36 @@ public class ThreadAddPO {
 	    String subject, 
 	    String content, 
 			String authKey) {
-	  return add(subject, content, null, authKey);
+	  return add(subject, content, null, null, authKey);
+	}
+	public Response add(
+	    String subject, 
+	    String content, 
+	    String threadId,
+			String authKey) {
+	  return add(subject, content, threadId, null, authKey);
 	}
 
 	public Response add(
 	    String subject, 
 	    String content, 
+	    List<String> tags,
+			String authKey) {
+	  return add(subject, content, null, tags, authKey);
+	}
+
+	public Response add(
+	    String subject, 
+	    String content, 
+	    String threadId,
 	    List<String> tags, 
 			String authKey) {
 	  AddInput input = new AddInput();
 		input.content = content;
 		input.subject = subject;
+		if(threadId!=null) {
+		  input.threadId = threadId;
+		}
 		if(tags!=null) {
 		  input.tags = StringWrapper.fromStrings(tags);
 		}

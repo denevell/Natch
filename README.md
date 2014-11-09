@@ -14,7 +14,7 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 ~~ * Post edit tests
 ~~ * Post single tests
 ~~ * Posts list tests
-* Thread add tests
+~~ * Thread add tests
 * Thread list
 * Thread delete tests
 * Thread edit tests
