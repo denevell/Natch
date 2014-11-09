@@ -7,21 +7,6 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 
 ## TODO
 
-~~ * Post add tests
-~~ * Check for jersey error return bodies
-~~ * Check for listed posts in add posts tests
-~~ * Post delete tests
-~~ * Post edit tests
-~~ * Post single tests
-~~ * Posts list tests
-~~ * Thread add tests
-~~ * Thread list
-~~ * Thread edit tests
-~~ * Thread from post tests
-~~ * Threads list
-~~ * Thread list by tag
-* Pust ids test
---
 * Html escape on listing threads
 * Edit thread success
 * Edit thread 403

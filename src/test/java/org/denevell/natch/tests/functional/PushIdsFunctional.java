@@ -1,15 +1,19 @@
 package org.denevell.natch.tests.functional;
 
+import static org.junit.Assert.assertEquals;
+
 import javax.ws.rs.client.WebTarget;
 
+import org.denevell.natch.model.PushEntity.Output;
 import org.denevell.natch.tests.functional.pageobjects.PushIdsPO;
+import org.junit.Before;
+import org.junit.Test;
 
 public class PushIdsFunctional {
 	
   private WebTarget service;
 	private PushIdsPO addPushIdsPo;
 	
-	/*
 	@Before
 	public void setup() throws Exception {
 		service = TestUtils.getRESTClient();
@@ -22,10 +26,10 @@ public class PushIdsFunctional {
 		addPushIdsPo.add("pushId1");
 		addPushIdsPo.add("pushId2");
 		
-		PushResource ids = addPushIdsPo.list(); 
-		assertEquals(2, ids.getIds().size());
-		assertEquals("pushId1", ids.getIds().get(0).getClientId());
-		assertEquals("pushId2", ids.getIds().get(1).getClientId());
+		Output ids = addPushIdsPo.list(); 
+		assertEquals(2, ids.ids.size());
+		assertEquals("pushId1", ids.ids.get(0).clientId);
+		assertEquals("pushId2", ids.ids.get(1).clientId);
 	}
 
 	@Test
@@ -33,10 +37,9 @@ public class PushIdsFunctional {
 		addPushIdsPo.add("pushId1");
 		addPushIdsPo.add("pushId1");
 		
-		PushResource ids = addPushIdsPo.list(); 
-		assertEquals(1, ids.getIds().size());
-		assertEquals("pushId1", ids.getIds().get(0).getClientId());
+		Output ids = addPushIdsPo.list(); 
+		assertEquals(1, ids.ids.size());
+		assertEquals("pushId1", ids.ids.get(0).clientId);
 	}
-	*/
 
 }
