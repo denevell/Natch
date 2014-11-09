@@ -50,7 +50,7 @@ public class ThreadRequests {
 	public OutputList listThreads(
 		@PathParam("start") int start, 	
 		@PathParam("limit") int limit) throws IOException {
-		return new OutputList(mThreadsModel.list(null, start, limit).getThreads());
+		return new OutputList(mThreadsModel.list(null, start, limit));
 	}	
 
 	@GET
@@ -77,7 +77,7 @@ public class ThreadRequests {
 			@PathParam("start") int start, 	
 			@PathParam("limit") int limit) throws IOException {
 		ThreadsAndNumTotalThreads threads = mThreadsModel.list(tag, start, limit);
-		return new OutputList(threads.getThreads());
+		return new OutputList(threads);
 	}
 
 	@PUT

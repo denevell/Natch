@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.denevell.natch.model.ThreadEntity.AddInput.StringWrapper;
+import org.denevell.natch.model.ThreadsListModel.ThreadsAndNumTotalThreads;
 import org.denevell.natch.utils.Log;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -48,13 +49,19 @@ public class ThreadEntity {
       @Length(max=PostEntity.MAX_TAG_LENGTH, message="Tag cannot be more than 20 characters")
       public String string;
       public static List<String> toStrings(List<StringWrapper> ws) {
-        List<String> ret = new ArrayList<String>();
-        if(ws!=null) for (StringWrapper w: ws) { ret.add(w.string); }
+        List<String> ret = new ArrayList<>();
+        if(ws!=null) for (StringWrapper w: ws) { 
+          if(w.string!=null) ret.add(w.string); 
+        }
         return ret;
       }
       public static List<StringWrapper> fromStrings(List<String> ws) {
-        List<StringWrapper> ret = new ArrayList<StringWrapper>();
-        if(ws!=null) for (String w: ws) { StringWrapper sw = new StringWrapper(); sw.string=w; ret.add(sw); }
+        List<StringWrapper> ret = new ArrayList<>();
+        if(ws!=null) for (String w: ws) { 
+          StringWrapper sw = new StringWrapper(); 
+          sw.string=w; 
+          ret.add(sw); 
+        }
         return ret;
       }
     }
@@ -135,10 +142,10 @@ public class ThreadEntity {
 
     public OutputList() {}
 
-		public OutputList(List<ThreadEntity> threadEntities) {
-		  this.numOfThreads = threadEntities.size();
+		public OutputList(ThreadsAndNumTotalThreads threadsAndNumTotalThreads) {
+		  this.numOfThreads = threadsAndNumTotalThreads.getNumOfThreads();
 			List<Output> postsResources = new ArrayList<Output>();
-			for (ThreadEntity p: threadEntities) {
+			for (ThreadEntity p: threadsAndNumTotalThreads.getThreads()) {
         if (p.rootPost == null) {
           if (p.id != null) {
             Log.info(getClass(), "Found a thread with a null root post. Thread: " + p.id);
