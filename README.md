@@ -21,12 +21,16 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 * Thread from post tests
 * Threads list
 * Pust ids test
-* Return thread id in move post to new thread
+--
 * Go back to test thread title in single post
 * Html escape on listing threads
 * And listing subject and tags on listing posts
 * Edit thread success
 * Edit thread 403
+--
+* Return thread id in move post to new thread
+* Should probably return post id in add post
+* Return thread id in add thread 
 
 ## Later
 
@@ -35,8 +39,6 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 * Fix multiple paths etc in testutils
 * Make adding a post with a non existent post id an error
 * Stop directory listing
-* Should probably return post id in add post
-* Return thread id in add thread 
 
 ### Dev complete
 
