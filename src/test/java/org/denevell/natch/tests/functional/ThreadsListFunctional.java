@@ -10,6 +10,7 @@ import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
 import org.denevell.natch.tests.functional.pageobjects.PostDeletePO;
 import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
+import org.denevell.natch.tests.functional.pageobjects.ThreadEditPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadsListPO;
 import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
 import org.denevell.natch.tests.functional.pageobjects.UserRegisterPO;
@@ -26,6 +27,7 @@ public class ThreadsListFunctional {
   private PostAddPO postAddPo;
   private PostDeletePO postDeletePo;
   private PostsListPO postListPo;
+  private ThreadEditPO threadEditPo;
 
 	@Before
 	public void setup() throws Exception {
@@ -35,6 +37,7 @@ public class ThreadsListFunctional {
 		postDeletePo = new PostDeletePO();
 		postListPo = new PostsListPO();
 		threadsListPo = new ThreadsListPO();
+		threadEditPo = new ThreadEditPO();
 	  new UserRegisterPO().register("aaron@aaron.com", "passy");
 		loginResult = new UserLoginPO().login("aaron@aaron.com", "passy");
 	}
@@ -115,5 +118,21 @@ public class ThreadsListFunctional {
 		assertEquals("sub1", threads.threads.get(0).subject);
 		assertEquals("other", threads.threads.get(0).id);
 	}	
+
+	@Test
+	public void shouldListThreadsWithThreadWithLastModifiedContentFirst() {	
+		threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey());
+		threadAddPo.add("sub2", "cont2", "t", loginResult.getAuthKey());
+		org.denevell.natch.model.PostEntity.OutputList posts = postListPo.list("0", "10");
+		assertEquals("Listing by last added", "sub2", posts.posts.get(0).subject);
+		
+		assertEquals(200, 
+		    threadEditPo.edit("blar", "blar2", 
+		        posts.posts.get(1).id, loginResult.getAuthKey()).getStatus());
+		OutputList threads = threadsListPo.list(0, 10);
+		
+		assertEquals("Listing by last added", "blar", threads.threads.get(0).subject);
+		assertEquals("Listing by last added", "sub2", threads.threads.get(1).subject);
+	}
 
 }

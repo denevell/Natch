@@ -1,15 +1,15 @@
 package org.denevell.natch.tests.functional;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
 
-import org.denevell.natch.model.PostEntity.Output;
+import java.util.ArrayList;
+
 import org.denevell.natch.model.ThreadEntity.OutputList;
 import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
 import org.denevell.natch.tests.functional.pageobjects.PostDeletePO;
 import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
+import org.denevell.natch.tests.functional.pageobjects.ThreadEditPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadsListPO;
 import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
 import org.denevell.natch.tests.functional.pageobjects.UserRegisterPO;
@@ -26,12 +26,14 @@ public class ThreadsListByTagFunctional {
   private PostAddPO postAddPo;
   private PostDeletePO postDeletePo;
   private PostsListPO postListPo;
+  private ThreadEditPO threadEditPo;
 
 	@Before
 	public void setup() throws Exception {
 		TestUtils.deleteTestDb();
 		threadAddPo = new ThreadAddPO();
 		postAddPo = new PostAddPO();
+		threadEditPo = new ThreadEditPO();
 		postDeletePo = new PostDeletePO();
 		postListPo = new PostsListPO();
 		threadsListPo = new ThreadsListPO();
@@ -39,84 +41,46 @@ public class ThreadsListByTagFunctional {
 		loginResult = new UserLoginPO().login("aaron@aaron.com", "passy");
 	}
 
-	/*
-	@Test
-	public void shouldListThreadsWithThreadWithLastModifiedContentFirst() {	
-		threadAddPo("sub1", "cont1", "other", loginResult.getAuthKey());
-		threadAddPo("sub1", "cont1", "t", loginResult.getAuthKey());
-
-		// Note: input2 was added last so should be first in the list
-		// Arrange - list them
-		ListPostsResource listedPosts = service
-		.path("rest").path("post").path("0").path("10").request()
-		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListPostsResource.class); 				
-		// Assert - we've got input2 first
-		assertEquals("Listing by last added", "sub2", listedPosts.getPosts().get(0).getSubject());
-		
-		// Act - modify input 1
-		EditThreadResource editedInput = new EditThreadResource();
-		editedInput.setContent("blar");
-		editedInput.setSubject("blar2");
-		EditPostResourceReturnData editReturnData = service
-		.path("rest").path("post").path("editthread")
-		.path(String.valueOf(listedPosts.getPosts().get(1).getId())).request()
-		.header("AuthKey", loginResult.getAuthKey())
-    	.post(Entity.json(editedInput), EditPostResourceReturnData.class); 			
-		assertTrue(editReturnData.isSuccessful());
-		
-		// Assert - we've now got input1 first
-		ListThreadsResource listedThreads = service
-		.path("rest").path("threads").path("0").path("10").request()
-		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListThreadsResource.class); 				
-		// Assert - we've got input2 first
-		assertEquals("Listing by last added", "blar2", listedThreads.getThreads().get(0).getSubject());
-	}
-
-	@Test
+	@SuppressWarnings("serial")
+  @Test
 	public void shouldListThreadsByTag() {
-		threadAddPo("x", "x", "x", new ArrayList<String>(){{add("onetag");}}, loginResult.getAuthKey());
-		threadAddPo("sub", "cont", "t", new ArrayList<String>(){{add("onetag");}}, loginResult.getAuthKey());
-		threadAddPo("sub1", "cont1", "other", loginResult.getAuthKey());
-		threadAddPo("sub2", "cont2", "t", loginResult.getAuthKey());
+		threadAddPo.add("x", "x", "x", new ArrayList<String>(){{add("onetag");}}, loginResult.getAuthKey());
+		threadAddPo.add("sub", "cont", "t", new ArrayList<String>(){{add("onetag");}}, loginResult.getAuthKey());
+		threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey());
+		threadAddPo.add("sub2", "cont2", "t", loginResult.getAuthKey());
 		
-		// Act
-		ListThreadsResource returnData = service
-		.path("rest").path("threads").path("onetag").path("0").path("10").request()
-    	.get(ListThreadsResource.class); 
+		OutputList returnData= threadsListPo.byTag("onetag", 0, 10);
 		
-		// Assert
-		assertEquals(2, returnData.getNumOfThreads());
-		assertEquals(2, returnData.getThreads().size());
-		assertEquals("sub", returnData.getThreads().get(0).getSubject());
-		assertEquals("t", returnData.getThreads().get(0).getId());
-		assertEquals("onetag", returnData.getThreads().get(0).getTags().get(1));
+		assertEquals(2, returnData.numOfThreads);
+		assertEquals(2, returnData.threads.size());
+		assertEquals("sub", returnData.threads.get(0).subject);
+		assertEquals("t", returnData.threads.get(0).id);
+		assertEquals("onetag", returnData.threads.get(0).tags.get(0));
 		
-		assertEquals("x", returnData.getThreads().get(1).getSubject());
-		assertEquals("x", returnData.getThreads().get(1).getId());
-		assertEquals("onetag", returnData.getThreads().get(1).getTags().get(0));
+		assertEquals("x", returnData.threads.get(1).subject);
+		assertEquals("x", returnData.threads.get(1).id);
+		assertEquals("onetag", returnData.threads.get(1).tags.get(0));
 	}	
-	
-	@Test
+
+	@SuppressWarnings("serial")
+  @Test
 	public void shouldListThreadsByTagWithLimit() {
-		threadAddPo("x", "x", "x", new ArrayList<String>(){{add("onetag");}}, loginResult.getAuthKey());
-		threadAddPo("sub", "cont", "t", loginResult.getAuthKey());
-		threadAddPo("sub1", "cont1", "other", loginResult.getAuthKey());
-		threadAddPo("sub2", "cont2", "t", loginResult.getAuthKey());
+		threadAddPo.add("x", "x", "x", new ArrayList<String>(){{add("onetag");}}, loginResult.getAuthKey());
+		threadAddPo.add("sub", "cont", "t", new ArrayList<String>(){{add("onetag");}}, loginResult.getAuthKey());
+		threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey());
+		threadAddPo.add("sub2", "cont2", "t", loginResult.getAuthKey());
 		
 		// Act
-		ListThreadsResource returnData = service
-		.path("rest").path("threads").path("onetag").path("1").path("1").request()
-    	.get(ListThreadsResource.class); 
+		OutputList returnData= threadsListPo.byTag("onetag", 1, 1);
 		
 		// Assert
-		assertEquals(2, returnData.getNumOfThreads());
-		assertEquals(1, returnData.getThreads().size());
-		assertEquals("x", returnData.getThreads().get(0).getSubject());
-		assertEquals("x", returnData.getThreads().get(0).getId());
-		assertEquals("onetag", returnData.getThreads().get(0).getTags().get(0));
+		assertEquals(2, returnData.numOfThreads);
+		assertEquals(1, returnData.threads.size());
+		assertEquals("x", returnData.threads.get(0).subject);
+		assertEquals("x", returnData.threads.get(0).id);
+		assertEquals("onetag", returnData.threads.get(0).tags.get(0));
 	}
+	/*
 	
 	@Ignore // Until we somehow get the edit ids when listing a post
 	@SuppressWarnings("serial")
@@ -125,33 +89,15 @@ public class ThreadsListByTagFunctional {
 		threadAddPo("sub1", "cont1", "other", new ArrayList<String>(){{add("a");add("b");}}, loginResult.getAuthKey());
 		threadAddPo("sub2", "cont2", "t", new ArrayList<String>(){{add("a");add("b");}}, loginResult.getAuthKey());
 
-		// Note: input2 was added last so should be first in the list
-		// Arrange - list them
-		ListThreadsResource listedPosts = service
-		.path("rest").path("threads").path("a").path("0").path("10").request()
-		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListThreadsResource.class); 				
-		// Assert - we've got input2 first
+		OutputList listedPosts = threadsListPo.byTag("a", 0, 10);
 		assertEquals("Listing by last added", "sub2", listedPosts.getThreads().get(0).getSubject());
 		
-		// Act - modify input 1
-		EditThreadResource editedInput = new EditThreadResource();
-		editedInput.setContent("blar");
-		editedInput.setSubject("blar2");
-		editedInput.setTags(new ArrayList<String>(){{add("a");add("b");}});
-		EditPostResourceReturnData editReturnData = service
-		.path("rest").path("post").path("editthread")
-		.path(String.valueOf(listedPosts.getThreads().get(1).getId())).request()
-		.header("AuthKey", loginResult.getAuthKey())
-    	.post(Entity.json(editedInput), EditPostResourceReturnData.class) ; 			
-		assertTrue(editReturnData.isSuccessful());
+		assertEquals(200, 
+		    threadEditPo.edit("blar", "blar2", 
+		        listedPosts.threads.get(1).id, loginResult.getAuthKey()).getStatus());
 		
 		// Assert - we've now got input1 first
-		listedPosts = service
-		.path("rest").path("threads").path("a").path("0").path("10").request()
-		.header("AuthKey", loginResult.getAuthKey())
-    	.get(ListThreadsResource.class); 				
-		// Assert - we've got input2 first
+		listedPosts = threadsListPo.byTag("a", 0, 10);
 		assertEquals("Listing by last added", "blar2", listedPosts.getThreads().get(0).getSubject());
 	}
 

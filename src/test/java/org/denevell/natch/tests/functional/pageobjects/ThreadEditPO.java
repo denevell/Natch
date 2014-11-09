@@ -45,7 +45,7 @@ public class ThreadEditPO {
 		  input.tags = StringWrapper.fromStrings(tags);
 		}
     return mService
-		.path("rest").path("thread")
+		.path("rest").path("thread").path("edit")
 		.path(String.valueOf(postId)).request()
 		.accept(MediaType.APPLICATION_JSON)
 		.header("AuthKey", authKey)

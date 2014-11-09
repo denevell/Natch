@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.denevell.natch.model.ThreadEntity.AddInput.StringWrapper;
@@ -106,6 +107,7 @@ public class ThreadEntity {
     }
 	}
 
+	@XmlRootElement
   public static class Output {
     public List<String> tags = new ArrayList<>();
     public String id;
@@ -135,6 +137,7 @@ public class ThreadEntity {
     }
   }
 
+  @XmlRootElement
   public static class OutputList {
     public long numOfThreads;
     public List<Output> threads = new ArrayList<Output>();

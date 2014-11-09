@@ -111,9 +111,9 @@ public class ThreadRequests {
   }
 
 	@POST
-	@Path("{postId}") 
+	@Path("edit/{postId}") 
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response editpost(
+	public Response editThread(
 			@PathParam(value="postId") long postId, 
 			@Valid EditInput input) {
 		User userEntity = (User) mRequest.getAttribute("user");
