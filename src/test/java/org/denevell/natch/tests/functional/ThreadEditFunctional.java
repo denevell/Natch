@@ -10,6 +10,7 @@ import org.denevell.natch.model.PostEntity.Output;
 import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadEditPO;
+import org.denevell.natch.tests.functional.pageobjects.ThreadsListPO;
 import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
 import org.denevell.natch.tests.functional.pageobjects.UserRegisterPO;
 import org.denevell.userservice.serv.LoginRequest.LoginResourceReturnData;
@@ -23,15 +24,40 @@ public class ThreadEditFunctional {
     private PostsListPO postListPo;
     private ThreadAddPO threadAddPo;
     private ThreadEditPO threadEditPo;
+    private ThreadsListPO threadListPo;
 
   @Before
 	public void setup() throws Exception {
 		TestUtils.deleteTestDb();
 		threadAddPo = new ThreadAddPO();
+		threadListPo = new ThreadsListPO();
 		postListPo = new PostsListPO();
 		threadEditPo = new ThreadEditPO();
 	  new UserRegisterPO().register("aaron@aaron.com", "passy");
 		loginResult = new UserLoginPO().login("aaron@aaron.com", "passy");
+	}
+
+	@Test
+	public void shouldEditThread() {
+	  assertEquals(200, threadAddPo.add("thread", "threadc", "thread", loginResult.getAuthKey()).getStatus());
+		Output post = postListPo.list("0", "10").posts.get(0);
+		Response ret = threadEditPo.edit("sup1", "sup2", Lists.newArrayList("sup3"), post.id, loginResult.getAuthKey());
+
+		assertEquals(200, ret.getStatus());
+		org.denevell.natch.model.ThreadEntity.Output thread = threadListPo.byThread("thread", 0, 10);
+
+		assertEquals("sup1", thread.subject);
+		assertEquals("sup2", thread.posts.get(0).content);
+		assertEquals("sup3", thread.posts.get(0).tags.get(0));
+	}
+
+	@Test
+	public void shouldSee401OnEditThreadWithWrongAuth() {
+	  assertEquals(200, threadAddPo.add("thread", "threadc", "thread", loginResult.getAuthKey()).getStatus());
+		Output post = postListPo.list("0", "10").posts.get(0);
+		Response ret = threadEditPo.edit("sup1", "sup2", post.id, loginResult.getAuthKey()+"BAD");
+
+		assertEquals(401, ret.getStatus());
 	}
 	
 	@Test

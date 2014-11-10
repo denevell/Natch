@@ -7,9 +7,6 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 
 ## TODO
 
-* Edit thread success
-* Edit thread 403
-
 ## Later
 
 * Make user service generator give a better logging name so as not to conflict
