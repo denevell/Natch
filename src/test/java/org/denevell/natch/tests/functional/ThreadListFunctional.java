@@ -79,5 +79,16 @@ public class ThreadListFunctional {
 
 		threadsList.byThreadShow404("rubbish", 1, 1);
 	}	
+	
+	@Test
+	public void shouldHtmlEscapeSubjectContentTags() {
+	  assertEquals(200, threadAddPo.add("<hi>", "<there>", "t", Lists.newArrayList("<again>"), loginResult.getAuthKey()).getStatus());
+		
+		Output returnData = threadsList.byThread("t", 0, 10);
+
+		assertEquals("&lt;hi&gt;", returnData.subject);
+		assertEquals("&lt;there&gt;", returnData.posts.get(0).content);
+		assertEquals("&lt;again&gt;", returnData.tags.get(0));
+	}		
 
 }

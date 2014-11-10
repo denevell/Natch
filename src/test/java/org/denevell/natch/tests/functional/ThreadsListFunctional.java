@@ -3,6 +3,7 @@ package org.denevell.natch.tests.functional;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import jersey.repackaged.com.google.common.collect.Lists;
 
 import org.denevell.natch.model.PostEntity.Output;
 import org.denevell.natch.model.ThreadEntity.OutputList;
@@ -134,5 +135,15 @@ public class ThreadsListFunctional {
 		assertEquals("Listing by last added", "blar", threads.threads.get(0).subject);
 		assertEquals("Listing by last added", "sub2", threads.threads.get(1).subject);
 	}
+
+	@Test
+	public void shouldHtmlEscapeSubjectContentTags() {
+		threadAddPo.add("<hi>", "cont1", "t", Lists.newArrayList("<there>"), loginResult.getAuthKey());
+
+		OutputList threads = threadsListPo.list(0, 10);
+
+		assertEquals("&lt;hi&gt;", threads.threads.get(0).subject);
+		assertEquals("&lt;there&gt;", threads.threads.get(0).tags.get(0));
+	}		
 
 }

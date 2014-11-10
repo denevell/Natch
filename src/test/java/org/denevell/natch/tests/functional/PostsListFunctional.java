@@ -64,7 +64,6 @@ public class PostsListFunctional {
 		OutputList returnData = postsListPo.list("0", "10");
 
 		assertEquals("&lt;hi&gt;", returnData.posts.get(0).content);
-		// TODO: Escape subject and tags
 	}		
 
 }

@@ -32,6 +32,7 @@ import org.denevell.natch.model.ThreadListModel.ThreadAndPosts;
 import org.denevell.natch.model.ThreadsListModel;
 import org.denevell.natch.model.ThreadsListModel.ThreadsAndNumTotalThreads;
 import org.denevell.natch.model.UserGetLoggedInModel.User;
+import org.denevell.natch.utils.Responses;
 
 @Path("thread")
 public class ThreadRequests {
@@ -107,7 +108,7 @@ public class ThreadRequests {
     if(thread==null) {
       return Response.serverError().build();
     }
-    return Response.ok().build();
+    return Response.ok().entity(Responses.hM("threadId", thread.id)).build();
   }
 
 	@POST

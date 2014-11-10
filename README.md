@@ -7,10 +7,8 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 
 ## TODO
 
-* Html escape on listing threads
 * Edit thread success
 * Edit thread 403
-* Return thread id in move post to new thread
 
 ## Later
 

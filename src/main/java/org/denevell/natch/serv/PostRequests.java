@@ -32,15 +32,15 @@ import org.denevell.natch.model.UserGetLoggedInModel.User;
 
 @Path("post")
 public class PostRequests {
-	
-	@Context HttpServletRequest mRequest;
+
+  @Context HttpServletRequest mRequest;
 	@Inject PostAddModel mAddPostModel;
 	@Inject PostDeleteModel mPostFindModel;
 	@Inject PostEditModel mPostEditModel;
 	@Inject PostSingleModel mPostSingle;
 	@Inject PostsListByModDateModel mPostsListModel;
 
-	@GET
+  @GET
 	@Path("single/{postId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response findById(@PathParam("postId") long postId) throws IOException {

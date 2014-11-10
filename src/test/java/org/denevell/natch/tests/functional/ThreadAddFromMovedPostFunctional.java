@@ -3,6 +3,8 @@ package org.denevell.natch.tests.functional;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashMap;
+
 import javax.ws.rs.core.Response;
 
 import org.denevell.natch.model.PostEntity.OutputList;
@@ -18,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 
+@SuppressWarnings("unchecked")
 public class ThreadAddFromMovedPostFunctional {
 	
 	private LoginResourceReturnData adminLoginResult;
@@ -61,6 +64,8 @@ public class ThreadAddFromMovedPostFunctional {
     		adminLoginResult.getAuthKey()); 
 		
 		assertEquals(200, returnData.getStatus());
+    HashMap<String, String> hm = (HashMap<String, String>) returnData.readEntity(HashMap.class);
+		assertTrue("Returns the new thread id", hm.get("threadId")!=null);
 		posts = postsListPo.list("0", "10");
 		assertEquals("New thread new new subject", posts.posts.get(0).subject, "New subject");
 		assertEquals("New thread has old user id", posts.posts.get(0).username, "other");

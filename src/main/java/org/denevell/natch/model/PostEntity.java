@@ -142,11 +142,12 @@ public class PostEntity {
     public static List<String> getTagsEscaped(List<String> tags) {
       if (tags == null)
         return null;
+      ArrayList<String> ts = new ArrayList<String>(); 
       for (int i = 0; i < tags.size(); i++) {
         String string = StringEscapeUtils.escapeHtml4(tags.get(i));
-        tags.set(i, string);
+        ts.add(string);
       }
-      return tags;
+      return ts;
     }
   }
 
