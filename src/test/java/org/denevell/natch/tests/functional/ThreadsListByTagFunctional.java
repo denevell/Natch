@@ -5,11 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 
 import org.denevell.natch.model.ThreadEntity.OutputList;
-import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
-import org.denevell.natch.tests.functional.pageobjects.PostDeletePO;
-import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
-import org.denevell.natch.tests.functional.pageobjects.ThreadEditPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadsListPO;
 import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
 import org.denevell.natch.tests.functional.pageobjects.UserRegisterPO;
@@ -23,19 +19,11 @@ public class ThreadsListByTagFunctional {
 	private LoginResourceReturnData loginResult;
   private ThreadAddPO threadAddPo;
   private ThreadsListPO threadsListPo;
-  private PostAddPO postAddPo;
-  private PostDeletePO postDeletePo;
-  private PostsListPO postListPo;
-  private ThreadEditPO threadEditPo;
 
 	@Before
 	public void setup() throws Exception {
 		TestUtils.deleteTestDb();
 		threadAddPo = new ThreadAddPO();
-		postAddPo = new PostAddPO();
-		threadEditPo = new ThreadEditPO();
-		postDeletePo = new PostDeletePO();
-		postListPo = new PostsListPO();
 		threadsListPo = new ThreadsListPO();
 	  new UserRegisterPO().register("aaron@aaron.com", "passy");
 		loginResult = new UserLoginPO().login("aaron@aaron.com", "passy");

@@ -24,11 +24,9 @@ import org.denevell.natch.model.ThreadEntity;
 import org.denevell.natch.model.ThreadEntity.AddFromPostInput;
 import org.denevell.natch.model.ThreadEntity.AddInput;
 import org.denevell.natch.model.ThreadEntity.EditInput;
-import org.denevell.natch.model.ThreadEntity.Output;
 import org.denevell.natch.model.ThreadEntity.OutputList;
 import org.denevell.natch.model.ThreadFromPostModel;
 import org.denevell.natch.model.ThreadListModel;
-import org.denevell.natch.model.ThreadListModel.ThreadAndPosts;
 import org.denevell.natch.model.ThreadsListModel;
 import org.denevell.natch.model.ThreadsListModel.ThreadsAndNumTotalThreads;
 import org.denevell.natch.model.UserGetLoggedInModel.User;
@@ -52,24 +50,17 @@ public class ThreadRequests {
 		@PathParam("start") int start, 	
 		@PathParam("limit") int limit) throws IOException {
     ThreadsAndNumTotalThreads list = mThreadsModel.list(null, start, limit);
-	  OutputList output = new OutputList(list);
-    return Response.ok().entity(output).build();
+    return Response.ok().entity(new OutputList(list)).build();
 	}	
 
 	@GET
 	@Path("/{threadId}/{start}/{limit}")
 	@Produces(MediaType.APPLICATION_JSON)	
-	public Output listByThreadId(
+	public Response listByThreadId(
 			@PathParam("threadId") String threadId,
 			@PathParam("start") int start, 	
 			@PathParam("limit") int limit) throws IOException {
-		ThreadAndPosts ret = mThreadModel.list(threadId, start, limit);
-		if(ret==null) {
-			mResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
-			return null;
-		} else {
-			return new Output(ret.getPosts(), ret.getThreadEntity());
-		}
+		return mThreadModel.find(threadId, start, limit).httpReturn();
 	}
 	
 	@GET

@@ -20,10 +20,8 @@ import javax.ws.rs.core.Response;
 import org.denevell.natch.model.PostAddModel;
 import org.denevell.natch.model.PostDeleteModel;
 import org.denevell.natch.model.PostEditModel;
-import org.denevell.natch.model.PostEntity;
 import org.denevell.natch.model.PostEntity.AddInput;
 import org.denevell.natch.model.PostEntity.EditInput;
-import org.denevell.natch.model.PostEntity.Output;
 import org.denevell.natch.model.PostEntity.OutputList;
 import org.denevell.natch.model.PostSingleModel;
 import org.denevell.natch.model.PostsListByModDateModel;
@@ -44,11 +42,7 @@ public class PostRequests {
 	@Path("single/{postId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response findById(@PathParam("postId") long postId) throws IOException {
-		PostEntity post = mPostSingle.find(postId);
-		if(post==null) {
-		  return Response.status(404).build();
-		}
-	  return Response.ok().entity(new Output(post)).build();
+		return mPostSingle.find(postId).httpReturn();
 	}
 
 	@GET

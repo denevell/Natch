@@ -11,10 +11,11 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.denevell.natch.model.ThreadEntity.AddInput.StringWrapper;
 import org.denevell.natch.model.ThreadsListModel.ThreadsAndNumTotalThreads;
 import org.denevell.natch.utils.Log;
+import org.denevell.natch.utils.ModelResponse.ModelExternaliser;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-public class ThreadEntity {
+public class ThreadEntity implements ModelExternaliser {
 	public static final String NAMED_QUERY_LIST_THREADS = "findThreads";
 	public static final String NAMED_QUERY_LIST_THREADS_BY_TAG = "findThreadByTag";
 	public static final String NAMED_QUERY_FIND_THREAD_BY_ID = "findThreadById";
@@ -119,22 +120,22 @@ public class ThreadEntity {
     public long rootPostId;
     public long latestPostId;
     public List<org.denevell.natch.model.PostEntity.Output> posts = new ArrayList<>();
+  }
 
-    public Output() {}
-
-    public Output (List<PostEntity> postEntities, ThreadEntity thread) {
-      List<org.denevell.natch.model.PostEntity.Output> postsResources = new ArrayList<>();
-      for (PostEntity p : postEntities) {
-        org.denevell.natch.model.PostEntity.Output postResource = new org.denevell.natch.model.PostEntity.Output(p);
-        postsResources.add(postResource);
-      }
-      subject = StringEscapeUtils.escapeHtml4(thread.rootPost.subject);
-      author = thread.rootPost.username;
-      posts = postsResources;
-      numPosts = (int) thread.numPosts;
-      id = thread.id;
-      tags = PostEntity.Utils.getTagsEscaped(thread.rootPost.tags);
+  @Override
+  public Output toOutput() {
+    Output output = new Output();
+    List<org.denevell.natch.model.PostEntity.Output> postsResources = new ArrayList<>();
+    for (PostEntity p : this.posts) {
+        postsResources.add(p.toOutput());
     }
+    output.subject = StringEscapeUtils.escapeHtml4(rootPost.subject);
+    output.author = rootPost.username;
+    output.posts = postsResources;
+    output.numPosts = (int) numPosts;
+    output.id = id;
+    output.tags = PostEntity.Utils.getTagsEscaped(rootPost.tags);
+    return output;
   }
 
   @XmlRootElement

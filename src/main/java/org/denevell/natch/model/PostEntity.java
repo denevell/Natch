@@ -8,9 +8,10 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.denevell.natch.utils.Log;
+import org.denevell.natch.utils.ModelResponse.ModelExternaliser;
 import org.hibernate.validator.constraints.NotBlank;
 
-public class PostEntity {
+public class PostEntity implements ModelExternaliser {
 	
 	public static final String NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE = "findByModData";
 	public static final String NAMED_QUERY_FIND_BY_THREADID = "findByThreadId";
@@ -84,20 +85,21 @@ public class PostEntity {
     public long modification;
     public List<String> tags = new ArrayList<>();
     public boolean adminEdited;
-
-    public Output() {}
-
-    public Output(PostEntity post) {
-      this.username = post.username;
-      this.creation = post.created;
-      this.modification = post.modified;
-      this.subject = StringEscapeUtils.escapeHtml4(post.subject);
-      this.content = StringEscapeUtils.escapeHtml4(post.content);
-      this.tags = Utils.getTagsEscaped(post.tags);
-      this.adminEdited = post.adminEdited;
-      this.id = post.id;
-      this.threadId = post.threadId;
-    }
+  }
+  
+  @Override
+  public Output toOutput() {
+    Output output = new Output(); 
+    output.username = this.username;
+    output.creation = this.created;
+    output.modification = this.modified;
+    output.subject = StringEscapeUtils.escapeHtml4(this.subject);
+    output.content = StringEscapeUtils.escapeHtml4(this.content);
+    output.tags = Utils.getTagsEscaped(this.tags);
+    output.adminEdited = this.adminEdited;
+    output.id = this.id;
+    output.threadId = this.threadId;
+    return output;
   }
 
   public static class OutputList {
@@ -107,7 +109,7 @@ public class PostEntity {
     public OutputList(List<PostEntity> entities) {
       List<Output> outputs = new ArrayList<Output>();
       for (PostEntity p : entities) {
-        Output entity = new Output(p);
+        Output entity = p.toOutput();
         outputs.add(entity);
       }
       posts = outputs;
@@ -138,7 +140,6 @@ public class PostEntity {
       }
       return threadId;
     }
-
     public static List<String> getTagsEscaped(List<String> tags) {
       if (tags == null)
         return null;
