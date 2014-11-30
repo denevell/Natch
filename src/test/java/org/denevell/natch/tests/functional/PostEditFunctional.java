@@ -45,7 +45,7 @@ public class PostEditFunctional {
 	  authKey = loginResult.getAuthKey();
 
 		// Add post
-	  threadAddPo.add("sub", "cont", "thread", authKey);
+	  assertEquals(200, threadAddPo.add("sub", "cont", "thread", authKey).getStatus());
 		assertEquals(200, postAddPo.add("cont", authKey, "thread").getStatus());
 		originallyListedPosts = postsListPo.list("0", "10");
 		initialPost = originallyListedPosts.posts.get(0); 

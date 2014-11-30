@@ -10,25 +10,15 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.denevell.natch.entities.PostEntity.OutputList;
-import org.denevell.natch.model.PostSingleModel;
 import org.denevell.natch.model.PostsListByModDateModel;
 
 @Path("post")
 public class PostRequests {
 
   @Context HttpServletRequest mRequest;
-	@Inject PostSingleModel mPostSingle;
 	@Inject PostsListByModDateModel mPostsListModel;
-
-  @GET
-	@Path("single/{postId}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response findById(@PathParam("postId") long postId) throws IOException {
-		return mPostSingle.find(postId).httpReturn();
-	}
 
 	@GET
 	@Path("/{start}/{limit}")

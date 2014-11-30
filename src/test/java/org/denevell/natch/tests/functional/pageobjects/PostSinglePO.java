@@ -22,7 +22,7 @@ public class PostSinglePO {
 
 	public Output single(long postId) {
     return mService
-		.path("rest").path("post").path("single").path(String.valueOf(postId)).request()
+		.path("rest").path("post_single").path(String.valueOf(postId)).request()
 		.accept(MediaType.APPLICATION_JSON)
 		.get(Output.class);
 	}	

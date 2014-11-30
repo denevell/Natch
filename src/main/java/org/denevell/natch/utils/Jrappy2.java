@@ -17,18 +17,9 @@ public class Jrappy2 {
   private boolean mGenericError;
   private boolean mNotFound;
   private boolean mNotAllowed;
+  private Object mFoundEntity;
   
   private Jrappy2() {}
-
-	public static <T> T find(Object primaryKey, boolean pessimisticRead, Class<T> clazz) {
-		T item = null;
-		if(pessimisticRead) {
-			item = mEntityManager.find(clazz, primaryKey, LockModeType.PESSIMISTIC_READ);
-		} else {
-			item = mEntityManager.find(clazz, primaryKey);
-		}
-		return item;
-	}
 
   public static Response persist(EntityManagerFactory factory, Object object) {
 	  return Jrappy2
@@ -77,6 +68,36 @@ public class Jrappy2 {
          .httpReturn();
   }
 
+	public static <T> Response find(
+      EntityManagerFactory factory, 
+	    Object primaryKey, 
+	    boolean pessimisticRead, 
+	    Class<T> clazz) {
+	  return Jrappy2
+         .begin(factory)
+         .find(primaryKey, pessimisticRead, clazz)
+         .close()
+         .httpReturn();
+	}
+
+	public <T> Jrappy2 find(
+	    Object primaryKey, 
+	    boolean pessimisticRead, 
+	    Class<T> clazz) {
+		T item = null;
+		if(pessimisticRead) {
+			item = mEntityManager.find(clazz, primaryKey, LockModeType.PESSIMISTIC_READ);
+		} else {
+			item = mEntityManager.find(clazz, primaryKey);
+		}
+		if(item==null) {
+		  mNotFound = true;
+		} else {
+		  mFoundEntity = item;
+		}
+		return this;
+	}
+
   public <T> Jrappy2 update(
       Object primaryKey, 
       Predicate<T> extraIsFoundPredicate, 
@@ -119,12 +140,28 @@ public class Jrappy2 {
     return jrappy2;
   }
 
+  public static Jrappy2 begin(EntityManagerFactory factory) {
+    Jrappy2 jrappy2 = new Jrappy2();
+    mEntityManager = factory.createEntityManager();
+    return jrappy2;
+  }
+
   public Jrappy2 commitAndClose() {
     try {
       mEntityManager.getTransaction().commit();
       mEntityManager.close();
     } catch(Exception e) {
-      Logger.getLogger(Jrappy2.class).debug("Committing transaction and closing entity manager", e);
+      Logger.getLogger(Jrappy2.class).debug("Error during committing transaction and closing entity manager", e);
+      mGenericError = true;
+    }
+    return this;
+  }
+
+  public Jrappy2 close() {
+    try {
+      mEntityManager.close();
+    } catch(Exception e) {
+      Logger.getLogger(Jrappy2.class).debug("Error during closing entity manager", e);
       mGenericError = true;
     }
     return this;
@@ -132,13 +169,13 @@ public class Jrappy2 {
 
   public Response httpReturn() {
     if(mNotFound) {
-      return new ModelResponse<Void>(404, null).httpReturn();
+      return new ModelResponse<>(404, mFoundEntity).httpReturn();
     } else if(mNotAllowed) {
-      return new ModelResponse<Void>(403, null).httpReturn();
+      return new ModelResponse<>(403, mFoundEntity).httpReturn();
     } else if(mGenericError) {
-      return new ModelResponse<Void>(500, null).httpReturn();
+      return new ModelResponse<>(500, mFoundEntity).httpReturn();
     } else {
-      return new ModelResponse<Void>(200, null).httpReturn();
+      return new ModelResponse<>(200, mFoundEntity).httpReturn();
     }
   }
 	

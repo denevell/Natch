@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.denevell.natch.entities.PostEntity.Output;
 import org.denevell.natch.entities.PostEntity.OutputList;
+import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
 import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
 import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
 import org.denevell.natch.tests.functional.pageobjects.PostSinglePO;
@@ -20,6 +21,7 @@ public class PostSingleFunctional {
   private PostAddPO postAddPo;
   private PostsListPO postsListPo;
   private PostSinglePO postSinglePo;
+  private ThreadAddPO threadAddPo = new ThreadAddPO();
 
 	@Before
 	public void setup() throws Exception {
@@ -29,6 +31,7 @@ public class PostSingleFunctional {
 		postAddPo = new PostAddPO();
 		postsListPo = new PostsListPO();
 		postSinglePo = new PostSinglePO();
+	  assertEquals(200, threadAddPo.add("sub", "cont", "thread", loginResult.getAuthKey()).getStatus());
 	}
 
 	
@@ -38,9 +41,9 @@ public class PostSingleFunctional {
 		OutputList posts = postsListPo.list("0", "10");
 		Output single = postSinglePo.single(posts.posts.get(0).id);
 		assertEquals("Get content of post", "contxx", single.content);
+		assertEquals("Get subject of post", "sub", single.subject);
 		assertEquals("thread", single.threadId);
 		assertTrue("Has a id more than zero", single.id > 0);
-		//TODO: Thread title
 	}
 
 	@Test

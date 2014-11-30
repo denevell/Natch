@@ -1,7 +1,5 @@
 package org.denevell.natch.utils;
 
-import org.denevell.natch.model.PostSingleModel;
-import org.denevell.natch.model.PostSingleModel.PostSingleModelImpl;
 import org.denevell.natch.model.PostsListByModDateModel;
 import org.denevell.natch.model.PostsListByModDateModel.PostsListByModDateModelImpl;
 import org.denevell.natch.model.PushAddModel;
@@ -19,6 +17,7 @@ import org.denevell.natch.model.UserGetLoggedInModel.UserGetLoggedInModelImpl;
 import org.denevell.natch.serv.PostAdd.PostAddService;
 import org.denevell.natch.serv.PostDelete.PostDeleteService;
 import org.denevell.natch.serv.PostEdit.PostEditService;
+import org.denevell.natch.serv.PostSingle.PostSingleService;
 import org.denevell.natch.serv.ThreadAdd.ThreadAddService;
 import org.denevell.userservice.AnnotationProcessor.UserService;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
@@ -46,7 +45,7 @@ public class JerseyApplication extends ResourceConfig {
       bind(PostDeleteServiceImpl.class).to(PostDeleteService.class);
       bind(PostEditServiceImpl.class).to(PostEditService.class);
       bind(PostsListByModDateModelImpl.class).to(PostsListByModDateModel.class);
-      bind(PostSingleModelImpl.class).to(PostSingleModel.class);
+      bind(PostSingleServiceImpl.class).to(PostSingleService.class);
       bind(ThreadAddServiceImpl.class).to(ThreadAddService.class);
       bind(ThreadListModelImpl.class).to(ThreadListModel.class);
       bind(ThreadsListModelImpl.class).to(ThreadsListModel.class);
@@ -61,5 +60,6 @@ public class JerseyApplication extends ResourceConfig {
   public static class PostAddServiceImpl implements PostAddService {};
   public static class PostDeleteServiceImpl implements PostDeleteService {};
   public static class PostEditServiceImpl implements PostEditService {};
+  public static class PostSingleServiceImpl implements PostSingleService {};
 
 }
