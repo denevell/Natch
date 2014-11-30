@@ -9,6 +9,7 @@ import javax.ws.rs.core.Response;
 
 import org.denevell.natch.entities.PostEntity.Output;
 import org.denevell.natch.entities.PostEntity.OutputList;
+import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
 import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
 import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
 import org.denevell.natch.tests.functional.pageobjects.PostEditPO;
@@ -29,6 +30,7 @@ public class PostEditFunctional {
   private PostAddPO postAddPo;
   private PostsListPO postsListPo;
   private PostEditPO postEditPo;
+  private ThreadAddPO threadAddPo = new ThreadAddPO();
 
 	@Before
 	public void setup() throws Exception {
@@ -43,7 +45,8 @@ public class PostEditFunctional {
 	  authKey = loginResult.getAuthKey();
 
 		// Add post
-		postAddPo.add("cont", authKey, "thread");
+	  threadAddPo.add("sub", "cont", "thread", authKey);
+		assertEquals(200, postAddPo.add("cont", authKey, "thread").getStatus());
 		originallyListedPosts = postsListPo.list("0", "10");
 		initialPost = originallyListedPosts.posts.get(0); 
 	}
@@ -70,8 +73,8 @@ public class PostEditFunctional {
 		OutputList postsAfter = postsListPo.list("0", "10");
 
 		assertEquals(403, response.getStatus());
-		assertEquals(1, originallyListedPosts.posts.size());
-		assertEquals(1, postsAfter.posts.size());
+		assertEquals(2, originallyListedPosts.posts.size());
+		assertEquals(2, postsAfter.posts.size());
 	}
 
 	@Test
@@ -86,8 +89,8 @@ public class PostEditFunctional {
 		OutputList postsAfter = postsListPo.list("0", "10");
 
 		assertEquals(200, response.getStatus());
-		assertEquals(2, posts.posts.size());
-		assertEquals(2, postsAfter.posts.size());
+		assertEquals(3, posts.posts.size());
+		assertEquals(3, postsAfter.posts.size());
 		assertEquals("other_user", posts.posts.get(0).username);
 		assertEquals("other_user", postsAfter.posts.get(0).username);
 		assertEquals("cont", posts.posts.get(0).content);

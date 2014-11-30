@@ -20,6 +20,16 @@ public class Jrappy2 {
   
   private Jrappy2() {}
 
+	public static <T> T find(Object primaryKey, boolean pessimisticRead, Class<T> clazz) {
+		T item = null;
+		if(pessimisticRead) {
+			item = mEntityManager.find(clazz, primaryKey, LockModeType.PESSIMISTIC_READ);
+		} else {
+			item = mEntityManager.find(clazz, primaryKey);
+		}
+		return item;
+	}
+
   public static Response persist(EntityManagerFactory factory, Object object) {
 	  return Jrappy2
          .beginTransaction(factory)
@@ -28,28 +38,58 @@ public class Jrappy2 {
          .httpReturn();
   }
 
-  public static <T> Response update(EntityManagerFactory factory, Class<T> clazz, Object primaryKey, UnaryOperator<T> updateEntity) {
+  public static <T> Response update(
+      EntityManagerFactory factory, 
+      Class<T> clazz, 
+      Object primaryKey, 
+      UnaryOperator<T> updateEntity) {
 	  return Jrappy2
          .beginTransaction(factory)
-         .update(primaryKey, updateEntity, null, clazz)
+         .update(primaryKey, null, null, updateEntity, clazz)
          .commitAndClose()
          .httpReturn();
   }
 
-  public static <T> Response update(EntityManagerFactory factory, Class<T> clazz, Object primaryKey, Predicate<T> predicate, UnaryOperator<T> updateEntity) {
+  public static <T> Response update(
+      EntityManagerFactory factory, 
+      Class<T> clazz, 
+      Object primaryKey, 
+      Predicate<T> allowedPredicate, 
+      UnaryOperator<T> updateEntity) {
 	  return Jrappy2
          .beginTransaction(factory)
-         .update(primaryKey, updateEntity, predicate, clazz)
+         .update(primaryKey, null, allowedPredicate, updateEntity, clazz)
          .commitAndClose()
          .httpReturn();
   }
 
-  public <T> Jrappy2 update(Object primaryKey, UnaryOperator<T> updateEntity, Predicate<T> predicate, Class<T> clazz) {
+  public static <T> Response update(
+      EntityManagerFactory factory, 
+      Class<T> clazz, 
+      Object primaryKey, 
+      Predicate<T> extraIsFoundPredicate, 
+      Predicate<T> allowedPredicate, 
+      UnaryOperator<T> updateEntity) {
+	  return Jrappy2
+         .beginTransaction(factory)
+         .update(primaryKey, extraIsFoundPredicate, allowedPredicate, updateEntity, clazz)
+         .commitAndClose()
+         .httpReturn();
+  }
+
+  public <T> Jrappy2 update(
+      Object primaryKey, 
+      Predicate<T> extraIsFoundPredicate, 
+      Predicate<T> allowedPredicate, 
+      UnaryOperator<T> updateEntity, 
+      Class<T> clazz) {
     try {
       T found = mEntityManager.find(clazz, primaryKey, LockModeType.PESSIMISTIC_READ);
       if(found==null) {
         mNotFound = true;
-      } else if(predicate!=null && !predicate.test(found)) {
+      } else if(extraIsFoundPredicate!=null && !extraIsFoundPredicate.test(found)) {
+        mNotFound = true;
+      } else if(allowedPredicate!=null && !allowedPredicate.test(found)) {
         mNotAllowed = true;
       } else {
         found = updateEntity.apply(found);

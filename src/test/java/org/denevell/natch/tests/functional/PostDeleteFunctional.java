@@ -41,6 +41,9 @@ public class PostDeleteFunctional {
 		loginResult = new UserLoginPO().login("aaron@aaron.com", "passy");
 		authKey = loginResult.getAuthKey();
 	}
+
+	// Test to not delete the only post in a thread?
+	// Test deleting the only post in thread
 	
 	@Test
 	public void shouldDeletePost() {
@@ -54,13 +57,15 @@ public class PostDeleteFunctional {
 		assertEquals(1, postsAfter.size());
 		assertEquals("cont", postsAfter.get(0).content);
 	}
+	
+	// Test for incorrect thread id
 
 	@Test
-	public void shouldSeeErrorOnUnAuthorised() {
+	public void shouldSeeErrorOnUnAuthorisedDelete() {
 	  registerPo.register("other_user", "passy");
 		String otherUserAuthKey = new UserLoginPO().login("other_user", "passy").getAuthKey();
 
-		threadAddPo.add("sub", "cont1", "thread", authKey).getStatus();
+		threadAddPo.add("sub", "cont1", "thread", authKey);
 		OutputList posts = postListPo.list("0", "10");
 		
 		Output output = posts.posts.get(0);
@@ -91,7 +96,8 @@ public class PostDeleteFunctional {
 	  registerPo.register("other_user", "passy");
 		String otherUserAuthKey = new UserLoginPO().login("other_user", "passy").getAuthKey();
 
-		threadAddPo.add("sub", "cont1", "thread", otherUserAuthKey).getStatus();
+		assertEquals(200, threadAddPo.add("sub", "cont1", "thread", otherUserAuthKey).getStatus());
+		assertEquals(200, postAddPo.add("cont1", authKey, "thread").getStatus());
 		OutputList posts = postListPo.list("0", "10");
 		
 		Output output = posts.posts.get(0);
@@ -99,8 +105,8 @@ public class PostDeleteFunctional {
 		OutputList postsAfter = postListPo.list("0", "10");
 
 		assertEquals(200, response.getStatus());
-		assertEquals(1, posts.posts.size());
-		assertEquals(0, postsAfter.posts.size());
+		assertEquals(2, posts.posts.size());
+		assertEquals(1, postsAfter.posts.size());
 	}
 
 }

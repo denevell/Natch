@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.denevell.jrappy.Jrappy;
 import org.denevell.natch.entities.PostEntity;
 import org.denevell.natch.entities.PushEntity;
@@ -11,7 +12,6 @@ import org.denevell.natch.entities.ThreadEntity;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.ManifestVars;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;

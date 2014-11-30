@@ -26,8 +26,7 @@ public class ThreadAdd {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addThread(@Valid AddInput input) {
     User userEntity = (User) mRequest.getAttribute("user");
-    ThreadEntity threadEntity = input.adapt(userEntity.username);
-    return mThreadAddService.threadAdd(threadEntity);
+    return mThreadAddService.threadAdd(input.adapt(userEntity.username));
 	}	
 	
 	public static interface ThreadAddService {

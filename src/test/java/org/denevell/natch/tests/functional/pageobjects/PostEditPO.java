@@ -28,7 +28,7 @@ public class PostEditPO {
 	  EditInput input = new EditInput();
 		input.content = content;
     return mService
-		.path("rest").path("post").path("editpost")
+		.path("rest").path("post_edit")
 		.path(String.valueOf(postId)).request()
 		.header("AuthKey", authKey)
 		.accept(MediaType.APPLICATION_JSON)

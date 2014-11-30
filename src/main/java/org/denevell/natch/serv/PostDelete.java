@@ -1,7 +1,5 @@
 package org.denevell.natch.serv;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -14,7 +12,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.denevell.natch.entities.PostEntity;
+import jersey.repackaged.com.google.common.collect.Lists;
+
 import org.denevell.natch.entities.ThreadEntity;
 import org.denevell.natch.model.UserGetLoggedInModel.User;
 import org.denevell.natch.utils.JPAFactoryContextListener;
@@ -35,26 +34,29 @@ public class PostDelete {
 
   public static interface PostDeleteService {
     default Response delete(String threadId, long postId, String username, boolean admin) {
-      return Jrappy2.update(
+      return Jrappy2.update( 
           JPAFactoryContextListener.sFactory, 
-          ThreadEntity.class, threadId, 
-          (threadEntity) -> {
-            return admin
-                || threadEntity.posts.stream()
+          ThreadEntity.class, 
+          threadId, 
+          (threadEntity) -> { // Is post there
+            return Lists.newArrayList(threadEntity.posts).stream()
+                .filter(post -> post.id==postId)
+                .count()==1;
+          },
+          (threadEntity) -> { // Do we have access rights
+            return admin ||  
+                Lists.newArrayList(threadEntity.posts).stream()
                 .filter(post -> post.id==postId)
                 .findFirst()
                 .get().username.equals(username);
           },
-          (threadEntity) -> {
-            List<PostEntity> posts = new ArrayList<PostEntity>();
-            for (PostEntity postEntity : threadEntity.posts) {
-              posts.add(postEntity);
-            }
-            threadEntity.posts = posts.stream()
+          (threadEntity) -> { // Remove the post from thread
+            threadEntity.posts = Lists.newArrayList(threadEntity.posts).stream()
                 .filter(post -> post.id!=postId)
                 .collect(Collectors.toList());
             threadEntity.numPosts = threadEntity.posts.size();
-            threadEntity.latestPost = threadEntity.posts.get(threadEntity.posts.size()-1);
+            if(threadEntity.posts.size()>1) 
+              threadEntity.latestPost = threadEntity.posts.get(threadEntity.posts.size()-1);
             return threadEntity;
           });
     }

@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -18,9 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.denevell.natch.entities.ThreadEntity.AddFromPostInput;
-import org.denevell.natch.entities.ThreadEntity.EditInput;
 import org.denevell.natch.entities.ThreadEntity.OutputList;
-import org.denevell.natch.model.PostEditModel;
 import org.denevell.natch.model.ThreadFromPostModel;
 import org.denevell.natch.model.ThreadListModel;
 import org.denevell.natch.model.ThreadsListModel;
@@ -33,7 +30,6 @@ public class ThreadRequests {
 	@Context HttpServletResponse mResponse;
 	@Context HttpServletRequest mRequest;
 	@Inject ThreadListModel mThreadModel;
-	@Inject PostEditModel mPostEditModel;
 	@Inject ThreadsListModel mThreadsModel;
 	@Inject ThreadFromPostModel mThreadFromPostModel;
 	
@@ -75,15 +71,5 @@ public class ThreadRequests {
     User user = (User) mRequest.getAttribute("user");
     return mThreadFromPostModel.makeNewThread(input.postId, input.subject, user.admin).httpReturn();
   }
-
-	@POST
-	@Path("edit/{postId}") 
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response editThread(
-			@PathParam(value="postId") long postId, 
-			@Valid EditInput input) {
-		User user = (User) mRequest.getAttribute("user");
-		return mPostEditModel.edit(postId, user.username, input.adapt(), user.admin).httpReturn();
-	}
 
 }
