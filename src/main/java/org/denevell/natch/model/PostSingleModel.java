@@ -1,6 +1,8 @@
 package org.denevell.natch.model;
 
 import org.denevell.jrappy.Jrappy;
+import org.denevell.natch.entities.PostEntity;
+import org.denevell.natch.entities.ThreadEntity;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.ModelResponse;
 import org.jvnet.hk2.annotations.Service;

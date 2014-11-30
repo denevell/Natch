@@ -5,7 +5,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.denevell.natch.model.ThreadEntity.AddFromPostInput;
+import org.denevell.natch.entities.ThreadEntity.AddFromPostInput;
 
 public class ThreadAddFromPostPO {
 	

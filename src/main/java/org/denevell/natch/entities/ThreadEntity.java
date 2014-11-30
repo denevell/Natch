@@ -1,6 +1,7 @@
-package org.denevell.natch.model;
+package org.denevell.natch.entities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -8,9 +9,9 @@ import javax.validation.Valid;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.denevell.natch.model.ThreadEntity.AddInput.StringWrapper;
+import org.apache.log4j.Logger;
+import org.denevell.natch.entities.ThreadEntity.AddInput.StringWrapper;
 import org.denevell.natch.model.ThreadsListModel.ThreadsAndNumTotalThreads;
-import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.ModelResponse.ModelExternaliser;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -83,6 +84,15 @@ public class ThreadEntity implements ModelExternaliser {
       }
       return entity;
     }
+
+    public ThreadEntity adapt(String username) {
+      PostEntity entity = adapt(false, username);
+      entity.threadId = PostEntity.Utils.createNewThreadId(entity.threadId, entity.subject);
+      ThreadEntity threadEntity = new ThreadEntity(entity, Arrays.asList(entity));
+      threadEntity.id = (entity.threadId);
+      threadEntity.numPosts = (threadEntity.numPosts + 1);
+      return threadEntity;
+    }
   }
 
   public static class AddFromPostInput {
@@ -119,13 +129,13 @@ public class ThreadEntity implements ModelExternaliser {
     public long modification;
     public long rootPostId;
     public long latestPostId;
-    public List<org.denevell.natch.model.PostEntity.Output> posts = new ArrayList<>();
+    public List<org.denevell.natch.entities.PostEntity.Output> posts = new ArrayList<>();
   }
 
   @Override
   public Output toOutput() {
     Output output = new Output();
-    List<org.denevell.natch.model.PostEntity.Output> postsResources = new ArrayList<>();
+    List<org.denevell.natch.entities.PostEntity.Output> postsResources = new ArrayList<>();
     for (PostEntity p : this.posts) {
         postsResources.add(p.toOutput());
     }
@@ -151,9 +161,9 @@ public class ThreadEntity implements ModelExternaliser {
 			for (ThreadEntity p: threadsAndNumTotalThreads.getThreads()) {
         if (p.rootPost == null) {
           if (p.id != null) {
-            Log.info(getClass(), "Found a thread with a null root post. Thread: " + p.id);
+            Logger.getLogger(getClass()).info("Found a thread with a null root post. Thread: " + p.id);
           } else {
-            Log.info(getClass(), "Found a thread with a null root post. Unknown thread id.");
+            Logger.getLogger(getClass()).info("Found a thread with a null root post. Unknown thread id.");
           }
           continue;
 				} else {

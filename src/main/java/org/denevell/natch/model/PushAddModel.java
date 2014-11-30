@@ -1,6 +1,7 @@
 package org.denevell.natch.model;
 
 import org.denevell.jrappy.Jrappy;
+import org.denevell.natch.entities.PushEntity;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.glassfish.jersey.spi.Contract;
 import org.jvnet.hk2.annotations.Service;

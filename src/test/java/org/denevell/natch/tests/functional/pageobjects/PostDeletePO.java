@@ -18,9 +18,11 @@ public class PostDeletePO {
 		mService = client.target(TestUtils.URL_REST_SERVICE);
 	}
 
-	public Response delete(long postId, String authKey) {
-		return mService.path("rest").path("post").path("del")
-		.path(String.valueOf(postId)).request()
+	public Response delete(long postId, String threadId, String authKey) {
+		return mService.path("rest").path("post_delete")
+		.path(String.valueOf(postId))
+		.path(String.valueOf(threadId))
+		.request()
 		.header("AuthKey", authKey)
 		.delete();	
 	}	

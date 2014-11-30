@@ -6,7 +6,7 @@ import javax.ws.rs.core.Response;
 
 import jersey.repackaged.com.google.common.collect.Lists;
 
-import org.denevell.natch.model.PostEntity.Output;
+import org.denevell.natch.entities.PostEntity.Output;
 import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadEditPO;
@@ -44,7 +44,7 @@ public class ThreadEditFunctional {
 		Response ret = threadEditPo.edit("sup1", "sup2", Lists.newArrayList("sup3"), post.id, loginResult.getAuthKey());
 
 		assertEquals(200, ret.getStatus());
-		org.denevell.natch.model.ThreadEntity.Output thread = threadListPo.byThread("thread", 0, 10);
+		org.denevell.natch.entities.ThreadEntity.Output thread = threadListPo.byThread("thread", 0, 10);
 
 		assertEquals("sup1", thread.subject);
 		assertEquals("sup2", thread.posts.get(0).content);

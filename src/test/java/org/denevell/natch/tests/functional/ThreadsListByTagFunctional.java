@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 
-import org.denevell.natch.model.ThreadEntity.OutputList;
+import org.denevell.natch.entities.ThreadEntity.OutputList;
 import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadsListPO;
 import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;

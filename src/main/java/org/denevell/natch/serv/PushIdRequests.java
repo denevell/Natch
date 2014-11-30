@@ -15,10 +15,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.denevell.natch.entities.PushEntity;
+import org.denevell.natch.entities.PushEntity.AddInput;
+import org.denevell.natch.entities.PushEntity.Output;
 import org.denevell.natch.model.PushAddModel;
-import org.denevell.natch.model.PushEntity;
-import org.denevell.natch.model.PushEntity.AddInput;
-import org.denevell.natch.model.PushEntity.Output;
 import org.denevell.natch.model.PushListModel;
 
 @Path("push")

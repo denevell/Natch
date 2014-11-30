@@ -5,8 +5,8 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
-import org.denevell.natch.model.ThreadEntity.Output;
-import org.denevell.natch.model.ThreadEntity.OutputList;
+import org.denevell.natch.entities.ThreadEntity.Output;
+import org.denevell.natch.entities.ThreadEntity.OutputList;
 import org.denevell.natch.tests.functional.TestUtils;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;

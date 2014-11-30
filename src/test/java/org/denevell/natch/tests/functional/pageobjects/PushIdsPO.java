@@ -3,8 +3,8 @@ package org.denevell.natch.tests.functional.pageobjects;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 
-import org.denevell.natch.model.PushEntity.AddInput;
-import org.denevell.natch.model.PushEntity.Output;
+import org.denevell.natch.entities.PushEntity.AddInput;
+import org.denevell.natch.entities.PushEntity.Output;
 
 public class PushIdsPO {
 	

@@ -17,20 +17,15 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.denevell.natch.model.PostAddModel;
+import org.denevell.natch.entities.ThreadEntity.AddFromPostInput;
+import org.denevell.natch.entities.ThreadEntity.EditInput;
+import org.denevell.natch.entities.ThreadEntity.OutputList;
 import org.denevell.natch.model.PostEditModel;
-import org.denevell.natch.model.PushSendModel;
-import org.denevell.natch.model.ThreadEntity;
-import org.denevell.natch.model.ThreadEntity.AddFromPostInput;
-import org.denevell.natch.model.ThreadEntity.AddInput;
-import org.denevell.natch.model.ThreadEntity.EditInput;
-import org.denevell.natch.model.ThreadEntity.OutputList;
 import org.denevell.natch.model.ThreadFromPostModel;
 import org.denevell.natch.model.ThreadListModel;
 import org.denevell.natch.model.ThreadsListModel;
 import org.denevell.natch.model.ThreadsListModel.ThreadsAndNumTotalThreads;
 import org.denevell.natch.model.UserGetLoggedInModel.User;
-import org.denevell.natch.utils.Responses;
 
 @Path("thread")
 public class ThreadRequests {
@@ -38,7 +33,6 @@ public class ThreadRequests {
 	@Context HttpServletResponse mResponse;
 	@Context HttpServletRequest mRequest;
 	@Inject ThreadListModel mThreadModel;
-	@Inject PostAddModel mAddPostModel;
 	@Inject PostEditModel mPostEditModel;
 	@Inject ThreadsListModel mThreadsModel;
 	@Inject ThreadFromPostModel mThreadFromPostModel;
@@ -70,36 +64,16 @@ public class ThreadRequests {
 			@PathParam("tag")  String tag,
 			@PathParam("start") int start, 	
 			@PathParam("limit") int limit) throws IOException {
-		ThreadsAndNumTotalThreads threads = mThreadsModel.list(tag, start, limit);
-		return new OutputList(threads);
+		return new OutputList(mThreadsModel.list(tag, start, limit));
 	}
 
-	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addThread(@Valid AddInput input) {
-    User userEntity = (User) mRequest.getAttribute("user");
-    ThreadEntity thread = mAddPostModel.add(input.adapt(false, userEntity.username));
-    if (thread == null) {
-      return Response.serverError().build();
-    }
-    PushSendModel.sendPushNotifications(thread);
-    return Response.ok().build();
-	}	
-	
 	@PUT
 	@Path("frompost")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
   public Response addThreadFromPost(@Valid AddFromPostInput input) throws IOException {
-    User userEntity = (User) mRequest.getAttribute("user");
-    if (!userEntity.admin) {
-      return Response.status(403).build();
-    }
-    ThreadEntity thread = mThreadFromPostModel.makeNewThread(input.postId, input.subject);
-    if(thread==null) {
-      return Response.serverError().build();
-    }
-    return Response.ok().entity(Responses.hM("threadId", thread.id)).build();
+    User user = (User) mRequest.getAttribute("user");
+    return mThreadFromPostModel.makeNewThread(input.postId, input.subject, user.admin).httpReturn();
   }
 
 	@POST
@@ -108,17 +82,8 @@ public class ThreadRequests {
 	public Response editThread(
 			@PathParam(value="postId") long postId, 
 			@Valid EditInput input) {
-		User userEntity = (User) mRequest.getAttribute("user");
-		int result = mPostEditModel.edit(postId, userEntity.username, input.adapt(), userEntity.admin);
-		if(result == PostEditModel.EDITED) {
-		  return Response.ok().build();
-		} else if(result == PostEditModel.DOESNT_EXIST) {
-		  return Response.status(404).build();
-		} else if(result == PostEditModel.NOT_YOURS) {
-		  return Response.status(403).build();
-		} else {
-		  return Response.serverError().build();
-		}
+		User user = (User) mRequest.getAttribute("user");
+		return mPostEditModel.edit(postId, user.username, input.adapt(), user.admin).httpReturn();
 	}
 
 }

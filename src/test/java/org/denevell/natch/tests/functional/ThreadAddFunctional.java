@@ -6,7 +6,7 @@ import javax.ws.rs.core.Response;
 
 import jersey.repackaged.com.google.common.collect.Lists;
 
-import org.denevell.natch.model.ThreadEntity.Output;
+import org.denevell.natch.entities.ThreadEntity.Output;
 import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadsListPO;
 import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
@@ -34,9 +34,9 @@ public class ThreadAddFunctional {
 	@Test
 	public void shouldMakeThread() {
 	  Response addResponse = threadAddPo.add("sub", "cont", Lists.newArrayList("tagy"), loginResult.getAuthKey());
+		assertEquals("Excepting 200 response", 200, addResponse.getStatus());
 	  Output thread = threadsListPo.list(0,  10).threads.get(0);
 		
-		assertEquals(200, addResponse.getStatus());
 		assertEquals("sub", thread.subject);
 		assertEquals("tagy", thread.tags.get(0));
 	}

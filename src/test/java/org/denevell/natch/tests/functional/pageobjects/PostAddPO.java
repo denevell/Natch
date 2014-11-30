@@ -6,7 +6,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.denevell.natch.model.PostEntity.AddInput;
+import org.denevell.natch.entities.PostEntity.AddInput;
 import org.denevell.natch.tests.functional.TestUtils;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -29,7 +29,7 @@ public class PostAddPO {
 		input.content = content;
 		input.threadId = threadId;
     return mService
-		.path("rest").path("post").path("add").request()
+		.path("rest").path("post_add").request()
 		.accept(MediaType.APPLICATION_JSON)
 		.header("AuthKey", authKey)
 		.put(Entity.entity(input, MediaType.APPLICATION_JSON));

@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 import javax.ws.rs.core.Response;
 
-import org.denevell.natch.model.PostEntity.OutputList;
+import org.denevell.natch.entities.PostEntity.OutputList;
 import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
 import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadAddFromPostPO;
@@ -52,7 +52,7 @@ public class ThreadAddFromMovedPostFunctional {
 		LoginResourceReturnData loginResult = loginPo.login("other", "other");
 
 		threadAdd.add("New thread", "first post", loginResult.getAuthKey());
-		org.denevell.natch.model.ThreadEntity.OutputList threads = threadsList.list(0, 10);
+		org.denevell.natch.entities.ThreadEntity.OutputList threads = threadsList.list(0, 10);
 		postAddPo.add("Second post", loginResult.getAuthKey(), threads.threads.get(0).id);
 		
 		OutputList posts = postsListPo.list("0", "10");
@@ -79,7 +79,7 @@ public class ThreadAddFromMovedPostFunctional {
 		LoginResourceReturnData loginResult = loginPo.login("other", "other");
 
 		threadAdd.add("New thread", "first post", loginResult.getAuthKey());
-		org.denevell.natch.model.ThreadEntity.OutputList threads = threadsList.list(0, 10);
+		org.denevell.natch.entities.ThreadEntity.OutputList threads = threadsList.list(0, 10);
 		postAddPo.add("Second post", loginResult.getAuthKey(), threads.threads.get(0).id);
 		
 		OutputList posts = postsListPo.list("0", "10");

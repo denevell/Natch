@@ -8,8 +8,8 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.denevell.natch.model.ThreadEntity.AddInput;
-import org.denevell.natch.model.ThreadEntity.AddInput.StringWrapper;
+import org.denevell.natch.entities.ThreadEntity.AddInput;
+import org.denevell.natch.entities.ThreadEntity.AddInput.StringWrapper;
 import org.denevell.natch.tests.functional.TestUtils;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -62,7 +62,7 @@ public class ThreadAddPO {
 		  input.tags = StringWrapper.fromStrings(tags);
 		}
     return mService
-		.path("rest").path("thread").request()
+		.path("rest").path("thread_add").request()
 		.accept(MediaType.APPLICATION_JSON)
 		.header("AuthKey", authKey)
 		.put(Entity.entity(input, MediaType.APPLICATION_JSON));

@@ -3,7 +3,7 @@ package org.denevell.natch.tests.functional;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.denevell.natch.model.PostEntity.OutputList;
+import org.denevell.natch.entities.PostEntity.OutputList;
 import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
 import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
 import org.denevell.natch.tests.functional.pageobjects.PostsListPO;

@@ -1,4 +1,4 @@
-package org.denevell.natch.model;
+package org.denevell.natch.entities;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.denevell.natch.utils.Log;
+import org.apache.log4j.Logger;
 import org.denevell.natch.utils.ModelResponse.ModelExternaliser;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -132,7 +132,7 @@ public class PostEntity implements ModelExternaliser {
           }
           threadId = sb.toString();
         } catch (NoSuchAlgorithmException e) {
-          Log.info(Utils.class, "Couldn't get an MD5 hash. I guess we'll just use hashCode() then.");
+          Logger.getLogger(Utils.class).info("Couldn't get an MD5 hash. I guess we'll just use hashCode() then.");
           e.printStackTrace();
           threadId = String.valueOf(subject.hashCode());
         }

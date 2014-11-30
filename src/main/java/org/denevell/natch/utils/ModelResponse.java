@@ -9,23 +9,25 @@ public class ModelResponse<ReturnType> {
   }
   
   public int code;
-  public Object object;
+  public ReturnType object;
   
-  public ModelResponse(int code, Object o) {
+  public ModelResponse(int code, ReturnType o) {
     this.code = code;
     this.object = o;
   }
 
   public Response httpReturn() {
-		if(this.code==404) {
-		  return Response.status(404).build();
-		}
-		if(this.object instanceof ModelExternaliser) {
-		  Object externalisd = ((ModelExternaliser)this.object).toOutput();
-      return Response.ok().entity(externalisd).build();
-		} else {
-		  return Response.ok().entity(this.object).build();
-		}
+    switch (this.code) {
+    case 200:
+      if (this.object != null && this.object instanceof ModelExternaliser) {
+        Object externalisd = ((ModelExternaliser) this.object).toOutput();
+        return Response.ok().entity(externalisd).build();
+      } else {
+        return Response.ok().entity(this.object).build();
+      }
+    default:
+		  return Response.status(this.code).build();
+    }
   }
 
 }

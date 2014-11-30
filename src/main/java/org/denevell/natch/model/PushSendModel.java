@@ -3,13 +3,15 @@ package org.denevell.natch.model;
 import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.codehaus.jackson.map.ObjectMapper;
+import org.apache.log4j.Logger;
 import org.denevell.jrappy.Jrappy;
-import org.denevell.natch.serv.ThreadRequests;
+import org.denevell.natch.entities.PostEntity;
+import org.denevell.natch.entities.PushEntity;
+import org.denevell.natch.entities.ThreadEntity;
 import org.denevell.natch.utils.JPAFactoryContextListener;
-import org.denevell.natch.utils.Log;
 import org.denevell.natch.utils.ManifestVars;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
@@ -22,7 +24,7 @@ public class PushSendModel {
       public void run() {
         String key = ManifestVars.getGCMKey();
         if (key == null || key.trim().length() == 0) {
-          Log.error(getClass(), "GCM KEY is null or blank");
+          Logger.getLogger(getClass()).error("GCM KEY is null or blank");
         }
         Sender sender = new Sender(key);
         Jrappy<PushEntity> jrappy = new Jrappy<PushEntity>(
@@ -35,13 +37,12 @@ public class PushSendModel {
           for (PushEntity pushEntity : list) {
             try {
               String registrationId = pushEntity.clientId;
-              String s = new ObjectMapper() .writeValueAsString(new CutDownThreadResource(thread));
+              String s = new ObjectMapper().writeValueAsString(new CutDownThreadResource(thread));
               Message message = new Message.Builder().addData("thread", s) .build();
               Result result = sender.send(message, registrationId, 5);
-              Log.info(ThreadRequests.class, "Push send result: " + result);
+              Logger.getLogger(getClass()).info("Push send result: " + result);
             } catch (Exception e) {
-              Log.info(ThreadRequests.class, "Error sending push message: "
-                  + e.getMessage());
+              Logger.getLogger(getClass()).error("Error sending push message: " + e.getMessage());
               e.printStackTrace();
             }
           }

@@ -30,6 +30,9 @@
 	  <url-pattern>/rest/thread/</url-pattern>
 	  <url-pattern>/rest/thread</url-pattern>
 	  <url-pattern>/rest/thread/edit/*</url-pattern>
+	  <url-pattern>/rest/thread_add</url-pattern>
+	  <url-pattern>/rest/post_add</url-pattern>
+	  <url-pattern>/rest/post_delete/*</url-pattern>
 	  <url-pattern>/rest/thread/frompost</url-pattern>
 	</filter-mapping>	
 	

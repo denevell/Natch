@@ -1,14 +1,22 @@
 package org.denevell.natch.model;
 
+import java.util.Arrays;
+import java.util.HashMap;
+
 import org.denevell.jrappy.Jrappy;
 import org.denevell.jrappy.Jrappy.DeleteOrMerge;
+import org.denevell.natch.entities.PostEntity;
+import org.denevell.natch.entities.ThreadEntity;
 import org.denevell.natch.utils.JPAFactoryContextListener;
+import org.denevell.natch.utils.ModelResponse;
+import org.denevell.natch.utils.Responses;
 import org.glassfish.jersey.spi.Contract;
 import org.jvnet.hk2.annotations.Service;
 
 @Contract
 public interface ThreadFromPostModel {
-  public ThreadEntity makeNewThread(long postId, String subject);
+  // TODO: Return a proper object
+  public ModelResponse<HashMap<String, String>> makeNewThread(long postId, String subject, boolean isAdmin);
 
   @Service
   public static class ThreadFromPostModelImpl implements ThreadFromPostModel {
@@ -17,11 +25,15 @@ public interface ThreadFromPostModel {
     private Jrappy<ThreadEntity> mThreadModel = new Jrappy<ThreadEntity>(JPAFactoryContextListener.sFactory);
 
     @Override
-    public ThreadEntity makeNewThread(long postId, String subject) {
+    public ModelResponse<HashMap<String, String>> makeNewThread(long postId, String subject, boolean isAdmin) {
+      if(!isAdmin) {
+        return new ModelResponse<>(403, null);
+      }
       try {
         PostEntity post = mPostModel.startTransaction().find(postId, true, PostEntity.class);
-        if (post == null)
-          return null;
+        if (post == null) {
+          return new ModelResponse<>(404, null);
+        }
         PostEntity newPost = new PostEntity(post);
         newPost.id = (0);
         newPost.adminEdited = true;
@@ -30,7 +42,10 @@ public interface ThreadFromPostModel {
         removePostFromOldThread(post);
         mPostModel.getEntityManager().remove(post);
         ThreadEntity thread = createNewThreadFromPost(newPost);
-        return thread;
+        if(thread==null) {
+          return new ModelResponse<>(500, null);
+        }
+        return new ModelResponse<>(200, Responses.hM("threadId", thread.id));
       } finally {
         mPostModel.commitAndCloseEntityManager();
       }
@@ -55,7 +70,11 @@ public interface ThreadFromPostModel {
       }, new Jrappy.NewItem<ThreadEntity>() {
         @Override
         public ThreadEntity newItem() {
-          return new ThreadFactory().makeThread(post);
+          post.threadId = PostEntity.Utils.createNewThreadId(post.threadId, post.subject);
+          ThreadEntity threadEntity = new ThreadEntity(post, Arrays.asList(post));
+          threadEntity.id = (post.threadId);
+          threadEntity.numPosts = (threadEntity.numPosts + 1);
+          return threadEntity;
         }
       }, ThreadEntity.class);
       return thread;

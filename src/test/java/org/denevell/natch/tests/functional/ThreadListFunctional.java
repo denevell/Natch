@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import jersey.repackaged.com.google.common.collect.Lists;
 
-import org.denevell.natch.model.ThreadEntity.Output;
+import org.denevell.natch.entities.ThreadEntity.Output;
 import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadsListPO;

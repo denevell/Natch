@@ -3,27 +3,23 @@ package org.denevell.natch.model;
 import java.util.Date;
 
 import org.denevell.jrappy.Jrappy;
+import org.denevell.natch.entities.PostEntity;
 import org.denevell.natch.utils.JPAFactoryContextListener;
+import org.denevell.natch.utils.ModelResponse;
 import org.glassfish.jersey.spi.Contract;
 import org.jvnet.hk2.annotations.Service;
 
 @Contract
 public interface PostEditModel {
-  public static int EDITED = 0;
-  public static int NOT_YOURS = 1;
-  public static int DOESNT_EXIST = 2;
 
-  /**
-   * @return -1 on error on a static constant in this class
-   */
-  int edit(long id, String user, PostEntity postWithEditedData, boolean adminEditing);
+  ModelResponse<Void> edit(long id, String user, PostEntity postWithEditedData, boolean adminEditing);
 
   @Service
   public static class PostEditModelImpl implements PostEditModel {
 
     private Jrappy<PostEntity> mPostModel = new Jrappy<PostEntity>(JPAFactoryContextListener.sFactory);
 
-    public int edit(final long id, final String username, final PostEntity editedPostEntity, final boolean adminEditing) {
+    public ModelResponse<Void> edit(final long id, final String username, final PostEntity editedPostEntity, final boolean adminEditing) {
       try {
         int result = mPostModel.startTransaction().updateEntityOnPermission(id, new Jrappy.UpdateItemOnPermissionCorrect<PostEntity>() {
           @Override
@@ -45,13 +41,13 @@ public interface PostEditModel {
         }, PostEntity.class);
         switch (result) {
         case Jrappy.NOT_FOUND:
-          return PostEditModel.DOESNT_EXIST;
+          return new ModelResponse<Void>(404, null);
         case Jrappy.UPDATED:
-          return PostEditModel.EDITED;
+          return new ModelResponse<Void>(200, null);
         case Jrappy.PERMISSION_DENIED:
-          return PostEditModel.NOT_YOURS;
+          return new ModelResponse<Void>(403, null);
         default:
-          return -1;
+          return new ModelResponse<Void>(500, null);
         }
       } finally {
         mPostModel.commitAndCloseEntityManager();

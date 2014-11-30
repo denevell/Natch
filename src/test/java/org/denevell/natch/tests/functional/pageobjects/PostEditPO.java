@@ -6,7 +6,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.denevell.natch.model.PostEntity.EditInput;
+import org.denevell.natch.entities.PostEntity.EditInput;
 import org.denevell.natch.tests.functional.TestUtils;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;

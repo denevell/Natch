@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import javax.ws.rs.client.WebTarget;
 
-import org.denevell.natch.model.PushEntity.Output;
+import org.denevell.natch.entities.PushEntity.Output;
 import org.denevell.natch.tests.functional.pageobjects.PushIdsPO;
 import org.junit.Before;
 import org.junit.Test;

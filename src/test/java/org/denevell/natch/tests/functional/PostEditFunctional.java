@@ -7,8 +7,8 @@ import java.util.List;
 
 import javax.ws.rs.core.Response;
 
-import org.denevell.natch.model.PostEntity.Output;
-import org.denevell.natch.model.PostEntity.OutputList;
+import org.denevell.natch.entities.PostEntity.Output;
+import org.denevell.natch.entities.PostEntity.OutputList;
 import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
 import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
 import org.denevell.natch.tests.functional.pageobjects.PostEditPO;

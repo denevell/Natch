@@ -1,4 +1,4 @@
-package org.denevell.natch.model;
+package org.denevell.natch.entities;
 
 import java.util.ArrayList;
 

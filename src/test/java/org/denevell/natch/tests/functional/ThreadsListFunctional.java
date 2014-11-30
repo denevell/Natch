@@ -5,8 +5,8 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import jersey.repackaged.com.google.common.collect.Lists;
 
-import org.denevell.natch.model.PostEntity.Output;
-import org.denevell.natch.model.ThreadEntity.OutputList;
+import org.denevell.natch.entities.PostEntity.Output;
+import org.denevell.natch.entities.ThreadEntity.OutputList;
 import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
 import org.denevell.natch.tests.functional.pageobjects.PostDeletePO;
 import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
@@ -81,12 +81,13 @@ public class ThreadsListFunctional {
 		threadAddPo.add("sub2", "cont2", "t", loginResult.getAuthKey());
 		
 		OutputList returnData = threadsListPo.list(0, 10);
-		postDeletePo.delete(returnData.threads.get(0).rootPostId, loginResult.getAuthKey());
+		org.denevell.natch.entities.ThreadEntity.Output output = returnData.threads.get(0);
+    postDeletePo.delete(output.rootPostId, output.id, loginResult.getAuthKey());
 		returnData = threadsListPo.list(0, 10);
 		
 		assertEquals(1, returnData.numOfThreads);
 		assertEquals(1, returnData.threads.size());
-		assertEquals("other", returnData.threads.get(0).id);
+		assertEquals("other", output.id);
 	}
 	
 	@Test
@@ -124,7 +125,7 @@ public class ThreadsListFunctional {
 	public void shouldListThreadsWithThreadWithLastModifiedContentFirst() {	
 		threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey());
 		threadAddPo.add("sub2", "cont2", "t", loginResult.getAuthKey());
-		org.denevell.natch.model.PostEntity.OutputList posts = postListPo.list("0", "10");
+		org.denevell.natch.entities.PostEntity.OutputList posts = postListPo.list("0", "10");
 		assertEquals("Listing by last added", "sub2", posts.posts.get(0).subject);
 		
 		assertEquals(200, 

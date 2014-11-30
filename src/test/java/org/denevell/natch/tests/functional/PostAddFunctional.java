@@ -6,10 +6,11 @@ import java.util.List;
 
 import javax.ws.rs.core.Response;
 
-import org.denevell.natch.model.PostEntity.Output;
-import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
+import org.denevell.natch.entities.PostEntity.Output;
 import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
 import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
+import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
+import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
 import org.denevell.natch.tests.functional.pageobjects.UserRegisterPO;
 import org.denevell.userservice.serv.LoginRequest.LoginResourceReturnData;
 import org.junit.Before;
@@ -21,15 +22,18 @@ public class PostAddFunctional {
   private String authKey;
 	private PostAddPO postAddPo;
   private PostsListPO postListPo;
+  private ThreadAddPO threadAddPo;
 	
 	@Before
 	public void setup() throws Exception {
 		postAddPo = new PostAddPO();
 		postListPo = new PostsListPO();
+		threadAddPo = new ThreadAddPO();
 		TestUtils.deleteTestDb();
 	  new UserRegisterPO().register("aaron@aaron.com", "passy");
 		loginResult = new UserLoginPO().login("aaron@aaron.com", "passy");
 		authKey = loginResult.getAuthKey();
+	  threadAddPo.add("sub", "cont", "thread", authKey);
 	}
 	
 	@Test
@@ -92,7 +96,6 @@ public class PostAddFunctional {
     assertEquals(400, response.getStatus());
     assertEquals("Post must include thread id", TestUtils.getValidationMessage(response, 0));
 	}
-	
 	
 	@Test
 	public void shouldSeeErrorOnBlanks() {
