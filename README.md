@@ -2,7 +2,7 @@
 
 The REST interface for a forum.
 
-See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and in dev work.
+See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and in dev work..
 
 
 ## TODO
