@@ -15,7 +15,7 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	   </named-query>       
        <attributes>
             <id name="clientId">
-	           <column name="client_id" nullable="false" length="500" />
+	           <column name="client_id" nullable="false" length="500" unique="true" />
             </id>
        </attributes>
     </entity>    

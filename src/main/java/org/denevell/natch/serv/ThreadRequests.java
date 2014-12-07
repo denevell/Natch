@@ -19,7 +19,6 @@ import javax.ws.rs.core.Response;
 import org.denevell.natch.entities.ThreadEntity.AddFromPostInput;
 import org.denevell.natch.entities.ThreadEntity.OutputList;
 import org.denevell.natch.model.ThreadFromPostModel;
-import org.denevell.natch.model.ThreadListModel;
 import org.denevell.natch.model.ThreadsListModel;
 import org.denevell.natch.model.ThreadsListModel.ThreadsAndNumTotalThreads;
 import org.denevell.natch.model.UserGetLoggedInModel.User;
@@ -29,7 +28,6 @@ public class ThreadRequests {
 	
 	@Context HttpServletResponse mResponse;
 	@Context HttpServletRequest mRequest;
-	@Inject ThreadListModel mThreadModel;
 	@Inject ThreadsListModel mThreadsModel;
 	@Inject ThreadFromPostModel mThreadFromPostModel;
 	
@@ -43,16 +41,6 @@ public class ThreadRequests {
     return Response.ok().entity(new OutputList(list)).build();
 	}	
 
-	@GET
-	@Path("/{threadId}/{start}/{limit}")
-	@Produces(MediaType.APPLICATION_JSON)	
-	public Response listByThreadId(
-			@PathParam("threadId") String threadId,
-			@PathParam("start") int start, 	
-			@PathParam("limit") int limit) throws IOException {
-		return mThreadModel.find(threadId, start, limit).httpReturn();
-	}
-	
 	@GET
 	@Path("bytag/{tag}/{start}/{limit}")
 	@Produces(MediaType.APPLICATION_JSON)	

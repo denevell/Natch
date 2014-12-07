@@ -1,23 +1,29 @@
 package org.denevell.natch.utils;
 
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.LockModeType;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 
 
-public class Jrappy2 {
+public class Jrappy2<ReturnOb> {
   
   private static EntityManager mEntityManager;
   private boolean mGenericError;
   private boolean mNotFound;
   private boolean mNotAllowed;
-  private Object mFoundEntity;
+  private ReturnOb mFoundEntity;
+  private List<ReturnOb> mFoundEntities;
   
   private Jrappy2() {}
 
@@ -54,13 +60,13 @@ public class Jrappy2 {
          .httpReturn();
   }
 
-  public static <T> Response update(
+  public static <ReturnOb> Response update(
       EntityManagerFactory factory, 
-      Class<T> clazz, 
+      Class<ReturnOb> clazz, 
       Object primaryKey, 
-      Predicate<T> extraIsFoundPredicate, 
-      Predicate<T> allowedPredicate, 
-      UnaryOperator<T> updateEntity) {
+      Predicate<ReturnOb> extraIsFoundPredicate, 
+      Predicate<ReturnOb> allowedPredicate, 
+      UnaryOperator<ReturnOb> updateEntity) {
 	  return Jrappy2
          .beginTransaction(factory)
          .update(primaryKey, extraIsFoundPredicate, allowedPredicate, updateEntity, clazz)
@@ -68,19 +74,42 @@ public class Jrappy2 {
          .httpReturn();
   }
 
-	public static <T> Response find(
+	public static <ReturnOb> Response find(
       EntityManagerFactory factory, 
 	    Object primaryKey, 
 	    boolean pessimisticRead, 
-	    Class<T> clazz) {
+	    Class<ReturnOb> clazz) {
 	  return Jrappy2
-         .begin(factory)
+         .begin(factory, clazz)
          .find(primaryKey, pessimisticRead, clazz)
          .close()
          .httpReturn();
 	}
 
-	public <T> Jrappy2 find(
+	public static <ReturnOb> ReturnOb findObject(
+      EntityManagerFactory factory, 
+	    Object primaryKey, 
+	    boolean pessimisticRead, 
+	    Class<ReturnOb> clazz) {
+	  return Jrappy2
+         .begin(factory, clazz)
+         .find(primaryKey, pessimisticRead, clazz)
+         .close()
+         .returnFoundObject();
+	}
+
+	public static <T> List<T> list(
+      EntityManagerFactory factory, 
+      int start, int limit,
+      String orderByDescAttribute,
+	    Class<T> clazz) {
+    return Jrappy2.begin(JPAFactoryContextListener.sFactory, clazz)
+        .list(start, limit, orderByDescAttribute, clazz)
+        .close()
+        .returnFoundObjects();
+	}
+
+	public <T extends ReturnOb> Jrappy2<ReturnOb> find(
 	    Object primaryKey, 
 	    boolean pessimisticRead, 
 	    Class<T> clazz) {
@@ -98,7 +127,34 @@ public class Jrappy2 {
 		return this;
 	}
 
-  public <T> Jrappy2 update(
+	@SuppressWarnings("unchecked")
+  public <T extends ReturnOb> Jrappy2<ReturnOb> list(
+	    int start, 
+	    int limit,
+	    String orderbyDescAttribute,
+	    Class<T> clazz) {
+		CriteriaBuilder cb = mEntityManager.getCriteriaBuilder();
+		CriteriaQuery<T> q = cb.createQuery(clazz);
+		Root<T> c = q.from(clazz);
+		if(orderbyDescAttribute!=null) {
+		  q.select(c).orderBy(cb.desc(c.get(orderbyDescAttribute)));
+		}
+    TypedQuery<T> item = mEntityManager.createQuery(q); 
+    if(start!=-1) {
+      item.setFirstResult(start);
+    }
+    if(limit!=-1) {
+      item.setMaxResults(limit);
+    }
+		if(item==null) {
+		  mNotFound = true;
+		} else {
+		  mFoundEntities = (List<ReturnOb>) item.getResultList();
+		}
+		return this;
+	}
+
+  public <T> Jrappy2<ReturnOb> update(
       Object primaryKey, 
       Predicate<T> extraIsFoundPredicate, 
       Predicate<T> allowedPredicate, 
@@ -123,7 +179,7 @@ public class Jrappy2 {
     }
   }
 
-  public Jrappy2 persist(Object object) {
+  public Jrappy2<ReturnOb> persist(Object object) {
     try {
       mEntityManager.persist(object);
     } catch(Exception e) {
@@ -133,20 +189,20 @@ public class Jrappy2 {
     return this;
   }
   
-  public static Jrappy2 beginTransaction(EntityManagerFactory factory) {
-    Jrappy2 jrappy2 = new Jrappy2();
+  public static <ReturnOb> Jrappy2<ReturnOb> beginTransaction(EntityManagerFactory factory) {
+    Jrappy2<ReturnOb> jrappy2 = new Jrappy2<>();
     mEntityManager = factory.createEntityManager();
     mEntityManager.getTransaction().begin();
     return jrappy2;
   }
 
-  public static Jrappy2 begin(EntityManagerFactory factory) {
-    Jrappy2 jrappy2 = new Jrappy2();
+  public static <ReturnOb> Jrappy2<ReturnOb> begin(EntityManagerFactory factory, Class<ReturnOb> class1) {
+    Jrappy2<ReturnOb> jrappy2 = new Jrappy2<>();
     mEntityManager = factory.createEntityManager();
     return jrappy2;
   }
 
-  public Jrappy2 commitAndClose() {
+  public Jrappy2<ReturnOb> commitAndClose() {
     try {
       mEntityManager.getTransaction().commit();
       mEntityManager.close();
@@ -157,7 +213,7 @@ public class Jrappy2 {
     return this;
   }
 
-  public Jrappy2 close() {
+  public Jrappy2<ReturnOb> close() {
     try {
       mEntityManager.close();
     } catch(Exception e) {
@@ -165,6 +221,14 @@ public class Jrappy2 {
       mGenericError = true;
     }
     return this;
+  }
+
+  public List<ReturnOb> returnFoundObjects() {
+    return mFoundEntities;
+  }
+
+  public ReturnOb returnFoundObject() {
+    return mFoundEntity;
   }
 
   public Response httpReturn() {

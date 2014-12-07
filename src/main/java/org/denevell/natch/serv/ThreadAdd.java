@@ -15,6 +15,7 @@ import org.denevell.natch.entities.ThreadEntity.AddInput;
 import org.denevell.natch.model.UserGetLoggedInModel.User;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Jrappy2;
+import org.denevell.natch.utils.PushSendService;
 
 @Path("thread_add")
 public class ThreadAdd {
@@ -31,7 +32,11 @@ public class ThreadAdd {
 	
 	public static interface ThreadAddService {
 	  default Response threadAdd(ThreadEntity threadEntity) {
-	    return Jrappy2.persist(JPAFactoryContextListener.sFactory, threadEntity);
+	    Response persist = Jrappy2.persist(JPAFactoryContextListener.sFactory, threadEntity);
+	    if(persist.getStatus()==200) {
+	      PushSendService.sendPushNotifications(threadEntity);
+	    }
+      return persist;
 	  }
   }
 	

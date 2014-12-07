@@ -209,5 +209,11 @@ func (m migration) Migration_9() {
 	if err != nil {
 		panic(err)
 	}
+}
 
+func (m migration) Migration_10() {
+	_, err := m.Tx.Exec("alter table pushids add constraint client_id_unique1 unique (client_id)")
+	if err != nil {
+		panic(err)
+	}
 }

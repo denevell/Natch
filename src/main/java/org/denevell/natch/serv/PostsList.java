@@ -14,6 +14,8 @@ import javax.ws.rs.core.MediaType;
 
 import org.denevell.natch.entities.PostEntity;
 import org.denevell.natch.entities.PostEntity.OutputList;
+import org.denevell.natch.utils.JPAFactoryContextListener;
+import org.denevell.natch.utils.Jrappy2;
 
 @Path("posts/{start}/{limit}")
 public class PostsList {
@@ -31,11 +33,11 @@ public class PostsList {
 
   public static interface PostsListService {
     default List<PostEntity> list(int start, int limit) {
-      return null;//Jrappy2.find(JPAFactoryContextListener.sFactory, postId, false, PostEntity.class);
-      /*
-        List<PostEntity> posts = mPostModel.startTransaction().start(start).max(numResults)
-            .namedQuery(PostEntity.NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE).list(PostEntity.class);
-            */
+      return Jrappy2.list(JPAFactoryContextListener.sFactory, 
+          start, 
+          limit, 
+          "modified", 
+          PostEntity.class);
     }
   }
 

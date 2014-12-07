@@ -8,6 +8,7 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 ## TODO
 
 * Add test for adding a post with a non-existant thread
+* Is thread single too inefficient?
 
 ## Later
 

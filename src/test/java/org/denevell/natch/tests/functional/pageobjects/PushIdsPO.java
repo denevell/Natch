@@ -18,14 +18,14 @@ public class PushIdsPO {
 		AddInput entity = new AddInput();
 		entity.id = (id);
         	mService
-        	.path("rest").path("push").path("add").request()
+        	.path("rest").path("push_add").request()
         	.put(Entity.json(entity));
 		return;
 	}	
 
 	public Output list() {
        return mService
-        	.path("rest").path("push").request()
+        	.path("rest").path("push_list").request()
         	.get(Output.class);
 	}	
 	

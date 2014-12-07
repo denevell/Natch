@@ -1,4 +1,4 @@
-package org.denevell.natch.model;
+package org.denevell.natch.utils;
 
 import java.util.List;
 
@@ -9,14 +9,12 @@ import org.denevell.jrappy.Jrappy;
 import org.denevell.natch.entities.PostEntity;
 import org.denevell.natch.entities.PushEntity;
 import org.denevell.natch.entities.ThreadEntity;
-import org.denevell.natch.utils.JPAFactoryContextListener;
-import org.denevell.natch.utils.ManifestVars;
 
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
 
-public class PushSendModel {
+public class PushSendService {
 
   public static void sendPushNotifications(final ThreadEntity thread) {
     new Thread(new Runnable() {
