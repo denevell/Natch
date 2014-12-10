@@ -12,10 +12,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.denevell.natch.model.UserGetLoggedInModel;
-import org.denevell.natch.model.UserGetLoggedInModel.User;
 import org.denevell.natch.utils.LoginHeadersFilter;
 import org.denevell.natch.utils.ManifestVars;
+import org.denevell.natch.utils.UserGetLoggedInService;
+import org.denevell.natch.utils.UserGetLoggedInService.User;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,7 +26,7 @@ public class LoginHeaderFilterTests {
 	private HttpServletResponse resp;
 	private HttpServletRequest req;
 	private FilterChain chain;
-	private UserGetLoggedInModel model = mock(UserGetLoggedInModel.class);
+	private UserGetLoggedInService model = mock(UserGetLoggedInService.class);
 
 	@Before
 	public void setup() {

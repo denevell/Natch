@@ -1,11 +1,7 @@
 package org.denevell.natch.utils;
 
-import org.denevell.natch.model.ThreadFromPostModel;
-import org.denevell.natch.model.ThreadFromPostModel.ThreadFromPostModelImpl;
 import org.denevell.natch.model.ThreadsListModel;
 import org.denevell.natch.model.ThreadsListModel.ThreadsListModelImpl;
-import org.denevell.natch.model.UserGetLoggedInModel;
-import org.denevell.natch.model.UserGetLoggedInModel.UserGetLoggedInModelImpl;
 import org.denevell.natch.serv.PostAdd.PostAddService;
 import org.denevell.natch.serv.PostDelete.PostDeleteService;
 import org.denevell.natch.serv.PostEdit.PostEditService;
@@ -14,7 +10,10 @@ import org.denevell.natch.serv.PostsList.PostsListService;
 import org.denevell.natch.serv.PushAdd.PushAddService;
 import org.denevell.natch.serv.PushList.PushListService;
 import org.denevell.natch.serv.ThreadAdd.ThreadAddService;
+import org.denevell.natch.serv.ThreadFromPost.ThreadFromPostService;
+import org.denevell.natch.serv.ThreadFromPost.ThreadFromPostServiceImpl;
 import org.denevell.natch.serv.ThreadSingle.ThreadSingleService;
+import org.denevell.natch.utils.UserGetLoggedInService.UserGetLoggedInModelImpl;
 import org.denevell.userservice.AnnotationProcessor.UserService;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -45,10 +44,10 @@ public class JerseyApplication extends ResourceConfig {
       bind(ThreadAddServiceImpl.class).to(ThreadAddService.class);
       bind(ThreadSingleServiceImpl.class).to(ThreadSingleService.class);
       bind(ThreadsListModelImpl.class).to(ThreadsListModel.class);
-      bind(ThreadFromPostModelImpl.class).to(ThreadFromPostModel.class);
       bind(PushAddServiceImpl.class).to(PushAddService.class);
       bind(PushListServiceImpl.class).to(PushListService.class);
-      bind(UserGetLoggedInModelImpl.class).to(UserGetLoggedInModel.class);
+      bind(UserGetLoggedInModelImpl.class).to(UserGetLoggedInService.class);
+      bind(ThreadFromPostServiceImpl.class).to(ThreadFromPostService.class);
     }
   }
 

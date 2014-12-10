@@ -1,4 +1,4 @@
-package org.denevell.natch.model;
+package org.denevell.natch.utils;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -6,17 +6,14 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.denevell.natch.utils.ManifestVars;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
-import org.jvnet.hk2.annotations.Service;
 
-public interface UserGetLoggedInModel {
+public interface UserGetLoggedInService {
 
   User get(Object authObject);
 
-  @Service
-  public static class UserGetLoggedInModelImpl implements UserGetLoggedInModel {
+  public static class UserGetLoggedInModelImpl implements UserGetLoggedInService {
 
     private WebTarget mServiceTarget;
 
@@ -30,14 +27,12 @@ public interface UserGetLoggedInModel {
 
     @Override
     public User get(Object authObject) {
-
       try {
         User u = mServiceTarget.request().header("AuthKey", (String) authObject).get(User.class);
         return u;
       } catch (Exception e) {
         return null;
       }
-
     }
 
   }

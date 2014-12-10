@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import jersey.repackaged.com.google.common.collect.Lists;
 
 import org.denevell.natch.entities.ThreadEntity;
+import org.denevell.natch.entities.ThreadEntity.Output;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Jrappy2;
 
@@ -25,11 +26,11 @@ public class ThreadSingle {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)	
-	public ThreadEntity byThreadId(
+	public Output byThreadId(
 			@PathParam("threadId") String threadId,
 			@PathParam("start") int start, 	
 			@PathParam("limit") int limit) throws IOException {
-		return mThreadModel.find(threadId, start, limit);
+		return mThreadModel.find(threadId, start, limit).toOutput();
 	}
 	
 

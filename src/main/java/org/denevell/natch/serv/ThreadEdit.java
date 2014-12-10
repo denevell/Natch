@@ -12,8 +12,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.denevell.natch.entities.ThreadEntity.EditInput;
-import org.denevell.natch.model.UserGetLoggedInModel.User;
 import org.denevell.natch.serv.PostEdit.PostEditService;
+import org.denevell.natch.utils.UserGetLoggedInService.User;
 
 @Path("thread_edit/{postId}")
 public class ThreadEdit {

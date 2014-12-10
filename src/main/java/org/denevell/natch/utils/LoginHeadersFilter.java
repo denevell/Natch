@@ -11,21 +11,20 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.denevell.natch.model.UserGetLoggedInModel;
-import org.denevell.natch.model.UserGetLoggedInModel.User;
-import org.denevell.natch.model.UserGetLoggedInModel.UserGetLoggedInModelImpl;
+import org.denevell.natch.utils.UserGetLoggedInService.User;
+import org.denevell.natch.utils.UserGetLoggedInService.UserGetLoggedInModelImpl;
 
 public class LoginHeadersFilter implements Filter {
 	
 	private static final String AUTHENTICATION_KEY = "AuthKey";
 	public static final String KEY_SERVLET_REQUEST_LOGGEDIN_USER= "authed_username";
 	public static final String KEY_SERVLET_REQUEST_LOGGEDIN_AUTHKEY = "authkey";
-	private UserGetLoggedInModel mModel = new UserGetLoggedInModelImpl();
+	private UserGetLoggedInService mModel = new UserGetLoggedInModelImpl();
 	
 	public LoginHeadersFilter() {
 	}
 
-	public LoginHeadersFilter(UserGetLoggedInModel model) {
+	public LoginHeadersFilter(UserGetLoggedInService model) {
 		mModel = model;
 	}
 	

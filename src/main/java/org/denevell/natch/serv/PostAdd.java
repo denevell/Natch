@@ -13,9 +13,9 @@ import javax.ws.rs.core.Response;
 import org.denevell.natch.entities.PostEntity;
 import org.denevell.natch.entities.ThreadEntity;
 import org.denevell.natch.entities.PostEntity.AddInput;
-import org.denevell.natch.model.UserGetLoggedInModel.User;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Jrappy2;
+import org.denevell.natch.utils.UserGetLoggedInService.User;
 
 @Path("post_add")
 public class PostAdd {
