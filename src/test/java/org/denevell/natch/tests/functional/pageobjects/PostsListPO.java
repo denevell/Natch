@@ -21,7 +21,7 @@ public class PostsListPO {
 
 	public OutputList list(String start, String limit) {
     return mService
-		.path("rest").path("post").path(start).path(limit).request()
+		.path("rest").path("posts").path(start).path(limit).request()
 		.accept(MediaType.APPLICATION_JSON)
 		.get(OutputList.class);
 	}	

@@ -30,7 +30,7 @@ public class PostSinglePO {
 	public PostSinglePO gives404OnBadId() {
 	  try {
 	    mService
-	    .path("rest").path("post").path("single").path("blllarrr").request()
+	    .path("rest").path("post_single").path("blllarrr").request()
 	    .accept(MediaType.APPLICATION_JSON)
 	    .get(Output.class);
       org.junit.Assert.assertTrue("Expected a 404", false);

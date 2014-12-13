@@ -21,7 +21,7 @@ public class ThreadAddFromPostPO {
     input.postId = (postId);
 
     Response returnData = mService
-        .path("rest").path("thread").path("frompost")
+        .path("rest").path("thread_frompost")
         .request().header("AuthKey", authKey)
         .put(Entity.entity(input, MediaType.APPLICATION_JSON));
     return returnData;

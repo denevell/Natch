@@ -57,6 +57,8 @@ public class PostDelete {
             threadEntity.numPosts = threadEntity.posts.size();
             if(threadEntity.posts.size()>1) 
               threadEntity.latestPost = threadEntity.posts.get(threadEntity.posts.size()-1);
+            else 
+              threadEntity.latestPost = threadEntity.posts.get(0);
             return threadEntity;
           });
     }

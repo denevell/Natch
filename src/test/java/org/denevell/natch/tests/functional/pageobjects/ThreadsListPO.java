@@ -25,7 +25,7 @@ public class ThreadsListPO {
 	    int start, 
 	    int limit) {
     return mService
-		.path("rest").path("thread").path(String.valueOf(start)).path(String.valueOf(limit))
+		.path("rest").path("threads").path(String.valueOf(start)).path(String.valueOf(limit))
 		.request()
 		.accept(MediaType.APPLICATION_JSON)
 		.get(OutputList.class);
@@ -33,7 +33,7 @@ public class ThreadsListPO {
 
   public Output byThread(String threadId, int start, int limit) {
     return mService
-		.path("rest").path("thread")
+		.path("rest").path("thread_single")
 		.path(threadId).path(String.valueOf(start)).path(String.valueOf(limit))
 		.request()
 		.accept(MediaType.APPLICATION_JSON)
@@ -42,7 +42,7 @@ public class ThreadsListPO {
 
   public OutputList byTag(String tag, int start, int limit) {
     return mService
-		.path("rest").path("thread").path("bytag")
+		.path("rest").path("threads_bytag")
 		.path(tag).path(String.valueOf(start)).path(String.valueOf(limit))
 		.request()
 		.accept(MediaType.APPLICATION_JSON)

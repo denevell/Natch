@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.denevell.natch.entities.PostEntity.OutputList;
+import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
 import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
 import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
 import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
@@ -17,6 +18,7 @@ public class PostsListFunctional {
 	private LoginResourceReturnData loginResult;
 	private PostAddPO addPostPo;
   private PostsListPO postsListPo;
+  private ThreadAddPO threadAddPo;
 
 	@Before
 	public void setup() throws Exception {
@@ -24,18 +26,20 @@ public class PostsListFunctional {
 	  new UserRegisterPO().register("aaron@aaron.com", "passy");
 		loginResult = new UserLoginPO().login("aaron@aaron.com", "passy");
 	  addPostPo = new PostAddPO();
+	  threadAddPo = new ThreadAddPO();
 	  postsListPo = new PostsListPO();
+	  assertEquals(200, threadAddPo.add("sub", "cont_", "thread", loginResult.getAuthKey()).getStatus());
 	}
 	
 	@Test
 	public void shouldListByCreationDate() {
-		addPostPo.add("cont", loginResult.getAuthKey(), "thread");
-		addPostPo.add("cont1", loginResult.getAuthKey(), "thread");
-		addPostPo.add("cont2", loginResult.getAuthKey(), "thread");
+		assertEquals(200, addPostPo.add("cont", loginResult.getAuthKey(), "thread").getStatus());
+		assertEquals(200, addPostPo.add("cont1", loginResult.getAuthKey(), "thread").getStatus());
+		assertEquals(200, addPostPo.add("cont2", loginResult.getAuthKey(), "thread").getStatus());
 		
 		OutputList returnData = postsListPo.list("0", "10");
 		
-		assertEquals(3, returnData.posts.size());
+		assertEquals(4, returnData.posts.size());
 		assertTrue(returnData.posts.get(0).id!=0);
 		assertTrue(returnData.posts.get(1).id!=0);
 		assertTrue(returnData.posts.get(2).id!=0);

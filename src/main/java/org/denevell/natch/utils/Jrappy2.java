@@ -103,11 +103,34 @@ public class Jrappy2<ReturnOb> {
       int start, int limit,
       String orderByDescAttribute,
 	    Class<T> clazz) {
+	  return list(factory, start, limit, orderByDescAttribute, clazz, null);
+	}
+
+	public static <T> List<T> list(
+      EntityManagerFactory factory, 
+      int start, int limit,
+      String orderByDescAttribute,
+	    Class<T> clazz, 
+	    QueryUpdate<T> whereArgs) {
     return Jrappy2.begin(JPAFactoryContextListener.sFactory, clazz)
-        .list(start, limit, orderByDescAttribute, clazz)
+        .list(start, limit, orderByDescAttribute, clazz, whereArgs)
         .close()
         .returnFoundObjects();
 	}
+	
+	public static <T> long count(
+      EntityManagerFactory factory, 
+	    Class<T> clazz) {
+	  EntityManager entityManager = JPAFactoryContextListener.sFactory.createEntityManager(); 
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Long> q = cb.createQuery(Long.class);
+		q.select(cb.count(q.from(clazz)));
+		Long singleResult = entityManager.createQuery(q).getSingleResult();
+		entityManager.close();
+    return singleResult;
+	}
+	
+
 
 	public <T extends ReturnOb> Jrappy2<ReturnOb> find(
 	    Object primaryKey, 
@@ -127,17 +150,26 @@ public class Jrappy2<ReturnOb> {
 		return this;
 	}
 
+	@FunctionalInterface
+	public static interface QueryUpdate<T> {
+	  public void yeah(CriteriaBuilder cb, CriteriaQuery<T> q);
+	}
+
 	@SuppressWarnings("unchecked")
   public <T extends ReturnOb> Jrappy2<ReturnOb> list(
 	    int start, 
 	    int limit,
 	    String orderbyDescAttribute,
-	    Class<T> clazz) {
+	    Class<T> clazz, 
+	    QueryUpdate<T> queryOperators) {
 		CriteriaBuilder cb = mEntityManager.getCriteriaBuilder();
 		CriteriaQuery<T> q = cb.createQuery(clazz);
 		Root<T> c = q.from(clazz);
 		if(orderbyDescAttribute!=null) {
 		  q.select(c).orderBy(cb.desc(c.get(orderbyDescAttribute)));
+		}
+		if(queryOperators!=null) {
+		  queryOperators.yeah(cb, q);
 		}
     TypedQuery<T> item = mEntityManager.createQuery(q); 
     if(start!=-1) {

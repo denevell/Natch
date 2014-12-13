@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.denevell.jrappy.Jrappy;
 import org.denevell.natch.entities.PostEntity;
 import org.denevell.natch.entities.PushEntity;
 import org.denevell.natch.entities.ThreadEntity;
@@ -25,12 +24,7 @@ public class PushSendService {
           Logger.getLogger(getClass()).error("GCM KEY is null or blank");
         }
         Sender sender = new Sender(key);
-        Jrappy<PushEntity> jrappy = new Jrappy<PushEntity>(
-            JPAFactoryContextListener.sFactory);
-        List<PushEntity> list = null;
-        list = jrappy
-              .namedQuery(PushEntity.NAMED_QUERY_LIST_IDS)
-              .list(PushEntity.class);
+        List<PushEntity> list = Jrappy2.list(JPAFactoryContextListener.sFactory, -1, -1, null, PushEntity.class);
         if(list!=null) {
           for (PushEntity pushEntity : list) {
             try {

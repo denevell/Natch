@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.denevell.natch.entities.ThreadEntity.AddInput.StringWrapper;
-import org.denevell.natch.model.ThreadsListModel.ThreadsAndNumTotalThreads;
+import org.denevell.natch.serv.ThreadsList.ThreadsAndNumTotalThreads;
 import org.denevell.natch.utils.ModelResponse.ModelExternaliser;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
