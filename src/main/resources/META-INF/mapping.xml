@@ -93,13 +93,13 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	       <id name="id">
 	           <column name="id" nullable="false" />
 	       </id>       
-	       <one-to-one name="latestPost" optional="false">
-	       	  <join-column name="latestPost_reference" referenced-column-name="id" />
+	       <one-to-one name="latestPost" optional="true">
+	       	  <join-column name="latestPost_reference" nullable="true" referenced-column-name="id" />
 	       </one-to-one>
-	       <one-to-one name="rootPost" optional="false">
-	       	  <join-column name="rootPost_reference" referenced-column-name="id" />
+	       <one-to-one name="rootPost" optional="true">
+	       	  <join-column name="rootPost_reference" nullable="true" referenced-column-name="id" />
 	       </one-to-one>
-	       <one-to-many name="posts" optional="false" orphan-removal="true">
+	       <one-to-many name="posts" orphan-removal="true">
 	       		<cascade>
 	       			<cascade-persist />
 	       			<cascade-remove />

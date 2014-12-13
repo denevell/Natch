@@ -38,6 +38,7 @@ public class ThreadListFunctional {
 	@Test
 	public void shouldPostsListByThreadId() {
 	  assertEquals(200, threadAddPo.add("sub", "cont", "t", loginResult.getAuthKey()).getStatus());
+	  assertEquals(200, threadAddPo.add("sub", "cont", "other", Lists.newArrayList("tagy"), loginResult.getAuthKey()).getStatus());
 	  assertEquals(200, postAddPo.add("cont1", loginResult.getAuthKey(), "other").getStatus());
 	  assertEquals(200, postAddPo.add("cont2", loginResult.getAuthKey(), "t").getStatus());
 		
@@ -56,9 +57,9 @@ public class ThreadListFunctional {
 	
 	@Test
 	public void shouldListPostsByThreadIdWithLimit() {
-	  assertEquals(200, threadAddPo.add("sub", "cont", 
-	      "t", Lists.newArrayList("tagy"), loginResult.getAuthKey()).getStatus());
-	  assertEquals(200, postAddPo.add("cont1", loginResult.getAuthKey(), "other").getStatus());
+	  assertEquals(200, threadAddPo.add("sub", "cont", "t", Lists.newArrayList("tagy"), loginResult.getAuthKey()).getStatus());
+	  assertEquals(200, threadAddPo.add("sub", "cont", "other", Lists.newArrayList("tagy"), loginResult.getAuthKey()).getStatus());
+	  //assertEquals(200, postAddPo.add("cont1", loginResult.getAuthKey(), "other").getStatus());
 	  assertEquals(200, postAddPo.add("cont2", loginResult.getAuthKey(), "t").getStatus());
 
 		Output returnData = threadsList.byThread("t", 1, 1);

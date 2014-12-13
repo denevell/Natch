@@ -51,6 +51,10 @@ public class ThreadFromPost {
 
     @SuppressWarnings("unused")
     public Response threadFromPost(long postId, String subject, boolean admin) {
+      if(!admin) {
+        return new ModelResponse<>(403, null).httpReturn();
+      }
+      
       PostEntity post = Jrappy2.findObject(JPAFactoryContextListener.sFactory, postId, false, PostEntity.class);
 
       PostEntity newPost = new PostEntity(post);
