@@ -13,11 +13,6 @@ import org.hibernate.validator.constraints.NotBlank;
 
 public class PostEntity implements ModelExternaliser {
 	
-	public static final String NAMED_QUERY_FIND_ORDERED_BY_MOD_DATE = "findByModData";
-	public static final String NAMED_QUERY_FIND_BY_THREADID = "findByThreadId";
-	public static final String NAMED_QUERY_PARAM_ID= "id";
-	public static final String NAMED_QUERY_PARAM_THREADID = "threadId";
-	public static final String NAMED_QUERY_FIND_BY_ID = "findById";
   public static final int MAX_TAG_LENGTH = 20;
   public static final int MAX_SUBJECT_LENGTH = 300;
 	

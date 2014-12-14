@@ -30,6 +30,7 @@
 	  <url-pattern>/rest/thread</url-pattern>
 	  <url-pattern>/rest/thread_edit/*</url-pattern>
 	  <url-pattern>/rest/thread_add</url-pattern>
+	  <url-pattern>/rest/thread_delete/*</url-pattern>
 	  <url-pattern>/rest/post_edit/*</url-pattern>
 	  <url-pattern>/rest/post_add</url-pattern>
 	  <url-pattern>/rest/post_delete/*</url-pattern>

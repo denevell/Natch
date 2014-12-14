@@ -9,8 +9,8 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 
 * Add test for adding a post with a non-existant thread
 * Is thread single too inefficient?
+* Are we getting proper 401 for posts due to web.xml mapping?
 * Date of threads coming down
-* Delete thread with only one post
 
 ## Later
 

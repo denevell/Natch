@@ -216,4 +216,16 @@ func (m migration) Migration_10() {
 	if err != nil {
 		panic(err)
 	}
+
+	_, err = m.Tx.Exec("alter table userentity drop constraint userentity_pkey")
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (m migration) Migration_11() {
+	_, err := m.Tx.Exec("alter table threadentity alter latestPost_reference drop not null")
+	if err != nil {
+		panic(err)
+	}
 }

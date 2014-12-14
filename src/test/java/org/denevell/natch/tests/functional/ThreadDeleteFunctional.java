@@ -2,16 +2,15 @@ package org.denevell.natch.tests.functional;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.List;
-
 import javax.ws.rs.core.Response;
 
 import org.denevell.natch.entities.PostEntity.Output;
 import org.denevell.natch.entities.PostEntity.OutputList;
 import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
-import org.denevell.natch.tests.functional.pageobjects.PostDeletePO;
 import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
+import org.denevell.natch.tests.functional.pageobjects.ThreadDeletePO;
+import org.denevell.natch.tests.functional.pageobjects.ThreadsListPO;
 import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
 import org.denevell.natch.tests.functional.pageobjects.UserRegisterPO;
 import org.denevell.userservice.serv.LoginRequest.LoginResourceReturnData;
@@ -19,15 +18,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-public class PostDeleteFunctional {
+public class ThreadDeleteFunctional {
 	
 	private LoginResourceReturnData loginResult;
 	private UserRegisterPO registerPo;
   private PostAddPO postAddPo;
-  private PostDeletePO postDeletePo;
   private String authKey;
   private PostsListPO postListPo;
   private ThreadAddPO threadAddPo;
+  private ThreadDeletePO threadDeletePo;
+  private ThreadsListPO threadsListPo;
 
 	@Before
 	public void setup() throws Exception {
@@ -35,7 +35,8 @@ public class PostDeleteFunctional {
 		threadAddPo = new ThreadAddPO();
 		postAddPo = new PostAddPO();
 		postListPo = new PostsListPO();
-		postDeletePo = new PostDeletePO();
+		threadDeletePo = new ThreadDeletePO();
+		threadsListPo = new ThreadsListPO();
 	  registerPo = new UserRegisterPO();
 	  registerPo.register("aaron@aaron.com", "passy");
 		loginResult = new UserLoginPO().login("aaron@aaron.com", "passy");
@@ -43,32 +44,36 @@ public class PostDeleteFunctional {
 	}
 
 	@Test
-	public void shouldDeletePost() {
+	public void shouldDeleteThread() {
 		assertEquals(200, threadAddPo.add("sub", "cont", "thread", authKey).getStatus());
-		assertEquals(200, postAddPo.add("cont1", authKey, "thread").getStatus());
-		List<Output> posts = postListPo.list("0", "10").posts;
-		assertEquals(2, posts.size());
-		Output post = posts.get(0);
-    assertEquals(200, postDeletePo.delete(post.id, post.threadId, authKey).getStatus());
-		List<Output> postsAfter = postListPo.list("0", "10").posts;
-		assertEquals(1, postsAfter.size());
-		assertEquals("cont", postsAfter.get(0).content);
+		assertEquals(1, threadsListPo.list(0, 10).threads.size());
+		assertEquals(1, threadsListPo.list(0, 10).numOfThreads);
+		assertEquals(1, postListPo.list("0", "10").posts.size());
+
+    assertEquals(200, threadDeletePo.delete("thread", authKey).getStatus());
+
+		assertEquals(0, threadsListPo.list(0, 10).threads.size());
+		assertEquals(0, threadsListPo.list(0, 10).numOfThreads);
+		assertEquals(0, postListPo.list("0", "10").posts.size());
 	}
 
 	@Test
-	public void shouldSeeErrorOnDeletingThreadRootPost() {
+	public void shouldDeleteThreadWhenOnePost() {
 		assertEquals(200, threadAddPo.add("sub", "cont", "thread", authKey).getStatus());
-		List<Output> posts = postListPo.list("0", "10").posts;
-		assertEquals(1, posts.size());
-		Output post = posts.get(0);
-    assertEquals(500, postDeletePo.delete(post.id, post.threadId, authKey).getStatus());
-		List<Output> postsAfter = postListPo.list("0", "10").posts;
-		assertEquals(1, postsAfter.size());
-		assertEquals("cont", postsAfter.get(0).content);
+		assertEquals(200, postAddPo.add("conttt", authKey, "thread").getStatus());
+		assertEquals(1, threadsListPo.list(0, 10).threads.size());
+		assertEquals(1, threadsListPo.list(0, 10).numOfThreads);
+		assertEquals(2, postListPo.list("0", "10").posts.size());
+
+    assertEquals(200, threadDeletePo.delete("thread", authKey).getStatus());
+
+		assertEquals(0, threadsListPo.list(0, 10).threads.size());
+		assertEquals(0, threadsListPo.list(0, 10).numOfThreads);
+		assertEquals(0, postListPo.list("0", "10").posts.size());
 	}
 	
 	@Test
-	public void shouldSeeErrorOnUnAuthorisedDelete() {
+	public void shouldSeeErrorOnUnAuthorisedDeleteThread() {
 	  registerPo.register("other_user", "passy");
 		String otherUserAuthKey = new UserLoginPO().login("other_user", "passy").getAuthKey();
 
@@ -76,7 +81,7 @@ public class PostDeleteFunctional {
 		OutputList posts = postListPo.list("0", "10");
 		
 		Output output = posts.posts.get(0);
-    Response response = postDeletePo.delete(output.id, output.threadId, otherUserAuthKey);
+    Response response = threadDeletePo.delete(output.threadId, otherUserAuthKey);
 		OutputList postsAfter = postListPo.list("0", "10");
 
 		assertEquals(403, response.getStatus());
@@ -85,12 +90,12 @@ public class PostDeleteFunctional {
 	}
 
 	@Test
-	public void shouldSeeErrorOnUnknownPost() {
+	public void shouldSeeErrorOnUnknownThread() {
 		threadAddPo.add("sub", "cont1", "thread", authKey).getStatus();
 		OutputList posts = postListPo.list("0", "10");
 		
 		Output output = posts.posts.get(0);
-    Response response = postDeletePo.delete(output.id+999, output.threadId, authKey);
+    Response response = threadDeletePo.delete(output.threadId+"BAD", authKey);
 		OutputList postsAfter = postListPo.list("0", "10");
 
 		assertEquals(404, response.getStatus());
@@ -99,21 +104,21 @@ public class PostDeleteFunctional {
 	}
 
 	@Test
-	public void shouldAllowAdminToDelete() {
+	public void shouldAllowAdminToDeleteThread() {
 	  registerPo.register("other_user", "passy");
 		String otherUserAuthKey = new UserLoginPO().login("other_user", "passy").getAuthKey();
 
 		assertEquals(200, threadAddPo.add("sub", "cont1", "thread", otherUserAuthKey).getStatus());
 		assertEquals(200, postAddPo.add("cont1", authKey, "thread").getStatus());
 		OutputList posts = postListPo.list("0", "10");
+		assertEquals(2, posts.posts.size());
 		
 		Output output = posts.posts.get(0);
-    Response response = postDeletePo.delete(output.id, output.threadId, authKey);
+    Response response = threadDeletePo.delete(output.threadId, authKey);
 		OutputList postsAfter = postListPo.list("0", "10");
 
 		assertEquals(200, response.getStatus());
-		assertEquals(2, posts.posts.size());
-		assertEquals(1, postsAfter.posts.size());
+		assertEquals(0, postsAfter.posts.size());
 	}
 
 }

@@ -74,6 +74,18 @@ public class Jrappy2<ReturnOb> {
          .httpReturn();
   }
 
+  public static <T> Response remove(
+      EntityManagerFactory factory, 
+      Object primaryKey,
+      Predicate<T> prediate,
+      Class<T> clazz) {
+	  return Jrappy2
+         .beginTransaction(factory)
+         .remove(primaryKey, prediate, clazz)
+         .commitAndClose()
+         .httpReturn();
+  }
+
 	public static <ReturnOb> Response find(
       EntityManagerFactory factory, 
 	    Object primaryKey, 
@@ -211,6 +223,29 @@ public class Jrappy2<ReturnOb> {
     }
   }
 
+  public <T> Jrappy2<ReturnOb> remove(
+      Object primaryKey, 
+      Predicate<T> allowedPredicate, 
+      Class<T> clazz) {
+    try {
+      T found = mEntityManager.find(clazz, primaryKey, LockModeType.PESSIMISTIC_READ);
+      if(found==null) {
+        mNotFound = true;
+        return this;
+      }
+      if(allowedPredicate!=null && !allowedPredicate.test(found)) {
+        mNotAllowed = true;
+        return this;
+      }
+      mEntityManager.remove(found);
+    } catch(Exception e) {
+      Logger.getLogger(Jrappy2.class).debug("Problem persisting entity", e);
+      mGenericError = true;
+    }
+    return this;
+  }
+  
+
   public Jrappy2<ReturnOb> persist(Object object) {
     try {
       mEntityManager.persist(object);
@@ -220,7 +255,7 @@ public class Jrappy2<ReturnOb> {
     }
     return this;
   }
-  
+
   public static <ReturnOb> Jrappy2<ReturnOb> beginTransaction(EntityManagerFactory factory) {
     Jrappy2<ReturnOb> jrappy2 = new Jrappy2<>();
     mEntityManager = factory.createEntityManager();

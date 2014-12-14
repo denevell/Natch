@@ -8,6 +8,7 @@ import org.denevell.natch.serv.PostsList.PostsListService;
 import org.denevell.natch.serv.PushAdd.PushAddService;
 import org.denevell.natch.serv.PushList.PushListService;
 import org.denevell.natch.serv.ThreadAdd.ThreadAddService;
+import org.denevell.natch.serv.ThreadDelete.ThreadDeleteService;
 import org.denevell.natch.serv.ThreadFromPost.ThreadFromPostService;
 import org.denevell.natch.serv.ThreadFromPost.ThreadFromPostServiceImpl;
 import org.denevell.natch.serv.ThreadSingle.ThreadSingleService;
@@ -48,10 +49,12 @@ public class JerseyApplication extends ResourceConfig {
       bind(UserGetLoggedInModelImpl.class).to(UserGetLoggedInService.class);
       bind(ThreadFromPostServiceImpl.class).to(ThreadFromPostService.class);
       bind(ThreadsListServiceImpl.class).to(ThreadsListService.class);
+      bind(ThreadDeleteServiceImpl.class).to(ThreadDeleteService.class);
       bind(ThreadListByTagServiceImpl.class).to(ThreadsListByTagService.class);
     }
   }
 
+  public static class ThreadDeleteServiceImpl implements ThreadDeleteService {};
   public static class ThreadListByTagServiceImpl implements ThreadsListByTagService {};
   public static class ThreadAddServiceImpl implements ThreadAddService {};
   public static class PostAddServiceImpl implements PostAddService {};
