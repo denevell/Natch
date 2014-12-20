@@ -23,8 +23,8 @@ public class PostAddPO {
 
 	public Response add(
 	    String content, 
-			String authKey,
-			String threadId) {
+			String threadId,
+			String authKey) {
 	  AddInput input = new AddInput();
 		input.content = content;
 		input.threadId = threadId;

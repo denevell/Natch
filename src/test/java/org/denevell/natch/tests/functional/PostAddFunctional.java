@@ -38,7 +38,7 @@ public class PostAddFunctional {
 	
 	@Test
 	public void shouldMakePost() {
-		assertEquals(200, postAddPo.add("cont", authKey, "thread").getStatus());
+		assertEquals(200, postAddPo.add("cont", "thread", authKey).getStatus());
 		Output postResource = postListPo.list("0", "1").posts.get(0);
     assertEquals("cont", postResource.content);
 		assertEquals("thread", postResource.threadId);
@@ -46,8 +46,8 @@ public class PostAddFunctional {
 
 	@Test 
 	public void shouldMakePostWithSameContent() {
-		assertEquals(200, postAddPo.add("cont", authKey, "thread").getStatus());
-		assertEquals(200, postAddPo.add("cont", authKey, "thread").getStatus());
+		assertEquals(200, postAddPo.add("cont", "thread", authKey).getStatus());
+		assertEquals(200, postAddPo.add("cont", "thread", authKey).getStatus());
 		List<Output> posts = postListPo.list("0", "2").posts;
     assertEquals("cont", posts.get(0).content);
 		assertEquals("thread", posts.get(0).threadId);
@@ -73,40 +73,40 @@ public class PostAddFunctional {
 				"aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit " +
 				"esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, " +
 				"sunt in culpa qui officia deserunt mollit anim id est laborum.";
-		assertEquals(200, postAddPo.add(largeContent, authKey, "thread").getStatus());
+		assertEquals(200, postAddPo.add(largeContent, "thread", authKey).getStatus());
 		Output postResource = postListPo.list("0", "1").posts.get(0);
     assertEquals(largeContent, postResource.content);
 	}	
 	
 	@Test
 	public void shouldSeeErrorOnUnAuthorised() {
-		assertEquals(401, postAddPo.add("cont", authKey+"BAD", "thread").getStatus());
+		assertEquals(401, postAddPo.add("cont", "thread", authKey+"BAD").getStatus());
 	}
 	
 	@Test
 	public void shouldSeeErrorOnBlankContent() {
-		Response response = postAddPo.add(" ", authKey, "thread");
+		Response response = postAddPo.add(" ", "thread", authKey);
     assertEquals(400, response.getStatus());
     assertEquals("Post must have content", TestUtils.getValidationMessage(response, 0));
 	}
 
 	@Test
 	public void shouldSeeErrorOnBlankThread() {
-		Response response = postAddPo.add("cont", authKey, " ");
+		Response response = postAddPo.add("cont", " ", authKey);
     assertEquals(400, response.getStatus());
     assertEquals("Post must include thread id", TestUtils.getValidationMessage(response, 0));
 	}
 	
 	@Test
 	public void shouldSeeErrorOnBlanks() {
-		Response response = postAddPo.add(" ", authKey, " ");
+		Response response = postAddPo.add(" ", " ", authKey);
     assertEquals(400, response.getStatus());
     assertEquals(2, TestUtils.getValidationMessages(response));
 	}
 
 	@Test
 	public void shouldSeeErrorOnNulls() {
-		Response response = postAddPo.add(null, authKey, null);
+		Response response = postAddPo.add(null, null, authKey);
     assertEquals(400, response.getStatus());
     assertEquals(2, TestUtils.getValidationMessages(response));
 	}

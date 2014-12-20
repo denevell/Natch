@@ -19,6 +19,7 @@ public class PushSendService {
     new Thread(new Runnable() {
       @Override
       public void run() {
+        try {
         String key = ManifestVars.getGCMKey();
         if (key == null || key.trim().length() == 0) {
           Logger.getLogger(getClass()).error("GCM KEY is null or blank");
@@ -39,6 +40,9 @@ public class PushSendService {
             }
           }
           
+        }
+        } catch(Exception e) {
+          Logger.getLogger(getClass()).info("Couldn't send push notification", e);
         }
       }
     }).start();

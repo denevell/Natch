@@ -46,7 +46,7 @@ public class PostEditFunctional {
 
 		// Add post
 	  assertEquals(200, threadAddPo.add("sub", "cont", "thread", authKey).getStatus());
-		assertEquals(200, postAddPo.add("cont", authKey, "thread").getStatus());
+		assertEquals(200, postAddPo.add("cont", "thread", authKey).getStatus());
 		originallyListedPosts = postsListPo.list("0", "10");
 		initialPost = originallyListedPosts.posts.get(0); 
 	}
@@ -82,7 +82,7 @@ public class PostEditFunctional {
 	  registerPo.register("other_user", "passy");
 		String otherUserAuthKey = new UserLoginPO().login("other_user", "passy").getAuthKey();
 
-		postAddPo.add("cont", otherUserAuthKey, "thread");
+		postAddPo.add("cont", "thread", otherUserAuthKey);
 		OutputList posts = postsListPo.list("0", "10");
 		
 		Response response = postEditPo.edit("editeeed", posts.posts.get(0).id, authKey);

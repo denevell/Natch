@@ -10,15 +10,15 @@ import javax.persistence.LockModeType;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 
 
 public class Jrappy2<ReturnOb> {
   
-  private static EntityManager mEntityManager;
+  private EntityManager mEntityManager;
   private boolean mGenericError;
   private boolean mNotFound;
   private boolean mNotAllowed;
@@ -115,17 +115,17 @@ public class Jrappy2<ReturnOb> {
       int start, int limit,
       String orderByDescAttribute,
 	    Class<T> clazz) {
-	  return list(factory, start, limit, orderByDescAttribute, clazz, null);
+	  return list(factory, start, limit, orderByDescAttribute, null, clazz);
 	}
 
 	public static <T> List<T> list(
       EntityManagerFactory factory, 
       int start, int limit,
       String orderByDescAttribute,
-	    Class<T> clazz, 
-	    QueryUpdate<T> whereArgs) {
+	    Pair<String, String> memberOf, 
+	    Class<T> clazz) {
     return Jrappy2.begin(JPAFactoryContextListener.sFactory, clazz)
-        .list(start, limit, orderByDescAttribute, clazz, whereArgs)
+        .list(start, limit, orderByDescAttribute, memberOf, clazz)
         .close()
         .returnFoundObjects();
 	}
@@ -172,28 +172,33 @@ public class Jrappy2<ReturnOb> {
 	    int start, 
 	    int limit,
 	    String orderbyDescAttribute,
-	    Class<T> clazz, 
-	    QueryUpdate<T> queryOperators) {
-		CriteriaBuilder cb = mEntityManager.getCriteriaBuilder();
-		CriteriaQuery<T> q = cb.createQuery(clazz);
-		Root<T> c = q.from(clazz);
+	    Pair<String, String> memberOf,
+	    Class<T> clazz) {
+
+	  // WHAT ABOUT ADDING IN memberOf.getRight? and order by?
+		String from = "select p from "+clazz.getSimpleName()+" p ";
+		if(memberOf!=null) {
+		   from = from + "where " + " :member member of " + "p."+memberOf.getRight() + " ";
+		}
 		if(orderbyDescAttribute!=null) {
-		  q.select(c).orderBy(cb.desc(c.get(orderbyDescAttribute)));
+		  from = from + "order by " + "p."+orderbyDescAttribute  + " desc";
 		}
-		if(queryOperators!=null) {
-		  queryOperators.yeah(cb, q);
+		TypedQuery<T> q = mEntityManager.createQuery(from, clazz);
+		if(memberOf!=null) {
+		  q.setParameter("member", memberOf.getLeft());
 		}
-    TypedQuery<T> item = mEntityManager.createQuery(q); 
     if(start!=-1) {
-      item.setFirstResult(start);
+      q.setFirstResult(start);
     }
     if(limit!=-1) {
-      item.setMaxResults(limit);
+      q.setMaxResults(limit);
     }
+
+    List<T> item = q.getResultList();
 		if(item==null) {
 		  mNotFound = true;
 		} else {
-		  mFoundEntities = (List<ReturnOb>) item.getResultList();
+		  mFoundEntities = (List<ReturnOb>) item;
 		}
 		return this;
 	}
@@ -205,7 +210,7 @@ public class Jrappy2<ReturnOb> {
       UnaryOperator<T> updateEntity, 
       Class<T> clazz) {
     try {
-      T found = mEntityManager.find(clazz, primaryKey, LockModeType.PESSIMISTIC_READ);
+      T found = mEntityManager.find(clazz, primaryKey, LockModeType.PESSIMISTIC_WRITE);
       if(found==null) {
         mNotFound = true;
       } else if(extraIsFoundPredicate!=null && !extraIsFoundPredicate.test(found)) {
@@ -217,7 +222,7 @@ public class Jrappy2<ReturnOb> {
       }
       return this;
     } catch(Exception e) {
-      Logger.getLogger(Jrappy2.class).debug("Problem finding / updating entity", e);
+      Logger.getLogger(Jrappy2.class).info("Problem finding / updating entity", e);
       mGenericError = true;
       return this;
     }
@@ -228,7 +233,7 @@ public class Jrappy2<ReturnOb> {
       Predicate<T> allowedPredicate, 
       Class<T> clazz) {
     try {
-      T found = mEntityManager.find(clazz, primaryKey, LockModeType.PESSIMISTIC_READ);
+      T found = mEntityManager.find(clazz, primaryKey, LockModeType.PESSIMISTIC_WRITE);
       if(found==null) {
         mNotFound = true;
         return this;
@@ -239,7 +244,7 @@ public class Jrappy2<ReturnOb> {
       }
       mEntityManager.remove(found);
     } catch(Exception e) {
-      Logger.getLogger(Jrappy2.class).debug("Problem persisting entity", e);
+      Logger.getLogger(Jrappy2.class).info("Problem persisting entity", e);
       mGenericError = true;
     }
     return this;
@@ -250,7 +255,7 @@ public class Jrappy2<ReturnOb> {
     try {
       mEntityManager.persist(object);
     } catch(Exception e) {
-      Logger.getLogger(Jrappy2.class).debug("Problem persisting entity", e);
+      Logger.getLogger(Jrappy2.class).info("Problem persisting entity", e);
       mGenericError = true;
     }
     return this;
@@ -258,14 +263,14 @@ public class Jrappy2<ReturnOb> {
 
   public static <ReturnOb> Jrappy2<ReturnOb> beginTransaction(EntityManagerFactory factory) {
     Jrappy2<ReturnOb> jrappy2 = new Jrappy2<>();
-    mEntityManager = factory.createEntityManager();
-    mEntityManager.getTransaction().begin();
+    jrappy2.mEntityManager = factory.createEntityManager();
+    jrappy2.mEntityManager.getTransaction().begin();
     return jrappy2;
   }
 
   public static <ReturnOb> Jrappy2<ReturnOb> begin(EntityManagerFactory factory, Class<ReturnOb> class1) {
     Jrappy2<ReturnOb> jrappy2 = new Jrappy2<>();
-    mEntityManager = factory.createEntityManager();
+    jrappy2.mEntityManager = factory.createEntityManager();
     return jrappy2;
   }
 
@@ -274,7 +279,7 @@ public class Jrappy2<ReturnOb> {
       mEntityManager.getTransaction().commit();
       mEntityManager.close();
     } catch(Exception e) {
-      Logger.getLogger(Jrappy2.class).debug("Error during committing transaction and closing entity manager", e);
+      Logger.getLogger(Jrappy2.class).info("Error during committing transaction and closing entity manager", e);
       mGenericError = true;
     }
     return this;
@@ -284,7 +289,7 @@ public class Jrappy2<ReturnOb> {
     try {
       mEntityManager.close();
     } catch(Exception e) {
-      Logger.getLogger(Jrappy2.class).debug("Error during closing entity manager", e);
+      Logger.getLogger(Jrappy2.class).info("Error during closing entity manager", e);
       mGenericError = true;
     }
     return this;

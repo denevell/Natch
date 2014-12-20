@@ -33,9 +33,9 @@ public class PostsListFunctional {
 	
 	@Test
 	public void shouldListByCreationDate() {
-		assertEquals(200, addPostPo.add("cont", loginResult.getAuthKey(), "thread").getStatus());
-		assertEquals(200, addPostPo.add("cont1", loginResult.getAuthKey(), "thread").getStatus());
-		assertEquals(200, addPostPo.add("cont2", loginResult.getAuthKey(), "thread").getStatus());
+		assertEquals(200, addPostPo.add("cont", "thread", loginResult.getAuthKey()).getStatus());
+		assertEquals(200, addPostPo.add("cont1", "thread", loginResult.getAuthKey()).getStatus());
+		assertEquals(200, addPostPo.add("cont2", "thread", loginResult.getAuthKey()).getStatus());
 		
 		OutputList returnData = postsListPo.list("0", "10");
 		
@@ -50,9 +50,9 @@ public class PostsListFunctional {
 
 	@Test
 	public void shouldListByCreationDateWithLimit() {
-		addPostPo.add("cont", loginResult.getAuthKey(), "thread");
-		addPostPo.add("cont1", loginResult.getAuthKey(), "thread");
-		addPostPo.add("cont2", loginResult.getAuthKey(), "thread");
+		addPostPo.add("cont", "thread", loginResult.getAuthKey());
+		addPostPo.add("cont1", "thread", loginResult.getAuthKey());
+		addPostPo.add("cont2", "thread", loginResult.getAuthKey());
 		
 		OutputList returnData = postsListPo.list("0", "1");
 		
@@ -63,7 +63,7 @@ public class PostsListFunctional {
 	
 	@Test
 	public void shouldHtmlEscapeSubjectContentTags() {
-		addPostPo.add("<hi>", loginResult.getAuthKey(), "thread");
+		addPostPo.add("<hi>", "thread", loginResult.getAuthKey());
 		
 		OutputList returnData = postsListPo.list("0", "10");
 

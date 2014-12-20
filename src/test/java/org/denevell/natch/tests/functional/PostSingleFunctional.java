@@ -37,7 +37,7 @@ public class PostSingleFunctional {
 	
 	@Test
 	public void shouldListSinglePost() {
-		postAddPo.add("contxx", loginResult.getAuthKey(), "thread");
+		postAddPo.add("contxx", "thread", loginResult.getAuthKey());
 		OutputList posts = postsListPo.list("0", "10");
 		Output single = postSinglePo.single(posts.posts.get(0).id);
 		assertEquals("Get content of post", "contxx", single.content);

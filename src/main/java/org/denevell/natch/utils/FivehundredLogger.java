@@ -12,7 +12,7 @@ public class FivehundredLogger implements ExceptionMapper<ServerErrorException> 
 
 	@Override
 	public Response toResponse(ServerErrorException exception) {
-		Logger.getLogger(getClass()).error("5xx exception while in REST project", exception);
+		Logger.getLogger(getClass()).info("5xx exception while in REST project", exception);
 		return Response
 				.serverError()
 				.build();

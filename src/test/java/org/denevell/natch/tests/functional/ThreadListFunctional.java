@@ -38,9 +38,9 @@ public class ThreadListFunctional {
 	@Test
 	public void shouldPostsListByThreadId() {
 	  assertEquals(200, threadAddPo.add("sub", "cont", "t", loginResult.getAuthKey()).getStatus());
-	  assertEquals(200, threadAddPo.add("sub", "cont", "other", Lists.newArrayList("tagy"), loginResult.getAuthKey()).getStatus());
-	  assertEquals(200, postAddPo.add("cont1", loginResult.getAuthKey(), "other").getStatus());
-	  assertEquals(200, postAddPo.add("cont2", loginResult.getAuthKey(), "t").getStatus());
+	  assertEquals(200, threadAddPo.add("sub", "cont", "other", loginResult.getAuthKey()).getStatus());
+	  assertEquals(200, postAddPo.add("cont1", "other", loginResult.getAuthKey()).getStatus());
+	  assertEquals(200, postAddPo.add("cont2", "t", loginResult.getAuthKey()).getStatus());
 		
 		Output returnData = threadsList.byThread("t", 0, 10);
 		
@@ -60,7 +60,7 @@ public class ThreadListFunctional {
 	  assertEquals(200, threadAddPo.add("sub", "cont", "t", Lists.newArrayList("tagy"), loginResult.getAuthKey()).getStatus());
 	  assertEquals(200, threadAddPo.add("sub", "cont", "other", Lists.newArrayList("tagy"), loginResult.getAuthKey()).getStatus());
 	  //assertEquals(200, postAddPo.add("cont1", loginResult.getAuthKey(), "other").getStatus());
-	  assertEquals(200, postAddPo.add("cont2", loginResult.getAuthKey(), "t").getStatus());
+	  assertEquals(200, postAddPo.add("cont2", "t", loginResult.getAuthKey()).getStatus());
 
 		Output returnData = threadsList.byThread("t", 1, 1);
 		
@@ -76,7 +76,7 @@ public class ThreadListFunctional {
 	@Test
 	public void shouldShowBlankOnBadThreadId() {
 	  assertEquals(200, threadAddPo.add("sub", "cont", "t", loginResult.getAuthKey()).getStatus());
-	  assertEquals(200, postAddPo.add("cont2", loginResult.getAuthKey(), "t").getStatus());
+	  assertEquals(200, postAddPo.add("cont2", "t", loginResult.getAuthKey()).getStatus());
 
 		threadsList.byThreadShow404("rubbish", 1, 1);
 	}	

@@ -45,7 +45,7 @@ public class PostDeleteFunctional {
 	@Test
 	public void shouldDeletePost() {
 		assertEquals(200, threadAddPo.add("sub", "cont", "thread", authKey).getStatus());
-		assertEquals(200, postAddPo.add("cont1", authKey, "thread").getStatus());
+		assertEquals(200, postAddPo.add("cont1", "thread", authKey).getStatus());
 		List<Output> posts = postListPo.list("0", "10").posts;
 		assertEquals(2, posts.size());
 		Output post = posts.get(0);
@@ -104,7 +104,7 @@ public class PostDeleteFunctional {
 		String otherUserAuthKey = new UserLoginPO().login("other_user", "passy").getAuthKey();
 
 		assertEquals(200, threadAddPo.add("sub", "cont1", "thread", otherUserAuthKey).getStatus());
-		assertEquals(200, postAddPo.add("cont1", authKey, "thread").getStatus());
+		assertEquals(200, postAddPo.add("cont1", "thread", authKey).getStatus());
 		OutputList posts = postListPo.list("0", "10");
 		
 		Output output = posts.posts.get(0);

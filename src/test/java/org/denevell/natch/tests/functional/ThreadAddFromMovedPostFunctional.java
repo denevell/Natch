@@ -51,9 +51,9 @@ public class ThreadAddFromMovedPostFunctional {
 	  registerPo.register("other", "other");
 		LoginResourceReturnData loginResult = loginPo.login("other", "other");
 
-		threadAdd.add("New thread", "first post", loginResult.getAuthKey());
+		assertEquals(200, threadAdd.add("New thread", "first post", loginResult.getAuthKey()).getStatus());
 		org.denevell.natch.entities.ThreadEntity.OutputList threads = threadsList.list(0, 10);
-		postAddPo.add("Second post", loginResult.getAuthKey(), threads.threads.get(0).id);
+		assertEquals(200, postAddPo.add("Second post", threads.threads.get(0).id, loginResult.getAuthKey()).getStatus());
 		
 		OutputList posts = postsListPo.list("0", "10");
 		assertTrue("Should have two posts, thread starter and first post", posts.posts.size()==2);
@@ -62,7 +62,7 @@ public class ThreadAddFromMovedPostFunctional {
     		"New subject",
     		posts.posts.get(0).id,
     		adminLoginResult.getAuthKey()); 
-		
+
 		assertEquals(200, returnData.getStatus());
     HashMap<String, String> hm = (HashMap<String, String>) returnData.readEntity(HashMap.class);
 		assertTrue("Returns the new thread id", hm.get("threadId")!=null);
@@ -80,7 +80,7 @@ public class ThreadAddFromMovedPostFunctional {
 
 		threadAdd.add("New thread", "first post", loginResult.getAuthKey());
 		org.denevell.natch.entities.ThreadEntity.OutputList threads = threadsList.list(0, 10);
-		postAddPo.add("Second post", loginResult.getAuthKey(), threads.threads.get(0).id);
+		postAddPo.add("Second post", threads.threads.get(0).id, loginResult.getAuthKey());
 		
 		OutputList posts = postsListPo.list("0", "10");
 		assertTrue("Should have two posts, thread starter and first post", posts.posts.size()==2);

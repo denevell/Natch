@@ -2,6 +2,7 @@ package org.denevell.natch.serv;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -49,7 +50,6 @@ public class ThreadFromPost {
     @Inject ThreadAddService mThreadAdd;
     @Inject PostDeleteService mPostDelete;
 
-    @SuppressWarnings("unused")
     public Response threadFromPost(long postId, String subject, boolean admin) {
       if(!admin) {
         return new ModelResponse<>(403, null).httpReturn();
@@ -58,6 +58,7 @@ public class ThreadFromPost {
       PostEntity post = Jrappy2.findObject(JPAFactoryContextListener.sFactory, postId, false, PostEntity.class);
 
       PostEntity newPost = new PostEntity(post);
+      newPost.modified = new Date().getTime();
       newPost.id = 0;
       newPost.adminEdited = true;
       newPost.threadId = PostEntity.Utils.createNewThreadId(null, subject);
@@ -67,8 +68,14 @@ public class ThreadFromPost {
       threadEntity.numPosts = 1;
 
       Response addResult = mThreadAdd.threadAdd(threadEntity);
+      if(addResult.getStatus()!=200) {
+        return new ModelResponse<Void>(addResult.getStatus(), null).httpReturn();
+      }
 
       Response deleteResult = mPostDelete.delete(post.threadId, postId, post.username, true);
+      if(deleteResult.getStatus()!=200) {
+        return new ModelResponse<Void>(deleteResult.getStatus(), null).httpReturn();
+      }
 
       // Hash of user id
       return new ModelResponse<>(200, Responses.hM("threadId", threadEntity.id)).httpReturn();

@@ -1,10 +1,10 @@
 package org.denevell.natch.tests.functional;
 
 import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
+import jersey.repackaged.com.google.common.collect.Lists;
 
 import org.denevell.natch.entities.ThreadEntity.OutputList;
+import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadsListPO;
 import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
@@ -19,6 +19,7 @@ public class ThreadsListByTagFunctional {
 	private LoginResourceReturnData loginResult;
   private ThreadAddPO threadAddPo;
   private ThreadsListPO threadsListPo;
+  private PostAddPO postAddPo = new PostAddPO();
 
 	@Before
 	public void setup() throws Exception {
@@ -29,17 +30,16 @@ public class ThreadsListByTagFunctional {
 		loginResult = new UserLoginPO().login("aaron@aaron.com", "passy");
 	}
 
-	@SuppressWarnings("serial")
   @Test
 	public void shouldListThreadsByTag() {
-		threadAddPo.add("x", "x", "x", new ArrayList<String>(){{add("onetag");}}, loginResult.getAuthKey());
-		threadAddPo.add("sub", "cont", "t", new ArrayList<String>(){{add("onetag");}}, loginResult.getAuthKey());
-		threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey());
-		threadAddPo.add("sub2", "cont2", "t", loginResult.getAuthKey());
+		assertEquals(200, threadAddPo.add("x", "x", "x", Lists.newArrayList("onetag", "two"), loginResult.getAuthKey()).getStatus());
+		assertEquals(200, threadAddPo.add("sub", "cont", "t", Lists.newArrayList("onetag", "two"), loginResult.getAuthKey()).getStatus());
+		assertEquals(200, threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey()).getStatus());
+		assertEquals(200, postAddPo.add("cont2", "t", loginResult.getAuthKey()).getStatus());
 		
 		OutputList returnData= threadsListPo.byTag("onetag", 0, 10);
 		
-		assertEquals(2, returnData.numOfThreads);
+		assertEquals(3, returnData.numOfThreads);
 		assertEquals(2, returnData.threads.size());
 		assertEquals("sub", returnData.threads.get(0).subject);
 		assertEquals("t", returnData.threads.get(0).id);
@@ -50,19 +50,18 @@ public class ThreadsListByTagFunctional {
 		assertEquals("onetag", returnData.threads.get(1).tags.get(0));
 	}	
 
-	@SuppressWarnings("serial")
   @Test
 	public void shouldListThreadsByTagWithLimit() {
-		threadAddPo.add("x", "x", "x", new ArrayList<String>(){{add("onetag");}}, loginResult.getAuthKey());
-		threadAddPo.add("sub", "cont", "t", new ArrayList<String>(){{add("onetag");}}, loginResult.getAuthKey());
-		threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey());
-		threadAddPo.add("sub2", "cont2", "t", loginResult.getAuthKey());
+		assertEquals(200, threadAddPo.add("x", "x", "x", Lists.newArrayList("onetag", "two"), loginResult.getAuthKey()).getStatus());
+		assertEquals(200, threadAddPo.add("sub", "cont", "t", Lists.newArrayList("onetag", "two"), loginResult.getAuthKey()).getStatus());
+		assertEquals(200, threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey()).getStatus());
+		assertEquals(200, postAddPo.add("cont2", "t", loginResult.getAuthKey()).getStatus());
 		
 		// Act
 		OutputList returnData= threadsListPo.byTag("onetag", 1, 1);
 		
 		// Assert
-		assertEquals(2, returnData.numOfThreads);
+		assertEquals(3, returnData.numOfThreads);
 		assertEquals(1, returnData.threads.size());
 		assertEquals("x", returnData.threads.get(0).subject);
 		assertEquals("x", returnData.threads.get(0).id);

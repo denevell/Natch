@@ -60,7 +60,7 @@ public class ThreadDeleteFunctional {
 	@Test
 	public void shouldDeleteThreadWhenOnePost() {
 		assertEquals(200, threadAddPo.add("sub", "cont", "thread", authKey).getStatus());
-		assertEquals(200, postAddPo.add("conttt", authKey, "thread").getStatus());
+		assertEquals(200, postAddPo.add("conttt", "thread", authKey).getStatus());
 		assertEquals(1, threadsListPo.list(0, 10).threads.size());
 		assertEquals(1, threadsListPo.list(0, 10).numOfThreads);
 		assertEquals(2, postListPo.list("0", "10").posts.size());
@@ -109,7 +109,7 @@ public class ThreadDeleteFunctional {
 		String otherUserAuthKey = new UserLoginPO().login("other_user", "passy").getAuthKey();
 
 		assertEquals(200, threadAddPo.add("sub", "cont1", "thread", otherUserAuthKey).getStatus());
-		assertEquals(200, postAddPo.add("cont1", authKey, "thread").getStatus());
+		assertEquals(200, postAddPo.add("cont1", "thread", authKey).getStatus());
 		OutputList posts = postListPo.list("0", "10");
 		assertEquals(2, posts.posts.size());
 		

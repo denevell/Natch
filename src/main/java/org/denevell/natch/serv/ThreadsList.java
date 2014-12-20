@@ -37,7 +37,7 @@ public class ThreadsList {
       List<ThreadEntity> list = Jrappy2.list(JPAFactoryContextListener.sFactory, 
           start, 
           limit, 
-          null, 
+          "latestPost.modified", 
           ThreadEntity.class);
       long count = Jrappy2.count(JPAFactoryContextListener.sFactory, ThreadEntity.class);
       return new ThreadsAndNumTotalThreads(list, count);

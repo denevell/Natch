@@ -18,7 +18,7 @@ public class ExceptionLogger implements Filter {
 		try {
 			chain.doFilter(req, resp);		
 		} catch (Exception e) {
-			Logger.getLogger(getClass()).error("Exception while in REST project", e);
+			Logger.getLogger(getClass()).info("Exception while in REST project", e);
 			throw e;
 		}
 	}

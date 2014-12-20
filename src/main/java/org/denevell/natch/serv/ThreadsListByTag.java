@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -13,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.denevell.natch.entities.ThreadEntity;
 import org.denevell.natch.entities.ThreadEntity.OutputList;
 import org.denevell.natch.serv.ThreadsList.ThreadsAndNumTotalThreads;
@@ -39,12 +39,9 @@ public class ThreadsListByTag {
       List<ThreadEntity> list = Jrappy2.list(JPAFactoryContextListener.sFactory, 
           start, 
           limit, 
-          null, 
-          ThreadEntity.class, 
-          (cb, q) -> {
-            Root<ThreadEntity> from = q.from(ThreadEntity.class);
-            q.where(cb.isMember(tag, from.get("rootPost").get("tags")));
-          });
+          "latestPost.modified", 
+          Pair.of(tag, "rootPost.tags"),
+          ThreadEntity.class);
       long count = Jrappy2.count(JPAFactoryContextListener.sFactory, ThreadEntity.class);
       return new ThreadsAndNumTotalThreads(list, count);
     }

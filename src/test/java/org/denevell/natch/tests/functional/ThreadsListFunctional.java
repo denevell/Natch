@@ -8,9 +8,9 @@ import jersey.repackaged.com.google.common.collect.Lists;
 import org.denevell.natch.entities.PostEntity.Output;
 import org.denevell.natch.entities.ThreadEntity.OutputList;
 import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
-import org.denevell.natch.tests.functional.pageobjects.PostDeletePO;
 import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
+import org.denevell.natch.tests.functional.pageobjects.ThreadDeletePO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadEditPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadsListPO;
 import org.denevell.natch.tests.functional.pageobjects.UserLoginPO;
@@ -26,7 +26,7 @@ public class ThreadsListFunctional {
   private ThreadAddPO threadAddPo;
   private ThreadsListPO threadsListPo;
   private PostAddPO postAddPo;
-  private PostDeletePO postDeletePo;
+  private ThreadDeletePO threadDeletePo;
   private PostsListPO postListPo;
   private ThreadEditPO threadEditPo;
 
@@ -35,7 +35,7 @@ public class ThreadsListFunctional {
 		TestUtils.deleteTestDb();
 		threadAddPo = new ThreadAddPO();
 		postAddPo = new PostAddPO();
-		postDeletePo = new PostDeletePO();
+		threadDeletePo = new ThreadDeletePO();
 		postListPo = new PostsListPO();
 		threadsListPo = new ThreadsListPO();
 		threadEditPo = new ThreadEditPO();
@@ -45,9 +45,9 @@ public class ThreadsListFunctional {
 
 	@Test
 	public void shouldListThreadsByPostLastEntered() {
-		threadAddPo.add("sub", "cont", "t", loginResult.getAuthKey());
-		threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey());
-		assertEquals(200, postAddPo.add("cont2", loginResult.getAuthKey(), "t").getStatus());
+		assertEquals(200, threadAddPo.add("sub", "cont", "t", loginResult.getAuthKey()).getStatus());
+		assertEquals(200, threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey()).getStatus());
+		assertEquals(200, postAddPo.add("cont2", "t", loginResult.getAuthKey()).getStatus());
 		
 		OutputList returnData = threadsListPo.list(0, 10);
 		
@@ -62,8 +62,8 @@ public class ThreadsListFunctional {
 
 	@Test
 	public void shouldHaveRootPostIdInThread() {
-		threadAddPo.add("sub", "cont", "t", loginResult.getAuthKey());
-		threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey());
+		assertEquals(200, threadAddPo.add("sub", "cont", "t", loginResult.getAuthKey()).getStatus());
+		assertEquals(200, threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey()).getStatus());
 		
 		OutputList returnData = threadsListPo.list(0, 10);
 		
@@ -76,24 +76,22 @@ public class ThreadsListFunctional {
 
 	@Test
 	public void shouldListThreadsAfterThreadDelete() {
-		threadAddPo.add("sub", "cont", "t", loginResult.getAuthKey());
-		threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey());
-		threadAddPo.add("sub2", "cont2", "t", loginResult.getAuthKey());
+		assertEquals(200, threadAddPo.add("sub", "cont", "t", loginResult.getAuthKey()).getStatus());
+		assertEquals(200, threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey()).getStatus());
 		
 		OutputList returnData = threadsListPo.list(0, 10);
-		org.denevell.natch.entities.ThreadEntity.Output output = returnData.threads.get(0);
-    postDeletePo.delete(output.rootPostId, output.id, loginResult.getAuthKey());
+    threadDeletePo.delete("t", loginResult.getAuthKey());
+
 		returnData = threadsListPo.list(0, 10);
-		
 		assertEquals(1, returnData.numOfThreads);
 		assertEquals(1, returnData.threads.size());
-		assertEquals("other", output.id);
+		assertEquals("other", returnData.threads.get(0).id);
 	}
 	
 	@Test
 	public void shouldListThreadsWithModificationDateAsLatestPost() {
-		threadAddPo.add("sub", "cont", "t", loginResult.getAuthKey());
-		threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey());
+		assertEquals(200, threadAddPo.add("sub", "cont", "t", loginResult.getAuthKey()).getStatus());
+		assertEquals(200, threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey()).getStatus());
 		
 		OutputList threads = threadsListPo.list(0, 10);
 		Output post = postListPo.list("0", "10").posts.get(0);
@@ -109,9 +107,9 @@ public class ThreadsListFunctional {
 	
 	@Test
 	public void shouldListThreadsByPostLastEnteredWithLimit() {
-		threadAddPo.add("sub", "cont", "t", loginResult.getAuthKey());
-		threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey());
-		threadAddPo.add("sub2", "cont2", "t", loginResult.getAuthKey());
+		assertEquals(200, threadAddPo.add("sub", "cont", "t", loginResult.getAuthKey()).getStatus());
+		assertEquals(200, threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey()).getStatus());
+		assertEquals(200, postAddPo.add("cont2", "t", loginResult.getAuthKey()).getStatus());
 		
 		OutputList threads = threadsListPo.list(1, 1);
 
@@ -123,8 +121,8 @@ public class ThreadsListFunctional {
 
 	@Test
 	public void shouldListThreadsWithThreadWithLastModifiedContentFirst() {	
-		threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey());
-		threadAddPo.add("sub2", "cont2", "t", loginResult.getAuthKey());
+		assertEquals(200, threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey()).getStatus());
+		assertEquals(200, threadAddPo.add("sub2", "cont2", "t", loginResult.getAuthKey()).getStatus());
 		org.denevell.natch.entities.PostEntity.OutputList posts = postListPo.list("0", "10");
 		assertEquals("Listing by last added", "sub2", posts.posts.get(0).subject);
 		
@@ -139,7 +137,7 @@ public class ThreadsListFunctional {
 
 	@Test
 	public void shouldHtmlEscapeSubjectContentTags() {
-		threadAddPo.add("<hi>", "cont1", "t", Lists.newArrayList("<there>"), loginResult.getAuthKey());
+		assertEquals(200, threadAddPo.add("<hi>", "cont1", "t", Lists.newArrayList("<there>"), loginResult.getAuthKey()).getStatus());
 
 		OutputList threads = threadsListPo.list(0, 10);
 
