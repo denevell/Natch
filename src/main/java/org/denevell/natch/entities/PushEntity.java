@@ -12,10 +12,15 @@ public class PushEntity {
 	
 	public static class AddInput {
 	  public String id;
+	  
+	  public PushEntity adapt() {
+	    PushEntity pushEntity = new PushEntity();
+	    pushEntity.clientId = id;
+      return pushEntity;
+	  }
 	}
 
-  public static class Output {
-    public ArrayList<PushEntity> ids = new ArrayList<PushEntity>();
-  }
+  @SuppressWarnings("serial")
+  public static class Output extends ArrayList<PushEntity> {}
 
 }

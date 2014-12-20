@@ -13,6 +13,14 @@ public interface UserGetLoggedInService {
 
   User get(Object authObject);
 
+  public static interface Username {
+    String getUsername();
+  }
+
+  public static interface Admin {
+    boolean getAdmin();
+  }
+
   public static class UserGetLoggedInModelImpl implements UserGetLoggedInService {
 
     private WebTarget mServiceTarget;
@@ -39,7 +47,7 @@ public interface UserGetLoggedInService {
   
   @XmlRootElement
   @XmlAccessorType(XmlAccessType.FIELD)
-  public static class User {
+  public static class User implements Username, Admin {
 
     public String username;
     public boolean admin;
@@ -52,6 +60,16 @@ public interface UserGetLoggedInService {
     public User(String username, boolean isAdmin) {
       this.username = username;
       this.admin = isAdmin;
+    }
+
+    @Override
+    public String getUsername() {
+      return username;
+    }
+
+    @Override
+    public boolean getAdmin() {
+      return admin;
     }
   }
 

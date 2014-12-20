@@ -39,13 +39,13 @@ public class PostsListFunctional {
 		
 		OutputList returnData = postsListPo.list("0", "10");
 		
-		assertEquals(4, returnData.posts.size());
-		assertTrue(returnData.posts.get(0).id!=0);
-		assertTrue(returnData.posts.get(1).id!=0);
-		assertTrue(returnData.posts.get(2).id!=0);
-		assertEquals("cont2", returnData.posts.get(0).content);
-		assertEquals("cont1", returnData.posts.get(1).content);
-		assertEquals("cont", returnData.posts.get(2).content);
+		assertEquals(4, returnData.size());
+		assertTrue(returnData.get(0).id!=0);
+		assertTrue(returnData.get(1).id!=0);
+		assertTrue(returnData.get(2).id!=0);
+		assertEquals("cont2", returnData.get(0).content);
+		assertEquals("cont1", returnData.get(1).content);
+		assertEquals("cont", returnData.get(2).content);
 	}
 
 	@Test
@@ -56,9 +56,9 @@ public class PostsListFunctional {
 		
 		OutputList returnData = postsListPo.list("0", "1");
 		
-		assertEquals(1, returnData.posts.size());
-		assertTrue(returnData.posts.get(0).id!=0);
-		assertEquals("cont2", returnData.posts.get(0).content);
+		assertEquals(1, returnData.size());
+		assertTrue(returnData.get(0).id!=0);
+		assertEquals("cont2", returnData.get(0).content);
 	}	
 	
 	@Test
@@ -67,7 +67,7 @@ public class PostsListFunctional {
 		
 		OutputList returnData = postsListPo.list("0", "10");
 
-		assertEquals("&lt;hi&gt;", returnData.posts.get(0).content);
+		assertEquals("&lt;hi&gt;", returnData.get(0).content);
 	}		
 
 }

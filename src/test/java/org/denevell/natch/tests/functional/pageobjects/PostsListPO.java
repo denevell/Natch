@@ -21,7 +21,11 @@ public class PostsListPO {
 
 	public OutputList list(String start, String limit) {
     return mService
-		.path("rest").path("posts").path(start).path(limit).request()
+		.path("rest").path("list").path("PostEntity")
+		  .queryParam("orderby", "modified")
+		  .queryParam("desc", "true")
+		  .queryParam("start", start)
+		  .queryParam("limit", limit).request()
 		.accept(MediaType.APPLICATION_JSON)
 		.get(OutputList.class);
 	}	

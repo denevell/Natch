@@ -9,16 +9,18 @@ import javax.validation.Valid;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.log4j.Logger;
 import org.denevell.natch.entities.ThreadEntity.AddInput.StringWrapper;
-import org.denevell.natch.serv.ThreadsList.ThreadsAndNumTotalThreads;
+import org.denevell.natch.gen.ServList.OutputWithCount;
 import org.denevell.natch.utils.ModelResponse.ModelExternaliser;
+import org.denevell.natch.utils.UserGetLoggedInService.Username;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-public class ThreadEntity implements ModelExternaliser {
+public class ThreadEntity implements ModelExternaliser, Username {
 
-	public String id;
+	public class OutputList extends OutputWithCount<ThreadEntity>{}
+
+  public String id;
 	public long numPosts;
 	public PostEntity latestPost;
 	public List<PostEntity> posts;
@@ -31,6 +33,11 @@ public class ThreadEntity implements ModelExternaliser {
 		this.rootPost = initialPost;
 		this.posts = posts;
 	}
+
+  @Override
+  public String getUsername() {
+    return rootPost.username;
+  }
 
   public static class AddInput {
     @NotBlank(message="Subject cannot be blank")
@@ -136,46 +143,22 @@ public class ThreadEntity implements ModelExternaliser {
     output.author = rootPost.username;
     output.posts = postsResources;
     output.numPosts = (int) numPosts;
+    output.modification = latestPost.modified;
+    output.creation = rootPost.created;
     output.id = id;
     output.tags = PostEntity.Utils.getTagsEscaped(rootPost.tags);
+    output.rootPostId = rootPost.id;
+    output.latestPostId = latestPost.id;
     return output;
   }
 
-  @XmlRootElement
-  public static class OutputList {
-    public long numOfThreads;
-    public List<Output> threads = new ArrayList<Output>();
-
-    public OutputList() {}
-
-		public OutputList(ThreadsAndNumTotalThreads threadsAndNumTotalThreads) {
-		  this.numOfThreads = threadsAndNumTotalThreads.getNumOfThreads();
-			ArrayList<Output> postsResources = new ArrayList<Output>();
-			for (ThreadEntity p: threadsAndNumTotalThreads.getThreads()) {
-        if (p.rootPost == null) {
+        /*if (p.rootPost == null) {
           if (p.id != null) {
             Logger.getLogger(getClass()).info("Found a thread with a null root post. Thread: " + p.id);
           } else {
             Logger.getLogger(getClass()).info("Found a thread with a null root post. Unknown thread id.");
           }
-          continue;
-				} else {
-					Output postResource = new Output();
-					postResource.author = (p.rootPost.username);
-					postResource.numPosts = ((int) p.numPosts);
-					postResource.subject = StringEscapeUtils.escapeHtml4(p.rootPost.subject);
-					postResource.rootPostId = (p.rootPost.id);
-					postResource.tags = PostEntity.Utils.getTagsEscaped(p.rootPost.tags);
-					postResource.modification = (p.latestPost.modified);
-					postResource.creation = (p.rootPost.created);
-					postResource.id = (p.id);
-					postResource.latestPostId = (p.latestPost.id);
-					postsResources.add(postResource);
-				}
-			}
-			this.threads = (postsResources);
-		}
-  }
+          */
 
   public static class Utils {
     public static void updateThreadToRemovePost(ThreadEntity te, PostEntity pe) {

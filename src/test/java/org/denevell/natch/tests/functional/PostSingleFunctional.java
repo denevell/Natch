@@ -39,7 +39,7 @@ public class PostSingleFunctional {
 	public void shouldListSinglePost() {
 		postAddPo.add("contxx", "thread", loginResult.getAuthKey());
 		OutputList posts = postsListPo.list("0", "10");
-		Output single = postSinglePo.single(posts.posts.get(0).id);
+		Output single = postSinglePo.single(posts.get(0).id);
 		assertEquals("Get content of post", "contxx", single.content);
 		assertEquals("Get subject of post", "sub", single.subject);
 		assertEquals("thread", single.threadId);

@@ -114,18 +114,11 @@ public class Jrappy2<ReturnOb> {
       EntityManagerFactory factory, 
       int start, int limit,
       String orderByDescAttribute,
-	    Class<T> clazz) {
-	  return list(factory, start, limit, orderByDescAttribute, null, clazz);
-	}
-
-	public static <T> List<T> list(
-      EntityManagerFactory factory, 
-      int start, int limit,
-      String orderByDescAttribute,
-	    Pair<String, String> memberOf, 
-	    Class<T> clazz) {
-    return Jrappy2.begin(JPAFactoryContextListener.sFactory, clazz)
-        .list(start, limit, orderByDescAttribute, memberOf, clazz)
+	    boolean desc, 
+	    Pair<String, String> memberOf,
+	    Class<T> class1) {
+    return Jrappy2.begin(JPAFactoryContextListener.sFactory, class1)
+        .list(start, limit, orderByDescAttribute, desc, memberOf, class1)
         .close()
         .returnFoundObjects();
 	}
@@ -172,6 +165,7 @@ public class Jrappy2<ReturnOb> {
 	    int start, 
 	    int limit,
 	    String orderbyDescAttribute,
+	    boolean desc,
 	    Pair<String, String> memberOf,
 	    Class<T> clazz) {
 
@@ -181,7 +175,11 @@ public class Jrappy2<ReturnOb> {
 		   from = from + "where " + " :member member of " + "p."+memberOf.getRight() + " ";
 		}
 		if(orderbyDescAttribute!=null) {
-		  from = from + "order by " + "p."+orderbyDescAttribute  + " desc";
+		  if(desc) {
+		    from = from + "order by " + "p."+orderbyDescAttribute  + " desc";
+		  } else {
+		    from = from + "order by " + "p."+orderbyDescAttribute  + " asc";
+		  }
 		}
 		TypedQuery<T> q = mEntityManager.createQuery(from, clazz);
 		if(memberOf!=null) {

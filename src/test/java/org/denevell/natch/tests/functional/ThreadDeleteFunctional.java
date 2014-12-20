@@ -46,30 +46,30 @@ public class ThreadDeleteFunctional {
 	@Test
 	public void shouldDeleteThread() {
 		assertEquals(200, threadAddPo.add("sub", "cont", "thread", authKey).getStatus());
-		assertEquals(1, threadsListPo.list(0, 10).threads.size());
-		assertEquals(1, threadsListPo.list(0, 10).numOfThreads);
-		assertEquals(1, postListPo.list("0", "10").posts.size());
+		assertEquals(1, threadsListPo.list(0, 10).results.size());
+		assertEquals(1, threadsListPo.list(0, 10).count);
+		assertEquals(1, postListPo.list("0", "10").size());
 
     assertEquals(200, threadDeletePo.delete("thread", authKey).getStatus());
 
-		assertEquals(0, threadsListPo.list(0, 10).threads.size());
-		assertEquals(0, threadsListPo.list(0, 10).numOfThreads);
-		assertEquals(0, postListPo.list("0", "10").posts.size());
+		assertEquals(0, threadsListPo.list(0, 10).results.size());
+		assertEquals(0, threadsListPo.list(0, 10).count);
+		assertEquals(0, postListPo.list("0", "10").size());
 	}
 
 	@Test
 	public void shouldDeleteThreadWhenOnePost() {
 		assertEquals(200, threadAddPo.add("sub", "cont", "thread", authKey).getStatus());
 		assertEquals(200, postAddPo.add("conttt", "thread", authKey).getStatus());
-		assertEquals(1, threadsListPo.list(0, 10).threads.size());
-		assertEquals(1, threadsListPo.list(0, 10).numOfThreads);
-		assertEquals(2, postListPo.list("0", "10").posts.size());
+		assertEquals(1, threadsListPo.list(0, 10).results.size());
+		assertEquals(1, threadsListPo.list(0, 10).count);
+		assertEquals(2, postListPo.list("0", "10").size());
 
     assertEquals(200, threadDeletePo.delete("thread", authKey).getStatus());
 
-		assertEquals(0, threadsListPo.list(0, 10).threads.size());
-		assertEquals(0, threadsListPo.list(0, 10).numOfThreads);
-		assertEquals(0, postListPo.list("0", "10").posts.size());
+		assertEquals(0, threadsListPo.list(0, 10).results.size());
+		assertEquals(0, threadsListPo.list(0, 10).count);
+		assertEquals(0, postListPo.list("0", "10").size());
 	}
 	
 	@Test
@@ -80,13 +80,13 @@ public class ThreadDeleteFunctional {
 		threadAddPo.add("sub", "cont1", "thread", authKey);
 		OutputList posts = postListPo.list("0", "10");
 		
-		Output output = posts.posts.get(0);
+		Output output = posts.get(0);
     Response response = threadDeletePo.delete(output.threadId, otherUserAuthKey);
 		OutputList postsAfter = postListPo.list("0", "10");
 
 		assertEquals(403, response.getStatus());
-		assertEquals(1, posts.posts.size());
-		assertEquals(1, postsAfter.posts.size());
+		assertEquals(1, posts.size());
+		assertEquals(1, postsAfter.size());
 	}
 
 	@Test
@@ -94,13 +94,13 @@ public class ThreadDeleteFunctional {
 		threadAddPo.add("sub", "cont1", "thread", authKey).getStatus();
 		OutputList posts = postListPo.list("0", "10");
 		
-		Output output = posts.posts.get(0);
+		Output output = posts.get(0);
     Response response = threadDeletePo.delete(output.threadId+"BAD", authKey);
 		OutputList postsAfter = postListPo.list("0", "10");
 
 		assertEquals(404, response.getStatus());
-		assertEquals(1, posts.posts.size());
-		assertEquals(1, postsAfter.posts.size());
+		assertEquals(1, posts.size());
+		assertEquals(1, postsAfter.size());
 	}
 
 	@Test
@@ -111,14 +111,14 @@ public class ThreadDeleteFunctional {
 		assertEquals(200, threadAddPo.add("sub", "cont1", "thread", otherUserAuthKey).getStatus());
 		assertEquals(200, postAddPo.add("cont1", "thread", authKey).getStatus());
 		OutputList posts = postListPo.list("0", "10");
-		assertEquals(2, posts.posts.size());
+		assertEquals(2, posts.size());
 		
-		Output output = posts.posts.get(0);
+		Output output = posts.get(0);
     Response response = threadDeletePo.delete(output.threadId, authKey);
 		OutputList postsAfter = postListPo.list("0", "10");
 
 		assertEquals(200, response.getStatus());
-		assertEquals(0, postsAfter.posts.size());
+		assertEquals(0, postsAfter.size());
 	}
 
 }

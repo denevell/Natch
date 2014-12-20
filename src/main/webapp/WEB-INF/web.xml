@@ -22,6 +22,7 @@
 	</filter>
 	<filter-mapping>
 	  <filter-name>Auth Filter</filter-name>
+	  <url-pattern>/rest/delete/*</url-pattern>
 	  <url-pattern>/rest/post/add</url-pattern>
 	  <url-pattern>/rest/post/addthread</url-pattern>
 	  <url-pattern>/rest/post/editthread/*</url-pattern>
@@ -51,7 +52,7 @@
         </init-param>		
 	    <init-param>
 	    	<param-name>jersey.config.server.provider.packages</param-name>
-			<param-value>org.denevell.natch.serv;org.denevell.natch.utils</param-value>
+			<param-value>org.denevell.natch.serv;org.denevell.natch.gen;org.denevell.natch.utils</param-value>
 	    </init-param>
         <load-on-startup>1</load-on-startup>
 	</servlet>

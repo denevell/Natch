@@ -35,7 +35,7 @@ public class ThreadAddFunctional {
 	public void shouldMakeThread() {
 	  Response addResponse = threadAddPo.add("sub", "cont", Lists.newArrayList("tagy"), loginResult.getAuthKey());
 		assertEquals("Excepting 200 response", 200, addResponse.getStatus());
-	  Output thread = threadsListPo.list(0,  10).threads.get(0);
+	  Output thread = threadsListPo.list(0,  10).results.get(0);
 		
 		assertEquals("sub", thread.subject);
 		assertEquals("tagy", thread.tags.get(0));

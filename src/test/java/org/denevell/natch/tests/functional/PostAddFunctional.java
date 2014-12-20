@@ -39,7 +39,7 @@ public class PostAddFunctional {
 	@Test
 	public void shouldMakePost() {
 		assertEquals(200, postAddPo.add("cont", "thread", authKey).getStatus());
-		Output postResource = postListPo.list("0", "1").posts.get(0);
+		Output postResource = postListPo.list("0", "1").get(0);
     assertEquals("cont", postResource.content);
 		assertEquals("thread", postResource.threadId);
 	}
@@ -48,7 +48,7 @@ public class PostAddFunctional {
 	public void shouldMakePostWithSameContent() {
 		assertEquals(200, postAddPo.add("cont", "thread", authKey).getStatus());
 		assertEquals(200, postAddPo.add("cont", "thread", authKey).getStatus());
-		List<Output> posts = postListPo.list("0", "2").posts;
+		List<Output> posts = postListPo.list("0", "2");
     assertEquals("cont", posts.get(0).content);
 		assertEquals("thread", posts.get(0).threadId);
     assertEquals("cont", posts.get(1).content);
@@ -74,7 +74,7 @@ public class PostAddFunctional {
 				"esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, " +
 				"sunt in culpa qui officia deserunt mollit anim id est laborum.";
 		assertEquals(200, postAddPo.add(largeContent, "thread", authKey).getStatus());
-		Output postResource = postListPo.list("0", "1").posts.get(0);
+		Output postResource = postListPo.list("0", "1").get(0);
     assertEquals(largeContent, postResource.content);
 	}	
 	

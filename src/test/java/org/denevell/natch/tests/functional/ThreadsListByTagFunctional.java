@@ -3,7 +3,8 @@ package org.denevell.natch.tests.functional;
 import static org.junit.Assert.assertEquals;
 import jersey.repackaged.com.google.common.collect.Lists;
 
-import org.denevell.natch.entities.ThreadEntity.OutputList;
+import org.denevell.natch.entities.ThreadEntity;
+import org.denevell.natch.gen.ServList.OutputWithCount;
 import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadAddPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadsListPO;
@@ -37,17 +38,17 @@ public class ThreadsListByTagFunctional {
 		assertEquals(200, threadAddPo.add("sub1", "cont1", "other", loginResult.getAuthKey()).getStatus());
 		assertEquals(200, postAddPo.add("cont2", "t", loginResult.getAuthKey()).getStatus());
 		
-		OutputList returnData= threadsListPo.byTag("onetag", 0, 10);
+		OutputWithCount<ThreadEntity.Output> returnData= threadsListPo.byTag("onetag", 0, 10);
 		
-		assertEquals(3, returnData.numOfThreads);
-		assertEquals(2, returnData.threads.size());
-		assertEquals("sub", returnData.threads.get(0).subject);
-		assertEquals("t", returnData.threads.get(0).id);
-		assertEquals("onetag", returnData.threads.get(0).tags.get(0));
+		assertEquals(3, returnData.count);
+		assertEquals(2, returnData.results.size());
+		assertEquals("sub", returnData.results.get(0).subject);
+		assertEquals("t", returnData.results.get(0).id);
+		assertEquals("onetag", returnData.results.get(0).tags.get(0));
 		
-		assertEquals("x", returnData.threads.get(1).subject);
-		assertEquals("x", returnData.threads.get(1).id);
-		assertEquals("onetag", returnData.threads.get(1).tags.get(0));
+		assertEquals("x", returnData.results.get(1).subject);
+		assertEquals("x", returnData.results.get(1).id);
+		assertEquals("onetag", returnData.results.get(1).tags.get(0));
 	}	
 
   @Test
@@ -58,14 +59,14 @@ public class ThreadsListByTagFunctional {
 		assertEquals(200, postAddPo.add("cont2", "t", loginResult.getAuthKey()).getStatus());
 		
 		// Act
-		OutputList returnData= threadsListPo.byTag("onetag", 1, 1);
+		OutputWithCount<ThreadEntity.Output> returnData= threadsListPo.byTag("onetag", 1, 1);
 		
 		// Assert
-		assertEquals(3, returnData.numOfThreads);
-		assertEquals(1, returnData.threads.size());
-		assertEquals("x", returnData.threads.get(0).subject);
-		assertEquals("x", returnData.threads.get(0).id);
-		assertEquals("onetag", returnData.threads.get(0).tags.get(0));
+		assertEquals(3, returnData.count);
+		assertEquals(1, returnData.results.size());
+		assertEquals("x", returnData.results.get(0).subject);
+		assertEquals("x", returnData.results.get(0).id);
+		assertEquals("onetag", returnData.results.get(0).tags.get(0));
 	}
 	/*
 	

@@ -27,9 +27,7 @@ public class PushAdd {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addPost(AddInput pushId) {
-		PushEntity pushEntity = new PushEntity();
-		pushEntity.clientId = pushId.id;
-		return mAddModel.add(pushEntity);
+		return mAddModel.add(pushId.adapt());
 	}
 
   public static interface PushAddService {

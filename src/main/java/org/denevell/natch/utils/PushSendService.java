@@ -25,7 +25,7 @@ public class PushSendService {
           Logger.getLogger(getClass()).error("GCM KEY is null or blank");
         }
         Sender sender = new Sender(key);
-        List<PushEntity> list = Jrappy2.list(JPAFactoryContextListener.sFactory, -1, -1, null, PushEntity.class);
+        List<PushEntity> list = Jrappy2.list(JPAFactoryContextListener.sFactory, -1, -1, null, true, null, PushEntity.class);
         if(list!=null) {
           for (PushEntity pushEntity : list) {
             try {

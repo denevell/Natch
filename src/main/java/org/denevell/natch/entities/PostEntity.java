@@ -9,9 +9,10 @@ import java.util.List;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.denevell.natch.utils.ModelResponse.ModelExternaliser;
+import org.denevell.natch.utils.UserGetLoggedInService.Username;
 import org.hibernate.validator.constraints.NotBlank;
 
-public class PostEntity implements ModelExternaliser {
+public class PostEntity implements ModelExternaliser, Username {
 	
   public static final int MAX_TAG_LENGTH = 20;
   public static final int MAX_SUBJECT_LENGTH = 300;
@@ -39,6 +40,11 @@ public class PostEntity implements ModelExternaliser {
 		this.username = entity.username;
 		this.adminEdited = entity.adminEdited;
 	}
+
+  @Override
+  public String getUsername() {
+    return username;
+  }
 
   public static class AddInput {
     @NotBlank(message = "Post must have content")
@@ -97,20 +103,6 @@ public class PostEntity implements ModelExternaliser {
     return output;
   }
 
-  public static class OutputList {
-    public List<Output> posts = new ArrayList<Output>();
-    public OutputList() {}
-
-    public OutputList(List<PostEntity> entities) {
-      List<Output> outputs = new ArrayList<Output>();
-      for (PostEntity p : entities) {
-        Output entity = p.toOutput();
-        outputs.add(entity);
-      }
-      posts = outputs;
-    }
-  }
-
   public static class Utils {
     public static String createNewThreadId(String threadId, String subject) {
       if ((threadId == null || threadId.trim().length() == 0)) {
@@ -146,5 +138,10 @@ public class PostEntity implements ModelExternaliser {
       return ts;
     }
   }
+
+  @SuppressWarnings("serial")
+  public static class OutputList extends ArrayList<PostEntity.Output> {
+  }
+
 
 }

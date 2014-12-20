@@ -40,7 +40,7 @@ public class ThreadEditFunctional {
 	@Test
 	public void shouldEditThread() {
 	  assertEquals(200, threadAddPo.add("thread", "threadc", "thread", loginResult.getAuthKey()).getStatus());
-		Output post = postListPo.list("0", "10").posts.get(0);
+		Output post = postListPo.list("0", "10").get(0);
 		Response ret = threadEditPo.edit("sup1", "sup2", Lists.newArrayList("sup3"), post.id, loginResult.getAuthKey());
 
 		assertEquals(200, ret.getStatus());
@@ -54,7 +54,7 @@ public class ThreadEditFunctional {
 	@Test
 	public void shouldSee401OnEditThreadWithWrongAuth() {
 	  assertEquals(200, threadAddPo.add("thread", "threadc", "thread", loginResult.getAuthKey()).getStatus());
-		Output post = postListPo.list("0", "10").posts.get(0);
+		Output post = postListPo.list("0", "10").get(0);
 		Response ret = threadEditPo.edit("sup1", "sup2", post.id, loginResult.getAuthKey()+"BAD");
 
 		assertEquals(401, ret.getStatus());
@@ -64,12 +64,12 @@ public class ThreadEditFunctional {
 	public void shouldSeeErrorOnBlankSubject() {
 	  assertEquals(200, 
 	      threadAddPo.add("thread", "threadc", "thread", loginResult.getAuthKey()).getStatus());
-		Output post = postListPo.list("0", "10").posts.get(0);
+		Output post = postListPo.list("0", "10").get(0);
 		Response ret = threadEditPo.edit(" ", "dsfd", post.id, loginResult.getAuthKey());
 		assertEquals(400, ret.getStatus());
 		assertEquals("Subject cannot be blank", TestUtils.getValidationMessage(ret, 0));
 
-		post = postListPo.list("0", "10").posts.get(0);
+		post = postListPo.list("0", "10").get(0);
 		assertEquals("threadc", post.content);
 		assertEquals("thread", post.subject);
 	}
@@ -77,12 +77,12 @@ public class ThreadEditFunctional {
 	@Test
 	public void shouldSeeErrorOnBlankContent() {
 		threadAddPo.add("thread", "threadc", "thread", loginResult.getAuthKey());
-		Output post = postListPo.list("0", "10").posts.get(0);
+		Output post = postListPo.list("0", "10").get(0);
 		Response ret = threadEditPo.edit("xdfsdf", " ", post.id, loginResult.getAuthKey());
 		assertEquals(400, ret.getStatus());
 		assertEquals("Content cannot be blank", TestUtils.getValidationMessage(ret, 0));
 
-		post = postListPo.list("0", "10").posts.get(0);
+		post = postListPo.list("0", "10").get(0);
 		assertEquals("threadc", post.content);
 		assertEquals("thread", post.subject);
 	}
@@ -90,12 +90,12 @@ public class ThreadEditFunctional {
 	@Test
 	public void shouldSeeErrorOnLargeSubject() {
 		threadAddPo.add("thread", "threadc", "thread", loginResult.getAuthKey());
-		Output post = postListPo.list("0", "10").posts.get(0);
+		Output post = postListPo.list("0", "10").get(0);
 		Response ret = threadEditPo.edit("sdfsdfassdfklasjdflksdfkjasfl;kjasdl;kfjsd;lfjasdl;fjsal;fjas;ldfjasld;fjasl;fjasl;fjsal;dfjsdlfkjasdjf;lkasjf;lajsdfl;ajsdf;ljasdf;lkjsdlfjasd;lkfjasl;dfkjasdlfjasdlfkjasdlfjsadlkfjasldfkjsadlfkjlkdfj;alskdfjasl;kdfjasl;dfj;alsdfjal;skdfj;alsdkjf;slajdflk;asjflkasdjflasjflkajdflkasdjflksdjflkasdjflkasjdflkasdjf;lasdjf;lasjdf;lkasdjfl;sjadfl;asjdfl;asjdf;lasjdfxdfsdf", "cont", post.id, loginResult.getAuthKey());
 		assertEquals(400, ret.getStatus());
 		assertEquals("Subject cannot be more than 300 characters", TestUtils.getValidationMessage(ret, 0));
 
-		post = postListPo.list("0", "10").posts.get(0);
+		post = postListPo.list("0", "10").get(0);
 		assertEquals("threadc", post.content);
 		assertEquals("thread", post.subject);
 	}
@@ -103,14 +103,14 @@ public class ThreadEditFunctional {
 	@Test
 	public void shouldSeeErrorOnLargeTag() {
 		threadAddPo.add("thread", "threadc", "thread", loginResult.getAuthKey());
-		Output post = postListPo.list("0", "10").posts.get(0);
+		Output post = postListPo.list("0", "10").get(0);
 		Response ret = threadEditPo.edit("fxdfsdf", "cont", 
 		    Lists.newArrayList("dslkjfaslkfjasd;ljfas;lkfjas;ljfas;lfjasld;fjsdlfkj"),
 		    post.id, loginResult.getAuthKey());
 		assertEquals(400, ret.getStatus());
 		assertEquals("Tag cannot be more than 20 characters", TestUtils.getValidationMessage(ret, 0));
 
-		post = postListPo.list("0", "10").posts.get(0);
+		post = postListPo.list("0", "10").get(0);
 		assertEquals("threadc", post.content);
 		assertEquals("thread", post.subject);
 	}

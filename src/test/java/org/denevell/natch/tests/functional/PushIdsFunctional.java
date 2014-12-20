@@ -27,9 +27,9 @@ public class PushIdsFunctional {
 		addPushIdsPo.add("pushId2");
 		
 		Output ids = addPushIdsPo.list(); 
-		assertEquals(2, ids.ids.size());
-		assertEquals("pushId1", ids.ids.get(0).clientId);
-		assertEquals("pushId2", ids.ids.get(1).clientId);
+		assertEquals(2, ids.size());
+		assertEquals("pushId1", ids.get(0).clientId);
+		assertEquals("pushId2", ids.get(1).clientId);
 	}
 
 	@Test
@@ -38,8 +38,8 @@ public class PushIdsFunctional {
 		addPushIdsPo.add("pushId1");
 		
 		Output ids = addPushIdsPo.list(); 
-		assertEquals(1, ids.ids.size());
-		assertEquals("pushId1", ids.ids.get(0).clientId);
+		assertEquals(1, ids.size());
+		assertEquals("pushId1", ids.get(0).clientId);
 	}
 
 }

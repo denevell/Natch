@@ -19,7 +19,6 @@ import org.denevell.natch.entities.PostEntity;
 import org.denevell.natch.entities.ThreadEntity;
 import org.denevell.natch.entities.ThreadEntity.AddFromPostInput;
 import org.denevell.natch.serv.PostDelete.PostDeleteService;
-import org.denevell.natch.serv.PostSingle.PostSingleService;
 import org.denevell.natch.serv.ThreadAdd.ThreadAddService;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Jrappy2;
@@ -46,7 +45,6 @@ public class ThreadFromPost {
   }
 
   public static class ThreadFromPostServiceImpl implements ThreadFromPostService {
-    @Inject PostSingleService mPostSingle;
     @Inject ThreadAddService mThreadAdd;
     @Inject PostDeleteService mPostDelete;
 

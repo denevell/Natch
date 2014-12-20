@@ -2,6 +2,7 @@ package org.denevell.natch.tests.functional;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.core.Response;
@@ -46,11 +47,11 @@ public class PostDeleteFunctional {
 	public void shouldDeletePost() {
 		assertEquals(200, threadAddPo.add("sub", "cont", "thread", authKey).getStatus());
 		assertEquals(200, postAddPo.add("cont1", "thread", authKey).getStatus());
-		List<Output> posts = postListPo.list("0", "10").posts;
+		List<Output> posts = postListPo.list("0", "10");
 		assertEquals(2, posts.size());
 		Output post = posts.get(0);
     assertEquals(200, postDeletePo.delete(post.id, post.threadId, authKey).getStatus());
-		List<Output> postsAfter = postListPo.list("0", "10").posts;
+		List<Output> postsAfter = postListPo.list("0", "10");
 		assertEquals(1, postsAfter.size());
 		assertEquals("cont", postsAfter.get(0).content);
 	}
@@ -58,11 +59,11 @@ public class PostDeleteFunctional {
 	@Test
 	public void shouldSeeErrorOnDeletingThreadRootPost() {
 		assertEquals(200, threadAddPo.add("sub", "cont", "thread", authKey).getStatus());
-		List<Output> posts = postListPo.list("0", "10").posts;
+		List<Output> posts = postListPo.list("0", "10");
 		assertEquals(1, posts.size());
 		Output post = posts.get(0);
     assertEquals(500, postDeletePo.delete(post.id, post.threadId, authKey).getStatus());
-		List<Output> postsAfter = postListPo.list("0", "10").posts;
+		List<Output> postsAfter = postListPo.list("0", "10");
 		assertEquals(1, postsAfter.size());
 		assertEquals("cont", postsAfter.get(0).content);
 	}
@@ -75,13 +76,13 @@ public class PostDeleteFunctional {
 		threadAddPo.add("sub", "cont1", "thread", authKey);
 		OutputList posts = postListPo.list("0", "10");
 		
-		Output output = posts.posts.get(0);
+		Output output = posts.get(0);
     Response response = postDeletePo.delete(output.id, output.threadId, otherUserAuthKey);
 		OutputList postsAfter = postListPo.list("0", "10");
 
 		assertEquals(403, response.getStatus());
-		assertEquals(1, posts.posts.size());
-		assertEquals(1, postsAfter.posts.size());
+		assertEquals(1, posts.size());
+		assertEquals(1, postsAfter.size());
 	}
 
 	@Test
@@ -89,13 +90,13 @@ public class PostDeleteFunctional {
 		threadAddPo.add("sub", "cont1", "thread", authKey).getStatus();
 		OutputList posts = postListPo.list("0", "10");
 		
-		Output output = posts.posts.get(0);
+		Output output = posts.get(0);
     Response response = postDeletePo.delete(output.id+999, output.threadId, authKey);
 		OutputList postsAfter = postListPo.list("0", "10");
 
 		assertEquals(404, response.getStatus());
-		assertEquals(1, posts.posts.size());
-		assertEquals(1, postsAfter.posts.size());
+		assertEquals(1, posts.size());
+		assertEquals(1, postsAfter.size());
 	}
 
 	@Test
@@ -105,15 +106,15 @@ public class PostDeleteFunctional {
 
 		assertEquals(200, threadAddPo.add("sub", "cont1", "thread", otherUserAuthKey).getStatus());
 		assertEquals(200, postAddPo.add("cont1", "thread", authKey).getStatus());
-		OutputList posts = postListPo.list("0", "10");
+		ArrayList<Output> posts = postListPo.list("0", "10");
 		
-		Output output = posts.posts.get(0);
+		Output output = posts.get(0);
     Response response = postDeletePo.delete(output.id, output.threadId, authKey);
-		OutputList postsAfter = postListPo.list("0", "10");
+		ArrayList<Output> postsAfter = postListPo.list("0", "10");
 
 		assertEquals(200, response.getStatus());
-		assertEquals(2, posts.posts.size());
-		assertEquals(1, postsAfter.posts.size());
+		assertEquals(2, posts.size());
+		assertEquals(1, postsAfter.size());
 	}
 
 }

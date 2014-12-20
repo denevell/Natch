@@ -44,7 +44,7 @@ public class PostEdit {
           (postEntity) -> { // Do we have access rights
             return admin || postEntity.username.equals(username);
           },
-          (postEntity) -> { // Edit thread
+          (postEntity) -> { // Edit post
             postEntity.content = editedPostEntity.content;
             if (editedPostEntity.subject != null) postEntity.subject = editedPostEntity.subject;
             if (editedPostEntity.tags != null) postEntity.tags = editedPostEntity.tags;

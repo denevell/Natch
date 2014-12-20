@@ -8,6 +8,8 @@ import java.util.HashMap;
 import javax.ws.rs.core.Response;
 
 import org.denevell.natch.entities.PostEntity.OutputList;
+import org.denevell.natch.entities.ThreadEntity;
+import org.denevell.natch.gen.ServList.OutputWithCount;
 import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
 import org.denevell.natch.tests.functional.pageobjects.PostsListPO;
 import org.denevell.natch.tests.functional.pageobjects.ThreadAddFromPostPO;
@@ -52,25 +54,25 @@ public class ThreadAddFromMovedPostFunctional {
 		LoginResourceReturnData loginResult = loginPo.login("other", "other");
 
 		assertEquals(200, threadAdd.add("New thread", "first post", loginResult.getAuthKey()).getStatus());
-		org.denevell.natch.entities.ThreadEntity.OutputList threads = threadsList.list(0, 10);
-		assertEquals(200, postAddPo.add("Second post", threads.threads.get(0).id, loginResult.getAuthKey()).getStatus());
+		OutputWithCount<ThreadEntity.Output> threads = threadsList.list(0, 10);
+		assertEquals(200, postAddPo.add("Second post", threads.results.get(0).id, loginResult.getAuthKey()).getStatus());
 		
 		OutputList posts = postsListPo.list("0", "10");
-		assertTrue("Should have two posts, thread starter and first post", posts.posts.size()==2);
+		assertTrue("Should have two posts, thread starter and first post", posts.size()==2);
 		
 		Response returnData = threadAddFromPostPo.addThreadFromPost(
     		"New subject",
-    		posts.posts.get(0).id,
+    		posts.get(0).id,
     		adminLoginResult.getAuthKey()); 
 
 		assertEquals(200, returnData.getStatus());
     HashMap<String, String> hm = (HashMap<String, String>) returnData.readEntity(HashMap.class);
 		assertTrue("Returns the new thread id", hm.get("threadId")!=null);
 		posts = postsListPo.list("0", "10");
-		assertEquals("New thread new new subject", posts.posts.get(0).subject, "New subject");
-		assertEquals("New thread has old user id", posts.posts.get(0).username, "other");
-		assertTrue("New thread is marked edited by admin", posts.posts.get(0).adminEdited);
-		assertTrue("Still just have two posts, since one's been moved", posts.posts.size()==2);
+		assertEquals("New thread new new subject", posts.get(0).subject, "New subject");
+		assertEquals("New thread has old user id", posts.get(0).username, "other");
+		assertTrue("New thread is marked edited by admin", posts.get(0).adminEdited);
+		assertTrue("Still just have two posts, since one's been moved", posts.size()==2);
 	}
 
 	@Test
@@ -79,20 +81,20 @@ public class ThreadAddFromMovedPostFunctional {
 		LoginResourceReturnData loginResult = loginPo.login("other", "other");
 
 		threadAdd.add("New thread", "first post", loginResult.getAuthKey());
-		org.denevell.natch.entities.ThreadEntity.OutputList threads = threadsList.list(0, 10);
-		postAddPo.add("Second post", threads.threads.get(0).id, loginResult.getAuthKey());
+		OutputWithCount<ThreadEntity.Output> threads = threadsList.list(0, 10);
+		postAddPo.add("Second post", threads.results.get(0).id, loginResult.getAuthKey());
 		
 		OutputList posts = postsListPo.list("0", "10");
-		assertTrue("Should have two posts, thread starter and first post", posts.posts.size()==2);
+		assertTrue("Should have two posts, thread starter and first post", posts.size()==2);
 		
 		Response returnData = threadAddFromPostPo.addThreadFromPost(
     		"New subject",
-    		posts.posts.get(0).id,
+    		posts.get(0).id,
     		loginResult.getAuthKey()); 
 		assertEquals(403, returnData.getStatus());
 
 		threads = threadsList.list(0, 10);
-		assertTrue("Should have one thread now", threads.numOfThreads==1);
+		assertTrue("Should have one thread now", threads.count==1);
 	}
 	
 }
