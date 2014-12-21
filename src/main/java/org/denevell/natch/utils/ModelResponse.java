@@ -7,6 +7,10 @@ public class ModelResponse<ReturnType> {
   public static interface ModelExternaliser {
     public Object toOutput();
   }
+
+  public static interface PushResourceExternaliser<T> {
+    public Object toPushResource(T ob);
+  }
   
   public int code;
   public ReturnType object;

@@ -9,10 +9,14 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 
 * Add test for adding a post with a non-existant thread
 * Is thread single too inefficient?
+* Getting all the posts down in the list threads call
 * Are we getting proper 401 for posts due to web.xml mapping?
 * Date of threads coming down
 * Allow primary key in delete to be a Long etc
 * Disallow delete on entities in some cases
+* Check non-null ids in production table
+* See if gcm is still working in dev
+* Return bean validation errors
 
 ## Later
 

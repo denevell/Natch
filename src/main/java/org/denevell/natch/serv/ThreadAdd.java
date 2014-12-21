@@ -34,7 +34,7 @@ public class ThreadAdd {
 	  default Response threadAdd(ThreadEntity threadEntity) {
 	    Response persist = Jrappy2.persist(JPAFactoryContextListener.sFactory, threadEntity);
 	    if(persist.getStatus()==200) {
-	      PushSendService.sendPushNotifications(threadEntity);
+	      PushSendService.sendPushNotifications("thread", threadEntity);
 	    }
       return persist;
 	  }

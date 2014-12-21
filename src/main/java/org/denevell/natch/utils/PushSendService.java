@@ -2,12 +2,9 @@ package org.denevell.natch.utils;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.denevell.natch.entities.PostEntity;
 import org.denevell.natch.entities.PushEntity;
-import org.denevell.natch.entities.ThreadEntity;
 
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.Result;
@@ -15,7 +12,7 @@ import com.google.android.gcm.server.Sender;
 
 public class PushSendService {
 
-  public static void sendPushNotifications(final ThreadEntity thread) {
+  public static void sendPushNotifications(String name, final Object thread) {
     new Thread(new Runnable() {
       @Override
       public void run() {
@@ -30,8 +27,8 @@ public class PushSendService {
           for (PushEntity pushEntity : list) {
             try {
               String registrationId = pushEntity.clientId;
-              String s = new ObjectMapper().writeValueAsString(new CutDownThreadResource(thread));
-              Message message = new Message.Builder().addData("thread", s) .build();
+              String s = new ObjectMapper().writeValueAsString(thread);
+              Message message = new Message.Builder().addData(name, s) .build();
               Result result = sender.send(message, registrationId, 5);
               Logger.getLogger(getClass()).info("Push send result: " + result);
             } catch (Exception e) {
@@ -46,32 +43,6 @@ public class PushSendService {
         }
       }
     }).start();
-  }
-
-  public static class CutDownThreadResource {
-
-    public List<String> tags;
-    public String id;
-    public String subject;
-    public String author;
-    public long numPosts;
-    public long creation;
-    public long modification;
-    public long rootPostId;
-
-    public CutDownThreadResource() {}
-    
-    public CutDownThreadResource(ThreadEntity tr) {
-      subject = StringEscapeUtils.escapeHtml4(tr.rootPost.subject);
-      author = tr.rootPost.username;
-      numPosts = tr.numPosts;
-      tags = PostEntity.Utils.getTagsEscaped(tr.rootPost.tags);
-      rootPostId = tr.rootPost.id;
-      modification = tr.rootPost.modified;
-      creation = tr.rootPost.created;
-      id = tr.id;
-    }
-
   }
 
 }

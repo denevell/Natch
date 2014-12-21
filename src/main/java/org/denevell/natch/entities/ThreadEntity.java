@@ -12,11 +12,12 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.denevell.natch.entities.ThreadEntity.AddInput.StringWrapper;
 import org.denevell.natch.gen.ServList.OutputWithCount;
 import org.denevell.natch.utils.ModelResponse.ModelExternaliser;
+import org.denevell.natch.utils.ModelResponse.PushResourceExternaliser;
 import org.denevell.natch.utils.UserGetLoggedInService.Username;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-public class ThreadEntity implements ModelExternaliser, Username {
+public class ThreadEntity implements ModelExternaliser, Username, PushResourceExternaliser<ThreadEntity> {
 
 	public class OutputList extends OutputWithCount<ThreadEntity>{}
 
@@ -139,9 +140,9 @@ public class ThreadEntity implements ModelExternaliser, Username {
     for (PostEntity p : this.posts) {
         postsResources.add(p.toOutput());
     }
+    output.posts = postsResources;
     output.subject = StringEscapeUtils.escapeHtml4(rootPost.subject);
     output.author = rootPost.username;
-    output.posts = postsResources;
     output.numPosts = (int) numPosts;
     output.modification = latestPost.modified;
     output.creation = rootPost.created;
@@ -171,6 +172,37 @@ public class ThreadEntity implements ModelExternaliser, Username {
       }
       te.numPosts = (te.numPosts - 1);
     }
+  }
+
+  @Override
+  public Object toPushResource(ThreadEntity t) {
+    return new ThreadResourceForPush(t);
+  }
+
+  public static class ThreadResourceForPush {
+
+    public List<String> tags;
+    public String id;
+    public String subject;
+    public String author;
+    public long numPosts;
+    public long creation;
+    public long modification;
+    public long rootPostId;
+
+    public ThreadResourceForPush() {}
+    
+    public ThreadResourceForPush(ThreadEntity tr) {
+      subject = StringEscapeUtils.escapeHtml4(tr.rootPost.subject);
+      author = tr.rootPost.username;
+      numPosts = tr.numPosts;
+      tags = PostEntity.Utils.getTagsEscaped(tr.rootPost.tags);
+      rootPostId = tr.rootPost.id;
+      modification = tr.rootPost.modified;
+      creation = tr.rootPost.created;
+      id = tr.id;
+    }
+
   }
 	
 }

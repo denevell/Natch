@@ -17,11 +17,13 @@ public class PushIdsPO {
 
 	public void add(String id) {
 		AddInput entity = new AddInput();
-		entity.id = (id);
-        	mService
-        	.path("rest").path("push_add").request()
-        	.put(Entity.json(entity));
-		return;
+		entity.id = id;
+    mService
+		.path("rest").path("add")
+		  .path("PushEntity%24AddInput")
+		  .request()
+		  .accept(MediaType.APPLICATION_JSON)
+		  .put(Entity.json(entity));
 	}	
 
 	public Output list() {

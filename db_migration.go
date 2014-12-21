@@ -229,3 +229,10 @@ func (m migration) Migration_11() {
 		panic(err)
 	}
 }
+
+func (m migration) Migration_12() {
+	_, err := m.Tx.Exec("alter table pushids alter column client_id set not null")
+	if err != nil {
+		panic(err)
+	}
+}

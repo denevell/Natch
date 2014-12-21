@@ -33,9 +33,6 @@ public class ServDelete {
 	    @QueryParam("authObject") String authField
 	    ) throws Exception {
     
-    // TODO: Allow the primary key to be a Long etc
-    // TODO: Disallow delete in some circumstances
-
     // Get username, and give a 401 if null, which it shouldn't be
     Username user = (Username) mRequest.getAttribute("user");
     Admin admin = (Admin) user;
