@@ -21,6 +21,8 @@ public interface UserGetLoggedInService {
     boolean getAdmin();
   }
 
+  public static interface SystemUser extends Admin, Username {}
+
   public static class UserGetLoggedInModelImpl implements UserGetLoggedInService {
 
     private WebTarget mServiceTarget;
@@ -47,7 +49,7 @@ public interface UserGetLoggedInService {
   
   @XmlRootElement
   @XmlAccessorType(XmlAccessType.FIELD)
-  public static class User implements Username, Admin {
+  public static class User implements SystemUser {
 
     public String username;
     public boolean admin;

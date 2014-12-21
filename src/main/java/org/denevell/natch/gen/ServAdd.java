@@ -1,5 +1,7 @@
 package org.denevell.natch.gen;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,10 +21,14 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.denevell.natch.utils.Adapter;
+import org.denevell.natch.utils.Adapter.AdapterWithSystemUser;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Jrappy2;
+import org.denevell.natch.utils.ModelResponse;
 import org.denevell.natch.utils.ModelResponse.PushResourceExternaliser;
 import org.denevell.natch.utils.PushSendService;
+import org.denevell.natch.utils.UserGetLoggedInService.SystemUser;
+import org.glassfish.jersey.server.validation.ValidationError;
 
 @Path("add/{inputClass}")
 @SuppressWarnings({"rawtypes", "unchecked"})
@@ -47,12 +53,34 @@ public class ServAdd{
     
     // Add bean validation to the input object
     Set<ConstraintViolation<Object>> validations = Validation.buildDefaultValidatorFactory().getValidator().validate(inputObject);
+    List<ValidationError> validationErrors = new ArrayList<>();
     for (ConstraintViolation<Object> constraintViolation : validations) {
-      int i = 0;
+      ValidationError ve = new ValidationError();
+      ve.setMessage(constraintViolation.getMessage());
+      ve.setPath("hmm");
+      ve.setInvalidValue(constraintViolation.getInvalidValue().toString());
+      validationErrors.add(ve);
+    }
+    if(validations!=null && validations.size()>0) {
+      return new ModelResponse<List<ValidationError>>(400, validationErrors).httpReturn();
     }
 	  
-	  // Persist it
-    Response persist = Jrappy2.persist(JPAFactoryContextListener.sFactory, ((Adapter)inputObject).adapt());
+    // Persist it, using User if needed
+	  Object persistObject = null;
+    if(inputObject instanceof AdapterWithSystemUser) {
+      Object userObject = mRequest.getAttribute("user");
+      if(userObject==null || !(userObject instanceof SystemUser)) {
+        return new ModelResponse<Void>(401, null).httpReturn();
+      }
+      SystemUser user = (SystemUser) userObject;
+      persistObject = ((AdapterWithSystemUser)inputObject).adapt(user);
+    } else if(inputObject instanceof Adapter) {
+      persistObject = ((Adapter)inputObject).adapt();
+    } else {
+      Logger.getLogger(getClass()).info("Input class doesn't implement either Adapter or AdapterWithSystemUser");
+      return new ModelResponse<Void>(500, null).httpReturn();
+    }
+    Response persist = Jrappy2.persist(JPAFactoryContextListener.sFactory, persistObject);
 
     // Send the push if needed
     if (pushSend!=null && pushSend.length()>0 && persist.getStatus() == 200) {

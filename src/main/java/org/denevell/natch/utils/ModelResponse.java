@@ -30,7 +30,7 @@ public class ModelResponse<ReturnType> {
         return Response.ok().entity(this.object).build();
       }
     default:
-		  return Response.status(this.code).build();
+		  return Response.status(this.code).entity(this.object).build();
     }
   }
 

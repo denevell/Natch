@@ -62,10 +62,13 @@ public class ThreadAddPO {
 		  input.tags = StringWrapper.fromStrings(tags);
 		}
     return mService
-		.path("rest").path("thread_add").request()
-		.accept(MediaType.APPLICATION_JSON)
-		.header("AuthKey", authKey)
-		.put(Entity.entity(input, MediaType.APPLICATION_JSON));
+		.path("rest").path("add")
+		  .path("ThreadEntity%24AddInput")
+		  .queryParam("push", "thread")
+		  .request()
+		  .accept(MediaType.APPLICATION_JSON)
+		  .header("AuthKey", authKey)
+		  .put(Entity.json(input));
 	}	
 
 }

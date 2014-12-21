@@ -13,6 +13,7 @@ import org.denevell.natch.entities.ThreadEntity.AddInput.StringWrapper;
 import org.denevell.natch.gen.ServList.OutputWithCount;
 import org.denevell.natch.utils.ModelResponse.ModelExternaliser;
 import org.denevell.natch.utils.ModelResponse.PushResourceExternaliser;
+import org.denevell.natch.utils.UserGetLoggedInService.SystemUser;
 import org.denevell.natch.utils.UserGetLoggedInService.Username;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -40,7 +41,7 @@ public class ThreadEntity implements ModelExternaliser, Username, PushResourceEx
     return rootPost.username;
   }
 
-  public static class AddInput {
+  public static class AddInput implements org.denevell.natch.utils.Adapter.AdapterWithSystemUser<ThreadEntity> {
     @NotBlank(message="Subject cannot be blank")
     @Length(max=PostEntity.MAX_SUBJECT_LENGTH, message="Subject cannot be more than 300 characters")
     public String subject;
@@ -86,8 +87,9 @@ public class ThreadEntity implements ModelExternaliser, Username, PushResourceEx
       return entity;
     }
 
-    public ThreadEntity adapt(String username) {
-      PostEntity entity = adapt(false, username);
+    @Override
+    public ThreadEntity adapt(SystemUser user) {
+      PostEntity entity = adapt(false, user.getUsername());
       entity.threadId = PostEntity.Utils.createNewThreadId(entity.threadId, entity.subject);
       ThreadEntity threadEntity = new ThreadEntity(entity, Arrays.asList(entity));
       threadEntity.id = (entity.threadId);

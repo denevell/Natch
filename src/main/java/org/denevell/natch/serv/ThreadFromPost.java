@@ -19,7 +19,6 @@ import org.denevell.natch.entities.PostEntity;
 import org.denevell.natch.entities.ThreadEntity;
 import org.denevell.natch.entities.ThreadEntity.AddFromPostInput;
 import org.denevell.natch.serv.PostDelete.PostDeleteService;
-import org.denevell.natch.serv.ThreadAdd.ThreadAddService;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Jrappy2;
 import org.denevell.natch.utils.ModelResponse;
@@ -45,7 +44,6 @@ public class ThreadFromPost {
   }
 
   public static class ThreadFromPostServiceImpl implements ThreadFromPostService {
-    @Inject ThreadAddService mThreadAdd;
     @Inject PostDeleteService mPostDelete;
 
     public Response threadFromPost(long postId, String subject, boolean admin) {
@@ -65,7 +63,7 @@ public class ThreadFromPost {
       threadEntity.id = newPost.threadId;
       threadEntity.numPosts = 1;
 
-      Response addResult = mThreadAdd.threadAdd(threadEntity);
+      Response addResult = Jrappy2.persist(JPAFactoryContextListener.sFactory, threadEntity);
       if(addResult.getStatus()!=200) {
         return new ModelResponse<Void>(addResult.getStatus(), null).httpReturn();
       }

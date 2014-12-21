@@ -16,7 +16,6 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 * Disallow delete on entities in some cases
 * Check non-null ids in production table
 * See if gcm is still working in dev
-* Return bean validation errors
 
 ## Later
 
