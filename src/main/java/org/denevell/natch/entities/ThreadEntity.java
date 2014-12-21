@@ -9,18 +9,19 @@ import javax.validation.Valid;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.denevell.natch.entities.ThreadEntity.AddInput.StringWrapper;
+import org.denevell.natch.entities.ThreadEntity.Utils.StringWrapper;
 import org.denevell.natch.gen.ServList.OutputWithCount;
 import org.denevell.natch.utils.ModelResponse.ModelExternaliser;
-import org.denevell.natch.utils.ModelResponse.PushResourceExternaliser;
+import org.denevell.natch.utils.ModelResponse.ModelPushExternaliser;
 import org.denevell.natch.utils.UserGetLoggedInService.SystemUser;
 import org.denevell.natch.utils.UserGetLoggedInService.Username;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-public class ThreadEntity implements ModelExternaliser, Username, PushResourceExternaliser<ThreadEntity> {
-
-	public class OutputList extends OutputWithCount<ThreadEntity>{}
+public class ThreadEntity implements 
+          ModelExternaliser, 
+          ModelPushExternaliser<ThreadEntity>,
+          Username {
 
   public String id;
 	public long numPosts;
@@ -28,7 +29,7 @@ public class ThreadEntity implements ModelExternaliser, Username, PushResourceEx
 	public List<PostEntity> posts;
 	public PostEntity rootPost;
 	
-	public ThreadEntity() { }
+	public ThreadEntity() {}
 	
 	public ThreadEntity(PostEntity initialPost, List<PostEntity> posts) {
 		this.latestPost = initialPost;
@@ -50,26 +51,6 @@ public class ThreadEntity implements ModelExternaliser, Username, PushResourceEx
     public String threadId;
     @Valid
     public List<StringWrapper> tags;
-    public static class StringWrapper {
-      @Length(max=PostEntity.MAX_TAG_LENGTH, message="Tag cannot be more than 20 characters")
-      public String string;
-      public static List<String> toStrings(List<StringWrapper> ws) {
-        List<String> ret = new ArrayList<>();
-        if(ws!=null) for (StringWrapper w: ws) { 
-          if(w!=null && w.string!=null) ret.add(w.string); 
-        }
-        return ret;
-      }
-      public static List<StringWrapper> fromStrings(List<String> ws) {
-        List<StringWrapper> ret = new ArrayList<>();
-        if(ws!=null) for (String w: ws) { 
-          StringWrapper sw = new StringWrapper(); 
-          sw.string=w; 
-          ret.add(sw); 
-        }
-        return ret;
-      }
-    }
 
     public PostEntity adapt(boolean adminEdited, String username) {
       PostEntity entity = new PostEntity();
@@ -139,8 +120,10 @@ public class ThreadEntity implements ModelExternaliser, Username, PushResourceEx
   public Output toOutput() {
     Output output = new Output();
     List<org.denevell.natch.entities.PostEntity.Output> postsResources = new ArrayList<>();
+    if(this.posts!=null) {
     for (PostEntity p : this.posts) {
         postsResources.add(p.toOutput());
+    }
     }
     output.posts = postsResources;
     output.subject = StringEscapeUtils.escapeHtml4(rootPost.subject);
@@ -162,19 +145,6 @@ public class ThreadEntity implements ModelExternaliser, Username, PushResourceEx
             Logger.getLogger(getClass()).info("Found a thread with a null root post. Unknown thread id.");
           }
           */
-
-  public static class Utils {
-    public static void updateThreadToRemovePost(ThreadEntity te, PostEntity pe) {
-      te.posts.remove(pe);
-      if (te.rootPost != null && te.rootPost.id == pe.id) {
-        te.rootPost = null;
-      }
-      if (te.latestPost != null && te.latestPost.id == pe.id && te.posts != null && te.posts.size() >= 1) {
-        te.latestPost = (te.posts.get(te.posts.size() - 1));
-      }
-      te.numPosts = (te.numPosts - 1);
-    }
-  }
 
   @Override
   public Object toPushResource(ThreadEntity t) {
@@ -205,6 +175,47 @@ public class ThreadEntity implements ModelExternaliser, Username, PushResourceEx
       id = tr.id;
     }
 
+  }
+
+	public class OutputList extends OutputWithCount<ThreadEntity>{}
+
+  public static class Utils {
+    public static void updateThreadToRemovePost(ThreadEntity te, PostEntity pe) {
+      te.posts.remove(pe);
+      if (te.rootPost != null && te.rootPost.id == pe.id) {
+        te.rootPost = null;
+      }
+      if (te.latestPost != null && te.latestPost.id == pe.id && te.posts != null && te.posts.size() >= 1) {
+        te.latestPost = (te.posts.get(te.posts.size() - 1));
+      }
+      te.numPosts = (te.numPosts - 1);
+    }
+    public static List<StringWrapper> stringsToStringWrapper(List<String> ws) {
+        List<StringWrapper> ret = new ArrayList<>();
+        if(ws!=null) for (String w: ws) { 
+          StringWrapper sw = new StringWrapper(); 
+          sw.string=w; 
+          ret.add(sw); 
+        }
+        return ret;
+    }
+    public static List<String> stringWrappersToStrings(List<StringWrapper> ws) {
+        List<String> ret = new ArrayList<>();
+        if(ws!=null) for (StringWrapper w: ws) { 
+          if(w!=null && w.string!=null) ret.add(w.string); 
+        }
+        return ret;
+    }
+    public static class StringWrapper {
+      @Length(max=PostEntity.MAX_TAG_LENGTH, message="Tag cannot be more than 20 characters")
+      public String string;
+      public static List<String> toStrings(List<StringWrapper> ws) {
+        return Utils.stringWrappersToStrings(ws);
+      }
+      public static List<StringWrapper> fromStrings(List<String> ws) {
+        return Utils.stringsToStringWrapper(ws);
+      }
+    }
   }
 	
 }

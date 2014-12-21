@@ -25,7 +25,7 @@ import org.denevell.natch.utils.Adapter.AdapterWithSystemUser;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Jrappy2;
 import org.denevell.natch.utils.ModelResponse;
-import org.denevell.natch.utils.ModelResponse.PushResourceExternaliser;
+import org.denevell.natch.utils.ModelResponse.ModelPushExternaliser;
 import org.denevell.natch.utils.PushSendService;
 import org.denevell.natch.utils.UserGetLoggedInService.SystemUser;
 import org.glassfish.jersey.server.validation.ValidationError;
@@ -85,8 +85,8 @@ public class ServAdd{
     // Send the push if needed
     if (pushSend!=null && pushSend.length()>0 && persist.getStatus() == 200) {
       Object object = persist.getEntity();
-      if(object instanceof PushResourceExternaliser) {
-        object = ((PushResourceExternaliser)object).toPushResource(object);
+      if(object instanceof ModelPushExternaliser) {
+        object = ((ModelPushExternaliser)object).toPushResource(object);
         PushSendService.sendPushNotifications(pushSend, object);
       } else {
         Logger.getLogger(getClass()).info("Request a push send but entity doesn't implement PushResourceExternaliser");

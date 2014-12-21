@@ -8,7 +8,7 @@ public class ModelResponse<ReturnType> {
     public Object toOutput();
   }
 
-  public static interface PushResourceExternaliser<T> {
+  public static interface ModelPushExternaliser<T> {
     public Object toPushResource(T ob);
   }
   
