@@ -9,7 +9,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.denevell.natch.entities.ThreadEntity.EditInput;
-import org.denevell.natch.entities.ThreadEntity.AddInput.StringWrapper;
+import org.denevell.natch.entities.ThreadEntity.Utils;
 import org.denevell.natch.tests.functional.TestUtils;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -42,7 +42,7 @@ public class ThreadEditPO {
 		input.content = content;
 		input.subject = subject;
 		if(tags!=null) {
-		  input.tags = StringWrapper.fromStrings(tags);
+		  input.tags = Utils.StringWrapper.fromStrings(tags);
 		}
     return mService
 		.path("rest").path("thread_edit")

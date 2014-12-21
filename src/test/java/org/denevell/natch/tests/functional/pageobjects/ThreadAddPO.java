@@ -9,7 +9,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.denevell.natch.entities.ThreadEntity.AddInput;
-import org.denevell.natch.entities.ThreadEntity.AddInput.StringWrapper;
+import org.denevell.natch.entities.ThreadEntity.Utils;
 import org.denevell.natch.tests.functional.TestUtils;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -59,7 +59,7 @@ public class ThreadAddPO {
 		  input.threadId = threadId;
 		}
 		if(tags!=null) {
-		  input.tags = StringWrapper.fromStrings(tags);
+		  input.tags = Utils.StringWrapper.fromStrings(tags);
 		}
     return mService
 		.path("rest").path("add")
