@@ -12,8 +12,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.ws.rs.core.Response;
 
+import jersey.repackaged.com.google.common.collect.Lists;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
+import org.eclipse.persistence.internal.jpa.JPAQuery;
+import org.eclipse.persistence.jpa.JpaQuery;
 
 
 public class Jrappy2<ReturnOb> {
@@ -90,19 +94,29 @@ public class Jrappy2<ReturnOb> {
       EntityManagerFactory factory, 
 	    Object primaryKey, 
 	    boolean pessimisticRead, 
-	    Class<ReturnOb> clazz) {
+	    String nullField,
+	    Class<ReturnOb> clazz) throws Exception { 
 	  return Jrappy2
          .begin(factory, clazz)
          .find(primaryKey, pessimisticRead, clazz)
+         .nullField(nullField)
          .close()
          .httpReturn();
 	}
 
-	public static <ReturnOb> ReturnOb findObject(
+	private <T> Jrappy2<ReturnOb> nullField(String nullField) throws Exception {
+	  if(mFoundEntity!=null && nullField!=null && nullField.trim().length()>0) {
+	    mFoundEntity.getClass().getField(nullField).set(mFoundEntity, Lists.newArrayList());
+	  }
+    return this;
+  }
+
+  public static <ReturnOb> ReturnOb findObject(
       EntityManagerFactory factory, 
 	    Object primaryKey, 
 	    boolean pessimisticRead, 
 	    Class<ReturnOb> clazz) {
+    
 	  return Jrappy2
          .begin(factory, clazz)
          .find(primaryKey, pessimisticRead, clazz)
@@ -135,8 +149,6 @@ public class Jrappy2<ReturnOb> {
     return singleResult;
 	}
 	
-
-
 	public <T extends ReturnOb> Jrappy2<ReturnOb> find(
 	    Object primaryKey, 
 	    boolean pessimisticRead, 

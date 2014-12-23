@@ -7,8 +7,8 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 
 ## TODO
 
+* Is thread single too inefficient? 
 * Add test for adding a post with a non-existant thread
-* Is thread single too inefficient?
 * Getting all the posts down in the list threads call
 * Are we getting proper 401 for posts due to web.xml mapping?
 * Date of threads coming down
@@ -16,6 +16,7 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 * Disallow delete on entities in some cases
 * Check non-null ids in production table
 * See if gcm is still working in dev
+* Get a single post but paginate on a sub collection
 
 ## Later
 

@@ -17,6 +17,7 @@ import org.denevell.natch.entities.ThreadEntity;
 import org.denevell.natch.entities.ThreadEntity.Output;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Jrappy2;
+import org.eclipse.persistence.jpa.JpaQuery;
 
 @Path("thread_single/{threadId}/{start}/{limit}")
 public class ThreadSingle {
@@ -41,10 +42,10 @@ public class ThreadSingle {
           false,
           ThreadEntity.class);
       int toIndex = start+limit;
-      if(thread.posts.size()<toIndex) {
-        toIndex = thread.posts.size();
-      }
-      thread.posts = Lists.newArrayList(thread.posts).subList(start, toIndex);
+      //if(thread.posts.size()<toIndex) {
+      //  toIndex = thread.posts.size();
+      //}
+      thread.posts = thread.posts.subList(start, limit);
       return thread;
     }
   }

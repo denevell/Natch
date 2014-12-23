@@ -25,17 +25,21 @@ public class ServSingle {
 	public Response single(
 	    @PathParam("entity") @NotNull String entity, 	
 	    @PathParam("id") String primaryKey,
-	    @QueryParam("isLong") @DefaultValue("false") boolean isLong 
+	    @QueryParam("isLong") @DefaultValue("false") boolean isLong, 
+	    @QueryParam("nullField") String paginationField 
 	    ) throws Exception {
 
     Class<?> clazz = Class.forName("org.denevell.natch.entities." + entity);
 
     // Plus converts to output form if the entity type is enabled for such
+    Response find = null;
     if(isLong) {
-      return Jrappy2.find(JPAFactoryContextListener.sFactory, Long.valueOf(primaryKey), false, clazz);
+      find = Jrappy2.find(JPAFactoryContextListener.sFactory, Long.valueOf(primaryKey), false, paginationField, clazz);
     } else {
-      return Jrappy2.find(JPAFactoryContextListener.sFactory, primaryKey, false, clazz);
+      find = Jrappy2.find(JPAFactoryContextListener.sFactory, primaryKey, false, paginationField, clazz);
     }
+
+    return find;
 	}
 	
 }
