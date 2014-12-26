@@ -45,11 +45,12 @@ public class ThreadEditPO {
 		  input.tags = Utils.StringWrapper.fromStrings(tags);
 		}
     return mService
-		.path("rest").path("thread_edit")
-		.path(String.valueOf(postId)).request()
-		.accept(MediaType.APPLICATION_JSON)
+		.path("rest").path("update").path("PostEntity").path("ThreadEntity%24EditInput").path(String.valueOf(postId))
+		.request()
 		.header("AuthKey", authKey)
-    .post(Entity.entity(input, MediaType.APPLICATION_JSON));
+		.accept(MediaType.APPLICATION_JSON)
+		.post(Entity.json(input));
+    
 	}	
 
 }

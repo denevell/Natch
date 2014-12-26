@@ -27,8 +27,7 @@ public class PostSinglePO {
 		.path("rest")
 		  .path("single")
 		  .path("PostEntity")
-		  .path(String.valueOf(postId))
-		  .queryParam("isLong", "true")
+		  .queryParam("idLong", String.valueOf(postId))
 		  .request()
 		  .accept(MediaType.APPLICATION_JSON)
 		  .get(new GenericType<PostEntity.Output>() {});

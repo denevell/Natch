@@ -5,7 +5,6 @@ import org.denevell.natch.serv.PostDelete.PostDeleteService;
 import org.denevell.natch.serv.PostEdit.PostEditService;
 import org.denevell.natch.serv.ThreadFromPost.ThreadFromPostService;
 import org.denevell.natch.serv.ThreadFromPost.ThreadFromPostServiceImpl;
-import org.denevell.natch.serv.ThreadSingle.ThreadSingleService;
 import org.denevell.natch.utils.UserGetLoggedInService.UserGetLoggedInModelImpl;
 import org.denevell.userservice.AnnotationProcessor.UserService;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
@@ -32,7 +31,6 @@ public class JerseyApplication extends ResourceConfig {
       bind(PostAddServiceImpl.class).to(PostAddService.class);
       bind(PostDeleteServiceImpl.class).to(PostDeleteService.class);
       bind(PostEditServiceImpl.class).to(PostEditService.class);
-      bind(ThreadSingleServiceImpl.class).to(ThreadSingleService.class);
       bind(UserGetLoggedInModelImpl.class).to(UserGetLoggedInService.class);
       bind(ThreadFromPostServiceImpl.class).to(ThreadFromPostService.class);
     }
@@ -41,6 +39,5 @@ public class JerseyApplication extends ResourceConfig {
   public static class PostAddServiceImpl implements PostAddService {};
   public static class PostDeleteServiceImpl implements PostDeleteService {};
   public static class PostEditServiceImpl implements PostEditService {};
-  public static class ThreadSingleServiceImpl implements ThreadSingleService {};
 
 }

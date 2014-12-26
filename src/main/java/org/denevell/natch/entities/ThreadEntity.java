@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.denevell.natch.entities.ThreadEntity.Utils.StringWrapper;
 import org.denevell.natch.gen.ServList.OutputWithCount;
+import org.denevell.natch.utils.Adapter.AdapterEdit;
 import org.denevell.natch.utils.ModelResponse.ModelExternaliser;
 import org.denevell.natch.utils.ModelResponse.ModelPushExternaliser;
 import org.denevell.natch.utils.UserGetLoggedInService.SystemUser;
@@ -42,7 +43,9 @@ public class ThreadEntity implements
     return rootPost.username;
   }
 
-  public static class AddInput implements org.denevell.natch.utils.Adapter.AdapterWithSystemUser<ThreadEntity> {
+  public static class AddInput implements 
+    org.denevell.natch.utils.Adapter.AdapterWithSystemUser<ThreadEntity>
+    {
     @NotBlank(message="Subject cannot be blank")
     @Length(max=PostEntity.MAX_SUBJECT_LENGTH, message="Subject cannot be more than 300 characters")
     public String subject;
@@ -69,7 +72,7 @@ public class ThreadEntity implements
     }
 
     @Override
-    public ThreadEntity adapt(SystemUser user) {
+    public ThreadEntity adaptWithUser(SystemUser user) {
       PostEntity entity = adapt(false, user.getUsername());
       entity.threadId = PostEntity.Utils.createNewThreadId(entity.threadId, entity.subject);
       ThreadEntity threadEntity = new ThreadEntity(entity, Arrays.asList(entity));
@@ -84,7 +87,8 @@ public class ThreadEntity implements
     public String subject;
   }
 	
-	public static class EditInput {
+	public static class EditInput 
+      implements AdapterEdit<PostEntity> {
 	  @NotBlank(message="Content cannot be blank")
 	  public String content;
 	  @NotBlank(message="Subject cannot be blank")
@@ -93,12 +97,15 @@ public class ThreadEntity implements
     @Valid
     public List<StringWrapper> tags;
 
-    public PostEntity adapt() {
-      PostEntity entity = new PostEntity();
-      entity.subject = subject;
-      entity.content = content;
-      entity.tags = StringWrapper.toStrings(tags);
-      return entity;
+    @Override
+    public PostEntity updateEntity(PostEntity postEntity, SystemUser user) {
+      postEntity.content = content;
+      if (content!= null) postEntity.content = content;
+      if (subject!= null) postEntity.subject = subject;
+      if (tags != null) postEntity.tags = StringWrapper.toStrings(tags);
+      postEntity.modified = new Date().getTime();
+      if (!user.getUsername().equals(postEntity.username) && user.getAdmin()) postEntity.adminEdited = true;
+      return postEntity;
     }
 	}
 

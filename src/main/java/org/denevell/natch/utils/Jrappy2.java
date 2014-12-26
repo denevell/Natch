@@ -16,8 +16,6 @@ import jersey.repackaged.com.google.common.collect.Lists;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
-import org.eclipse.persistence.internal.jpa.JPAQuery;
-import org.eclipse.persistence.jpa.JpaQuery;
 
 
 public class Jrappy2<ReturnOb> {
@@ -53,10 +51,10 @@ public class Jrappy2<ReturnOb> {
 
   public static <T> Response update(
       EntityManagerFactory factory, 
-      Class<T> clazz, 
+      Class clazz, 
       Object primaryKey, 
-      Predicate<T> allowedPredicate, 
-      UnaryOperator<T> updateEntity) {
+      Predicate allowedPredicate, 
+      UnaryOperator updateEntity) {
 	  return Jrappy2
          .beginTransaction(factory)
          .update(primaryKey, null, allowedPredicate, updateEntity, clazz)
@@ -93,8 +91,8 @@ public class Jrappy2<ReturnOb> {
 	public static <ReturnOb> Response find(
       EntityManagerFactory factory, 
 	    Object primaryKey, 
-	    boolean pessimisticRead, 
-	    String nullField,
+	    String nullField, 
+	    boolean pessimisticRead,
 	    Class<ReturnOb> clazz) throws Exception { 
 	  return Jrappy2
          .begin(factory, clazz)
@@ -215,12 +213,12 @@ public class Jrappy2<ReturnOb> {
 
   public <T> Jrappy2<ReturnOb> update(
       Object primaryKey, 
-      Predicate<T> extraIsFoundPredicate, 
-      Predicate<T> allowedPredicate, 
-      UnaryOperator<T> updateEntity, 
-      Class<T> clazz) {
+      Predicate extraIsFoundPredicate, 
+      Predicate allowedPredicate, 
+      UnaryOperator updateEntity, 
+      Class clazz) {
     try {
-      T found = mEntityManager.find(clazz, primaryKey, LockModeType.PESSIMISTIC_WRITE);
+      Object found = mEntityManager.find(clazz, primaryKey, LockModeType.PESSIMISTIC_WRITE);
       if(found==null) {
         mNotFound = true;
       } else if(extraIsFoundPredicate!=null && !extraIsFoundPredicate.test(found)) {

@@ -27,12 +27,14 @@ public class PostEditPO {
 			String authKey) {
 	  EditInput input = new EditInput();
 		input.content = content;
+
     return mService
-		.path("rest").path("post_edit")
-		.path(String.valueOf(postId)).request()
+		.path("rest").path("update").path("PostEntity%24EditInput").path(String.valueOf(postId))
+		.request()
 		.header("AuthKey", authKey)
 		.accept(MediaType.APPLICATION_JSON)
-    .post(Entity.entity(input, MediaType.APPLICATION_JSON));
+		.post(Entity.json(input));
+    
 	}	
 	
 

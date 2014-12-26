@@ -15,17 +15,17 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 * Allow primary key in delete to be a Long etc
 * Disallow delete on entities in some cases
 * Check non-null ids in production table
-* See if gcm is still working in dev
-* Get a single post but paginate on a sub collection
 
 ## Later
 
+* See if gcm is still working in dev
+* Paginate on multiple collections in entity
 * Make user service generator give a better logging name so as not to conflict
-* Some services generator squashing the loader file
 * Fix multiple paths etc in testutils
 * Make adding a post with a non existent post id an error
 * Stop directory listing
 * Should probably return post id in add post
+* See if edit and updating a post should change their parent's modification date
 * Return thread id in add thread 
 * Go back to test thread title in single post
 * And listing subject and tags on listing posts

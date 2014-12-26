@@ -41,6 +41,7 @@
 	<filter-mapping>
 	  <filter-name>Auth Filter Process Even With No User</filter-name>
 	  <url-pattern>/rest/add/*</url-pattern>
+	  <url-pattern>/rest/update/*</url-pattern>
 	</filter-mapping>	
 	
 	<servlet>

@@ -73,7 +73,7 @@ public class ServAdd{
         return new ModelResponse<Void>(401, null).httpReturn();
       }
       SystemUser user = (SystemUser) userObject;
-      persistObject = ((AdapterWithSystemUser)inputObject).adapt(user);
+      persistObject = ((AdapterWithSystemUser)inputObject).adaptWithUser(user);
     } else if(inputObject instanceof Adapter) {
       persistObject = ((Adapter)inputObject).adapt();
     } else {

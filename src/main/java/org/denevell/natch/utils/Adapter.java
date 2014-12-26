@@ -8,7 +8,11 @@ public interface Adapter<T> {
   T adapt();
 
   public static interface AdapterWithSystemUser<T> {
-    T adapt(SystemUser user);
+    T adaptWithUser(SystemUser user);
+  }
+
+  public static interface AdapterEdit<T> {
+    T updateEntity(T object, SystemUser user);
   }
 
 }

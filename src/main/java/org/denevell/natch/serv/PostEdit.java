@@ -41,10 +41,12 @@ public class PostEdit {
           JPAFactoryContextListener.sFactory, 
           PostEntity.class, 
           postId, 
-          (postEntity) -> { // Do we have access rights
+          (pe) -> { // Do we have access rights
+            PostEntity postEntity = (PostEntity) pe;
             return admin || postEntity.username.equals(username);
           },
-          (postEntity) -> { // Edit post
+          (pe) -> { // Edit post
+            PostEntity postEntity = (PostEntity) pe;
             postEntity.content = editedPostEntity.content;
             if (editedPostEntity.subject != null) postEntity.subject = editedPostEntity.subject;
             if (editedPostEntity.tags != null) postEntity.tags = editedPostEntity.tags;

@@ -1,5 +1,7 @@
 package org.denevell.natch.gen;
 
+import java.lang.reflect.Field;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.DefaultValue;
@@ -12,9 +14,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import jersey.repackaged.com.google.common.collect.Lists;
-
-@Path("single_pagination/{entity}/{id}")
+@Path("single_pagination/{entity}")
 public class ServSingleWithPagination {
 
   @Context HttpServletRequest mRequest;
@@ -23,8 +23,8 @@ public class ServSingleWithPagination {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response single(
 	    @PathParam("entity") @NotNull String entity, 	
-	    @PathParam("id") String primaryKey,
-	    @QueryParam("isLong") @DefaultValue("false") boolean isLong,
+	    @QueryParam("idString") String primaryKeyString,
+	    @QueryParam("idLong") @DefaultValue("-1") long primaryKeyLong,
 	    
 	    @QueryParam("pageField") String paginationField, 	
 	    @QueryParam("pageEntity") String paginationEntity, 	
@@ -32,24 +32,35 @@ public class ServSingleWithPagination {
 	    @QueryParam("pageDesc") @DefaultValue("true") boolean desc, 	
 	    @QueryParam("pageStart") @DefaultValue("-1") int start, 	
 	    @QueryParam("pageLimit") @DefaultValue("-1") int limit,
-	    @QueryParam("pageCount") @DefaultValue("false") boolean count,
 	    @QueryParam("pageMember") String member,
 	    @QueryParam("pageMemberof") String memberOf 
 	    ) throws Exception {
 
-    Response single = new ServSingle().single(entity, primaryKey, isLong, paginationField);
+    Response single = new ServSingle().single(
+        entity, 
+        primaryKeyString, 
+        primaryKeyLong, 
+        paginationField);
     
     if(paginationEntity!=null) {
-    Response pagination = new ServList().list(
+      Response pagination = new ServList().list(
         paginationEntity, 
         orderby, 
         desc, 
         start, 
         limit, 
-        count, 
-        member, 
-        memberOf);
-      
+        false, 
+        null, 
+        null);
+
+      Object foundEntity = pagination.getEntity();
+      if(foundEntity!=null && paginationField!=null && paginationField.trim().length()>0) {
+        Object singleEntity = single.getEntity();
+        Class<?> class1 = singleEntity.getClass();
+        Field field = class1.getField(paginationField);
+        field.set(singleEntity, foundEntity); 
+	    }
+
     }
 
     return single;

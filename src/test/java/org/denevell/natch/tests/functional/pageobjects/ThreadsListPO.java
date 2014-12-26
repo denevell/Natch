@@ -39,11 +39,17 @@ public class ThreadsListPO {
 
   public Output byThread(String threadId, int start, int limit) {
     return mService
-		.path("rest").path("thread_single")
-		.path(threadId).path(String.valueOf(start)).path(String.valueOf(limit))
-		.request()
-		.accept(MediaType.APPLICATION_JSON)
-		.get(Output.class);
+		.path("rest")
+		  .path("single")
+		  .path("ThreadEntity")
+		  .queryParam("idString", threadId)
+		  .queryParam("pageField", "posts")
+		  .queryParam("pageEntity", "PostEntity")
+		  .queryParam("pageStart", String.valueOf(start))
+		  .queryParam("pageLimit", String.valueOf(limit))
+		  .request()
+		  .accept(MediaType.APPLICATION_JSON)
+		  .get(new GenericType<ThreadEntity.Output>() {});
   }
 
   public OutputWithCount<ThreadEntity.Output> byTag(String tag, int start, int limit) {

@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Jrappy2;
 
-@Path("single/{entity}/{id}")
+@Path("single/{entity}")
 public class ServSingle {
 
   @Context HttpServletRequest mRequest;
@@ -24,20 +24,23 @@ public class ServSingle {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response single(
 	    @PathParam("entity") @NotNull String entity, 	
-	    @PathParam("id") String primaryKey,
-	    @QueryParam("isLong") @DefaultValue("false") boolean isLong, 
+	    @QueryParam("idString") String primaryKeyString,
+	    @QueryParam("idLong") @DefaultValue("-1") long primaryKeyLong, 
 	    @QueryParam("nullField") String paginationField 
 	    ) throws Exception {
 
     Class<?> clazz = Class.forName("org.denevell.natch.entities." + entity);
 
-    // Plus converts to output form if the entity type is enabled for such
-    Response find = null;
-    if(isLong) {
-      find = Jrappy2.find(JPAFactoryContextListener.sFactory, Long.valueOf(primaryKey), false, paginationField, clazz);
-    } else {
-      find = Jrappy2.find(JPAFactoryContextListener.sFactory, primaryKey, false, paginationField, clazz);
+    Object primaryKey = primaryKeyString;
+    if(primaryKeyString==null) {
+      primaryKey = primaryKeyLong;
     }
+    Response find = Jrappy2.find(
+        JPAFactoryContextListener.sFactory, 
+        primaryKey,
+        paginationField, 
+        false, 
+        clazz);
 
     return find;
 	}
