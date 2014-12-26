@@ -8,7 +8,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
+import org.denevell.natch.utils.Adapter.AdapterEdit;
 import org.denevell.natch.utils.ModelResponse.ModelExternaliser;
+import org.denevell.natch.utils.UserGetLoggedInService.SystemUser;
 import org.denevell.natch.utils.UserGetLoggedInService.Username;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -64,15 +66,16 @@ public class PostEntity implements ModelExternaliser, Username {
     }
   }
 
-  public static class EditInput {
+  public static class EditInput implements AdapterEdit<PostEntity> {
     @NotBlank(message = "Post must have content")
     public String content;
 
-    public PostEntity adapt() {
-      PostEntity entity = new PostEntity();
-      entity.content = content;
-      entity.subject = ("-");
-      return entity;
+    @Override
+    public PostEntity updateEntity(PostEntity postEntity, SystemUser user) {
+      postEntity.content = content;
+      postEntity.modified = new Date().getTime();
+      if (!user.getUsername().equals(postEntity.username) && user.getAdmin()) postEntity.adminEdited = true;
+      return postEntity;
     }
   }
 
