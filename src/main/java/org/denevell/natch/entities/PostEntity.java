@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.denevell.natch.utils.Adapter.AdapterEdit;
@@ -48,7 +50,7 @@ public class PostEntity implements ModelExternaliser, Username {
     return username;
   }
 
-  public static class AddInput {
+  public static class AddInput implements AdapterEdit<ThreadEntity> {
     @NotBlank(message = "Post must have content")
     public String content;
     @NotBlank(message = "Post must include thread id")
@@ -63,6 +65,16 @@ public class PostEntity implements ModelExternaliser, Username {
       entity.created = created;
       entity.modified = created;
       return entity;
+    }
+
+    @Override
+    public ThreadEntity updateEntity(ThreadEntity threadEntity, SystemUser user) {
+      PostEntity pe = adapt(user.getUsername());
+      pe.subject = threadEntity.rootPost.subject;
+      threadEntity.latestPost = pe;
+      threadEntity.posts.add(pe);
+      threadEntity.numPosts = threadEntity.numPosts + 1;
+      return threadEntity;
     }
   }
 

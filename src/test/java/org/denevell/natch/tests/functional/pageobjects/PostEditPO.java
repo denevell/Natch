@@ -29,7 +29,8 @@ public class PostEditPO {
 		input.content = content;
 
     return mService
-		.path("rest").path("update").path("PostEntity").path("PostEntity%24EditInput").path(String.valueOf(postId))
+		.path("rest").path("update").path("PostEntity").path("PostEntity%24EditInput")
+		.queryParam("idLong", postId)
 		.request()
 		.header("AuthKey", authKey)
 		.accept(MediaType.APPLICATION_JSON)

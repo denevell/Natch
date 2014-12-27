@@ -28,7 +28,7 @@ import org.denevell.natch.utils.UserGetLoggedInService.SystemUser;
 import org.denevell.natch.utils.UserGetLoggedInService.Username;
 import org.glassfish.jersey.server.validation.ValidationError;
 
-@Path("update/{entity}/{entityInput}/{id}")
+@Path("update/{entity}/{entityInput}")
 @SuppressWarnings("unchecked")
 public class ServUpdate {
 
@@ -39,7 +39,8 @@ public class ServUpdate {
 	public Response delete(
 	    @PathParam("entity") @NotNull String entity, 	
 	    @PathParam("entityInput") @NotNull String entityInput, 	
-	    @PathParam("id") long primaryKey,
+	    @QueryParam("idLong") long primaryKeyLong,
+	    @QueryParam("idString") String primaryKeyString,
 	    @QueryParam("authObject") String authField,
 	    String editInput
 	    ) throws Exception {
@@ -64,7 +65,10 @@ public class ServUpdate {
       ValidationError ve = new ValidationError();
       ve.setMessage(constraintViolation.getMessage());
       ve.setPath("hmm");
-      ve.setInvalidValue(constraintViolation.getInvalidValue().toString());
+      Object invalidValue = constraintViolation.getInvalidValue();
+      if(invalidValue!=null) {
+        ve.setInvalidValue(invalidValue.toString());
+      }
       validationErrors.add(ve);
     }
     if(validations!=null && validations.size()>0) {
@@ -74,6 +78,7 @@ public class ServUpdate {
     // Now update it, check if the authObject, or main root object's username 
     // is our username or we're admin
     Class<?> clazz = Class.forName("org.denevell.natch.entities." + entity);
+    Object primaryKey = (primaryKeyLong>0) ? primaryKeyLong : primaryKeyString;
     Response update = Jrappy2.update(
         JPAFactoryContextListener.sFactory, 
         clazz,

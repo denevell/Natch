@@ -29,7 +29,9 @@ public class Jrappy2<ReturnOb> {
   
   private Jrappy2() {}
 
-  public static Response persist(EntityManagerFactory factory, Object object) {
+  public static Response persist(
+      EntityManagerFactory factory, 
+      Object object) {
 	  return Jrappy2
          .beginTransaction(factory)
          .persist(object)

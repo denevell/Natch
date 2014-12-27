@@ -1,6 +1,5 @@
 package org.denevell.natch.utils;
 
-import org.denevell.natch.serv.PostAdd.PostAddService;
 import org.denevell.natch.serv.PostDelete.PostDeleteService;
 import org.denevell.natch.serv.ThreadFromPost.ThreadFromPostService;
 import org.denevell.natch.serv.ThreadFromPost.ThreadFromPostServiceImpl;
@@ -27,14 +26,12 @@ public class JerseyApplication extends ResourceConfig {
 
     @Override
     protected void configure() {
-      bind(PostAddServiceImpl.class).to(PostAddService.class);
       bind(PostDeleteServiceImpl.class).to(PostDeleteService.class);
       bind(UserGetLoggedInModelImpl.class).to(UserGetLoggedInService.class);
       bind(ThreadFromPostServiceImpl.class).to(ThreadFromPostService.class);
     }
   }
 
-  public static class PostAddServiceImpl implements PostAddService {};
   public static class PostDeleteServiceImpl implements PostDeleteService {};
 
 }

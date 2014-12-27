@@ -80,7 +80,9 @@ public class ServAdd{
       Logger.getLogger(getClass()).info("Input class doesn't implement either Adapter or AdapterWithSystemUser");
       return new ModelResponse<Void>(500, null).httpReturn();
     }
-    Response persist = Jrappy2.persist(JPAFactoryContextListener.sFactory, persistObject);
+    Response persist = Jrappy2.persist(
+        JPAFactoryContextListener.sFactory, 
+        persistObject);
 
     // Send the push if needed
     if (pushSend!=null && pushSend.length()>0 && persist.getStatus() == 200) {

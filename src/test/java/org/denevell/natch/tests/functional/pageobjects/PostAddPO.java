@@ -29,11 +29,12 @@ public class PostAddPO {
 		input.content = content;
 		input.threadId = threadId;
     return mService
-		.path("rest").path("post_add").request()
-		.accept(MediaType.APPLICATION_JSON)
+		.path("rest").path("update").path("ThreadEntity").path("PostEntity%24AddInput")
+		.queryParam("idString", threadId)
+		.request()
 		.header("AuthKey", authKey)
-		.put(Entity.entity(input, MediaType.APPLICATION_JSON));
+		.accept(MediaType.APPLICATION_JSON)
+		.post(Entity.json(input));
 	}	
-	
 
 }

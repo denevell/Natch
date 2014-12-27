@@ -15,60 +15,39 @@ import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
 public class ThreadAddPO {
-	
-	private WebTarget mService;
 
-	public ThreadAddPO() {
-		Client client = JerseyClientBuilder.createClient();
-		client.register(JacksonFeature.class);
-		mService = client.target(TestUtils.URL_REST_SERVICE);
-	}
-	
-	public Response add(
-	    String subject, 
-	    String content, 
-			String authKey) {
-	  return add(subject, content, null, null, authKey);
-	}
-	public Response add(
-	    String subject, 
-	    String content, 
-	    String threadId,
-			String authKey) {
-	  return add(subject, content, threadId, null, authKey);
-	}
+  private WebTarget mService;
 
-	public Response add(
-	    String subject, 
-	    String content, 
-	    List<String> tags,
-			String authKey) {
-	  return add(subject, content, null, tags, authKey);
-	}
+  public ThreadAddPO() {
+    Client client = JerseyClientBuilder.createClient();
+    client.register(JacksonFeature.class);
+    mService = client.target(TestUtils.URL_REST_SERVICE);
+  }
 
-	public Response add(
-	    String subject, 
-	    String content, 
-	    String threadId,
-	    List<String> tags, 
-			String authKey) {
-	  AddInput input = new AddInput();
-		input.content = content;
-		input.subject = subject;
-		if(threadId!=null) {
-		  input.threadId = threadId;
-		}
-		if(tags!=null) {
-		  input.tags = Utils.StringWrapper.fromStrings(tags);
-		}
-    return mService
-		.path("rest").path("add")
-		  .path("ThreadEntity%24AddInput")
-		  .queryParam("push", "thread")
-		  .request()
-		  .accept(MediaType.APPLICATION_JSON)
-		  .header("AuthKey", authKey)
-		  .put(Entity.json(input));
-	}	
+  public Response add(String subject, String content, String authKey) {
+    return add(subject, content, null, null, authKey);
+  }
+
+  public Response add(String subject, String content, String threadId, String authKey) {
+    return add(subject, content, threadId, null, authKey);
+  }
+
+  public Response add(String subject, String content, List<String> tags, String authKey) {
+    return add(subject, content, null, tags, authKey);
+  }
+
+  public Response add(String subject, String content, String threadId, List<String> tags, String authKey) {
+    AddInput input = new AddInput();
+    input.content = content;
+    input.subject = subject;
+    if (threadId != null) {
+      input.threadId = threadId;
+    }
+    if (tags != null) {
+      input.tags = Utils.StringWrapper.fromStrings(tags);
+    }
+    return mService.path("rest").path("add").path("ThreadEntity%24AddInput").queryParam("push", "thread").request()
+        .accept(MediaType.APPLICATION_JSON).header("AuthKey", authKey).put(Entity.json(input));
+  }
 
 }

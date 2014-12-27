@@ -45,7 +45,8 @@ public class ThreadEditPO {
 		  input.tags = Utils.StringWrapper.fromStrings(tags);
 		}
     return mService
-		.path("rest").path("update").path("PostEntity").path("ThreadEntity%24EditInput").path(String.valueOf(postId))
+		.path("rest").path("update").path("PostEntity").path("ThreadEntity%24EditInput")
+		.queryParam("idLong", postId)
 		.request()
 		.header("AuthKey", authKey)
 		.accept(MediaType.APPLICATION_JSON)
