@@ -44,6 +44,10 @@ public class ServSingleWithPagination {
         primaryKeyLong, 
         paginationField);
     
+    if(single.getStatus()!=200) {
+      return single;
+    }
+    
     if(paginationEntity!=null) {
       Response pagination = new ServList().list(
         paginationEntity, 
