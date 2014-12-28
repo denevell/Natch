@@ -44,15 +44,16 @@ public class ThreadListFunctional {
 		
 		Output returnData = threadsList.byThread("t", 0, 10);
 		
-		assertEquals(2, returnData.posts.size());
-		assertTrue(returnData.posts.get(0).id!=0);
-		assertTrue(returnData.posts.get(1).id!=0);
+		assertEquals(2, returnData.posts.results.size());
+		assertEquals(2, returnData.posts.count);
+		assertTrue(returnData.posts.results.get(0).id!=0);
+		assertTrue(returnData.posts.results.get(1).id!=0);
 		assertEquals("sub", returnData.subject);
 		assertEquals("aaron@aaron.com", returnData.author);
-		assertEquals("cont", returnData.posts.get(0).content);
-		assertEquals("t", returnData.posts.get(0).threadId);
-		assertEquals("cont2", returnData.posts.get(1).content);		
-		assertEquals("t", returnData.posts.get(1).threadId);
+		assertEquals("cont", returnData.posts.results.get(0).content);
+		assertEquals("t", returnData.posts.results.get(0).threadId);
+		assertEquals("cont2", returnData.posts.results.get(1).content);		
+		assertEquals("t", returnData.posts.results.get(1).threadId);
 	}
 	
 	@Test
@@ -64,13 +65,13 @@ public class ThreadListFunctional {
 
 		Output returnData = threadsList.byThread("t", 1, 1);
 		
-		assertEquals(1, returnData.posts.size());
-		assertEquals(2, returnData.numPosts);
+		assertEquals(1, returnData.posts.results.size());
+		assertEquals(2, returnData.posts.count);
 		assertEquals("sub", returnData.subject);
 		assertEquals("tagy", returnData.tags.get(0));
 		assertEquals("aaron@aaron.com", returnData.author);
-		assertEquals("cont2", returnData.posts.get(0).content);
-		assertEquals("t", returnData.posts.get(0).threadId);
+		assertEquals("cont2", returnData.posts.results.get(0).content);
+		assertEquals("t", returnData.posts.results.get(0).threadId);
 	}		
 	
 	@Test
@@ -88,7 +89,7 @@ public class ThreadListFunctional {
 		Output returnData = threadsList.byThread("t", 0, 10);
 
 		assertEquals("&lt;hi&gt;", returnData.subject);
-		assertEquals("&lt;there&gt;", returnData.posts.get(0).content);
+		assertEquals("&lt;there&gt;", returnData.posts.results.get(0).content);
 		assertEquals("&lt;again&gt;", returnData.tags.get(0));
 	}		
 

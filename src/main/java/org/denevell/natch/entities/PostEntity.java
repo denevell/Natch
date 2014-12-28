@@ -71,7 +71,6 @@ public class PostEntity implements ModelExternaliser, Username {
       pe.subject = threadEntity.rootPost.subject;
       threadEntity.latestPost = pe;
       threadEntity.posts.add(pe);
-      threadEntity.numPosts = threadEntity.numPosts + 1;
       return threadEntity;
     }
   }

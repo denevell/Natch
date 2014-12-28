@@ -61,7 +61,6 @@ public class ThreadFromPost {
       newPost.subject = subject;
       ThreadEntity threadEntity = new ThreadEntity(newPost, Arrays.asList(newPost));
       threadEntity.id = newPost.threadId;
-      threadEntity.numPosts = 1;
 
       Response addResult = Jrappy2.persist(JPAFactoryContextListener.sFactory, threadEntity);
       if(addResult.getStatus()!=200) {

@@ -47,8 +47,8 @@ public class ThreadEditFunctional {
 		org.denevell.natch.entities.ThreadEntity.Output thread = threadListPo.byThread("thread", 0, 10);
 
 		assertEquals("sup1", thread.subject);
-		assertEquals("sup2", thread.posts.get(0).content);
-		assertEquals("sup3", thread.posts.get(0).tags.get(0));
+		assertEquals("sup2", thread.posts.results.get(0).content);
+		assertEquals("sup3", thread.posts.results.get(0).tags.get(0));
 	}
 
 	@Test

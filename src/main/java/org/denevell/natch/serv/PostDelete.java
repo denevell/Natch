@@ -54,7 +54,6 @@ public class PostDelete {
             threadEntity.posts = Lists.newArrayList(threadEntity.posts).stream()
                 .filter(post -> post.id!=postId)
                 .collect(Collectors.toList());
-            threadEntity.numPosts = threadEntity.posts.size();
             if(threadEntity.posts.size()>1) 
               threadEntity.latestPost = threadEntity.posts.get(threadEntity.posts.size()-1);
             else if(threadEntity.posts.size()!=0) 

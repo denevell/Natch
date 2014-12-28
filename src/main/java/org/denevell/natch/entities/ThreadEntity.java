@@ -27,7 +27,7 @@ public class ThreadEntity implements
           EditableByAll {
 
   public String id;
-	public long numPosts;
+	public long numPosts = 0;
 	public PostEntity latestPost;
 	public List<PostEntity> posts;
 	public PostEntity rootPost;
@@ -79,7 +79,6 @@ public class ThreadEntity implements
       entity.threadId = PostEntity.Utils.createNewThreadId(entity.threadId, entity.subject);
       ThreadEntity threadEntity = new ThreadEntity(entity, Arrays.asList(entity));
       threadEntity.id = (entity.threadId);
-      threadEntity.numPosts = (threadEntity.numPosts + 1);
       return threadEntity;
     }
   }
@@ -117,33 +116,42 @@ public class ThreadEntity implements
     public String id;
     public String subject;
     public String author;
-    public int numPosts;
     public long creation;
     public long modification;
-    public long rootPostId;
-    public long latestPostId;
-    public List<org.denevell.natch.entities.PostEntity.Output> posts = new ArrayList<>();
+    public PostEntity.Output rootPost;
+    public PostEntity.Output latestPost;
+    public OutputWithCount<PostEntity.Output> posts;
   }
 
   @Override
   public Output toOutput() {
     Output output = new Output();
+
+    /*
     List<org.denevell.natch.entities.PostEntity.Output> postsResources = new ArrayList<>();
     if(this.posts!=null) {
-    for (PostEntity p : this.posts) {
+      for (PostEntity p : this.posts) {
         postsResources.add(p.toOutput());
+      }
     }
-    }
-    output.posts = postsResources;
+    OutputWithCount<org.denevell.natch.entities.PostEntity.Output> outputWithCount = 
+        new OutputWithCount<>(postsResources, 0);
+
+    output.posts = outputWithCount;
+    */
+
     output.subject = StringEscapeUtils.escapeHtml4(rootPost.subject);
     output.author = rootPost.username;
-    output.numPosts = (int) numPosts;
     output.modification = latestPost.modified;
     output.creation = rootPost.created;
     output.id = id;
     output.tags = PostEntity.Utils.getTagsEscaped(rootPost.tags);
-    output.rootPostId = rootPost.id;
-    output.latestPostId = latestPost.id;
+    if(this.rootPost!=null) {
+      output.rootPost = this.rootPost.toOutput();
+    }
+    if(this.latestPost!=null) {
+      output.latestPost = this.latestPost.toOutput();
+    }
     return output;
   }
 
@@ -176,7 +184,7 @@ public class ThreadEntity implements
     public ThreadResourceForPush(ThreadEntity tr) {
       subject = StringEscapeUtils.escapeHtml4(tr.rootPost.subject);
       author = tr.rootPost.username;
-      numPosts = tr.numPosts;
+      //TODO: postsNum?
       tags = PostEntity.Utils.getTagsEscaped(tr.rootPost.tags);
       rootPostId = tr.rootPost.id;
       modification = tr.rootPost.modified;
@@ -197,7 +205,6 @@ public class ThreadEntity implements
       if (te.latestPost != null && te.latestPost.id == pe.id && te.posts != null && te.posts.size() >= 1) {
         te.latestPost = (te.posts.get(te.posts.size() - 1));
       }
-      te.numPosts = (te.numPosts - 1);
     }
     public static List<StringWrapper> stringsToStringWrapper(List<String> ws) {
         List<StringWrapper> ret = new ArrayList<>();

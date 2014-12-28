@@ -40,7 +40,7 @@ public class ThreadsListByTagFunctional {
 		
 		OutputWithCount<ThreadEntity.Output> returnData= threadsListPo.byTag("onetag", 0, 10);
 		
-		assertEquals(3, returnData.count);
+		assertEquals(2, returnData.count);
 		assertEquals(2, returnData.results.size());
 		assertEquals("sub", returnData.results.get(0).subject);
 		assertEquals("t", returnData.results.get(0).id);
@@ -62,7 +62,7 @@ public class ThreadsListByTagFunctional {
 		OutputWithCount<ThreadEntity.Output> returnData= threadsListPo.byTag("onetag", 1, 1);
 		
 		// Assert
-		assertEquals(3, returnData.count);
+		assertEquals(2, returnData.count);
 		assertEquals(1, returnData.results.size());
 		assertEquals("x", returnData.results.get(0).subject);
 		assertEquals("x", returnData.results.get(0).id);

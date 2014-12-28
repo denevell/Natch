@@ -5,20 +5,22 @@ The REST interface for a forum.
 See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and in dev work..
 
 
+## TESTs TO DO
+`
+* Date of threads coming down
+* Add test for adding a post with a non-existant thread
+
 ## TODO
 
-* Is thread single too inefficient? 
-* Add test for adding a post with a non-existant thread
-* Getting all the posts down in the list threads call
+* Look at numPosts on push entity for threads
 * Are we getting proper 401 for posts due to web.xml mapping?
-* Date of threads coming down
 * Allow primary key in delete to be a Long etc
 * Disallow delete on entities in some cases
 * Check non-null ids in production table
 
 ## Later
 
-* See if gcm is still working in dev
+* List nulls the entity collections but still fetches them 
 * Paginate on multiple collections in entity
 * Make adding a post with a non existent post id an error
 * Should probably return post id in add post
@@ -30,6 +32,7 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 * Make user service generator give a better logging name so as not to conflict
 * Fix multiple paths etc in testutils
 * Stop directory listing
+* See if gcm is still working in dev
 
 ### Dev complete
 

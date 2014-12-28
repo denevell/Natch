@@ -55,7 +55,7 @@ public class ServSingleWithPagination {
         desc, 
         start, 
         limit, 
-        false, 
+        true, 
         member, 
         memberOf,
         whereField,

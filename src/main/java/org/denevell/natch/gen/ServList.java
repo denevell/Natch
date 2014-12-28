@@ -77,7 +77,12 @@ public class ServList {
     
     // Grab the count of the entire entities if specified
     if(count) {
-      long countNum = Jrappy2.count(JPAFactoryContextListener.sFactory, clazz);
+      long countNum = Jrappy2.count(
+          JPAFactoryContextListener.sFactory, 
+          whereClausePair, 
+          memberOfPair, 
+          clazz);
+      // Get the latest entry via a list call
       return Response.ok(new OutputWithCount(list, countNum)).build();
     } else {
       return Response.ok(list).build();
@@ -88,7 +93,7 @@ public class ServList {
   @XmlRootElement
 	public static class OutputWithCount<T> {
 	  public List<T> results;
-	  public long count;
+	  public long count = - 1;
 	  public OutputWithCount() {}
 	  public OutputWithCount(List<T> results, long count) {
 	    this.results = results;

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import jersey.repackaged.com.google.common.collect.Lists;
 
 import org.denevell.natch.entities.PostEntity.Output;
+import org.denevell.natch.entities.PostEntity;
 import org.denevell.natch.entities.ThreadEntity;
 import org.denevell.natch.gen.ServList.OutputWithCount;
 import org.denevell.natch.tests.functional.pageobjects.PostAddPO;
@@ -68,11 +69,11 @@ public class ThreadsListFunctional {
 		
 		OutputWithCount<ThreadEntity.Output> returnData = threadsListPo.list(0, 10);
 		
-		long rootPostId1 = returnData.results.get(0).rootPostId;
-    assertTrue("Thread has root post", rootPostId1>0);
-		long rootPostId2 = returnData.results.get(1).rootPostId;
-    assertTrue("Thread has root post", rootPostId2>0);
-		assertTrue("Root posts aren't the same", rootPostId1!=rootPostId2);
+		PostEntity.Output rootPost1 = returnData.results.get(0).rootPost;
+    assertTrue("Thread has root post", rootPost1!=null);
+		PostEntity.Output rootPost2 = returnData.results.get(1).rootPost;
+    assertTrue("Thread has root post", rootPost2!=null);
+		assertTrue("Root posts aren't the same", rootPost1.id!=rootPost2.id);
 	}
 
 	@Test

@@ -141,12 +141,30 @@ public class Jrappy2<ReturnOb> {
 	
 	public static <T> long count(
       EntityManagerFactory factory, 
+	    Pair<String, String> whereClause,
+	    Pair<String, String> memberOf,
 	    Class<T> clazz) {
 	  EntityManager entityManager = JPAFactoryContextListener.sFactory.createEntityManager(); 
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Long> q = cb.createQuery(Long.class);
-		q.select(cb.count(q.from(clazz)));
-		Long singleResult = entityManager.createQuery(q).getSingleResult();
+
+	  //TODO: WHAT ABOUT ADDING IN memberOf.getRight? order by? where field?
+		String from = "select count(p) from "+clazz.getSimpleName()+" p ";
+		if(memberOf!=null) {
+		  from = from + "where :member member of " + "p."+memberOf.getRight() + " ";
+		}
+		if(whereClause!=null) {
+		  String w = (memberOf==null) ? "where " : "and ";
+		  from = from + w + "p." + whereClause.getLeft() +" = :wherevalue";
+		}
+
+		TypedQuery<T> q = entityManager.createQuery(from, clazz);
+		if(memberOf!=null) {
+		  q.setParameter("member", memberOf.getLeft());
+		}
+		if(whereClause!=null) {
+		  q.setParameter("wherevalue", whereClause.getRight());
+		}
+
+		Long singleResult = (Long) q.getSingleResult();
 		entityManager.close();
     return singleResult;
 	}
