@@ -21,6 +21,7 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.denevell.natch.utils.Adapter.AdapterEdit;
+import org.denevell.natch.utils.Adapter.EditableByAll;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Jrappy2;
 import org.denevell.natch.utils.ModelResponse;
@@ -85,7 +86,7 @@ public class ServUpdate {
         primaryKey, 
         (item) -> { // Do we have access rights?
           try { 
-            return user.getAdmin() || getUsernameField(item, authField).equals(user.getUsername());
+            return item instanceof EditableByAll || user.getAdmin() || getUsernameField(item, authField).equals(user.getUsername());
           } catch (Exception e) {
             Logger.getLogger(ServUpdate.class).info("Couldn't find the delete entity's username field", e);
             return false;

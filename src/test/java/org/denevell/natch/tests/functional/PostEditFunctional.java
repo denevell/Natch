@@ -84,7 +84,7 @@ public class PostEditFunctional {
 	  registerPo.register("other_user", "passy");
 		String otherUserAuthKey = new UserLoginPO().login("other_user", "passy").getAuthKey();
 
-		postAddPo.add("cont", "thread", otherUserAuthKey);
+		assertEquals(200, postAddPo.add("cont", "thread", otherUserAuthKey).getStatus());
 		OutputList posts = postsListPo.list("0", "10");
 		
 		Response response = postEditPo.edit("editeeed", posts.get(0).id, authKey);

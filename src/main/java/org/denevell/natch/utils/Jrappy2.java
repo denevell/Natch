@@ -51,6 +51,7 @@ public class Jrappy2<ReturnOb> {
          .httpReturn();
   }
 
+  @SuppressWarnings("rawtypes")
   public static <T> Response update(
       EntityManagerFactory factory, 
       Class clazz, 
@@ -130,9 +131,10 @@ public class Jrappy2<ReturnOb> {
       String orderByDescAttribute,
 	    boolean desc, 
 	    Pair<String, String> memberOf,
+	    Pair<String, String> whereCaluse,
 	    Class<T> class1) {
     return Jrappy2.begin(JPAFactoryContextListener.sFactory, class1)
-        .list(start, limit, orderByDescAttribute, desc, memberOf, class1)
+        .list(start, limit, orderByDescAttribute, desc, memberOf, whereCaluse, class1)
         .close()
         .returnFoundObjects();
 	}
@@ -179,12 +181,17 @@ public class Jrappy2<ReturnOb> {
 	    String orderbyDescAttribute,
 	    boolean desc,
 	    Pair<String, String> memberOf,
+	    Pair<String, String> whereClause,
 	    Class<T> clazz) {
 
-	  // WHAT ABOUT ADDING IN memberOf.getRight? and order by?
+	  //TODO: WHAT ABOUT ADDING IN memberOf.getRight? order by? where field?
 		String from = "select p from "+clazz.getSimpleName()+" p ";
 		if(memberOf!=null) {
-		   from = from + "where " + " :member member of " + "p."+memberOf.getRight() + " ";
+		  from = from + "where " + " :member member of " + "p."+memberOf.getRight() + " ";
+		}
+		if(whereClause!=null) {
+		  String w = (memberOf==null) ? "where " : "and ";
+		  from = from + w + "p." + whereClause.getLeft() +" = :wherevalue ";
 		}
 		if(orderbyDescAttribute!=null) {
 		  if(desc) {
@@ -196,6 +203,9 @@ public class Jrappy2<ReturnOb> {
 		TypedQuery<T> q = mEntityManager.createQuery(from, clazz);
 		if(memberOf!=null) {
 		  q.setParameter("member", memberOf.getLeft());
+		}
+		if(whereClause!=null) {
+		  q.setParameter("wherevalue", whereClause.getRight());
 		}
     if(start!=-1) {
       q.setFirstResult(start);
@@ -213,6 +223,7 @@ public class Jrappy2<ReturnOb> {
 		return this;
 	}
 
+  @SuppressWarnings({ "rawtypes", "unchecked" })
   public <T> Jrappy2<ReturnOb> update(
       Object primaryKey, 
       Predicate extraIsFoundPredicate, 

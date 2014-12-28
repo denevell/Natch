@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.denevell.natch.entities.ThreadEntity.Utils.StringWrapper;
 import org.denevell.natch.gen.ServList.OutputWithCount;
 import org.denevell.natch.utils.Adapter.AdapterEdit;
+import org.denevell.natch.utils.Adapter.EditableByAll;
 import org.denevell.natch.utils.ModelResponse.ModelExternaliser;
 import org.denevell.natch.utils.ModelResponse.ModelPushExternaliser;
 import org.denevell.natch.utils.UserGetLoggedInService.SystemUser;
@@ -22,7 +23,8 @@ import org.hibernate.validator.constraints.NotBlank;
 public class ThreadEntity implements 
           ModelExternaliser, 
           ModelPushExternaliser<ThreadEntity>,
-          Username {
+          Username,
+          EditableByAll {
 
   public String id;
 	public long numPosts;

@@ -40,13 +40,17 @@ public class ThreadsListPO {
   public Output byThread(String threadId, int start, int limit) {
     return mService
 		.path("rest")
-		  .path("single")
+		  .path("single_pagination")
 		  .path("ThreadEntity")
 		  .queryParam("idString", threadId)
 		  .queryParam("pageField", "posts")
 		  .queryParam("pageEntity", "PostEntity")
+		  .queryParam("pageOrderby", "created")
+		  .queryParam("pageDesc", "false")
 		  .queryParam("pageStart", String.valueOf(start))
 		  .queryParam("pageLimit", String.valueOf(limit))
+		  .queryParam("whereField", "threadId")
+		  .queryParam("whereValue", threadId)
 		  .request()
 		  .accept(MediaType.APPLICATION_JSON)
 		  .get(new GenericType<ThreadEntity.Output>() {});

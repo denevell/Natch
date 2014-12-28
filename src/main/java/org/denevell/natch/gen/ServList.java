@@ -37,7 +37,9 @@ public class ServList {
 	    @QueryParam("limit") @DefaultValue("-1") int limit,
 	    @QueryParam("count") @DefaultValue("false") boolean count,
 	    @QueryParam("member") String member,
-	    @QueryParam("memberof") String memberOf 
+	    @QueryParam("memberof") String memberOf,
+	    @QueryParam("whereField") String whereField,
+	    @QueryParam("whereValue") String whereValue 
 	    ) throws Exception {
 
     Class<?> clazz = Class.forName("org.denevell.natch.entities." + entity);
@@ -46,6 +48,10 @@ public class ServList {
     Pair<String, String> memberOfPair = null;
     if(member!=null && member.trim().length()>0 && memberOf !=null && memberOf.trim().length()>0) {
       memberOfPair = Pair.of(member, memberOf);
+    }
+    Pair<String, String> whereClausePair = null;
+    if(whereField!=null && whereField.trim().length()>0 && whereValue !=null && whereValue.trim().length()>0) {
+      whereClausePair = Pair.of(whereField, whereValue);
     }
 
     // Get the list of entities
@@ -56,6 +62,7 @@ public class ServList {
         orderby, 
         desc, 
         memberOfPair,
+        whereClausePair,
         clazz);
 
     // Convert to output form if the entity type is enabled for such

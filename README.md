@@ -20,15 +20,16 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 
 * See if gcm is still working in dev
 * Paginate on multiple collections in entity
+* Make adding a post with a non existent post id an error
+* Should probably return post id in add post
+* Return thread id in add thread 
+* And listing subject and tags on listing posts
+* Remove EditableByAll by auto updating parent entities when adding to a sub collection
+* See if edit and updating a post should change their parent's modification date
+* Go back to test thread title in single post
 * Make user service generator give a better logging name so as not to conflict
 * Fix multiple paths etc in testutils
-* Make adding a post with a non existent post id an error
 * Stop directory listing
-* Should probably return post id in add post
-* See if edit and updating a post should change their parent's modification date
-* Return thread id in add thread 
-* Go back to test thread title in single post
-* And listing subject and tags on listing posts
 
 ### Dev complete
 

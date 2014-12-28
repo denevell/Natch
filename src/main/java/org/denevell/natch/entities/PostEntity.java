@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.denevell.natch.utils.Adapter.AdapterEdit;

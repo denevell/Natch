@@ -15,4 +15,6 @@ public interface Adapter<T> {
     T updateEntity(T object, SystemUser user);
   }
 
+  public static interface EditableByAll {}
+
 }

@@ -33,7 +33,9 @@ public class ServSingleWithPagination {
 	    @QueryParam("pageStart") @DefaultValue("-1") int start, 	
 	    @QueryParam("pageLimit") @DefaultValue("-1") int limit,
 	    @QueryParam("pageMember") String member,
-	    @QueryParam("pageMemberof") String memberOf 
+	    @QueryParam("pageMemberof") String memberOf,
+	    @QueryParam("whereField") String whereField,
+	    @QueryParam("whereValue") String whereValue 
 	    ) throws Exception {
 
     Response single = new ServSingle().single(
@@ -50,8 +52,10 @@ public class ServSingleWithPagination {
         start, 
         limit, 
         false, 
-        null, 
-        null);
+        member, 
+        memberOf,
+        whereField,
+        whereValue);
 
       Object foundEntity = pagination.getEntity();
       if(foundEntity!=null && paginationField!=null && paginationField.trim().length()>0) {
