@@ -1,8 +1,5 @@
 package org.denevell.natch.utils;
 
-import org.denevell.natch.serv.PostDelete.PostDeleteService;
-import org.denevell.natch.serv.ThreadFromPost.ThreadFromPostService;
-import org.denevell.natch.serv.ThreadFromPost.ThreadFromPostServiceImpl;
 import org.denevell.natch.utils.UserGetLoggedInService.UserGetLoggedInModelImpl;
 import org.denevell.userservice.AnnotationProcessor.UserService;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
@@ -26,12 +23,9 @@ public class JerseyApplication extends ResourceConfig {
 
     @Override
     protected void configure() {
-      bind(PostDeleteServiceImpl.class).to(PostDeleteService.class);
       bind(UserGetLoggedInModelImpl.class).to(UserGetLoggedInService.class);
-      bind(ThreadFromPostServiceImpl.class).to(ThreadFromPostService.class);
+      //bind(ThreadFromPostServiceImpl.class).to(ThreadFromPostService.class);
     }
   }
-
-  public static class PostDeleteServiceImpl implements PostDeleteService {};
 
 }

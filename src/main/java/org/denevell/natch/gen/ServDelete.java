@@ -20,16 +20,17 @@ import org.denevell.natch.utils.ModelResponse;
 import org.denevell.natch.utils.UserGetLoggedInService.Admin;
 import org.denevell.natch.utils.UserGetLoggedInService.Username;
 
-@Path("delete/{entity}/{id}")
+@Path("delete/{entity}")
 public class ServDelete {
 
-  @Context HttpServletRequest mRequest;
+  @Context public HttpServletRequest mRequest;
 
   @DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response delete(
 	    @PathParam("entity") @NotNull String entity, 	
-	    @PathParam("id") String primaryKey,
+	    @QueryParam("idString") String primaryKeyString,
+	    @QueryParam("idLong") long primaryKeyLong,
 	    @QueryParam("authObject") String authField
 	    ) throws Exception {
     
@@ -43,6 +44,7 @@ public class ServDelete {
     // Now remove it, check if the authObject, or main root object's username 
     // is our username or we're admin
     Class<?> clazz = Class.forName("org.denevell.natch.entities." + entity);
+    Object primaryKey = (primaryKeyString!=null) ? primaryKeyString : primaryKeyLong;
     return Jrappy2.remove(
         JPAFactoryContextListener.sFactory, 
         primaryKey, 

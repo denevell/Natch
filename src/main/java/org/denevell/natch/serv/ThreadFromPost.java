@@ -1,10 +1,8 @@
 package org.denevell.natch.serv;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -18,7 +16,7 @@ import javax.ws.rs.core.Response;
 import org.denevell.natch.entities.PostEntity;
 import org.denevell.natch.entities.ThreadEntity;
 import org.denevell.natch.entities.ThreadEntity.AddFromPostInput;
-import org.denevell.natch.serv.PostDelete.PostDeleteService;
+import org.denevell.natch.gen.ServDelete;
 import org.denevell.natch.utils.JPAFactoryContextListener;
 import org.denevell.natch.utils.Jrappy2;
 import org.denevell.natch.utils.ModelResponse;
@@ -29,24 +27,22 @@ import org.denevell.natch.utils.UserGetLoggedInService.User;
 public class ThreadFromPost {
 
   @Context HttpServletRequest mRequest;
-  @Inject ThreadFromPostService mThreadFromPostService;
 
   @PUT
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response addThreadFromPost(@Valid AddFromPostInput input) throws IOException {
+  public Response addThreadFromPost(@Valid AddFromPostInput input) throws Exception {
     User user = (User) mRequest.getAttribute("user");
-    return mThreadFromPostService.threadFromPost(input.postId, input.subject, user.admin);
+    return new ThreadFromPostServiceImpl().threadFromPost(input.postId, input.subject, user.admin);
   }
 
   public static interface ThreadFromPostService {
-    Response threadFromPost(long postId, String subject, boolean admin);
+    Response threadFromPost(long postId, String subject, boolean admin) throws Exception;
   }
 
-  public static class ThreadFromPostServiceImpl implements ThreadFromPostService {
-    @Inject PostDeleteService mPostDelete;
+  public class ThreadFromPostServiceImpl implements ThreadFromPostService {
 
-    public Response threadFromPost(long postId, String subject, boolean admin) {
+    public Response threadFromPost(long postId, String subject, boolean admin) throws Exception {
       if(!admin) {
         return new ModelResponse<>(403, null).httpReturn();
       }
@@ -67,7 +63,9 @@ public class ThreadFromPost {
         return new ModelResponse<Void>(addResult.getStatus(), null).httpReturn();
       }
 
-      Response deleteResult = mPostDelete.delete(post.threadId, postId, post.username, true);
+      ServDelete servDelete = new ServDelete();
+      servDelete.mRequest = mRequest; 
+      Response deleteResult = servDelete.delete("PostEntity", null, postId, null);
       if(deleteResult.getStatus()!=200) {
         return new ModelResponse<Void>(deleteResult.getStatus(), null).httpReturn();
       }

@@ -127,7 +127,6 @@ public class ThreadEntity implements
   public Output toOutput() {
     Output output = new Output();
 
-    /*
     List<org.denevell.natch.entities.PostEntity.Output> postsResources = new ArrayList<>();
     if(this.posts!=null) {
       for (PostEntity p : this.posts) {
@@ -138,7 +137,6 @@ public class ThreadEntity implements
         new OutputWithCount<>(postsResources, 0);
 
     output.posts = outputWithCount;
-    */
 
     output.subject = StringEscapeUtils.escapeHtml4(rootPost.subject);
     output.author = rootPost.username;

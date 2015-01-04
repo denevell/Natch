@@ -22,15 +22,15 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 
     <entity class="org.denevell.natch.entities.PostEntity">
        <table name="PostEntity" />
-	   <named-query name="findByModData">
+	     <named-query name="findByModData">
 	       <query>select p from PostEntity p order by p.modified desc</query>
-	   </named-query>       
-	   <named-query name="findByThreadId">
+	     </named-query>       
+	     <named-query name="findByThreadId">
 	       <query>select p from PostEntity p where p.threadId = :threadId order by p.created</query>
-	   </named-query>       
-	   <named-query name="findById">
+	     </named-query>       
+	     <named-query name="findById">
 	       <query>select p from PostEntity p where p.id = :id</query>
-	   </named-query>       
+	     </named-query>       
        <attributes>
 	       <id name="id">
 	          <generated-value strategy="auto" />
@@ -42,12 +42,12 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	       <basic name="username">
 	          <column name="username" nullable="false" />
 	       </basic>
-		   <element-collection name="tags" fetch="eager">
+		     <element-collection name="tags" fetch="eager">
 	          <column name="tag_text" nullable="true" />
 	          <collection-table name="post_tags">
 	              <join-column name="post_id" />
 	          </collection-table>	   
-		   </element-collection>
+		     </element-collection>
 	       <basic name="adminEdited">
 	          <column name="adminedited" nullable="false" />
 	       </basic>    		   
@@ -63,7 +63,7 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	       <basic name="modified">
 	          <column name="modified" nullable="false" />
 	       </basic>    		   
-       </attributes>
+      </attributes>
     </entity>    
     
     <entity class="org.denevell.natch.entities.ThreadEntity">
@@ -101,12 +101,12 @@ http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 	       </one-to-one>
 	       <one-to-many name="posts" orphan-removal="true">
 	          <join-table name="thread_posts">
-	            <join-column name="thread_id"/>
+  	       		<cascade-on-delete>true</cascade-on-delete>
+	            <join-column name="thread_id" referenced-column-name="id" />
 	            <inverse-join-column name="post_id"/>
 	          </join-table>	   
 	       		<cascade>
-	       			<cascade-persist />
-	       			<cascade-remove />
+	       			<cascade-all />
 	       		</cascade>
 	       </one-to-many>
        </attributes>

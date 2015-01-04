@@ -168,7 +168,7 @@ public class Jrappy2<ReturnOb> {
 		entityManager.close();
     return singleResult;
 	}
-	
+
 	public <T extends ReturnOb> Jrappy2<ReturnOb> find(
 	    Object primaryKey, 
 	    boolean pessimisticRead, 

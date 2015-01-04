@@ -39,7 +39,7 @@ public class ServList {
 	    @QueryParam("member") String member,
 	    @QueryParam("memberof") String memberOf,
 	    @QueryParam("whereField") String whereField,
-	    @QueryParam("whereValue") String whereValue 
+	    @QueryParam("whereValue") String whereValue
 	    ) throws Exception {
 
     Class<?> clazz = Class.forName("org.denevell.natch.entities." + entity);
@@ -82,8 +82,11 @@ public class ServList {
           whereClausePair, 
           memberOfPair, 
           clazz);
+      
+      OutputWithCount returnValue = new OutputWithCount(list, countNum);
+
       // Get the latest entry via a list call
-      return Response.ok(new OutputWithCount(list, countNum)).build();
+      return Response.ok(returnValue).build();
     } else {
       return Response.ok(list).build();
     }
@@ -92,7 +95,7 @@ public class ServList {
 
   @XmlRootElement
 	public static class OutputWithCount<T> {
-	  public List<T> results;
+    public List<T> results;
 	  public long count = - 1;
 	  public OutputWithCount() {}
 	  public OutputWithCount(List<T> results, long count) {

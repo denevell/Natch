@@ -21,7 +21,8 @@ public class ThreadDeletePO {
 
 	public Response delete(String threadId, String authKey) {
     return mService
-		.path("rest").path("delete").path("ThreadEntity").path(threadId)
+		.path("rest").path("delete").path("ThreadEntity")
+		.queryParam("idString", threadId)
 		.request()
 		.header("AuthKey", authKey)
 		.accept(MediaType.APPLICATION_JSON)

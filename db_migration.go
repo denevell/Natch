@@ -236,3 +236,13 @@ func (m migration) Migration_12() {
 		panic(err)
 	}
 }
+
+/*
+alter table thread_posts drop constraint threadentity_latestpost_reference_fkey, add constraint threadentity_latestpost_reference_fkey FOREIGN KEY (latestpost_reference) REFERENCES postentity(id) on delete cascade;
+
+alter table threadentity drop constraint threadentity_latestpost_reference_fkey, add constraint threadentity_latestpost_reference_fkey FOREIGN KEY (latestpost_reference) REFERENCES postentity(id) on delete cascade;
+
+alter table threadentity drop constraint threadentity_rootpost_reference_fkey, add constraint threadentity_rootpost_reference_fkey FOREIGN KEY (rootpost_reference) REFERENCES postentity(id) on delete cascade
+
+alter table thread_posts drop constraint thread_posts_thread_id_fkey, add constraint thread_posts_thread_id_fkey FOREIGN KEY (thread_id) REFERENCES threadentity(id) on delete cascade;
+*/

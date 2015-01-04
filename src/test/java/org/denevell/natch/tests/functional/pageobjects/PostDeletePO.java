@@ -2,6 +2,7 @@ package org.denevell.natch.tests.functional.pageobjects;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.denevell.natch.tests.functional.TestUtils;
@@ -19,12 +20,13 @@ public class PostDeletePO {
 	}
 
 	public Response delete(long postId, String threadId, String authKey) {
-		return mService.path("rest").path("post_delete")
-		.path(String.valueOf(postId))
-		.path(String.valueOf(threadId))
+    return mService
+		.path("rest").path("delete").path("PostEntity")
+		.queryParam("idLong", postId)
 		.request()
 		.header("AuthKey", authKey)
-		.delete();	
+		.accept(MediaType.APPLICATION_JSON)
+		.delete();
 	}	
 	
 

@@ -9,30 +9,29 @@ See the README for Natch-Runner pr Natch-JerseyMvc for the icebox, backlog and i
 `
 * Date of threads coming down
 * Add test for adding a post with a non-existant thread
+* Test for getting numPosts on listing threads?
 
 ## TODO
 
-* Look at numPosts on push entity for threads
-* Are we getting proper 401 for posts due to web.xml mapping?
 * Allow primary key in delete to be a Long etc
-* Disallow delete on entities in some cases
-* Check non-null ids in production table
+* Look at numPosts on push entity for threads
 
 ## Later
 
-* List nulls the entity collections but still fetches them 
-* Paginate on multiple collections in entity
+* Are we getting proper 401 for posts due to web.xml mapping?
+* Disallow delete on entities in some cases
+* Check non-null ids in production table
 * Make adding a post with a non existent post id an error
 * Should probably return post id in add post
 * Return thread id in add thread 
-* And listing subject and tags on listing posts
 * Remove EditableByAll by auto updating parent entities when adding to a sub collection
+
+## Later misc
 * See if edit and updating a post should change their parent's modification date
-* Go back to test thread title in single post
-* Make user service generator give a better logging name so as not to conflict
-* Fix multiple paths etc in testutils
-* Stop directory listing
 * See if gcm is still working in dev
+* Stop directory listing
+* Fix multiple paths etc in testutils
+* Make user service generator give a better logging name so as not to conflict
 
 ### Dev complete
 
